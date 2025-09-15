@@ -1,0 +1,13 @@
+{
+    "app": {"title": "EV Charging"},
+    "nav": {"stations": "Stations", "my": "My Charges", "auth": "Sign In"},
+    "auth": {"title": "Sign in", "google": "Continue with Google", "email": "Email", "password": "Password", "signin": "Sign in", "signout": "Sign out"},
+    "stations": {
+      "title": "Charging Stations",
+      "search": "Search address or name…",
+      "filters": {"status": "Status", "connector": "Connector", "free": "Free charging"},
+      "start": "Start charging",
+      "details": {"connectors": "Connectors", "tariffs": "Tariffs", "status": "Status"}
+    },
+    "session": {"active": "Active sessions", "history": "History", "stop": "Stop", "cost": "Cost", "energy": "Energy", "duration": "Duration"}
+  }
