@@ -109,9 +109,9 @@ import { NotificationService } from '../../../core/services/notification.service
       display: flex !important;
       justify-content: center !important;
       align-items: center !important;
-      min-height: 100vh !important;
-      padding: 40px 20px !important;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      height: 100% !important;
+      padding: 20px !important;
+      background: transparent !important;
     }
 
     .login-card {
@@ -121,6 +121,9 @@ import { NotificationService } from '../../../core/services/notification.service
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
       border-radius: 20px !important;
       margin: 0 auto !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
     }
 
     .login-card mat-card-header {
@@ -270,7 +273,7 @@ import { NotificationService } from '../../../core/services/notification.service
 
     @media (max-width: 480px) {
       .login-container {
-        padding: 20px 16px !important;
+        padding: 16px !important;
       }
       
       .login-card {
@@ -288,7 +291,7 @@ import { NotificationService } from '../../../core/services/notification.service
       }
 
       .login-form {
-        padding: 24px !important;
+        padding: 20px !important;
         max-width: 100% !important;
       }
 

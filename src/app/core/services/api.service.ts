@@ -203,4 +203,15 @@ export class ApiService {
     
     return this.get<{ data: T[]; pagination: PaginationInfo }>(url);
   }
+
+  /**
+   * Get direct array response (for endpoints that return arrays directly)
+   */
+  getArray<T>(endpoint: string, params?: Record<string, any>): Observable<T[]> {
+    const httpParams = this.buildHttpParams(params);
+    return this.http.get<T[]>(`${this.baseUrl}${endpoint}`, { params: httpParams })
+      .pipe(
+        catchError(error => this.handleError(error))
+      );
+  }
 }

@@ -5,3 +5,4 @@ export * from './notification.service';
 export * from './storage.service';
 export * from './map.service';
 export * from './translation.service';
+export * from './chargepoint.service';
