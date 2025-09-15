@@ -1,0 +1,13 @@
+{
+    "app": {"title": "Cargas EV"},
+    "nav": {"stations": "Estaciones", "my": "Mis Cargas", "auth": "Entrar"},
+    "auth": {"title": "Acceder", "google": "Continuar con Google", "email": "Correo", "password": "Contraseña", "signin": "Entrar", "signout": "Salir"},
+    "stations": {
+      "title": "Estaciones de carga",
+      "search": "Buscar dirección o nombre…",
+      "filters": {"status": "Estado", "connector": "Conector", "free": "Carga gratuita"},
+      "start": "Iniciar carga",
+      "details": {"connectors": "Conectores", "tariffs": "Tarifas", "status": "Estado"}
+    },
+    "session": {"active": "Sesiones activas", "history": "Historial", "stop": "Detener", "cost": "Costo", "energy": "Energía", "duration": "Duración"}
+  }
