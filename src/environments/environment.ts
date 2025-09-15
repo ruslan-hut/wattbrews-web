@@ -1,7 +1,9 @@
 export const environment = {
     production: true,
-    apiBaseUrl: '/assets/mocks',      // пока моки
-    wsBaseUrl: 'wss://mock.example',  // заглушка
+    apiBaseUrl: 'https://wattbrews.me/api/v1',
+    wsBaseUrl: 'wss://wattbrews.me/ws',
+    apiTimeout: 30000, // 30 seconds
+    apiRetryAttempts: 3,
     firebase: {
       apiKey: "AIzaSyB0NiW4HE2isMSIej6MbgCUUylV39xSEkw",
       authDomain: "evcharge-68bc8.firebaseapp.com",

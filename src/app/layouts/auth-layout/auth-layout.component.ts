@@ -31,9 +31,7 @@ import { MatButtonModule } from '@angular/material/button';
       </mat-toolbar>
       
       <div class="auth-content">
-        <div class="auth-card">
-          <router-outlet></router-outlet>
-        </div>
+        <router-outlet></router-outlet>
       </div>
       
       <footer class="auth-footer">
@@ -48,16 +46,21 @@ import { MatButtonModule } from '@angular/material/button';
   `,
   styles: [`
     .auth-container {
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      overflow: hidden;
     }
     
     .auth-toolbar {
       position: sticky;
       top: 0;
       z-index: 1000;
+      background: rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .toolbar-content {
@@ -77,15 +80,17 @@ import { MatButtonModule } from '@angular/material/button';
       font-size: 2rem;
       width: 2rem;
       height: 2rem;
+      color: white;
     }
     
     .logo-text {
       font-size: 1.5rem;
       font-weight: 500;
+      color: white;
     }
     
     .home-button {
-      color: white;
+      color: white !important;
     }
     
     .auth-content {
@@ -93,17 +98,8 @@ import { MatButtonModule } from '@angular/material/button';
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
-    }
-    
-    .auth-card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      padding: 2rem;
-      width: 100%;
-      max-width: 400px;
-      min-height: 400px;
+      padding: 0;
+      overflow: hidden;
     }
     
     .auth-footer {
@@ -131,11 +127,7 @@ import { MatButtonModule } from '@angular/material/button';
     
     @media (max-width: 768px) {
       .auth-content {
-        padding: 1rem;
-      }
-      
-      .auth-card {
-        padding: 1.5rem;
+        padding: 0;
       }
       
       .footer-links {

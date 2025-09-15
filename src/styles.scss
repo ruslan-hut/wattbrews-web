@@ -43,9 +43,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  min-height: 100vh !important;
-  padding: 40px 20px !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  height: 100% !important;
+  padding: 20px !important;
+  background: transparent !important;
 }
 
 .login-card {

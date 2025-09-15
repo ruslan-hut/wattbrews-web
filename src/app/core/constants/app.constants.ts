@@ -5,6 +5,12 @@ export const APP_CONSTANTS = {
   DEFAULT_LANGUAGE: 'es',
   SUPPORTED_CURRENCIES: ['EUR', 'USD'],
   DEFAULT_CURRENCY: 'EUR',
+  API: {
+    BASE_URL: 'https://wattbrews.me/api/v1',
+    WS_URL: 'wss://wattbrews.me/ws',
+    TIMEOUT: 30000, // 30 seconds
+    RETRY_ATTEMPTS: 3,
+  },
   PAGINATION: {
     DEFAULT_PAGE_SIZE: 20,
     MAX_PAGE_SIZE: 100,
@@ -103,6 +109,13 @@ export const API_ENDPOINTS = {
     STOP: '/sessions/:id/stop',
     ACTIVE: '/sessions/active',
     HISTORY: '/sessions/history',
+  },
+  CHARGE_POINTS: {
+    LIST: '/chp',
+    DETAIL: '/chp/:id',
+    STATUS: '/chp/:id/status',
+    ENABLE: '/chp/:id/enable',
+    DISABLE: '/chp/:id/disable',
   },
   PAYMENTS: {
     METHODS: '/payments/methods',

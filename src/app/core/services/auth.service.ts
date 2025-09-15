@@ -50,10 +50,16 @@ export class AuthService {
   constructor() {
     // Listen to Firebase auth state changes
     onAuthStateChanged(this.auth, async (firebaseUser) => {
+      console.log('Firebase Auth State Changed:', firebaseUser ? 'User logged in' : 'User logged out');
+      
       if (firebaseUser) {
+        console.log('Loading user profile for:', firebaseUser.uid);
         await this.loadUserProfile(firebaseUser.uid);
       } else {
+        console.log('Clearing user data');
         this._user.set(null);
+        this._userProfile.set(null);
+        this._userName.set(null);
         this.userSubject.next(null);
       }
     });
@@ -203,10 +209,15 @@ export class AuthService {
    */
   async getToken(): Promise<string | null> {
     const user = this.auth.currentUser;
-    if (!user) return null;
+    if (!user) {
+      console.log('No current user for token request');
+      return null;
+    }
     
     try {
-      return await user.getIdToken();
+      const token = await user.getIdToken();
+      console.log('Token obtained successfully');
+      return token;
     } catch (error) {
       console.error('Error getting token:', error);
       return null;

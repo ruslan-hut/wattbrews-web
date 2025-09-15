@@ -7,5 +7,8 @@ export * from './station.model';
 // Session models
 export * from './session.model';
 
+// Charge Point models
+export * from './chargepoint.model';
+
 // API models
 export * from './api.model';
