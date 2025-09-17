@@ -13,3 +13,7 @@ export * from './chargepoint.model';
 
 // API models
 export * from './api.model';
+
+// Transaction models
+export * from './transaction.model';
+export * from './transaction-detail.model';

@@ -1,0 +1,123 @@
+<div class="transaction-preview-container">
+  <!-- Header -->
+  <div class="preview-header">
+    <h2 mat-dialog-title>Transaction Details</h2>
+    <button mat-icon-button (click)="closeDialog($event)" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading()">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading transaction details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error()">
+    <mat-icon class="error-icon">error</mat-icon>
+    <p>{{ error() }}</p>
+    <button mat-raised-button color="primary" (click)="loadTransactionDetail()">
+      Retry
+    </button>
+  </div>
+
+  <!-- Transaction Details -->
+  <div class="transaction-content" *ngIf="!loading() && !error() && transactionDetail()">
+    <mat-dialog-content>
+      <!-- Transaction Overview -->
+      <mat-card class="overview-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>receipt</mat-icon>
+            Transaction #{{ transactionDetail()?.transaction_id }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ transactionDetail()?.charge_point_title }}
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="overview-grid">
+            <div class="overview-item">
+              <mat-icon>ev_station</mat-icon>
+              <div class="item-content">
+                <span class="item-label">Station</span>
+                <span class="item-value">{{ transactionDetail()?.charge_point_id }}</span>
+              </div>
+            </div>
+            <div class="overview-item">
+              <mat-icon>power</mat-icon>
+              <div class="item-content">
+                <span class="item-label">Connector</span>
+                <span class="item-value">{{ transactionDetail()?.connector?.connector_id_name }} ({{ transactionDetail()?.connector?.type }})</span>
+              </div>
+            </div>
+            <div class="overview-item">
+              <mat-icon>schedule</mat-icon>
+              <div class="item-content">
+                <span class="item-label">Duration</span>
+                <span class="item-value">{{ formatDuration(transactionDetail()?.duration || 0) }}</span>
+              </div>
+            </div>
+            <div class="overview-item">
+              <mat-icon>battery_charging_full</mat-icon>
+              <div class="item-content">
+                <span class="item-label">Energy Consumed</span>
+                <span class="item-value">{{ formatEnergy(transactionDetail()?.consumed || 0) }} kWh</span>
+              </div>
+            </div>
+            <div class="overview-item">
+              <mat-icon>attach_money</mat-icon>
+              <div class="item-content">
+                <span class="item-label">Cost</span>
+                <span class="item-value">${{ (transactionDetail()?.price || 0).toFixed(2) }}</span>
+              </div>
+            </div>
+            <div class="overview-item">
+              <mat-icon>flash_on</mat-icon>
+              <div class="item-content">
+                <span class="item-label">Average Power</span>
+                <span class="item-value">{{ calculateAveragePower() | number:'1.0-1' }} W</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Timing -->
+      <mat-card class="status-card">
+        <mat-card-header>
+          <mat-card-title>Timing</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="status-grid">
+            <div class="status-item">
+              <span class="status-label">Started:</span>
+              <span class="status-value">{{ formatDateTime(transactionDetail()?.time_started || '') }}</span>
+            </div>
+            <div class="status-item" *ngIf="!transactionDetail()?.is_charging">
+              <span class="status-label">Ended:</span>
+              <span class="status-value">{{ formatEndTime(transactionDetail()?.time_started || '', transactionDetail()?.duration || 0) }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Energy Consumption Chart -->
+      <mat-card class="chart-card" *ngIf="hasMeterValues()">
+        <mat-card-header>
+          <mat-card-title>Energy Consumption Over Time</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-energy-chart [meterValues]="transactionDetail()?.meter_values || []"></app-energy-chart>
+        </mat-card-content>
+      </mat-card>
+
+    </mat-dialog-content>
+
+    <!-- Actions -->
+    <mat-dialog-actions>
+      <button mat-button (click)="closeDialog($event)">Close</button>
+    </mat-dialog-actions>
+  </div>
+</div>

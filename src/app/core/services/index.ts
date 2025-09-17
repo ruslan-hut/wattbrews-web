@@ -7,3 +7,4 @@ export * from './map.service';
 export * from './translation.service';
 export * from './chargepoint.service';
 export * from './user-info.service';
+export * from './transaction.service';
