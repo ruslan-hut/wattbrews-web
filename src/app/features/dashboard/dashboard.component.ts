@@ -5,10 +5,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { ChargePointService } from '../../core/services/chargepoint.service';
 import { AuthService } from '../../core/services/auth.service';
+import { TransactionService } from '../../core/services/transaction.service';
 import { ChargePoint } from '../../core/models/chargepoint.model';
+import { Transaction } from '../../core/models/transaction.model';
+import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,158 +26,7 @@ import { ChargePoint } from '../../core/models/chargepoint.model';
     MatChipsModule,
     RouterModule
   ],
-  template: `
-    <div class="dashboard-container">
-      <h1 class="dashboard-title">Welcome to WattBrews</h1>
-      <p class="dashboard-subtitle">Your EV charging management platform</p>
-      
-      <div class="dashboard-grid">
-        <!-- Quick Actions -->
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>Quick Actions</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="quick-actions">
-              <button mat-raised-button color="primary" routerLink="/stations">
-                <mat-icon>ev_station</mat-icon>
-                Find Stations
-              </button>
-              <button mat-raised-button color="accent" routerLink="/sessions/active">
-                <mat-icon>charging_station</mat-icon>
-                Active Sessions
-              </button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-        
-        <!-- Recent Activity -->
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>Recent Activity</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="activity-list">
-              <div class="activity-item" *ngFor="let activity of recentActivities()">
-                <mat-icon class="activity-icon">{{ activity.icon }}</mat-icon>
-                <div class="activity-content">
-                  <p class="activity-text">{{ activity.text }}</p>
-                  <span class="activity-time">{{ activity.time }}</span>
-                </div>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-        
-        <!-- Charge Points Statistics -->
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>Charge Points Overview</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="loading-container" *ngIf="chargePointService.loading()">
-              <mat-spinner diameter="40"></mat-spinner>
-              <p>Loading charge points...</p>
-            </div>
-            
-            <div class="error-container" *ngIf="chargePointService.error()">
-              <mat-icon class="error-icon">error</mat-icon>
-              <p>{{ chargePointService.error() }}</p>
-              <button mat-button color="primary" (click)="refreshChargePoints()">
-                Retry
-              </button>
-            </div>
-            
-            <div class="stats-grid" *ngIf="!chargePointService.loading() && !chargePointService.error()">
-              <div class="stat-item">
-                <mat-icon class="stat-icon">ev_station</mat-icon>
-                <div class="stat-content">
-                  <span class="stat-value">{{ chargePointService.chargePoints().length }}</span>
-                  <span class="stat-label">Total Charge Points</span>
-                </div>
-              </div>
-              <div class="stat-item">
-                <mat-icon class="stat-icon">wifi</mat-icon>
-                <div class="stat-content">
-                  <span class="stat-value">{{ chargePointService.onlineChargePoints().length }}</span>
-                  <span class="stat-label">Online</span>
-                </div>
-              </div>
-              <div class="stat-item">
-                <mat-icon class="stat-icon">check_circle</mat-icon>
-                <div class="stat-content">
-                  <span class="stat-value">{{ chargePointService.availableChargePoints().length }}</span>
-                  <span class="stat-label">Available</span>
-                </div>
-              </div>
-              <div class="stat-item">
-                <mat-icon class="stat-icon">power</mat-icon>
-                <div class="stat-content">
-                  <span class="stat-value">{{ chargePointService.availableConnectors() }}</span>
-                  <span class="stat-label">Available Connectors</span>
-                </div>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-        
-        <!-- Charge Points List -->
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>Recent Charge Points</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="loading-container" *ngIf="chargePointService.loading()">
-              <mat-spinner diameter="40"></mat-spinner>
-              <p>Loading charge points...</p>
-            </div>
-            
-            <div class="error-container" *ngIf="chargePointService.error()">
-              <mat-icon class="error-icon">error</mat-icon>
-              <p>{{ chargePointService.error() }}</p>
-              <button mat-button color="primary" (click)="refreshChargePoints()">
-                Retry
-              </button>
-            </div>
-            
-            <div class="charge-points-list" *ngIf="!chargePointService.loading() && !chargePointService.error()">
-              <div class="charge-point-item" *ngFor="let cp of recentChargePoints()">
-                <div class="charge-point-info">
-                  <h4 class="charge-point-title">{{ cp.title }}</h4>
-                  <p class="charge-point-address">{{ cp.address }}</p>
-                  <div class="charge-point-details">
-                    <mat-chip-set>
-                      <mat-chip [class.online]="cp.is_online" [class.offline]="!cp.is_online">
-                        {{ cp.is_online ? 'Online' : 'Offline' }}
-                      </mat-chip>
-                      <mat-chip [class.available]="cp.status === 'Available'" [class.busy]="cp.status !== 'Available'">
-                        {{ cp.status }}
-                      </mat-chip>
-                      <mat-chip>{{ cp.vendor }}</mat-chip>
-                    </mat-chip-set>
-                  </div>
-                  <div class="connectors-info">
-                    <span class="connectors-count">{{ cp.connectors.length }} connectors</span>
-                    <span class="available-connectors">
-                      {{ getAvailableConnectors(cp) }} available
-                    </span>
-                  </div>
-                </div>
-                <div class="charge-point-actions">
-                  <button mat-icon-button [disabled]="!cp.is_enabled">
-                    <mat-icon>power_settings_new</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <button mat-button color="primary" routerLink="/stations" class="view-all-button">
-              View All Charge Points
-            </button>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
-  `,
+  templateUrl: './dashboard.component.html',
   styles: [`
     .dashboard-container {
       padding: 20px;
@@ -215,35 +68,131 @@ import { ChargePoint } from '../../core/models/chargepoint.model';
       min-width: 150px;
     }
     
-    .activity-list {
+    .transactions-list {
       display: flex;
       flex-direction: column;
       gap: 12px;
+      margin-bottom: 16px;
     }
     
-    .activity-item {
+    .transaction-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .transaction-item:hover {
+      border-color: #2196f3;
+      box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+      transform: translateY(-1px);
+    }
+    
+    .transaction-icon {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 8px 0;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #f5f5f5;
     }
     
-    .activity-icon {
-      color: #666;
+    .transaction-icon mat-icon {
+      font-size: 20px;
     }
     
-    .activity-content {
+    .transaction-icon .finished {
+      color: #4caf50;
+    }
+    
+    .transaction-icon .pending {
+      color: #ff9800;
+    }
+    
+    .transaction-content {
       flex: 1;
     }
     
-    .activity-text {
-      margin: 0;
-      font-size: 0.9rem;
+    .transaction-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
     }
     
-    .activity-time {
+    .transaction-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .transaction-status {
+      padding: 4px 8px;
+      border-radius: 4px;
       font-size: 0.8rem;
-      color: #999;
+      font-weight: 500;
+    }
+    
+    .transaction-status.finished {
+      background-color: #e8f5e8;
+      color: #4caf50;
+    }
+    
+    .transaction-status.pending {
+      background-color: #fff3e0;
+      color: #ff9800;
+    }
+    
+    .transaction-details {
+      margin-bottom: 8px;
+    }
+    
+    .transaction-details p {
+      margin: 4px 0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .transaction-energy {
+      font-weight: 500;
+      color: #333 !important;
+    }
+    
+    .transaction-payment {
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .payment-amount {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #4caf50;
+    }
+    
+    .no-transactions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .no-data-icon {
+      font-size: 3rem;
+      color: #ccc;
+    }
+    
+    .no-transactions p {
+      margin: 0;
+      color: #666;
+      font-size: 1rem;
     }
     
     .stats-grid {
@@ -454,49 +403,54 @@ import { ChargePoint } from '../../core/models/chargepoint.model';
       .charge-point-actions {
         align-self: flex-end;
       }
+      
+      .transaction-item {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .transaction-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+      
+      .transaction-status {
+        align-self: flex-start;
+      }
     }
   `]
 })
 export class DashboardComponent implements OnInit {
   protected readonly chargePointService = inject(ChargePointService);
   protected readonly authService = inject(AuthService);
+  protected readonly transactionService = inject(TransactionService);
+  private readonly dialog = inject(MatDialog);
   
   protected readonly totalSessions = signal(24);
   protected readonly totalEnergy = signal(156.8);
   protected readonly totalCost = signal(89.50);
   
-  protected readonly recentActivities = signal([
-    {
-      icon: 'charging_station',
-      text: 'Charging session completed at Tesla Supercharger',
-      time: '2 hours ago'
-    },
-    {
-      icon: 'ev_station',
-      text: 'Added new favorite station',
-      time: '1 day ago'
-    },
-    {
-      icon: 'payment',
-      text: 'Payment processed successfully',
-      time: '2 days ago'
-    }
-  ]);
   
   ngOnInit(): void {
-    // Wait for authentication before loading charge points
+    // Wait for authentication before loading data
     this.authService.user$.subscribe(user => {
       if (user) {
-        console.log('User authenticated, loading charge points');
+        console.log('User authenticated, loading data');
         this.loadChargePoints();
+        this.loadTransactions();
       } else {
-        console.log('User not authenticated, skipping charge points load');
+        console.log('User not authenticated, skipping data load');
       }
     });
   }
   
   protected recentChargePoints(): ChargePoint[] {
     return this.chargePointService.chargePoints().slice(0, 5);
+  }
+  
+  protected recentTransactions(): Transaction[] {
+    return this.transactionService.getRecentTransactions();
   }
   
   protected getAvailableConnectors(chargePoint: ChargePoint): number {
@@ -506,6 +460,21 @@ export class DashboardComponent implements OnInit {
   protected refreshChargePoints(): void {
     this.chargePointService.clearError();
     this.loadChargePoints();
+  }
+  
+  protected refreshTransactions(): void {
+    this.transactionService.clearError();
+    this.loadTransactions();
+  }
+
+  protected openTransactionPreview(transaction: Transaction): void {
+    this.dialog.open(TransactionPreviewComponent, {
+      data: { transactionId: transaction.transaction_id },
+      width: '90vw',
+      maxWidth: '800px',
+      autoFocus: false,
+      restoreFocus: false
+    });
   }
   
   private loadChargePoints(): void {
@@ -524,5 +493,60 @@ export class DashboardComponent implements OnInit {
         });
       }
     });
+  }
+  
+  private loadTransactions(): void {
+    console.log('Attempting to load transactions...');
+    this.transactionService.loadTransactions().subscribe({
+      next: (transactions) => {
+        console.log('Transactions loaded successfully:', transactions);
+      },
+      error: (error) => {
+        console.error('Error loading transactions:', error);
+        console.error('Error details:', {
+          message: error.message,
+          status: error.status,
+          statusText: error.statusText,
+          url: error.url
+        });
+      }
+    });
+  }
+  
+  protected formatEnergy(meterStart: number, meterStop: number): string {
+    const energy = (meterStop - meterStart) / 1000; // Convert from Wh to kWh
+    return energy.toFixed(2);
+  }
+  
+  protected formatDuration(timeStart: string, timeStop: string): string {
+    const start = new Date(timeStart);
+    const stop = new Date(timeStop);
+    const durationMs = stop.getTime() - start.getTime();
+    
+    const hours = Math.floor(durationMs / (1000 * 60 * 60));
+    const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+    
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else {
+      return `${minutes}m`;
+    }
+  }
+  
+  protected formatTransactionTime(timeStart: string): string {
+    const date = new Date(timeStart);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffHours / 24);
+    
+    if (diffDays > 0) {
+      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    } else if (diffHours > 0) {
+      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    } else {
+      const diffMinutes = Math.floor(diffMs / (1000 * 60));
+      return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
+    }
   }
 }
