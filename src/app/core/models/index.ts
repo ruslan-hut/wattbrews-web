@@ -1,5 +1,6 @@
 // User models
 export * from './user.model';
+export * from './user-info.model';
 
 // Station models
 export * from './station.model';

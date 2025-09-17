@@ -92,6 +92,7 @@ export const API_ENDPOINTS = {
     UPDATE_PROFILE: '/users/profile',
     CHANGE_PASSWORD: '/users/change-password',
     DELETE_ACCOUNT: '/users/delete-account',
+    INFO: '/users/info',
   },
   STATIONS: {
     LIST: '/stations',
