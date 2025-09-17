@@ -17,10 +17,22 @@ export class ApiService {
    */
   get<T>(endpoint: string, params?: Record<string, any>): Observable<T> {
     const httpParams = this.buildHttpParams(params);
-    return this.http.get<ApiResponse<T>>(`${this.baseUrl}${endpoint}`, { params: httpParams })
+    const fullUrl = `${this.baseUrl}${endpoint}`;
+    
+    console.log('ApiService: Making GET request to:', fullUrl);
+    console.log('ApiService: Request parameters:', params);
+    console.log('ApiService: Full URL with params:', fullUrl);
+    
+    return this.http.get<ApiResponse<T>>(fullUrl, { params: httpParams })
       .pipe(
-        map(response => this.handleResponse(response)),
-        catchError(error => this.handleError(error))
+        map(response => {
+          console.log('ApiService: Response received:', response);
+          return this.handleResponse(response);
+        }),
+        catchError(error => {
+          console.error('ApiService: Error in GET request:', error);
+          return this.handleError(error);
+        })
       );
   }
 
@@ -212,6 +224,29 @@ export class ApiService {
     return this.http.get<T[]>(`${this.baseUrl}${endpoint}`, { params: httpParams })
       .pipe(
         catchError(error => this.handleError(error))
+      );
+  }
+
+  /**
+   * Get direct object response (for endpoints that return objects directly)
+   */
+  getDirect<T>(endpoint: string, params?: Record<string, any>): Observable<T> {
+    const httpParams = this.buildHttpParams(params);
+    const fullUrl = `${this.baseUrl}${endpoint}`;
+    
+    console.log('ApiService: Making direct GET request to:', fullUrl);
+    console.log('ApiService: Request parameters:', params);
+    
+    return this.http.get<T>(fullUrl, { params: httpParams })
+      .pipe(
+        map(response => {
+          console.log('ApiService: Direct response received:', response);
+          return response;
+        }),
+        catchError(error => {
+          console.error('ApiService: Error in direct GET request:', error);
+          return this.handleError(error);
+        })
       );
   }
 }

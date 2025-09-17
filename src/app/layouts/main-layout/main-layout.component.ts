@@ -1,6 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, Router, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,7 @@ import { AuthService } from '../../core/services/auth.service';
   imports: [
     CommonModule,
     RouterOutlet,
+    RouterModule,
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
