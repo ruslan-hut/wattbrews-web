@@ -1,5 +1,6 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,14 +30,25 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
       <h1 class="profile-title">User Profile</h1>
       <p>Profile component is working!</p>
       
+      <!-- Authentication Required Message -->
+      <div class="auth-required-message" *ngIf="!isAuthenticated()">
+        <mat-icon class="auth-icon">lock</mat-icon>
+        <h3>Authentication Required</h3>
+        <p>You need to be logged in to view your profile. Please sign in to continue.</p>
+        <button mat-raised-button color="primary" (click)="navigateToLogin()">
+          <mat-icon>login</mat-icon>
+          Sign In
+        </button>
+      </div>
+      
       <!-- Loading State -->
-      <div class="loading-container" *ngIf="userInfoService.loading()">
+      <div class="loading-container" *ngIf="isAuthenticated() && userInfoService.loading()">
         <mat-spinner diameter="40"></mat-spinner>
         <p>Loading user information...</p>
       </div>
       
       <!-- Error State -->
-      <div class="error-container" *ngIf="userInfoService.error()">
+      <div class="error-container" *ngIf="isAuthenticated() && userInfoService.error()">
         <mat-icon class="error-icon">error</mat-icon>
         <p>{{ userInfoService.error() }}</p>
         <button mat-button color="primary" (click)="refreshUserInfo()">
@@ -45,7 +57,7 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
       </div>
       
       <!-- Profile Content -->
-      <div class="profile-content" *ngIf="!userInfoService.loading() && !userInfoService.error() && userInfoService.userInfo()">
+      <div class="profile-content" *ngIf="isAuthenticated() && !userInfoService.loading() && !userInfoService.error() && userInfoService.userInfo()">
         <!-- User Basic Info -->
         <mat-card class="profile-card">
           <mat-card-header>
@@ -253,6 +265,37 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
       margin-bottom: 2rem;
       color: #2c3e50;
       text-align: center;
+    }
+
+    .auth-required-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 3rem;
+      text-align: center;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .auth-icon {
+      font-size: 1.5rem;
+      color: #6c757d;
+    }
+
+    .auth-required-message h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #2c3e50;
+    }
+
+    .auth-required-message p {
+      margin: 0;
+      color: #6c757d;
+      font-size: 1rem;
+      line-height: 1.5;
     }
     
     .loading-container {
@@ -558,21 +601,23 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
 export class ProfileComponent implements OnInit {
   protected readonly userInfoService = inject(UserInfoService);
   protected readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  
+  // Authentication state
+  protected readonly isAuthenticated = this.authService.isAuthenticated;
 
   ngOnInit(): void {
     console.log('ProfileComponent initialized');
     console.log('Current user from auth service:', this.authService.user());
     console.log('Is authenticated:', this.authService.isAuthenticated());
     
-    // Wait for authentication before loading user info
-    this.authService.user$.subscribe(user => {
-      if (user) {
-        console.log('User authenticated, loading profile data');
-        this.loadUserInfo();
-      } else {
-        console.log('User not authenticated, skipping profile data load');
-      }
-    });
+    // Only load user info if authenticated
+    if (this.isAuthenticated()) {
+      console.log('User authenticated, loading profile data');
+      this.loadUserInfo();
+    } else {
+      console.log('User not authenticated, skipping profile data load');
+    }
   }
 
   protected refreshUserInfo(): void {
@@ -607,5 +652,12 @@ export class ProfileComponent implements OnInit {
         console.error('Error loading current user info:', error);
       }
     });
+  }
+  
+  /**
+   * Navigate to login page
+   */
+  protected navigateToLogin(): void {
+    this.router.navigate(['/auth/login']);
   }
 }

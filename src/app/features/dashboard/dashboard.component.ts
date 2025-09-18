@@ -443,31 +443,86 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       color: #5a6c7d;
     }
     
-    .charge-point-details {
+    .connectors-section {
       margin-bottom: 8px;
     }
     
-    .connectors-info {
+    .connectors-title {
+      margin: 0 0 8px 0;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    
+    .connectors-list {
       display: flex;
-      gap: 16px;
-      font-size: 0.8rem;
-      color: #5a6c7d;
+      flex-wrap: wrap;
+      gap: 6px;
     }
     
-    .charge-point-actions {
-      display: flex;
-      align-items: center;
+    .connector-chip {
+      font-size: 0.75rem;
+      height: 28px;
+      display: flex !important;
+      align-items: center !important;
     }
     
-    .start-charging-btn {
-      width: 48px;
-      height: 48px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    .connector-chip ::ng-deep .mat-mdc-chip-action {
+      display: flex !important;
+      align-items: center !important;
+      flex-direction: row !important;
+      height: 100%;
+      padding: 0 8px;
+      gap: 4px;
+      white-space: nowrap;
+      line-height: 1;
     }
     
-    .start-charging-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    .connector-chip ::ng-deep .mat-mdc-chip-action .mat-icon {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    
+    .connector-chip ::ng-deep .mat-mdc-chip-action .mat-mdc-chip-action-label {
+      display: inline !important;
+      line-height: 1;
+      vertical-align: middle;
+    }
+    
+    .connector-chip.available {
+      background-color: #e8f5e8;
+      color: #2e7d32;
+    }
+    
+    .connector-chip.occupied {
+      background-color: #fff3e0;
+      color: #f57c00;
+    }
+    
+    .connector-chip.out_of_order {
+      background-color: #ffebee;
+      color: #d32f2f;
+    }
+    
+    .connector-chip.reserved {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+    
+    .connector-chip.unknown {
+      background-color: #f5f5f5;
+      color: #757575;
+    }
+    
+    .chip-icon {
+      font-size: 0.9rem;
+      margin-right: 0.25rem;
     }
     
     .no-charge-points {
@@ -568,19 +623,16 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       }
       
       .charge-point-item {
-        flex-direction: column;
-        gap: 12px;
         padding: 12px;
       }
       
-      .charge-point-actions {
-        align-self: center;
-        margin-top: 8px;
+      .connectors-list {
+        gap: 4px;
       }
       
-      .start-charging-btn {
-        width: 44px;
-        height: 44px;
+      .connector-chip {
+        font-size: 0.7rem;
+        height: 26px;
       }
       
       .transaction-item {
@@ -670,6 +722,42 @@ export class DashboardComponent implements OnInit {
   
   protected getAvailableConnectors(chargePoint: ChargePoint): number {
     return chargePoint.connectors.filter(conn => conn.status === 'Available').length;
+  }
+
+  protected getConnectorStatusClass(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'available':
+        return 'available';
+      case 'occupied':
+      case 'charging':
+        return 'occupied';
+      case 'out_of_order':
+      case 'faulted':
+        return 'out_of_order';
+      case 'reserved':
+        return 'reserved';
+      default:
+        return 'unknown';
+    }
+  }
+
+  protected getConnectorTypeIcon(type: string): string {
+    switch (type.toLowerCase()) {
+      case 'type1':
+      case 'type_1':
+        return 'electrical_services';
+      case 'type2':
+      case 'type_2':
+        return 'power';
+      case 'ccs':
+        return 'battery_charging_full';
+      case 'chademo':
+        return 'battery_charging_full';
+      case 'tesla':
+        return 'electric_car';
+      default:
+        return 'power';
+    }
   }
   
   protected refreshChargePoints(): void {

@@ -84,7 +84,7 @@
     <mat-card class="dashboard-card charge-points-card">
       <mat-card-header>
         <mat-card-title>Available Charge Points</mat-card-title>
-        <mat-card-subtitle>Tap to start charging</mat-card-subtitle>
+        <mat-card-subtitle>Tap to view details</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="loading-container" *ngIf="chargePointService.loading()">
@@ -106,28 +106,18 @@
             <div class="charge-point-info">
               <h4 class="charge-point-title">{{ cp.title }}</h4>
               <p class="charge-point-address">{{ cp.address }}</p>
-              <div class="charge-point-details">
-                <mat-chip-set>
-                  <mat-chip [class.online]="cp.is_online" [class.offline]="!cp.is_online">
-                    {{ cp.is_online ? 'Online' : 'Offline' }}
+              <div class="connectors-section">
+                <h5 class="connectors-title">Connectors</h5>
+                <div class="connectors-list">
+                  <mat-chip 
+                    *ngFor="let connector of cp.connectors" 
+                    [class]="getConnectorStatusClass(connector.status)"
+                    class="connector-chip">
+                    <mat-icon class="chip-icon">{{ getConnectorTypeIcon(connector.type) }}</mat-icon>
+                    {{ connector.type }} - {{ connector.power }}kW
                   </mat-chip>
-                  <mat-chip [class.available]="cp.status === 'Available'" [class.busy]="cp.status !== 'Available'">
-                    {{ cp.status }}
-                  </mat-chip>
-                  <mat-chip>{{ cp.vendor }}</mat-chip>
-                </mat-chip-set>
+                </div>
               </div>
-              <div class="connectors-info">
-                <span class="connectors-count">{{ cp.connectors.length }} connectors</span>
-                <span class="available-connectors">
-                  {{ getAvailableConnectors(cp) }} available
-                </span>
-              </div>
-            </div>
-            <div class="charge-point-actions">
-              <button mat-fab color="primary" [disabled]="!cp.is_enabled || cp.status !== 'Available'" class="start-charging-btn">
-                <mat-icon>power_settings_new</mat-icon>
-              </button>
             </div>
           </div>
           

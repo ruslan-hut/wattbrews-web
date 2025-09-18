@@ -5,8 +5,19 @@
     <p class="page-subtitle">View and manage your charging session history</p>
   </div>
 
+  <!-- Authentication Required Message -->
+  <div class="auth-required-message" *ngIf="!isAuthenticated()">
+    <mat-icon class="auth-icon">lock</mat-icon>
+    <h3>Authentication Required</h3>
+    <p>You need to be logged in to view your session history. Please sign in to continue.</p>
+    <button mat-raised-button color="primary" (click)="navigateToLogin()">
+      <mat-icon>login</mat-icon>
+      Sign In
+    </button>
+  </div>
+
   <!-- Statistics Row -->
-  <div class="stats-row">
+  <div class="stats-row" *ngIf="isAuthenticated()">
     <mat-card class="stat-card">
       <mat-card-content>
         <div style="display: flex; align-items: center; gap: 16px;">
@@ -45,7 +56,7 @@
   </div>
 
   <!-- Filters Section -->
-  <div class="filters-section">
+  <div class="filters-section" *ngIf="isAuthenticated()">
     <mat-card class="filters-card">
       <mat-card-content>
         <div class="filters-row">
@@ -88,7 +99,7 @@
   </div>
 
   <!-- Transactions Section -->
-  <div class="transactions-section">
+  <div class="transactions-section" *ngIf="isAuthenticated()">
     <mat-card class="transactions-card">
       <div class="card-header">
         <h2 class="card-title">Transaction History</h2>

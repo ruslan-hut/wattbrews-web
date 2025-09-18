@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +17,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../../../core/services/transaction.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Transaction } from '../../../core/models/transaction.model';
 import { TransactionPreviewComponent } from '../../../shared/components/transaction-preview/transaction-preview.component';
 
@@ -65,6 +67,37 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
       font-size: 1.1rem;
       color: #5a6c7d;
       margin: 0;
+    }
+
+    .auth-required-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 3rem;
+      text-align: center;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .auth-icon {
+      font-size: 1.5rem;
+      color: #6c757d;
+    }
+
+    .auth-required-message h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #2c3e50;
+    }
+
+    .auth-required-message p {
+      margin: 0;
+      color: #6c757d;
+      font-size: 1rem;
+      line-height: 1.5;
     }
     
     .filters-section {
@@ -499,6 +532,8 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
 export class SessionsHistoryComponent implements OnInit {
   protected readonly transactionService = inject(TransactionService);
   private readonly dialog = inject(MatDialog);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   
   // Table configuration
   protected readonly displayedColumns = [
@@ -531,11 +566,17 @@ export class SessionsHistoryComponent implements OnInit {
   protected readonly totalCost = signal(0);
   protected readonly completedSessions = signal(0);
   
+  // Authentication
+  protected readonly isAuthenticated = this.authService.isAuthenticated;
+  
   ngOnInit(): void {
-    // Set current month as default filter
-    const currentMonth = new Date();
-    this.monthFilter.set(currentMonth);
-    this.loadTransactions();
+    // Only load transactions if user is authenticated
+    if (this.isAuthenticated()) {
+      // Set current month as default filter
+      const currentMonth = new Date();
+      this.monthFilter.set(currentMonth);
+      this.loadTransactions();
+    }
   }
   
   protected loadTransactions(): void {
@@ -745,5 +786,12 @@ export class SessionsHistoryComponent implements OnInit {
     this.monthFilter.set(null);
     this.currentPage.set(0);
     this.loadTransactions();
+  }
+  
+  /**
+   * Navigate to login page
+   */
+  protected navigateToLogin(): void {
+    this.router.navigate(['/auth/login']);
   }
 }
