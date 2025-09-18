@@ -30,26 +30,40 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
   styles: [`
     .dashboard-container {
       padding: 20px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      background-color: #f8f9fa;
+      min-height: 100vh;
+    }
+    
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 2rem;
     }
     
     .dashboard-title {
       font-size: 2.5rem;
       font-weight: 300;
       margin-bottom: 0.5rem;
-      color: #333;
+      color: #2c3e50;
     }
     
     .dashboard-subtitle {
       font-size: 1.1rem;
-      color: #666;
+      color: #5a6c7d;
+      margin-bottom: 0;
+    }
+    
+    .dashboard-top-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
       margin-bottom: 2rem;
     }
     
-    .dashboard-grid {
+    .dashboard-bottom-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
     
@@ -63,9 +77,52 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       flex-wrap: wrap;
     }
     
-    .quick-actions button {
+    .action-button {
       flex: 1;
       min-width: 150px;
+      height: 48px;
+    }
+    
+    .quick-actions-card {
+      background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+      color: #2c3e50;
+      border: 1px solid #ced4da;
+    }
+    
+    .quick-actions-card .mat-mdc-card-title {
+      color: #2c3e50;
+    }
+    
+    .overview-card {
+      background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
+      color: #2c3e50;
+      border: 1px solid #dadce0;
+    }
+    
+    .overview-card .mat-mdc-card-title {
+      color: #2c3e50;
+    }
+    
+    .charge-points-card {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      color: #2c3e50;
+      border: 1px solid #ced4da;
+    }
+    
+    .charge-points-card .mat-mdc-card-title,
+    .charge-points-card .mat-mdc-card-subtitle {
+      color: #2c3e50;
+    }
+    
+    .transactions-card {
+      background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
+      color: #2c3e50;
+      border: 1px solid #dadce0;
+    }
+    
+    .transactions-card .mat-mdc-card-title,
+    .transactions-card .mat-mdc-card-subtitle {
+      color: #2c3e50;
     }
     
     .transactions-list {
@@ -73,6 +130,8 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       flex-direction: column;
       gap: 12px;
       margin-bottom: 16px;
+      max-height: 400px;
+      overflow-y: auto;
     }
     
     .transaction-item {
@@ -80,16 +139,19 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       align-items: flex-start;
       gap: 12px;
       padding: 16px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
       transition: all 0.2s ease;
       cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     
     .transaction-item:hover {
-      border-color: #2196f3;
-      box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
-      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #ced4da;
     }
     
     .transaction-icon {
@@ -129,7 +191,7 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       margin: 0;
       font-size: 1rem;
       font-weight: 500;
-      color: #333;
+      color: #2c3e50;
     }
     
     .transaction-status {
@@ -156,12 +218,12 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
     .transaction-details p {
       margin: 4px 0;
       font-size: 0.9rem;
-      color: #666;
+      color: #5a6c7d;
     }
     
     .transaction-energy {
       font-weight: 500;
-      color: #333 !important;
+      color: #2c3e50 !important;
     }
     
     .transaction-payment {
@@ -191,7 +253,7 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
     
     .no-transactions p {
       margin: 0;
-      color: #666;
+      color: #5a6c7d;
       font-size: 1rem;
     }
     
@@ -208,8 +270,13 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
     }
     
     .stat-icon {
-      color: #2196f3;
+      color: #6c757d;
       font-size: 2rem;
+    }
+    
+    .overview-card .stat-icon {
+      color: #5a6c7d;
+      font-size: 1.5rem;
     }
     
     .stat-content {
@@ -220,12 +287,20 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
     .stat-value {
       font-size: 1.5rem;
       font-weight: 500;
-      color: #333;
+      color: #2c3e50;
     }
     
     .stat-label {
       font-size: 0.8rem;
-      color: #666;
+      color: #5a6c7d;
+    }
+    
+    .overview-card .stat-value {
+      color: #2c3e50;
+    }
+    
+    .overview-card .stat-label {
+      color: #5a6c7d;
     }
     
     .nearby-stations {
@@ -309,6 +384,8 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       flex-direction: column;
       gap: 12px;
       margin-bottom: 16px;
+      max-height: 400px;
+      overflow-y: auto;
     }
     
     .charge-point-item {
@@ -316,13 +393,37 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       justify-content: space-between;
       align-items: flex-start;
       padding: 16px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      transition: box-shadow 0.2s;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: relative;
     }
     
     .charge-point-item:hover {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #ced4da;
+    }
+    
+    .charge-point-status-indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      border-radius: 12px 0 0 12px;
+    }
+    
+    .charge-point-status-indicator.available {
+      background: #4caf50;
+    }
+    
+    .charge-point-status-indicator.busy {
+      background: #ff9800;
     }
     
     .charge-point-info {
@@ -333,13 +434,13 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       margin: 0 0 8px 0;
       font-size: 1.1rem;
       font-weight: 500;
-      color: #333;
+      color: #2c3e50;
     }
     
     .charge-point-address {
       margin: 0 0 12px 0;
       font-size: 0.9rem;
-      color: #666;
+      color: #5a6c7d;
     }
     
     .charge-point-details {
@@ -350,12 +451,43 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       display: flex;
       gap: 16px;
       font-size: 0.8rem;
-      color: #666;
+      color: #5a6c7d;
     }
     
     .charge-point-actions {
       display: flex;
       align-items: center;
+    }
+    
+    .start-charging-btn {
+      width: 48px;
+      height: 48px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .start-charging-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .no-charge-points {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .no-charge-points .no-data-icon {
+      font-size: 3rem;
+      color: #adb5bd;
+    }
+    
+    .no-charge-points p {
+      margin: 0;
+      color: #5a6c7d;
+      font-size: 1rem;
     }
     
     .mat-chip.online {
@@ -383,30 +515,78 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
         padding: 10px;
       }
       
+      .dashboard-header {
+        margin-bottom: 1.5rem;
+      }
+      
       .dashboard-title {
         font-size: 2rem;
       }
       
-      .quick-actions {
-        flex-direction: column;
+      .dashboard-subtitle {
+        font-size: 1rem;
       }
       
-      .quick-actions button {
+      .dashboard-top-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 1.5rem;
+      }
+      
+      .dashboard-bottom-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      
+      .quick-actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .action-button {
         min-width: auto;
+        height: 44px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      
+      .stat-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+      }
+      
+      .stat-icon {
+        font-size: 1.5rem;
+      }
+      
+      .stat-value {
+        font-size: 1.2rem;
       }
       
       .charge-point-item {
         flex-direction: column;
         gap: 12px;
+        padding: 12px;
       }
       
       .charge-point-actions {
-        align-self: flex-end;
+        align-self: center;
+        margin-top: 8px;
+      }
+      
+      .start-charging-btn {
+        width: 44px;
+        height: 44px;
       }
       
       .transaction-item {
         flex-direction: column;
         gap: 12px;
+        padding: 12px;
       }
       
       .transaction-header {
@@ -417,6 +597,41 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       
       .transaction-status {
         align-self: flex-start;
+      }
+      
+      .transactions-list,
+      .charge-points-list {
+        max-height: 300px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .dashboard-container {
+        padding: 8px;
+      }
+      
+      .dashboard-title {
+        font-size: 1.8rem;
+      }
+      
+      .dashboard-subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .stat-item {
+        flex-direction: row;
+        text-align: left;
+        gap: 12px;
+      }
+      
+      .action-button {
+        height: 40px;
+        font-size: 0.9rem;
       }
     }
   `]
@@ -475,6 +690,14 @@ export class DashboardComponent implements OnInit {
       autoFocus: false,
       restoreFocus: false
     });
+  }
+
+  protected startChargingSession(chargePoint: ChargePoint): void {
+    if (chargePoint.is_enabled && chargePoint.status === 'Available') {
+      // Navigate to station detail or start charging flow
+      console.log('Starting charging session for:', chargePoint.title);
+      // TODO: Implement charging session start logic
+    }
   }
   
   private loadChargePoints(): void {
