@@ -244,7 +244,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
     
     .stat-icon {
       color: #6c757d;
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       margin-bottom: 8px;
     }
     
@@ -292,7 +292,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
       }
       
       .stat-icon {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
       }
     }
     
@@ -350,7 +350,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
       }
       
       .stat-icon {
-        font-size: 2rem;
+        font-size: 1.6rem;
       }
       
       .card-header {
@@ -579,7 +579,6 @@ export class SessionsHistoryComponent implements OnInit {
     this.applyFilters();
   }
   
-  
   protected onMonthFilterChange(month: Date | null): void {
     this.monthFilter.set(month);
     this.currentPage.set(0); // Reset to first page when changing month
@@ -605,6 +604,7 @@ export class SessionsHistoryComponent implements OnInit {
     const search = this.searchTerm().toLowerCase();
     if (search) {
       filtered = filtered.filter(transaction => 
+        transaction.transaction_id.toString().toLowerCase().includes(search) ||
         transaction.charge_point_id.toLowerCase().includes(search) ||
         transaction.id_tag.toLowerCase().includes(search) ||
         transaction.user_tag.username.toLowerCase().includes(search)
