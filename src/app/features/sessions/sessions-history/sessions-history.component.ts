@@ -43,24 +43,27 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
   styles: [`
     .sessions-history-container {
       padding: 20px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      background-color: #f8f9fa;
+      min-height: 100vh;
     }
     
     .page-header {
       margin-bottom: 24px;
+      text-align: center;
     }
     
     .page-title {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 300;
       margin: 0 0 8px 0;
-      color: #333;
+      color: #2c3e50;
     }
     
     .page-subtitle {
-      font-size: 1rem;
-      color: #666;
+      font-size: 1.1rem;
+      color: #5a6c7d;
       margin: 0;
     }
     
@@ -70,6 +73,8 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
     
     .filters-card {
       padding: 20px;
+      background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
+      border: 1px solid #dadce0;
     }
     
     .filters-row {
@@ -90,7 +95,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
     }
     
     .clear-month-button {
-      color: #666;
+      color: #5a6c7d;
     }
     
     .clear-month-button:hover {
@@ -103,6 +108,8 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
     
     .transactions-card {
       padding: 0;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 1px solid #ced4da;
     }
     
     .card-header {
@@ -116,6 +123,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
       font-size: 1.25rem;
       font-weight: 500;
       margin: 0;
+      color: #2c3e50;
     }
     
     .refresh-button {
@@ -154,7 +162,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
     }
     
     .transaction-row:hover {
-      background-color: #f5f5f5;
+      background-color: rgba(255, 255, 255, 0.8);
     }
     
     .status-chip {
@@ -174,7 +182,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
     
     .energy-value {
       font-weight: 500;
-      color: #333;
+      color: #2c3e50;
     }
     
     .payment-amount {
@@ -198,13 +206,13 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
     
     .no-transactions h3 {
       margin: 0;
-      color: #666;
+      color: #5a6c7d;
       font-weight: 400;
     }
     
     .no-transactions p {
       margin: 0;
-      color: #999;
+      color: #adb5bd;
     }
     
     .stats-row {
@@ -217,23 +225,25 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
     .stat-card {
       flex: 1;
       min-width: 200px;
+      background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+      border: 1px solid #ced4da;
     }
     
     .stat-value {
       font-size: 2rem;
       font-weight: 500;
-      color: #333;
+      color: #2c3e50;
       margin: 0;
     }
     
     .stat-label {
       font-size: 0.9rem;
-      color: #666;
+      color: #5a6c7d;
       margin: 4px 0 0 0;
     }
     
     .stat-icon {
-      color: #2196f3;
+      color: #6c757d;
       font-size: 2.5rem;
       margin-bottom: 8px;
     }
@@ -370,10 +380,10 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
         display: block;
         margin-bottom: 12px;
         padding: 16px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        background: white;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         cursor: pointer;
         transition: all 0.2s ease;
         -webkit-tap-highlight-color: transparent;
@@ -397,7 +407,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
       
       .mobile-transaction-id {
         font-weight: 600;
-        color: #333;
+        color: #2c3e50;
         font-size: 1rem;
       }
       
@@ -420,13 +430,13 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
       
       .mobile-detail-label {
         font-size: 0.85rem;
-        color: #666;
+        color: #5a6c7d;
         font-weight: 500;
       }
       
       .mobile-detail-value {
         font-size: 0.9rem;
-        color: #333;
+        color: #2c3e50;
         text-align: right;
         max-width: 60%;
         word-break: break-word;
