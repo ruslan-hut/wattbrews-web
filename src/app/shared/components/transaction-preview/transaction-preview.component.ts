@@ -54,7 +54,7 @@ import { EnergyChartComponent } from '../energy-chart/energy-chart.component';
     }
     
     .close-button {
-      color: #666;
+      color: #5a6c7d;
     }
     
     .loading-container,
@@ -83,6 +83,8 @@ import { EnergyChartComponent } from '../energy-chart/energy-chart.component';
     .chart-card {
       margin-bottom: 0;
       margin-top: 8px;
+      background: white;
+      border: 1px solid #e9ecef;
     }
     
     .overview-card {
@@ -100,12 +102,13 @@ import { EnergyChartComponent } from '../energy-chart/energy-chart.component';
       align-items: center;
       gap: 12px;
       padding: 12px;
-      background-color: #f5f5f5;
+      background-color: white;
+      border: 1px solid #e9ecef;
       border-radius: 8px;
     }
     
     .overview-item mat-icon {
-      color: #2196f3;
+      color: #6c757d;
       font-size: 1.5rem;
     }
     
@@ -116,14 +119,14 @@ import { EnergyChartComponent } from '../energy-chart/energy-chart.component';
     
     .item-label {
       font-size: 0.8rem;
-      color: #666;
+      color: #5a6c7d;
       margin-bottom: 2px;
     }
     
     .item-value {
       font-size: 1rem;
       font-weight: 500;
-      color: #333;
+      color: #2c3e50;
     }
     
     .status-grid {
@@ -140,12 +143,12 @@ import { EnergyChartComponent } from '../energy-chart/energy-chart.component';
     
     .status-label {
       font-weight: 500;
-      color: #666;
+      color: #5a6c7d;
       min-width: 80px;
     }
     
     .status-value {
-      color: #333;
+      color: #2c3e50;
     }
     
     .mat-chip.completed {

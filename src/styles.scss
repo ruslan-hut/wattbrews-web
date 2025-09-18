@@ -26,8 +26,8 @@ body {
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
+  background-color: #f8f9fa;
+  color: #2c3e50;
   font: var(--mat-sys-body-medium);
 
   // Reset the user agent margin.
@@ -70,14 +70,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   gap: 20px !important;
   font-size: 2.2rem !important;
   font-weight: 600 !important;
-  color: #333 !important;
+  color: #2c3e50 !important;
   margin-bottom: 8px !important;
   padding: 0 !important;
   text-align: center !important;
 }
 
 .login-icon {
-  color: #2196f3 !important;
+  color: #6c757d !important;
   font-size: 1.8rem !important;
   flex-shrink: 0 !important;
 }
@@ -85,7 +85,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 mat-card-subtitle {
   text-align: center !important;
   margin: 0 !important;
-  color: #666 !important;
+  color: #5a6c7d !important;
   font-size: 1rem !important;
 }
 
@@ -98,7 +98,7 @@ mat-card-subtitle {
 }
 
 .explanation-text {
-  color: #666 !important;
+  color: #5a6c7d !important;
   font-size: 0.95rem !important;
   line-height: 1.5 !important;
   margin: 0 !important;

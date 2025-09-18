@@ -241,15 +241,18 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
   styles: [`
     .profile-container {
       padding: 20px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      background-color: #f8f9fa;
+      min-height: 100vh;
     }
     
     .profile-title {
       font-size: 2.5rem;
       font-weight: 300;
       margin-bottom: 2rem;
-      color: #333;
+      color: #2c3e50;
+      text-align: center;
     }
     
     .loading-container {
@@ -282,6 +285,8 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     
     .profile-card {
       margin-bottom: 24px;
+      background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
+      border: 1px solid #dadce0;
     }
     
     .user-info-grid {
@@ -298,13 +303,13 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     
     .info-item label {
       font-weight: 500;
-      color: #666;
+      color: #5a6c7d;
       font-size: 0.9rem;
     }
     
     .info-item span {
       font-size: 1.1rem;
-      color: #333;
+      color: #2c3e50;
     }
     
     .mat-chip.admin {
@@ -327,6 +332,8 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     
     .section-card {
       margin-bottom: 24px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 1px solid #ced4da;
     }
     
     .payment-plans {
@@ -336,14 +343,19 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     }
     
     .plan-item {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
       padding: 16px;
-      transition: box-shadow 0.2s;
+      background: rgba(255, 255, 255, 0.8);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     
     .plan-item:hover {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #ced4da;
     }
     
     .plan-header {
@@ -357,6 +369,7 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
       margin: 0;
       font-size: 1.2rem;
       font-weight: 500;
+      color: #2c3e50;
     }
     
     .plan-badges {
@@ -376,7 +389,7 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     }
     
     .price-item mat-icon {
-      color: #666;
+      color: #5a6c7d;
     }
     
     .user-tags {
@@ -386,14 +399,19 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     }
     
     .tag-item {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
       padding: 16px;
-      transition: box-shadow 0.2s;
+      background: rgba(255, 255, 255, 0.8);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     
     .tag-item:hover {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #ced4da;
     }
     
     .tag-header {
@@ -408,6 +426,7 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
       font-size: 1.2rem;
       font-weight: 500;
       font-family: monospace;
+      color: #2c3e50;
     }
     
     .tag-badges {
@@ -428,7 +447,7 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     
     .tag-info .label {
       font-weight: 500;
-      color: #666;
+      color: #5a6c7d;
       min-width: 80px;
     }
     
@@ -439,14 +458,19 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     }
     
     .method-item {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
       padding: 16px;
-      transition: box-shadow 0.2s;
+      background: rgba(255, 255, 255, 0.8);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     
     .method-item:hover {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #ced4da;
     }
     
     .method-header {
@@ -460,11 +484,12 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
       margin: 0 0 4px 0;
       font-size: 1.2rem;
       font-weight: 500;
+      color: #2c3e50;
     }
     
     .method-info p {
       margin: 0;
-      color: #666;
+      color: #5a6c7d;
       font-size: 0.9rem;
     }
     
@@ -487,7 +512,7 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     
     .method-info-item .label {
       font-weight: 500;
-      color: #666;
+      color: #5a6c7d;
       min-width: 80px;
     }
     
@@ -498,12 +523,12 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
       gap: 16px;
       padding: 40px;
       text-align: center;
-      color: #666;
+      color: #5a6c7d;
     }
     
     .empty-state mat-icon {
       font-size: 3rem;
-      color: #ccc;
+      color: #adb5bd;
     }
     
     @media (max-width: 768px) {
