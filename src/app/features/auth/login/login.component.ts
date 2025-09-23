@@ -50,10 +50,10 @@ import { NotificationService } from '../../../core/services/notification.service
 
           <!-- Primary: Google Sign In -->
           <div class="primary-login">
-            <button mat-raised-button color="primary" type="button" class="google-button primary" (click)="signInWithGoogle()" [disabled]="isLoading()">
-              <mat-icon class="google-icon">login</mat-icon>
+            <button mat-raised-button type="button" class="energy-button-primary" (click)="signInWithGoogle()" [disabled]="isLoading()">
+              <mat-icon class="energy-m-sm">login</mat-icon>
               <span *ngIf="!isLoading()">Continue with Google</span>
-              <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
+              <mat-spinner *ngIf="isLoading()" diameter="20" class="energy-m-sm"></mat-spinner>
             </button>
           </div>
 
@@ -94,8 +94,8 @@ import { NotificationService } from '../../../core/services/notification.service
                 </a>
               </div>
 
-              <button mat-raised-button color="accent" type="submit" class="email-login-button" [disabled]="loginForm.invalid || isLoading()">
-                <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
+              <button mat-raised-button type="submit" class="energy-button-secondary" [disabled]="loginForm.invalid || isLoading()">
+                <mat-spinner *ngIf="isLoading()" diameter="20" class="energy-m-sm"></mat-spinner>
                 <span *ngIf="!isLoading()">Sign In with Email</span>
               </button>
             </form>
@@ -105,199 +105,47 @@ import { NotificationService } from '../../../core/services/notification.service
     </div>
   `,
   styles: [`
-    .login-container {
-      display: flex !important;
-      justify-content: center !important;
-      align-items: center !important;
-      height: 100% !important;
-      padding: 20px !important;
-      background: transparent !important;
-    }
-
-    .login-card {
-      width: 100% !important;
-      max-width: 450px !important;
-      padding: 0 !important;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
-      border-radius: 20px !important;
-      margin: 0 auto !important;
-      background: rgba(255, 255, 255, 0.95) !important;
-      backdrop-filter: blur(10px) !important;
-      -webkit-backdrop-filter: blur(10px) !important;
-    }
-
-    .login-card mat-card-header {
-      text-align: center !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      padding: 24px 20px 16px 20px !important;
-    }
-
-    .login-title {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 20px !important;
-      font-size: 2.2rem !important;
-      font-weight: 600 !important;
-      color: #333 !important;
-      margin-bottom: 8px !important;
-      padding: 0 !important;
-      text-align: center !important;
-    }
-
-    .login-icon {
-      color: #2196f3 !important;
-      font-size: 1.8rem !important;
-      flex-shrink: 0 !important;
-    }
-
-    mat-card-subtitle {
-      text-align: center !important;
-      margin: 0 !important;
-      color: #666 !important;
-      font-size: 1rem !important;
-    }
-
-    .login-explanation {
-      margin-bottom: 24px !important;
-      text-align: center !important;
-      display: flex !important;
-      justify-content: center !important;
-      width: 100% !important;
-    }
-
-    .explanation-text {
-      color: #666 !important;
-      font-size: 0.95rem !important;
-      line-height: 1.5 !important;
-      margin: 0 !important;
-      padding: 0 20px !important;
-      text-align: center !important;
-      max-width: 400px !important;
-    }
-
-    .primary-login {
-      display: flex !important;
-      justify-content: center !important;
-      width: 100% !important;
-      margin-bottom: 32px !important;
-    }
-
-    .google-button.primary {
-      width: 100% !important;
-      height: 64px !important;
-      font-size: 1.2rem !important;
-      font-weight: 600 !important;
-      background: #4285f4 !important;
-      color: white !important;
-      border: none !important;
-      border-radius: 12px !important;
-      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3) !important;
-    }
-
-    .google-button.primary:hover {
-      background: #3367d6 !important;
-      box-shadow: 0 6px 16px rgba(66, 133, 244, 0.4) !important;
-    }
-
-    .google-icon {
-      margin-right: 16px !important;
-      font-size: 1.4rem !important;
-    }
-
-    .secondary-login {
-      transition: all 0.3s ease !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      width: 100% !important;
-    }
-
-    .toggle-email-button {
-      width: 100% !important;
-      height: 56px !important;
-      font-size: 1.1rem !important;
-      font-weight: 500 !important;
-      margin-bottom: 24px !important;
-      border-radius: 12px !important;
-    }
-
+    // Minimal component-specific styles - most styling handled by global energy theme
     .login-form {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 24px !important;
-      margin-top: 24px !important;
-      padding: 32px !important;
-      background: #f8f9fa !important;
-      border-radius: 16px !important;
-      border: 1px solid #e9ecef !important;
-      width: 100% !important;
-      max-width: 400px !important;
+      display: flex;
+      flex-direction: column;
+      gap: var(--energy-space-lg);
+      margin-top: var(--energy-space-lg);
+      padding: var(--energy-space-xl);
+      background: var(--energy-gray-100);
+      border-radius: var(--energy-radius-xl);
+      border: 1px solid var(--energy-gray-200);
+      width: 100%;
+      max-width: 400px;
     }
 
     .full-width {
-      width: 100% !important;
+      width: 100%;
     }
 
     .forgot-password {
-      text-align: right !important;
-      margin-top: -8px !important;
+      text-align: right;
+      margin-top: calc(-1 * var(--energy-space-sm));
     }
 
     .forgot-link {
-      color: #2196f3 !important;
-      text-decoration: none !important;
-      font-size: 0.95rem !important;
-      font-weight: 500 !important;
+      color: var(--energy-cyan);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
     }
 
     .forgot-link:hover {
-      text-decoration: underline !important;
+      color: var(--energy-cyan-dark);
+      text-decoration: underline;
     }
 
-    .email-login-button {
-      width: 100% !important;
-      height: 56px !important;
-      font-size: 1.1rem !important;
-      font-weight: 600 !important;
-      margin-top: 16px !important;
-      border-radius: 12px !important;
-    }
-
-    .button-spinner {
-      margin-right: 12px !important;
-    }
-
+    // Responsive adjustments
     @media (max-width: 480px) {
-      .login-container {
-        padding: 16px !important;
-      }
-      
-      .login-card {
-        margin: 0 !important;
-      }
-
-      .login-title {
-        font-size: 1.8rem !important;
-        gap: 16px !important;
-        padding: 0 16px !important;
-      }
-
-      .login-icon {
-        font-size: 1.5rem !important;
-      }
-
       .login-form {
-        padding: 20px !important;
-        max-width: 100% !important;
-      }
-
-      .explanation-text {
-        padding: 0 12px !important;
-        font-size: 0.9rem !important;
+        padding: var(--energy-space-lg);
+        max-width: 100%;
       }
     }
   `]
