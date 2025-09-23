@@ -3,6 +3,7 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { ChargePoint, ChargePointFilters, ChargePointListResponse } from '../models/chargepoint.model';
+import { StationDetail } from '../models/station-detail.model';
 import { API_ENDPOINTS } from '../constants/app.constants';
 
 @Injectable({
@@ -228,5 +229,33 @@ export class ChargePointService {
 
   private deg2rad(deg: number): number {
     return deg * (Math.PI/180);
+  }
+
+  /**
+   * Get detailed station information by point ID
+   */
+  getStationDetail(pointId: string): Observable<StationDetail> {
+    this._loading.set(true);
+    this._error.set(null);
+
+    const endpoint = API_ENDPOINTS.CHARGE_POINTS.POINT_DETAIL.replace(':id', pointId);
+    
+    console.log('ChargePointService: Loading station detail for point ID:', pointId);
+    console.log('ChargePointService: Endpoint:', endpoint);
+    
+    return this.apiService.getDirect<StationDetail>(endpoint)
+      .pipe(
+        tap((station) => {
+          console.log('ChargePointService: Station detail loaded successfully:', station);
+          this._loading.set(false);
+          this._lastUpdated.set(new Date());
+        }),
+        catchError(error => {
+          console.error('ChargePointService: Error loading station detail:', error);
+          this._error.set(error.message || 'Failed to load station details');
+          this._loading.set(false);
+          return throwError(() => error);
+        })
+      );
   }
 }

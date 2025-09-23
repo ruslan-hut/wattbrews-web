@@ -4,6 +4,7 @@ export * from './user-info.model';
 
 // Station models
 export * from './station.model';
+export * from './station-detail.model';
 
 // Session models
 export * from './session.model';
