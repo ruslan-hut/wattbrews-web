@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -529,11 +530,15 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
     }
   `]
 })
-export class SessionsHistoryComponent implements OnInit {
+export class SessionsHistoryComponent implements OnInit, OnDestroy {
   protected readonly transactionService = inject(TransactionService);
   private readonly dialog = inject(MatDialog);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  
+  // Subscription management
+  private authSubscription?: Subscription;
+  private authCheckTimeout?: any;
   
   // Table configuration
   protected readonly displayedColumns = [
@@ -568,14 +573,38 @@ export class SessionsHistoryComponent implements OnInit {
   
   // Authentication
   protected readonly isAuthenticated = this.authService.isAuthenticated;
+  protected readonly authLoading = signal(true);
   
   ngOnInit(): void {
-    // Only load transactions if user is authenticated
-    if (this.isAuthenticated()) {
-      // Set current month as default filter
-      const currentMonth = new Date();
-      this.monthFilter.set(currentMonth);
-      this.loadTransactions();
+    // Subscribe to auth state changes with timeout to handle page reload
+    this.authSubscription = this.authService.user$.subscribe(user => {
+      if (user) {
+        console.log('SessionsHistoryComponent: User authenticated, loading transactions');
+        this.authLoading.set(false);
+        if (this.authCheckTimeout) {
+          clearTimeout(this.authCheckTimeout);
+        }
+        // Set current month as default filter
+        const currentMonth = new Date();
+        this.monthFilter.set(currentMonth);
+        this.loadTransactions();
+      } else {
+        // Give Firebase auth time to restore session on page reload
+        this.authCheckTimeout = setTimeout(() => {
+          console.log('SessionsHistoryComponent: User not authenticated after timeout');
+          this.authLoading.set(false);
+        }, 1000); // 1 second delay
+      }
+    });
+  }
+  
+  ngOnDestroy(): void {
+    // Clean up subscription and timeout
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+    if (this.authCheckTimeout) {
+      clearTimeout(this.authCheckTimeout);
     }
   }
   

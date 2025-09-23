@@ -547,12 +547,16 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   
   // Subscription management
   private authSubscription?: Subscription;
+  private authCheckTimeout?: any;
 
   ngOnInit() {
     // Wait for authentication before loading station details
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {
         console.log('StationDetailComponent: User authenticated, loading station detail');
+        if (this.authCheckTimeout) {
+          clearTimeout(this.authCheckTimeout);
+        }
         this.route.params.subscribe(params => {
           const pointId = params['id'];
           if (pointId) {
@@ -560,8 +564,12 @@ export class StationDetailComponent implements OnInit, OnDestroy {
           }
         });
       } else {
-        console.log('StationDetailComponent: User not authenticated, redirecting to login');
-        this.router.navigate(['/auth/login']);
+        // Give Firebase auth time to restore session on page reload
+        // Only redirect after a short delay to avoid premature redirects
+        this.authCheckTimeout = setTimeout(() => {
+          console.log('StationDetailComponent: User not authenticated after timeout, redirecting to login');
+          this.router.navigate(['/auth/login']);
+        }, 1000); // 1 second delay
       }
     });
   }
@@ -570,6 +578,9 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     // Clean up subscription to prevent memory leaks
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
+    }
+    if (this.authCheckTimeout) {
+      clearTimeout(this.authCheckTimeout);
     }
   }
 

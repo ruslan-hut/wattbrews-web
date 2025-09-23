@@ -5,8 +5,15 @@
     <p class="page-subtitle">View and manage your charging session history</p>
   </div>
 
+  <!-- Authentication Loading State -->
+  <div class="auth-required-message" *ngIf="authLoading()">
+    <mat-spinner diameter="40"></mat-spinner>
+    <h3>Checking Authentication...</h3>
+    <p>Please wait while we verify your login status.</p>
+  </div>
+
   <!-- Authentication Required Message -->
-  <div class="auth-required-message" *ngIf="!isAuthenticated()">
+  <div class="auth-required-message" *ngIf="!authLoading() && !isAuthenticated()">
     <mat-icon class="auth-icon">lock</mat-icon>
     <h3>Authentication Required</h3>
     <p>You need to be logged in to view your session history. Please sign in to continue.</p>
@@ -17,7 +24,7 @@
   </div>
 
   <!-- Statistics Row -->
-  <div class="stats-row" *ngIf="isAuthenticated()">
+  <div class="stats-row" *ngIf="!authLoading() && isAuthenticated()">
     <mat-card class="stat-card">
       <mat-card-content>
         <div style="display: flex; align-items: center; gap: 16px;">
@@ -56,7 +63,7 @@
   </div>
 
   <!-- Filters Section -->
-  <div class="filters-section" *ngIf="isAuthenticated()">
+  <div class="filters-section" *ngIf="!authLoading() && isAuthenticated()">
     <mat-card class="filters-card">
       <mat-card-content>
         <div class="filters-row">
@@ -99,7 +106,7 @@
   </div>
 
   <!-- Transactions Section -->
-  <div class="transactions-section" *ngIf="isAuthenticated()">
+  <div class="transactions-section" *ngIf="!authLoading() && isAuthenticated()">
     <mat-card class="transactions-card">
       <div class="card-header">
         <h2 class="card-title">Transaction History</h2>
