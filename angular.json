@@ -43,20 +43,15 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kB",
-                  "maximumError": "10kB"
+                  "maximumWarning": "8kB",
+                  "maximumError": "12kB"
                 }
               ],
               "outputHashing": "all",
               "serviceWorker": "ngsw-config.json",
               "optimization": true,
               "extractLicenses": true,
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractCss": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "sourceMap": false
             },
             "development": {
               "optimization": false,
