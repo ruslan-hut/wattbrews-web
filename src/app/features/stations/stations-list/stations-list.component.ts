@@ -101,10 +101,6 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
                 <span class="info-text">{{ station.vendor }} {{ station.model }}</span>
               </div>
               
-              <div class="info-row">
-                <mat-icon class="info-icon">power</mat-icon>
-                <span class="info-text">{{ getTotalPower(station) }} kW total power</span>
-              </div>
               
               <div class="info-row">
                 <mat-icon class="info-icon">electrical_services</mat-icon>
@@ -279,11 +275,23 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
       font-size: 1.2rem;
       font-weight: 500;
       margin-bottom: 0.25rem;
+      text-align: left;
     }
 
     .station-address {
       color: #6c757d;
       font-size: 0.9rem;
+      text-align: left;
+      word-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+      line-height: 1.4;
+      display: block;
+      width: 100%;
+    }
+
+    .station-address ::ng-deep {
+      text-align: left !important;
     }
 
     .station-info {

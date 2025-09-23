@@ -4,87 +4,12 @@
     <p class="dashboard-subtitle">Choose a charger to start your charging session</p>
   </div>
   
-  <!-- Top Row: Quick Actions and Overview -->
-  <div class="dashboard-top-row">
-    <!-- Quick Actions -->
-    <mat-card class="dashboard-card quick-actions-card">
-      <mat-card-header>
-        <mat-card-title>Quick Actions</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="quick-actions">
-          <button mat-raised-button color="primary" routerLink="/stations" class="action-button">
-            <mat-icon>ev_station</mat-icon>
-            Find Stations
-          </button>
-          <button mat-raised-button color="accent" routerLink="/sessions/active" class="action-button">
-            <mat-icon>charging_station</mat-icon>
-            Active Sessions
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    
-    <!-- Charge Points Overview -->
-    <mat-card class="dashboard-card overview-card">
-      <mat-card-header>
-        <mat-card-title>Charge Points Overview</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="loading-container" *ngIf="chargePointService.loading()">
-          <mat-spinner diameter="40"></mat-spinner>
-          <p>Loading charge points...</p>
-        </div>
-        
-        <div class="error-container" *ngIf="chargePointService.error()">
-          <mat-icon class="error-icon">error</mat-icon>
-          <p>{{ chargePointService.error() }}</p>
-          <button mat-button color="primary" (click)="refreshChargePoints()">
-            Retry
-          </button>
-        </div>
-        
-        <div class="stats-grid" *ngIf="!chargePointService.loading() && !chargePointService.error()">
-          <div class="stat-item">
-            <mat-icon class="stat-icon">ev_station</mat-icon>
-            <div class="stat-content">
-              <span class="stat-value">{{ chargePointService.chargePoints().length }}</span>
-              <span class="stat-label">Total</span>
-            </div>
-          </div>
-          <div class="stat-item">
-            <mat-icon class="stat-icon">wifi</mat-icon>
-            <div class="stat-content">
-              <span class="stat-value">{{ chargePointService.onlineChargePoints().length }}</span>
-              <span class="stat-label">Online</span>
-            </div>
-          </div>
-          <div class="stat-item">
-            <mat-icon class="stat-icon">check_circle</mat-icon>
-            <div class="stat-content">
-              <span class="stat-value">{{ chargePointService.availableChargePoints().length }}</span>
-              <span class="stat-label">Available</span>
-            </div>
-          </div>
-          <div class="stat-item">
-            <mat-icon class="stat-icon">power</mat-icon>
-            <div class="stat-content">
-              <span class="stat-value">{{ chargePointService.availableConnectors() }}</span>
-              <span class="stat-label">Connectors</span>
-            </div>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  
-  <!-- Bottom Row: Charge Points and Recent Transactions Lists -->
-  <div class="dashboard-bottom-row">
+  <!-- Main Content: Charge Points and Recent Transactions Lists -->
+  <div class="dashboard-main-content">
     <!-- Charge Points List -->
     <mat-card class="dashboard-card charge-points-card">
       <mat-card-header>
         <mat-card-title>Available Charge Points</mat-card-title>
-        <mat-card-subtitle>Tap to view details</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="loading-container" *ngIf="chargePointService.loading()">
@@ -140,7 +65,6 @@
     <mat-card class="dashboard-card transactions-card">
       <mat-card-header>
         <mat-card-title>Recent Transactions</mat-card-title>
-        <mat-card-subtitle>Your charging history</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="loading-container" *ngIf="transactionService.loading()">
@@ -201,5 +125,57 @@
       </mat-card-content>
     </mat-card>
   </div>
+  
+  <!-- Overview Card at Bottom -->
+  <mat-card class="dashboard-card overview-card">
+    <mat-card-header>
+      <mat-card-title>Charge Points Overview</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="loading-container" *ngIf="chargePointService.loading()">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Loading charge points...</p>
+      </div>
+      
+      <div class="error-container" *ngIf="chargePointService.error()">
+        <mat-icon class="error-icon">error</mat-icon>
+        <p>{{ chargePointService.error() }}</p>
+        <button mat-button color="primary" (click)="refreshChargePoints()">
+          Retry
+        </button>
+      </div>
+      
+      <div class="stats-grid" *ngIf="!chargePointService.loading() && !chargePointService.error()">
+        <div class="stat-item">
+          <mat-icon class="stat-icon">ev_station</mat-icon>
+          <div class="stat-content">
+            <span class="stat-value">{{ chargePointService.chargePoints().length }}</span>
+            <span class="stat-label">Total</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <mat-icon class="stat-icon">wifi</mat-icon>
+          <div class="stat-content">
+            <span class="stat-value">{{ chargePointService.onlineChargePoints().length }}</span>
+            <span class="stat-label">Online</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <mat-icon class="stat-icon">check_circle</mat-icon>
+          <div class="stat-content">
+            <span class="stat-value">{{ chargePointService.availableChargePoints().length }}</span>
+            <span class="stat-label">Available</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <mat-icon class="stat-icon">power</mat-icon>
+          <div class="stat-content">
+            <span class="stat-value">{{ chargePointService.availableConnectors() }}</span>
+            <span class="stat-label">Connectors</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>
 
