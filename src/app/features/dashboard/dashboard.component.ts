@@ -54,44 +54,17 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       margin-bottom: 0;
     }
     
-    .dashboard-top-row {
+    .dashboard-main-content {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
       margin-bottom: 2rem;
     }
     
-    .dashboard-bottom-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    
     .dashboard-card {
       height: fit-content;
     }
     
-    .quick-actions {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    
-    .action-button {
-      flex: 1;
-      min-width: 150px;
-      height: 48px;
-    }
-    
-    .quick-actions-card {
-      background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
-      color: #2c3e50;
-      border: 1px solid #ced4da;
-    }
-    
-    .quick-actions-card .mat-mdc-card-title {
-      color: #2c3e50;
-    }
     
     .overview-card {
       background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
@@ -582,26 +555,12 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
         font-size: 1rem;
       }
       
-      .dashboard-top-row {
+      .dashboard-main-content {
         grid-template-columns: 1fr;
         gap: 16px;
         margin-bottom: 1.5rem;
       }
       
-      .dashboard-bottom-row {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      
-      .quick-actions {
-        flex-direction: column;
-        gap: 12px;
-      }
-      
-      .action-button {
-        min-width: auto;
-        height: 44px;
-      }
       
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -681,10 +640,6 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
         gap: 12px;
       }
       
-      .action-button {
-        height: 40px;
-        font-size: 0.9rem;
-      }
     }
   `]
 })

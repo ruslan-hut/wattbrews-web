@@ -59,7 +59,3 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo systemctl reload nginx || true"
         
-    - name: Deployment notification
-      run: |
-        echo "✅ Deployment completed successfully!"
-        echo "🌐 App deployed to: https://app.wattbrews.me"
