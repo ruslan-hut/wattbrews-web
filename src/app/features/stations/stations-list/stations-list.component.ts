@@ -1,7 +1,8 @@
-import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,8 +10,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChargePointService } from '../../../core/services/chargepoint.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { UserInfoService } from '../../../core/services/user-info.service';
 import { ChargePoint } from '../../../core/models/chargepoint.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
@@ -28,6 +31,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     MatChipsModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     LoadingSpinnerComponent,
     ErrorMessageComponent
   ],
@@ -126,18 +130,11 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
             <button 
               mat-button 
               color="primary" 
-              [disabled]="!station.is_online || !station.is_enabled"
+              [disabled]="!hasViewDetailsAccess()"
+              [matTooltip]="getViewDetailsTooltip(station)"
               (click)="viewStationDetails(station.charge_point_id)">
               <mat-icon>visibility</mat-icon>
               View Details
-            </button>
-            
-            <button 
-              mat-icon-button 
-              [color]="station.is_online ? 'warn' : 'primary'"
-              [disabled]="!station.is_enabled"
-              (click)="toggleStationStatus(station)">
-              <mat-icon>{{ station.is_online ? 'pause' : 'play_arrow' }}</mat-icon>
             </button>
           </mat-card-actions>
         </mat-card>
@@ -433,9 +430,10 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     }
   `]
 })
-export class StationsListComponent implements OnInit {
+export class StationsListComponent implements OnInit, OnDestroy {
   private readonly chargePointService = inject(ChargePointService);
   private readonly authService = inject(AuthService);
+  private readonly userInfoService = inject(UserInfoService);
   private readonly router = inject(Router);
 
   // Signals
@@ -447,6 +445,9 @@ export class StationsListComponent implements OnInit {
   // Search functionality
   searchQuery = '';
   private readonly _searchQuery = signal('');
+  
+  // Subscription management
+  private authSubscription?: Subscription;
 
   // Computed filtered stations
   readonly filteredStations = computed(() => {
@@ -466,9 +467,32 @@ export class StationsListComponent implements OnInit {
   });
 
   ngOnInit() {
-    // Only load stations if user is authenticated
-    if (this.isAuthenticated()) {
-      this.loadStations();
+    // Listen for auth state changes and load stations when user becomes authenticated
+    this.authSubscription = this.authService.user$.subscribe(user => {
+      if (user) {
+        console.log('User authenticated, loading stations and user info...');
+        this.loadStations();
+        // Load user info to get access level for View Details functionality
+        this.userInfoService.loadCurrentUserInfo().subscribe({
+          next: (userInfo) => {
+            console.log('User info loaded, access level:', userInfo.access_level);
+          },
+          error: (error) => {
+            console.error('Failed to load user info:', error);
+          }
+        });
+      } else {
+        console.log('User not authenticated, clearing stations...');
+        // Optionally clear stations when user logs out
+        // this.chargePointService.clearChargePoints();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    // Clean up subscription to prevent memory leaks
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
     }
   }
 
@@ -531,15 +555,18 @@ export class StationsListComponent implements OnInit {
 
   viewStationDetails(stationId: string) {
     // Navigate to station detail page
-    console.log('Navigate to station:', stationId);
+    this.router.navigate(['/stations', stationId]);
   }
 
-  toggleStationStatus(station: ChargePoint) {
-    if (station.is_online) {
-      this.chargePointService.disableChargePoint(station.charge_point_id).subscribe();
-    } else {
-      this.chargePointService.enableChargePoint(station.charge_point_id).subscribe();
+  hasViewDetailsAccess(): boolean {
+    return this.userInfoService.getAccessLevel() >= 5;
+  }
+
+  getViewDetailsTooltip(station: ChargePoint): string {
+    if (!this.hasViewDetailsAccess()) {
+      return 'Access level 5 or higher required to view station details';
     }
+    return 'View station details';
   }
 
   navigateToLogin() {

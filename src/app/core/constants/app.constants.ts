@@ -114,6 +114,7 @@ export const API_ENDPOINTS = {
   CHARGE_POINTS: {
     LIST: '/chp',
     DETAIL: '/chp/:id',
+    POINT_DETAIL: '/point/:id',
     STATUS: '/chp/:id/status',
     ENABLE: '/chp/:id/enable',
     DISABLE: '/chp/:id/disable',
