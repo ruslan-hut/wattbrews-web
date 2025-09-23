@@ -307,9 +307,14 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
       gap: 1.5rem;
     }
     
+    mat-card {
+      background-color: white !important;
+    }
+    
     .info-card, .status-card, .location-card, .connectors-card {
       border-radius: 12px;
       overflow: hidden;
+      background-color: white !important;
     }
     
     .station-status-icon {
@@ -365,7 +370,6 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
       align-items: center;
       gap: 8px;
       padding: 1rem;
-      background: #f8f9fa;
       border-radius: 8px;
     }
     
@@ -378,7 +382,6 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     .status-info, .status-times {
       margin-top: 1rem;
       padding: 1rem;
-      background: #f8f9fa;
       border-radius: 8px;
     }
     
@@ -437,17 +440,14 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     
     .connector-item.available {
       border-color: #28a745;
-      background: #f8fff9;
     }
     
     .connector-item.occupied {
       border-color: #ffc107;
-      background: #fffdf5;
     }
     
     .connector-item.out-of-order {
       border-color: #dc3545;
-      background: #fff5f5;
     }
     
     .connector-header {
@@ -474,6 +474,15 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
       flex-direction: column;
     }
     
+    @media (max-width: 768px) {
+      .connector-info {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+    
     .connector-label {
       font-size: 0.8rem;
       color: #6c757d;
@@ -489,7 +498,6 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     .connector-status-info, .connector-time {
       margin-top: 0.5rem;
       padding: 0.5rem;
-      background: #f8f9fa;
       border-radius: 6px;
     }
     
@@ -503,16 +511,16 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     .status-unavailable { color: #dc3545; }
     .status-offline { color: #6c757d; }
     
-    .online { background-color: #d4edda; color: #155724; }
-    .offline { background-color: #f8d7da; color: #721c24; }
-    .enabled { background-color: #d4edda; color: #155724; }
-    .disabled { background-color: #f8d7da; color: #721c24; }
+    .online { color: #155724; }
+    .offline { color: #721c24; }
+    .enabled { color: #155724; }
+    .disabled { color: #721c24; }
     
-    .available { background-color: #d4edda; color: #155724; }
-    .occupied { background-color: #fff3cd; color: #856404; }
-    .out-of-order { background-color: #f8d7da; color: #721c24; }
-    .no-error { background-color: #d4edda; color: #155724; }
-    .error { background-color: #f8d7da; color: #721c24; }
+    .available { color: #155724; }
+    .occupied { color: #856404; }
+    .out-of-order { color: #721c24; }
+    .no-error { color: #155724; }
+    .error { color: #721c24; }
     
     @media (max-width: 768px) {
       .info-grid, .status-grid, .connectors-grid {
