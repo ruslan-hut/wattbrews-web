@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit } from '@angular/core';
+import { Component, signal, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -11,6 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { UserInfoService } from '../../core/services/user-info.service';
 import { AuthService } from '../../core/services/auth.service';
 import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/models/user-info.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -28,10 +29,15 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
   template: `
     <div class="profile-container">
       <h1 class="profile-title">User Profile</h1>
-      <p>Profile component is working!</p>
+      
+      <!-- Authentication Loading State -->
+      <div class="loading-container" *ngIf="isAuthLoading()">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Checking authentication...</p>
+      </div>
       
       <!-- Authentication Required Message -->
-      <div class="auth-required-message" *ngIf="!isAuthenticated()">
+      <div class="auth-required-message" *ngIf="!isAuthLoading() && !isAuthenticated()">
         <mat-icon class="auth-icon">lock</mat-icon>
         <h3>Authentication Required</h3>
         <p>You need to be logged in to view your profile. Please sign in to continue.</p>
@@ -41,14 +47,14 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
         </button>
       </div>
       
-      <!-- Loading State -->
+      <!-- User Info Loading State -->
       <div class="loading-container" *ngIf="isAuthenticated() && userInfoService.loading()">
         <mat-spinner diameter="40"></mat-spinner>
         <p>Loading user information...</p>
       </div>
       
       <!-- Error State -->
-      <div class="error-container" *ngIf="isAuthenticated() && userInfoService.error()">
+      <div class="error-container" *ngIf="!isAuthLoading() && isAuthenticated() && userInfoService.error()">
         <mat-icon class="error-icon">error</mat-icon>
         <p>{{ userInfoService.error() }}</p>
         <button mat-button color="primary" (click)="refreshUserInfo()">
@@ -57,7 +63,7 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
       </div>
       
       <!-- Profile Content -->
-      <div class="profile-content" *ngIf="isAuthenticated() && !userInfoService.loading() && !userInfoService.error() && userInfoService.userInfo()">
+      <div class="profile-content" *ngIf="!isAuthLoading() && isAuthenticated() && !userInfoService.loading() && !userInfoService.error() && userInfoService.userInfo()">
         <!-- User Basic Info -->
         <mat-card class="profile-card">
           <mat-card-header>
@@ -118,7 +124,7 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
                   <div class="payment-plans" *ngIf="userInfoService.getPaymentPlans().length > 0; else noPlans">
                     <div class="plan-item" *ngFor="let plan of userInfoService.getPaymentPlans()">
                       <div class="plan-header">
-                        <h3>{{ plan.plan_id }}</h3>
+                        <h3>{{ plan.description }}</h3>
                         <div class="plan-badges">
                           <mat-chip *ngIf="plan.is_default" color="primary">Default</mat-chip>
                           <mat-chip *ngIf="plan.is_active" color="accent">Active</mat-chip>
@@ -132,6 +138,14 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
                         <div class="price-item">
                           <mat-icon>schedule</mat-icon>
                           <span>{{ plan.price_per_hour }} €/hour</span>
+                        </div>
+                        <div class="price-item" *ngIf="plan.start_time">
+                          <mat-icon>schedule</mat-icon>
+                          <span>Start: {{ formatTime(plan.start_time) }}</span>
+                        </div>
+                        <div class="price-item" *ngIf="plan.end_time">
+                          <mat-icon>schedule</mat-icon>
+                          <span>End: {{ formatTime(plan.end_time) }}</span>
                         </div>
                       </div>
                     </div>
@@ -421,8 +435,9 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     }
     
     .plan-details {
-      display: flex;
-      gap: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
     }
     
     .price-item {
@@ -588,7 +603,7 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
       }
       
       .plan-details {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         gap: 12px;
       }
       
@@ -598,25 +613,47 @@ import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/mo
     }
   `]
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   protected readonly userInfoService = inject(UserInfoService);
   protected readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   
   // Authentication state
   protected readonly isAuthenticated = this.authService.isAuthenticated;
+  protected readonly isAuthLoading = this.authService.isLoading;
+  
+  // Subscription management
+  private authSubscription?: Subscription;
 
   ngOnInit(): void {
     console.log('ProfileComponent initialized');
     console.log('Current user from auth service:', this.authService.user());
-    console.log('Is authenticated:', this.authService.isAuthenticated());
+    console.log('Is authenticated:', this.isAuthenticated());
+    console.log('Is auth loading:', this.isAuthLoading());
     
-    // Only load user info if authenticated
+    // Subscribe to auth state changes to handle race conditions
+    this.authSubscription = this.authService.user$.subscribe(user => {
+      console.log('Auth state changed in profile component:', user ? 'User logged in' : 'User logged out');
+      
+      if (user && this.isAuthenticated()) {
+        console.log('User authenticated, loading profile data');
+        this.loadUserInfo();
+      } else if (!user) {
+        console.log('User not authenticated, clearing profile data');
+        this.userInfoService.clearData();
+      }
+    });
+    
+    // Also check immediately in case auth is already resolved
     if (this.isAuthenticated()) {
-      console.log('User authenticated, loading profile data');
+      console.log('User already authenticated, loading profile data immediately');
       this.loadUserInfo();
-    } else {
-      console.log('User not authenticated, skipping profile data load');
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
     }
   }
 
@@ -639,6 +676,42 @@ export class ProfileComponent implements OnInit {
   protected getDateFromString(dateString: string): Date | null {
     if (!dateString || dateString === '0001-01-01T00:00:00Z') return null;
     return new Date(dateString);
+  }
+
+  protected formatTime(timeString: string): string {
+    if (!timeString) return 'N/A';
+    
+    // Handle different time formats
+    try {
+      // If it's a time string like "09:00" or "09:00:00"
+      if (timeString.includes(':')) {
+        const timeParts = timeString.split(':');
+        const hours = parseInt(timeParts[0], 10);
+        const minutes = parseInt(timeParts[1], 10);
+        
+        // Format as 12-hour time
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+        const displayMinutes = minutes.toString().padStart(2, '0');
+        
+        return `${displayHours}:${displayMinutes} ${period}`;
+      }
+      
+      // If it's a full datetime string
+      const date = new Date(timeString);
+      if (!isNaN(date.getTime())) {
+        return date.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        });
+      }
+      
+      return timeString;
+    } catch (error) {
+      console.warn('Error formatting time:', timeString, error);
+      return timeString;
+    }
   }
 
   private loadUserInfo(): void {
