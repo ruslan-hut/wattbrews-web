@@ -1,0 +1,36 @@
+# Apache configuration for favicon and static assets
+# Ensure proper MIME types for favicon files
+<IfModule mod_mime.c>
+    AddType image/x-icon .ico
+    AddType image/png .png
+    AddType application/manifest+json .webmanifest
+</IfModule>
+
+# Cache control for favicon and static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    # Cache favicon for 1 year
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType application/manifest+json "access plus 1 week"
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options nosniff
+    # Cache control for favicon
+    <FilesMatch "\.(ico|png)$">
+        Header set Cache-Control "public, max-age=31536000"
+    </FilesMatch>
+</IfModule>
+
+# Fallback for SPA routing
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+</IfModule>
