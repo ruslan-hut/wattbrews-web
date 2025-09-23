@@ -1,0 +1,65 @@
+name: Deploy to Production Server
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build Angular app for production
+      run: npm run build
+      env:
+        NODE_ENV: production
+        
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        
+    - name: Create deployment directory
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ vars.DEPLOY_PATH }}"
+        
+    - name: Deploy to server
+      run: |
+        # Create a temporary directory for the build
+        mkdir -p dist
+        
+        # Copy build files to temporary directory
+        cp -r dist/wattbrews-web/browser/* dist/
+        
+        # Upload files to server
+        rsync -avz --delete \
+          -e "ssh -o StrictHostKeyChecking=no" \
+          dist/ \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ vars.DEPLOY_PATH }}/
+          
+    - name: Set proper permissions and ownership
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo chown -R www-data:www-data ${{ vars.DEPLOY_PATH }}"
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo chmod -R 755 ${{ vars.DEPLOY_PATH }}"
+        
+    - name: Restart web server (if needed)
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo systemctl reload nginx || true"
+        
+    - name: Deployment notification
+      run: |
+        echo "✅ Deployment completed successfully!"
+        echo "🌐 App deployed to: https://app.wattbrews.me"
