@@ -1,7 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +19,6 @@ import { NotificationService } from '../../../core/services/notification.service
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -48,56 +47,60 @@ import { NotificationService } from '../../../core/services/notification.service
             </p>
           </div>
 
-          <!-- Primary: Google Sign In -->
-          <div class="primary-login">
-            <button mat-raised-button type="button" class="energy-button-primary" (click)="signInWithGoogle()" [disabled]="isLoading()">
-              <mat-icon class="energy-m-sm">login</mat-icon>
+          <!-- Sign-in Options -->
+          <div class="sign-in-options">
+            <button mat-raised-button type="button" class="sign-in-button google-button" (click)="signInWithGoogle()" [disabled]="isLoading()">
+              <mat-icon class="button-icon">login</mat-icon>
               <span *ngIf="!isLoading()">Continue with Google</span>
-              <mat-spinner *ngIf="isLoading()" diameter="20" class="energy-m-sm"></mat-spinner>
+              <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
+            </button>
+
+            <button mat-raised-button type="button" class="sign-in-button email-link-button" (click)="toggleEmailLinkForm()" [disabled]="isLoading()">
+              <mat-icon class="button-icon">link</mat-icon>
+              <span *ngIf="!isLoading()">Sign in with Email Link</span>
+              <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
             </button>
           </div>
 
-          <!-- Secondary: Email/Password -->
-          <div class="secondary-login" [class.expanded]="showEmailLogin()">
-            <button mat-stroked-button type="button" class="toggle-email-button" (click)="toggleEmailLogin()" [disabled]="isLoading()">
-              <mat-icon>email</mat-icon>
-              Sign in with Email
-            </button>
+          <!-- Email Link Form -->
+          <div class="email-link-form-container" [class.expanded]="showEmailLinkForm()">
 
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" *ngIf="showEmailLogin()">
+            <!-- Email Link Form -->
+            <form [formGroup]="emailLinkForm" (ngSubmit)="onEmailLinkSubmit()" class="login-form" *ngIf="showEmailLinkForm()">
+              <div class="email-link-explanation">
+                <p class="explanation-text">
+                  Enter your email address and we'll send you a secure sign-in link. 
+                  No password required!
+                </p>
+              </div>
+
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Email</mat-label>
-                <input matInput type="email" formControlName="email" placeholder="Enter your email">
+                <input matInput type="email" formControlName="email" placeholder="Enter your email address">
                 <mat-icon matSuffix>email</mat-icon>
-                <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+                <mat-error *ngIf="emailLinkForm.get('email')?.hasError('required')">
                   Email is required
                 </mat-error>
-                <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+                <mat-error *ngIf="emailLinkForm.get('email')?.hasError('email')">
                   Please enter a valid email
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Password</mat-label>
-                <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" placeholder="Enter your password">
-                <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
-                  <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-                <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-                  Password is required
-                </mat-error>
-              </mat-form-field>
-
-              <div class="forgot-password">
-                <a routerLink="/auth/forgot-password" class="forgot-link">
-                  Forgot your password?
-                </a>
-              </div>
-
-              <button mat-raised-button type="submit" class="energy-button-secondary" [disabled]="loginForm.invalid || isLoading()">
+              <button mat-raised-button type="submit" class="energy-button-secondary" [disabled]="emailLinkForm.invalid || isLoading()">
                 <mat-spinner *ngIf="isLoading()" diameter="20" class="energy-m-sm"></mat-spinner>
-                <span *ngIf="!isLoading()">Sign In with Email</span>
+                <span *ngIf="!isLoading()">Send Sign-in Link</span>
               </button>
+
+              <!-- Success Message -->
+              <div class="email-link-success" *ngIf="emailLinkSent()">
+                <mat-icon class="success-icon">check_circle</mat-icon>
+                <p class="success-message">
+                  Sign-in link sent! Check your email and click the link to sign in.
+                </p>
+                <p class="success-submessage">
+                  Didn't receive the email? Check your spam folder or try again.
+                </p>
+              </div>
             </form>
           </div>
         </mat-card-content>
@@ -123,22 +126,102 @@ import { NotificationService } from '../../../core/services/notification.service
       width: 100%;
     }
 
-    .forgot-password {
-      text-align: right;
-      margin-top: calc(-1 * var(--energy-space-sm));
+    .sign-in-options {
+      display: flex;
+      flex-direction: column;
+      gap: var(--energy-space-md);
+      margin-bottom: var(--energy-space-lg);
     }
 
-    .forgot-link {
-      color: var(--energy-cyan);
-      text-decoration: none;
-      font-size: 0.95rem;
+    .sign-in-button {
+      width: 100%;
+      height: 48px;
+      font-size: 1rem;
       font-weight: 500;
-      transition: color 0.2s ease;
+      border-radius: var(--energy-radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--energy-space-sm);
+      transition: all 0.2s ease;
     }
 
-    .forgot-link:hover {
-      color: var(--energy-cyan-dark);
-      text-decoration: underline;
+    .google-button {
+      background: #4285f4;
+      color: white;
+      border: none;
+    }
+
+    .google-button:hover:not(:disabled) {
+      background: #3367d6;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+    }
+
+    .email-link-button {
+      background: var(--energy-blue);
+      color: white;
+      border: none;
+    }
+
+    .email-link-button:hover:not(:disabled) {
+      background: var(--energy-blue-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .button-icon {
+      font-size: 1.2rem;
+    }
+
+    .button-spinner {
+      margin: 0;
+    }
+
+    .email-link-form-container {
+      margin-top: var(--energy-space-lg);
+    }
+
+    .email-link-explanation {
+      margin-bottom: var(--energy-space-lg);
+      padding: var(--energy-space-md);
+      background: var(--energy-blue-50);
+      border-radius: var(--energy-radius-lg);
+      border-left: 4px solid var(--energy-blue);
+    }
+
+    .email-link-explanation .explanation-text {
+      margin: 0;
+      color: var(--energy-blue-dark);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .email-link-success {
+      margin-top: var(--energy-space-lg);
+      padding: var(--energy-space-lg);
+      background: var(--energy-green-50);
+      border-radius: var(--energy-radius-lg);
+      border: 1px solid var(--energy-green-200);
+      text-align: center;
+    }
+
+    .success-icon {
+      color: var(--energy-green);
+      font-size: 2rem;
+      margin-bottom: var(--energy-space-sm);
+    }
+
+    .success-message {
+      margin: 0 0 var(--energy-space-sm) 0;
+      color: var(--energy-green-dark);
+      font-weight: 500;
+    }
+
+    .success-submessage {
+      margin: 0;
+      color: var(--energy-gray-600);
+      font-size: 0.9rem;
     }
 
     // Responsive adjustments
@@ -146,6 +229,15 @@ import { NotificationService } from '../../../core/services/notification.service
       .login-form {
         padding: var(--energy-space-lg);
         max-width: 100%;
+      }
+
+      .sign-in-options {
+        gap: var(--energy-space-sm);
+      }
+
+      .sign-in-button {
+        height: 44px;
+        font-size: 0.95rem;
       }
     }
   `]
@@ -156,21 +248,16 @@ export class LoginComponent {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
-  protected readonly hidePassword = signal(true);
-  protected readonly showEmailLogin = signal(false);
+  protected readonly showEmailLinkForm = signal(false);
+  protected readonly emailLinkSent = signal(false);
   protected readonly isLoading = this.authService.isLoading;
 
-  loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+  emailLinkForm: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]]
   });
 
-  togglePasswordVisibility(): void {
-    this.hidePassword.update(hide => !hide);
-  }
-
-  toggleEmailLogin(): void {
-    this.showEmailLogin.update(show => !show);
+  toggleEmailLinkForm(): void {
+    this.showEmailLinkForm.update(show => !show);
   }
 
   async signInWithGoogle(): Promise<void> {
@@ -182,14 +269,15 @@ export class LoginComponent {
     }
   }
 
-  async onSubmit(): Promise<void> {
-    if (this.loginForm.valid) {
+  async onEmailLinkSubmit(): Promise<void> {
+    if (this.emailLinkForm.valid) {
       try {
-        const { email, password } = this.loginForm.value;
-        await this.authService.login({ email, password });
-        this.notificationService.success('Welcome back!', 'Email Login Successful');
+        const { email } = this.emailLinkForm.value;
+        await this.authService.sendSignInLinkToEmail(email);
+        this.emailLinkSent.set(true);
+        this.notificationService.success('Sign-in link sent!', 'Check your email and click the link to sign in.');
       } catch (error: any) {
-        this.notificationService.error(error.message || 'Login failed. Please try again.');
+        this.notificationService.error(error.message || 'Failed to send sign-in link. Please try again.');
       }
     }
   }
