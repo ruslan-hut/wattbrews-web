@@ -70,15 +70,21 @@ import { AuthService } from '../../core/services/auth.service';
           </button>
           <span>{{ appTitle() }}</span>
           <span class="spacer"></span>
+          <!-- Authenticated user menu -->
           <div class="user-info" *ngIf="userName()">
             <span class="user-name">{{ userName() }}</span>
             <button mat-icon-button [matMenuTriggerFor]="userMenu">
               <mat-icon>account_circle</mat-icon>
             </button>
           </div>
-          <button mat-icon-button [matMenuTriggerFor]="userMenu" *ngIf="!userName()">
-            <mat-icon>account_circle</mat-icon>
+          
+          <!-- Login button for unauthenticated users -->
+          <button mat-button color="accent" (click)="navigateToLogin()" *ngIf="!userName()">
+            <mat-icon>login</mat-icon>
+            Login
           </button>
+          
+          <!-- User menu (only visible for authenticated users) -->
           <mat-menu #userMenu="matMenu">
             <button mat-menu-item routerLink="/profile">
               <mat-icon>person</mat-icon>
@@ -146,6 +152,37 @@ import { AuthService } from '../../core/services/auth.service';
       opacity: 1;
     }
     
+    button[mat-button] {
+      color: white !important;
+      background-color: var(--energy-cyan, #00bcd4) !important;
+      border: 1px solid var(--energy-cyan-dark, #0097a7) !important;
+      border-radius: var(--energy-radius-lg, 12px);
+      padding: 8px 16px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      box-shadow: var(--energy-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+      
+      &:hover {
+        background-color: var(--energy-cyan-dark, #0097a7) !important;
+        border-color: var(--energy-cyan-dark, #0097a7) !important;
+        transform: translateY(-1px);
+        box-shadow: var(--energy-shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+      }
+      
+      &:active {
+        transform: translateY(0);
+        box-shadow: var(--energy-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+      }
+      
+      mat-icon {
+        margin-right: 8px;
+        font-size: 1.2rem;
+        width: 1.2rem;
+        height: 1.2rem;
+        color: white !important;
+      }
+    }
+    
     .main-content {
       padding: 20px;
       min-height: calc(100vh - 64px);
@@ -186,5 +223,9 @@ export class MainLayoutComponent {
     } catch (error) {
       console.error('Logout error:', error);
     }
+  }
+  
+  navigateToLogin(): void {
+    this.router.navigate(['/auth/login']);
   }
 }
