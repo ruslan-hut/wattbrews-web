@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, sendPasswordResetEmail, updateProfile, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, sendPasswordResetEmail, updateProfile, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, ActionCodeSettings } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, from, throwError } from 'rxjs';
@@ -205,6 +205,79 @@ export class AuthService {
   }
 
   /**
+   * Send sign-in link to email (passwordless authentication)
+   */
+  async sendSignInLinkToEmail(email: string): Promise<void> {
+    try {
+      this._isLoading.set(true);
+      this._error.set(null);
+
+      const actionCodeSettings: ActionCodeSettings = {
+        url: `${window.location.origin}/auth/verify-email-link`,
+        handleCodeInApp: true,
+        iOS: {
+          bundleId: 'com.wattbrews.app'
+        },
+        android: {
+          packageName: 'com.wattbrews.app',
+          installApp: true,
+          minimumVersion: '1.0'
+        }
+      };
+
+      await sendSignInLinkToEmail(this.auth, email, actionCodeSettings);
+      
+      // Store email locally for verification
+      localStorage.setItem('emailForSignIn', email);
+    } catch (error: any) {
+      this._error.set(this.getErrorMessage(error));
+      throw error;
+    } finally {
+      this._isLoading.set(false);
+    }
+  }
+
+  /**
+   * Check if current URL is a sign-in link
+   */
+  isSignInWithEmailLink(url: string): boolean {
+    return isSignInWithEmailLink(this.auth, url);
+  }
+
+  /**
+   * Complete sign-in with email link
+   */
+  async signInWithEmailLink(email: string, url: string): Promise<void> {
+    try {
+      this._isLoading.set(true);
+      this._error.set(null);
+
+      const userCredential = await signInWithEmailLink(this.auth, email, url);
+      
+      // Clear stored email
+      localStorage.removeItem('emailForSignIn');
+      
+      // Check if user profile exists, if not create it
+      await this.ensureUserProfile(userCredential.user);
+      await this.loadUserProfile(userCredential.user.uid);
+      
+      this.router.navigate(['/dashboard']);
+    } catch (error: any) {
+      this._error.set(this.getErrorMessage(error));
+      throw error;
+    } finally {
+      this._isLoading.set(false);
+    }
+  }
+
+  /**
+   * Get stored email for sign-in link verification
+   */
+  getStoredEmailForSignIn(): string | null {
+    return localStorage.getItem('emailForSignIn');
+  }
+
+  /**
    * Get current user token (for backend requests)
    */
   async getToken(): Promise<string | null> {
@@ -351,6 +424,14 @@ export class AuthService {
         return 'This account has been disabled.';
       case 'auth/too-many-requests':
         return 'Too many failed attempts. Please try again later.';
+      case 'auth/invalid-action-code':
+        return 'The sign-in link is invalid or has expired.';
+      case 'auth/expired-action-code':
+        return 'The sign-in link has expired. Please request a new one.';
+      case 'auth/invalid-email-verified':
+        return 'The email address is not verified.';
+      case 'auth/email-already-exists':
+        return 'An account with this email already exists.';
       default:
         return error.message || 'An error occurred during authentication.';
     }

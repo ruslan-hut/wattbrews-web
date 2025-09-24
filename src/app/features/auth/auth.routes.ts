@@ -16,5 +16,9 @@ export const authRoutes: Routes = [
   {
     path: 'forgot-password',
     loadComponent: () => import('./forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'verify-email-link',
+    loadComponent: () => import('./verify-email-link/verify-email-link.component').then(m => m.VerifyEmailLinkComponent)
   }
 ];
