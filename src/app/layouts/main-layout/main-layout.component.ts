@@ -124,16 +124,26 @@ import { AuthService } from '../../core/services/auth.service';
       display: flex;
       align-items: center;
       gap: 8px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
     }
     
     .user-name {
       font-size: 0.9rem;
-      font-weight: 500;
-      color: white;
+      font-weight: 600;
+      color: inherit;
       max-width: 150px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      opacity: 1;
     }
     
     .main-content {
