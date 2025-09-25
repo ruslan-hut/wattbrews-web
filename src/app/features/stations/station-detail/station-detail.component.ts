@@ -509,6 +509,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     
     .status-available { color: #28a745; }
     .status-unavailable { color: #dc3545; }
+    .status-unavailable-yellow { color: #ff9800; }
     .status-offline { color: #6c757d; }
     
     .online { color: #155724; }
@@ -516,9 +517,22 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     .enabled { color: #155724; }
     .disabled { color: #721c24; }
     
-    .available { color: #155724; }
-    .occupied { color: #856404; }
-    .out-of-order { color: #721c24; }
+    .available { 
+      background-color: #d1fae5;
+      color: #10b981;
+    }
+    .occupied { 
+      background-color: #fef3c7;
+      color: #f59e0b;
+    }
+    .out-of-order { 
+      background-color: #f3f4f6;
+      color: #6b7280;
+    }
+    .reserved {
+      background-color: #dbeafe;
+      color: #3b82f6;
+    }
     .no-error { color: #155724; }
     .error { color: #721c24; }
     
@@ -618,7 +632,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     if (!station) return 'help';
     if (!station.is_online) return 'wifi_off';
     const availableConnectors = station.connectors.filter(c => c.status === 'Available').length;
-    return availableConnectors > 0 ? 'check_circle' : 'cancel';
+    return availableConnectors > 0 ? 'check_circle' : 'warning';
   }
 
   getStatusIconClass(): string {
@@ -626,7 +640,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     if (!station) return '';
     if (!station.is_online) return 'status-offline';
     const availableConnectors = station.connectors.filter(c => c.status === 'Available').length;
-    return availableConnectors > 0 ? 'status-available' : 'status-unavailable';
+    return availableConnectors > 0 ? 'status-available' : 'status-unavailable-yellow';
   }
 
   getStatusChipClass(status: string): string {
@@ -634,7 +648,9 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       case 'available': return 'available';
       case 'occupied': return 'occupied';
       case 'outoforder': return 'out-of-order';
-      default: return '';
+      case 'out_of_order': return 'out-of-order';
+      case 'reserved': return 'reserved';
+      default: return 'out-of-order';
     }
   }
 
@@ -647,7 +663,9 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       case 'available': return 'available';
       case 'occupied': return 'occupied';
       case 'outoforder': return 'out-of-order';
-      default: return '';
+      case 'out_of_order': return 'out-of-order';
+      case 'reserved': return 'reserved';
+      default: return 'out-of-order';
     }
   }
 
