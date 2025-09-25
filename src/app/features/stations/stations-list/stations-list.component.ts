@@ -360,18 +360,23 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     }
 
     .connector-chip.available {
-      background-color: #e8f5e8;
-      color: #2e7d32;
+      background-color: #d1fae5;
+      color: #10b981;
     }
 
     .connector-chip.occupied {
-      background-color: #fff3e0;
-      color: #f57c00;
+      background-color: #fef3c7;
+      color: #f59e0b;
     }
 
     .connector-chip.out_of_order {
-      background-color: #ffebee;
-      color: #d32f2f;
+      background-color: #f3f4f6;
+      color: #6b7280;
+    }
+
+    .connector-chip.reserved {
+      background-color: #dbeafe;
+      color: #3b82f6;
     }
 
     .chip-icon {
@@ -385,6 +390,10 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
 
     .status-unavailable {
       color: #f44336;
+    }
+
+    .status-unavailable-yellow {
+      color: #ff9800;
     }
 
     .status-offline {
@@ -516,13 +525,13 @@ export class StationsListComponent implements OnInit, OnDestroy {
   getStatusIcon(station: ChargePoint): string {
     if (!station.is_online) return 'wifi_off';
     const availableConnectors = this.getAvailableConnectors(station);
-    return availableConnectors > 0 ? 'check_circle' : 'cancel';
+    return availableConnectors > 0 ? 'check_circle' : 'warning';
   }
 
   getStatusIconClass(station: ChargePoint): string {
     if (!station.is_online) return 'status-offline';
     const availableConnectors = this.getAvailableConnectors(station);
-    return availableConnectors > 0 ? 'status-available' : 'status-unavailable';
+    return availableConnectors > 0 ? 'status-available' : 'status-unavailable-yellow';
   }
 
   getTotalPower(station: ChargePoint): number {
@@ -538,7 +547,8 @@ export class StationsListComponent implements OnInit, OnDestroy {
       case 'available': return 'available';
       case 'occupied': return 'occupied';
       case 'out_of_order': return 'out_of_order';
-      default: return '';
+      case 'reserved': return 'reserved';
+      default: return 'out_of_order';
     }
   }
 
