@@ -5,8 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ChargePointService } from '../../core/services/chargepoint.service';
 import { AuthService } from '../../core/services/auth.service';
 import { TransactionService } from '../../core/services/transaction.service';
@@ -24,6 +25,7 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
     MatButtonModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatTooltipModule,
     RouterModule
   ],
   templateUrl: './dashboard.component.html',
@@ -419,6 +421,12 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       border-color: #ced4da;
     }
 
+    .charge-point-actions {
+      display: flex;
+      align-items: center;
+      margin-left: 12px;
+    }
+
     
     .charge-point-status-indicator {
       position: absolute;
@@ -705,6 +713,7 @@ export class DashboardComponent implements OnInit {
   protected readonly authService = inject(AuthService);
   protected readonly transactionService = inject(TransactionService);
   private readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
   
   protected readonly totalSessions = signal(24);
   protected readonly totalEnergy = signal(156.8);
@@ -803,6 +812,30 @@ export class DashboardComponent implements OnInit {
       console.log('Starting charging session for:', chargePoint.title);
       // TODO: Implement charging session start logic
     }
+  }
+
+  protected canStartCharge(chargePoint: ChargePoint): boolean {
+    return chargePoint.is_online && 
+           chargePoint.is_enabled && 
+           this.getAvailableConnectors(chargePoint) > 0;
+  }
+
+  protected getStartChargeTooltip(chargePoint: ChargePoint): string {
+    if (!chargePoint.is_online) {
+      return 'Station is offline';
+    }
+    if (!chargePoint.is_enabled) {
+      return 'Station is disabled';
+    }
+    if (this.getAvailableConnectors(chargePoint) === 0) {
+      return 'No available connectors';
+    }
+    return 'Start charging at this station';
+  }
+
+  protected startCharge(stationId: string): void {
+    // Navigate to charge initiation screen
+    this.router.navigate(['/stations', stationId, 'charge']);
   }
   
   private loadChargePoints(): void {

@@ -136,6 +136,15 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
               <mat-icon>visibility</mat-icon>
               View Details
             </button>
+            <button 
+              mat-raised-button 
+              color="accent" 
+              [disabled]="!canStartCharge(station)"
+              [matTooltip]="getStartChargeTooltip(station)"
+              (click)="startCharge(station.charge_point_id)">
+              <mat-icon>play_arrow</mat-icon>
+              Start Charge
+            </button>
           </mat-card-actions>
         </mat-card>
       </div>
@@ -581,5 +590,28 @@ export class StationsListComponent implements OnInit, OnDestroy {
 
   navigateToLogin() {
     this.router.navigate(['/auth/login']);
+  }
+
+  canStartCharge(station: ChargePoint): boolean {
+    return station.is_online && 
+           station.is_enabled && 
+           this.getAvailableConnectors(station) > 0;
+  }
+
+  getStartChargeTooltip(station: ChargePoint): string {
+    if (!station.is_online) {
+      return 'Station is offline';
+    }
+    if (!station.is_enabled) {
+      return 'Station is disabled';
+    }
+    if (this.getAvailableConnectors(station) === 0) {
+      return 'No available connectors';
+    }
+    return 'Start charging at this station';
+  }
+
+  startCharge(stationId: string): void {
+    this.router.navigate(['/stations', stationId, 'charge']);
   }
 }
