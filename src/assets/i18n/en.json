@@ -9,5 +9,16 @@
       "start": "Start charging",
       "details": {"connectors": "Connectors", "tariffs": "Tariffs", "status": "Status"}
     },
-    "session": {"active": "Active sessions", "history": "History", "stop": "Stop", "cost": "Cost", "energy": "Energy", "duration": "Duration"}
+    "session": {"active": "Active sessions", "history": "History", "stop": "Stop", "cost": "Cost", "energy": "Energy", "duration": "Duration"},
+    "dashboard": {
+      "title": "Welcome to WattBrews",
+      "subtitle": "Choose a charger to start your charging session",
+      "recentChargePoints": "Recent Charge Points",
+      "recentTransactions": "Recent Transactions",
+      "overview": "Charge Points Overview",
+      "loadingChargePoints": "Loading recent charge points...",
+      "noRecentChargePoints": "No recent charge points found",
+      "viewAllTransactions": "View All Transactions",
+      "viewAllChargePoints": "View All Charge Points"
+    }
   }
