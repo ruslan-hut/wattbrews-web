@@ -101,10 +101,10 @@ export class TransactionService {
   }
   
   /**
-   * Get recent transactions (last 5)
+   * Get recent transactions (last 3)
    */
   getRecentTransactions(): Transaction[] {
-    return this._transactions().slice(0, 5);
+    return this._transactions().slice(0, 3);
   }
 
   /**
