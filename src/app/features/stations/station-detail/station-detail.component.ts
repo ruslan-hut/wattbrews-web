@@ -263,6 +263,19 @@ import { SmallMapComponent } from '../../../shared/components/small-map/small-ma
                 </div>
               </div>
             </div>
+            
+            <!-- Start Charge Button -->
+            <div class="start-charge-section" *ngIf="hasAvailableConnectors()">
+              <button 
+                mat-raised-button 
+                color="primary" 
+                class="start-charge-button"
+                (click)="startCharge()">
+                <mat-icon>play_arrow</mat-icon>
+                Start Charge
+              </button>
+              <p class="start-charge-info">Click to begin charging at this station</p>
+            </div>
           </mat-card-content>
         </mat-card>
       </div>
@@ -556,6 +569,29 @@ import { SmallMapComponent } from '../../../shared/components/small-map/small-ma
     .no-error { color: #155724; }
     .error { color: #721c24; }
     
+    .start-charge-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding: 2rem;
+      background-color: #f8f9fa;
+      border-radius: 12px;
+    }
+    
+    .start-charge-button {
+      font-size: 1.2rem;
+      padding: 1rem 2rem;
+      min-width: 200px;
+    }
+    
+    .start-charge-info {
+      text-align: center;
+      color: #6c757d;
+      margin: 0;
+    }
+    
     @media (max-width: 768px) {
       .info-grid, .status-grid, .connectors-grid {
         grid-template-columns: 1fr;
@@ -697,5 +733,18 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     } catch {
       return dateString;
     }
+  }
+
+  hasAvailableConnectors(): boolean {
+    const station = this.stationDetail();
+    if (!station) return false;
+    return station.connectors.some(connector => connector.status === 'Available');
+  }
+
+  startCharge(): void {
+    const station = this.stationDetail();
+    if (!station) return;
+    
+    this.router.navigate(['/stations', station.charge_point_id, 'charge']);
   }
 }

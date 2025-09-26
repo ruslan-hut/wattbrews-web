@@ -26,7 +26,7 @@
         </div>
         
         <div class="recent-charge-points-list" *ngIf="!transactionService.loading() && !transactionService.error()">
-          <div class="recent-charge-point-item" *ngFor="let cp of recentChargePoints()" (click)="startChargingSession(cp)">
+          <div class="recent-charge-point-item" *ngFor="let cp of recentChargePoints()">
             <div class="charge-point-status-indicator" [class.available]="cp.status === 'Available'" [class.busy]="cp.status !== 'Available'"></div>
             <div class="charge-point-info">
               <h4 class="charge-point-title">{{ cp.title }}</h4>
@@ -43,6 +43,17 @@
                   </mat-chip>
                 </div>
               </div>
+            </div>
+            <div class="charge-point-actions">
+              <button 
+                mat-raised-button 
+                color="accent" 
+                [disabled]="!canStartCharge(cp)"
+                [matTooltip]="getStartChargeTooltip(cp)"
+                (click)="startCharge(cp.charge_point_id)">
+                <mat-icon>play_arrow</mat-icon>
+                Start Charge
+              </button>
             </div>
           </div>
           

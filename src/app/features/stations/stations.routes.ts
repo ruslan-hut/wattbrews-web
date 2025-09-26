@@ -12,5 +12,9 @@ export const stationsRoutes: Routes = [
   {
     path: ':id',
     loadComponent: () => import('./station-detail/station-detail.component').then(m => m.StationDetailComponent)
+  },
+  {
+    path: ':id/charge',
+    loadComponent: () => import('./charge-initiation/charge-initiation.component').then(m => m.ChargeInitiationComponent)
   }
 ];
