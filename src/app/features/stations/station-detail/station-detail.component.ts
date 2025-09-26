@@ -14,6 +14,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { StationDetail } from '../../../core/models/station-detail.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
+import { SmallMapComponent } from '../../../shared/components/small-map/small-map.component';
 
 @Component({
   selector: 'app-station-detail',
@@ -28,7 +29,8 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     MatDividerModule,
     MatTooltipModule,
     LoadingSpinnerComponent,
-    ErrorMessageComponent
+    ErrorMessageComponent,
+    SmallMapComponent
   ],
   template: `
     <div class="station-detail-container">
@@ -187,6 +189,17 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
                     {{ stationDetail()!.location.latitude }}, {{ stationDetail()!.location.longitude }}
                   </span>
                 </div>
+              </div>
+              
+              <!-- Small Map View -->
+              <div class="map-section">
+                <app-small-map
+                  [latitude]="stationDetail()!.location.latitude"
+                  [longitude]="stationDetail()!.location.longitude"
+                  [title]="stationDetail()!.title"
+                  [height]="'200px'"
+                  [zoom]="15">
+                </app-small-map>
               </div>
             </div>
           </mat-card-content>
@@ -394,6 +407,13 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
       display: flex;
       flex-direction: column;
       gap: 1rem;
+    }
+
+    .map-section {
+      margin-top: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .location-item {
