@@ -4,6 +4,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Transaction } from '../models/transaction.model';
 import { TransactionDetail } from '../models/transaction-detail.model';
+import { ChargePoint } from '../models/chargepoint.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,13 @@ export class TransactionService {
   
   // Signals for state management
   private readonly _transactions = signal<Transaction[]>([]);
+  private readonly _recentChargePoints = signal<ChargePoint[]>([]);
   private readonly _loading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
   
   // Public readonly signals
   readonly transactions = this._transactions.asReadonly();
+  readonly recentChargePoints = this._recentChargePoints.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
   
@@ -37,6 +40,28 @@ export class TransactionService {
       catchError(error => {
         console.error('Error loading transactions:', error);
         this._error.set(error.message || 'Failed to load transactions');
+        this._loading.set(false);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Load recent charge points from the API
+   */
+  loadRecentChargePoints(): Observable<ChargePoint[]> {
+    this._loading.set(true);
+    this._error.set(null);
+    
+    return this.apiService.getArray<ChargePoint>('/transactions/recent').pipe(
+      tap(chargePoints => {
+        console.log('Recent charge points loaded successfully:', chargePoints);
+        this._recentChargePoints.set(chargePoints);
+        this._loading.set(false);
+      }),
+      catchError(error => {
+        console.error('Error loading recent charge points:', error);
+        this._error.set(error.message || 'Failed to load recent charge points');
         this._loading.set(false);
         throw error;
       })
@@ -80,6 +105,13 @@ export class TransactionService {
    */
   getRecentTransactions(): Transaction[] {
     return this._transactions().slice(0, 5);
+  }
+
+  /**
+   * Get recent charge points
+   */
+  getRecentChargePoints(): ChargePoint[] {
+    return this._recentChargePoints();
   }
   
   /**

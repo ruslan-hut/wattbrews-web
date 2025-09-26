@@ -86,6 +86,17 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
     .charge-points-card .mat-mdc-card-subtitle {
       color: #2c3e50;
     }
+
+    .recent-charge-points-card {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      color: #2c3e50;
+      border: 1px solid #ced4da;
+    }
+    
+    .recent-charge-points-card .mat-mdc-card-title,
+    .recent-charge-points-card .mat-mdc-card-subtitle {
+      color: #2c3e50;
+    }
     
     .transactions-card {
       background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 100%);
@@ -360,8 +371,31 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       max-height: 400px;
       overflow-y: auto;
     }
+
+    .recent-charge-points-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
     
     .charge-point-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+
+    .recent-charge-point-item {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -381,6 +415,14 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       border-color: #ced4da;
     }
+
+    .recent-charge-point-item:hover {
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #ced4da;
+    }
+
     
     .charge-point-status-indicator {
       position: absolute;
@@ -517,6 +559,26 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       color: #5a6c7d;
       font-size: 1rem;
     }
+
+    .no-recent-charge-points {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .no-recent-charge-points .no-data-icon {
+      font-size: 3rem;
+      color: #adb5bd;
+    }
+    
+    .no-recent-charge-points p {
+      margin: 0;
+      color: #5a6c7d;
+      font-size: 1rem;
+    }
     
     .mat-chip.online {
       background-color: #4caf50;
@@ -611,7 +673,8 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       }
       
       .transactions-list,
-      .charge-points-list {
+      .charge-points-list,
+      .recent-charge-points-list {
         max-height: 300px;
       }
     }
@@ -659,7 +722,7 @@ export class DashboardComponent implements OnInit {
     this.authService.user$.subscribe(user => {
       if (user) {
         console.log('User authenticated, loading data');
-        this.loadChargePoints();
+        this.loadRecentChargePoints();
         this.loadTransactions();
       } else {
         console.log('User not authenticated, skipping data load');
@@ -668,7 +731,7 @@ export class DashboardComponent implements OnInit {
   }
   
   protected recentChargePoints(): ChargePoint[] {
-    return this.chargePointService.chargePoints().slice(0, 5);
+    return this.transactionService.getRecentChargePoints();
   }
   
   protected recentTransactions(): Transaction[] {
@@ -719,6 +782,11 @@ export class DashboardComponent implements OnInit {
     this.chargePointService.clearError();
     this.loadChargePoints();
   }
+
+  protected refreshRecentChargePoints(): void {
+    this.transactionService.clearError();
+    this.loadRecentChargePoints();
+  }
   
   protected refreshTransactions(): void {
     this.transactionService.clearError();
@@ -751,6 +819,24 @@ export class DashboardComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading charge points:', error);
+        console.error('Error details:', {
+          message: error.message,
+          status: error.status,
+          statusText: error.statusText,
+          url: error.url
+        });
+      }
+    });
+  }
+
+  private loadRecentChargePoints(): void {
+    console.log('Attempting to load recent charge points...');
+    this.transactionService.loadRecentChargePoints().subscribe({
+      next: (chargePoints) => {
+        console.log('Recent charge points loaded successfully:', chargePoints);
+      },
+      error: (error) => {
+        console.error('Error loading recent charge points:', error);
         console.error('Error details:', {
           message: error.message,
           status: error.status,

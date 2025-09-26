@@ -6,27 +6,27 @@
   
   <!-- Main Content: Charge Points and Recent Transactions Lists -->
   <div class="dashboard-main-content">
-    <!-- Charge Points List -->
-    <mat-card class="dashboard-card charge-points-card">
+    <!-- Recent Charge Points -->
+    <mat-card class="dashboard-card recent-charge-points-card">
       <mat-card-header>
-        <mat-card-title>Available Charge Points</mat-card-title>
+        <mat-card-title>Recent Charge Points</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="loading-container" *ngIf="chargePointService.loading()">
+        <div class="loading-container" *ngIf="transactionService.loading()">
           <mat-spinner diameter="40"></mat-spinner>
-          <p>Loading charge points...</p>
+          <p>Loading recent charge points...</p>
         </div>
         
-        <div class="error-container" *ngIf="chargePointService.error()">
+        <div class="error-container" *ngIf="transactionService.error()">
           <mat-icon class="error-icon">error</mat-icon>
-          <p>{{ chargePointService.error() }}</p>
-          <button mat-button color="primary" (click)="refreshChargePoints()">
+          <p>{{ transactionService.error() }}</p>
+          <button mat-button color="primary" (click)="refreshRecentChargePoints()">
             Retry
           </button>
         </div>
         
-        <div class="charge-points-list" *ngIf="!chargePointService.loading() && !chargePointService.error()">
-          <div class="charge-point-item" *ngFor="let cp of recentChargePoints()" (click)="startChargingSession(cp)">
+        <div class="recent-charge-points-list" *ngIf="!transactionService.loading() && !transactionService.error()">
+          <div class="recent-charge-point-item" *ngFor="let cp of recentChargePoints()" (click)="startChargingSession(cp)">
             <div class="charge-point-status-indicator" [class.available]="cp.status === 'Available'" [class.busy]="cp.status !== 'Available'"></div>
             <div class="charge-point-info">
               <h4 class="charge-point-title">{{ cp.title }}</h4>
@@ -46,16 +46,16 @@
             </div>
           </div>
           
-          <div class="no-charge-points" *ngIf="recentChargePoints().length === 0">
+          <div class="no-recent-charge-points" *ngIf="recentChargePoints().length === 0">
             <mat-icon class="no-data-icon">ev_station</mat-icon>
-            <p>No charge points available</p>
+            <p>No recent charge points found</p>
             <button mat-raised-button color="primary" routerLink="/stations">
               Find Stations
             </button>
           </div>
         </div>
         
-        <button mat-button color="primary" routerLink="/stations" class="view-all-button" *ngIf="!chargePointService.loading() && !chargePointService.error()">
+        <button mat-button color="primary" routerLink="/stations" class="view-all-button" *ngIf="!transactionService.loading() && !transactionService.error()">
           View All Charge Points
         </button>
       </mat-card-content>
