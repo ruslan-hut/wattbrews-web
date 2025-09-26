@@ -375,8 +375,6 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
       flex-direction: column;
       gap: 12px;
       margin-bottom: 16px;
-      max-height: 400px;
-      overflow-y: auto;
     }
     
     .charge-point-item {
@@ -670,8 +668,7 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
         align-self: flex-start;
       }
       
-      .charge-points-list,
-      .recent-charge-points-list {
+      .charge-points-list {
         max-height: 300px;
       }
     }
