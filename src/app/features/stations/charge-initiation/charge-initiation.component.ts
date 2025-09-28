@@ -227,7 +227,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
           </div>
           
           <button 
-            mat-raised-button 
+            mat-button 
             color="primary" 
             class="start-charge-button"
             [disabled]="!canStartCharge()"
@@ -570,16 +570,16 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
       align-items: center;
       gap: 0.5rem;
       padding: 0.75rem 1.5rem;
-      background-color: #e8f5e8;
-      border: 1px solid #28a745;
+      background-color: transparent;
+      border: none;
       border-radius: 8px;
-      color: #155724;
+      color: #2c3e50;
       font-weight: 500;
       font-size: 0.9rem;
     }
     
     .selected-connector-info mat-icon {
-      color: #28a745;
+      color: #2c3e50;
       font-size: 1.2rem;
     }
     
@@ -587,6 +587,19 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
       font-size: 1.2rem;
       padding: 1rem 2rem;
       min-width: 200px;
+      border: 2px solid #1976d2 !important;
+      background-color: transparent !important;
+      color: #1976d2 !important;
+    }
+    
+    .start-charge-button:hover:not(:disabled) {
+      background-color: #1976d2 !important;
+      color: white !important;
+    }
+    
+    .start-charge-button:disabled {
+      border-color: #ccc !important;
+      color: #ccc !important;
     }
     
     .start-charge-info {

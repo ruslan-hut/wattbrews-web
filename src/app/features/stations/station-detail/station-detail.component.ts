@@ -405,6 +405,20 @@ export class SortByConnectorIdPipe implements PipeTransform {
       margin-bottom: 1rem;
     }
     
+    @media (max-width: 768px) {
+      .status-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .status-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+    }
+    
     .status-item {
       display: flex;
       flex-direction: column;
@@ -412,6 +426,20 @@ export class SortByConnectorIdPipe implements PipeTransform {
       gap: 8px;
       padding: 1rem;
       border-radius: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .status-item {
+        padding: 0.75rem;
+        gap: 6px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .status-item {
+        padding: 0.5rem;
+        gap: 4px;
+      }
     }
     
     .status-label {
@@ -608,7 +636,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
     }
     
     @media (max-width: 768px) {
-      .info-grid, .status-grid, .connectors-grid {
+      .info-grid, .connectors-grid {
         grid-template-columns: 1fr;
       }
       
