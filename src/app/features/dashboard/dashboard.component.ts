@@ -135,8 +135,8 @@ export class SortByConnectorIdPipe implements PipeTransform {
     
     .transaction-item {
       display: flex;
-      align-items: flex-start;
-      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
       padding: 16px;
       background: rgba(255, 255, 255, 0.8);
       border: 1px solid #e9ecef;
@@ -153,87 +153,53 @@ export class SortByConnectorIdPipe implements PipeTransform {
       border-color: #ced4da;
     }
     
-    .transaction-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: #f5f5f5;
-    }
-    
-    .transaction-icon mat-icon {
-      font-size: 20px;
-    }
-    
-    .transaction-icon .finished {
-      color: #4caf50;
-    }
-    
-    .transaction-icon .pending {
-      color: #ff9800;
-    }
-    
-    .transaction-content {
+    .transaction-left-section {
       flex: 1;
     }
     
-    .transaction-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
-    
     .transaction-title {
-      margin: 0;
+      margin: 0 0 8px 0;
       font-size: 1rem;
       font-weight: 500;
       color: #2c3e50;
     }
     
-    .transaction-status {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-    
-    .transaction-status.finished {
-      background-color: #e8f5e8;
-      color: #4caf50;
-    }
-    
-    .transaction-status.pending {
-      background-color: #fff3e0;
-      color: #ff9800;
-    }
-    
-    .transaction-details {
-      margin-bottom: 8px;
-    }
-    
-    .transaction-details p {
+    .transaction-duration,
+    .transaction-time,
+    .transaction-relative-time {
       margin: 4px 0;
       font-size: 0.9rem;
       color: #5a6c7d;
     }
     
-    .transaction-energy {
+    .transaction-time {
       font-weight: 500;
-      color: #2c3e50 !important;
+      color: #2c3e50;
     }
     
-    .transaction-payment {
+    .transaction-relative-time {
+      font-size: 0.8rem;
+      color: #8a9ba8;
+    }
+    
+    .transaction-right-section {
       display: flex;
-      justify-content: flex-end;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
     }
     
-    .payment-amount {
-      font-size: 1.1rem;
-      font-weight: 600;
+    .transaction-energy-value {
+      font-size: 2.5rem;
+      font-weight: 700;
       color: #4caf50;
+      line-height: 1;
+    }
+    
+    .transaction-energy-unit {
+      font-size: 0.9rem;
+      color: #5a6c7d;
+      margin-top: 4px;
     }
     
     .no-transactions {
@@ -676,19 +642,20 @@ export class SortByConnectorIdPipe implements PipeTransform {
       }
       
       .transaction-item {
-        flex-direction: column;
+        flex-direction: row;
         gap: 12px;
         padding: 12px;
+        align-items: center;
       }
       
-      .transaction-header {
-        flex-direction: column;
-        gap: 8px;
-        align-items: flex-start;
+      .transaction-right-section {
+        align-items: flex-end;
+        text-align: right;
+        min-width: 80px;
       }
       
-      .transaction-status {
-        align-self: flex-start;
+      .transaction-energy-value {
+        font-size: 1.8rem;
       }
       
       .charge-points-list {
@@ -942,5 +909,15 @@ export class DashboardComponent implements OnInit {
       const diffMinutes = Math.floor(diffMs / (1000 * 60));
       return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
     }
+  }
+
+  protected formatTransactionDateTime(timeStart: string): string {
+    const date = new Date(timeStart);
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 }
