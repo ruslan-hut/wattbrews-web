@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, Pipe, PipeTransform } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,20 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { SmallMapComponent } from '../../../shared/components/small-map/small-map.component';
 
+@Pipe({
+  name: 'sortByConnectorId',
+  standalone: true
+})
+export class SortByConnectorIdPipe implements PipeTransform {
+  transform(connectors: any[]): any[] {
+    if (!connectors || connectors.length === 0) {
+      return connectors;
+    }
+    
+    return [...connectors].sort((a, b) => a.connector_id - b.connector_id);
+  }
+}
+
 @Component({
   selector: 'app-station-detail',
   standalone: true,
@@ -30,7 +44,8 @@ import { SmallMapComponent } from '../../../shared/components/small-map/small-ma
     MatTooltipModule,
     LoadingSpinnerComponent,
     ErrorMessageComponent,
-    SmallMapComponent
+    SmallMapComponent,
+    SortByConnectorIdPipe
   ],
   template: `
     <div class="station-detail-container">
@@ -214,14 +229,14 @@ import { SmallMapComponent } from '../../../shared/components/small-map/small-ma
           <mat-card-content>
             <div class="connectors-grid">
               <div 
-                *ngFor="let connector of stationDetail()!.connectors" 
+                *ngFor="let connector of stationDetail()!.connectors | sortByConnectorId" 
                 class="connector-item"
                 [class.available]="connector.status === 'Available'"
                 [class.occupied]="connector.status === 'Occupied'"
                 [class.out-of-order]="connector.status === 'OutOfOrder'">
                 
                 <div class="connector-header">
-                  <h4>Connector {{ connector.connector_id_name }}</h4>
+                  <h4>Connector {{ (connector.connector_id_name || connector.connector_id) }}</h4>
                   <mat-chip [class]="getConnectorStatusClass(connector.status)">
                     {{ connector.status }}
                   </mat-chip>

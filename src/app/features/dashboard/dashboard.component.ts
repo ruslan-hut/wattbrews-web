@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit } from '@angular/core';
+import { Component, signal, inject, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,9 +11,23 @@ import { RouterModule, Router } from '@angular/router';
 import { ChargePointService } from '../../core/services/chargepoint.service';
 import { AuthService } from '../../core/services/auth.service';
 import { TransactionService } from '../../core/services/transaction.service';
-import { ChargePoint } from '../../core/models/chargepoint.model';
+import { ChargePoint, ChargePointConnector } from '../../core/models/chargepoint.model';
 import { Transaction } from '../../core/models/transaction.model';
 import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
+
+@Pipe({
+  name: 'sortByConnectorId',
+  standalone: true
+})
+export class SortByConnectorIdPipe implements PipeTransform {
+  transform(connectors: ChargePointConnector[]): ChargePointConnector[] {
+    if (!connectors || connectors.length === 0) {
+      return connectors;
+    }
+    
+    return [...connectors].sort((a, b) => a.connector_id - b.connector_id);
+  }
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -26,7 +40,8 @@ import { TransactionPreviewComponent } from '../../shared/components/transaction
     MatProgressSpinnerModule,
     MatChipsModule,
     MatTooltipModule,
-    RouterModule
+    RouterModule,
+    SortByConnectorIdPipe
   ],
   templateUrl: './dashboard.component.html',
   styles: [`
