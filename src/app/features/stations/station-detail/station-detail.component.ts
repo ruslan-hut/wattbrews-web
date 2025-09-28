@@ -282,7 +282,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
             <!-- Start Charge Button -->
             <div class="start-charge-section" *ngIf="hasAvailableConnectors()">
               <button 
-                mat-raised-button 
+                mat-button 
                 color="primary" 
                 class="start-charge-button"
                 (click)="startCharge()">
@@ -627,6 +627,19 @@ export class SortByConnectorIdPipe implements PipeTransform {
       font-size: 1.2rem;
       padding: 1rem 2rem;
       min-width: 200px;
+      border: 2px solid #1976d2 !important;
+      background-color: transparent !important;
+      color: #1976d2 !important;
+    }
+    
+    .start-charge-button:hover:not(:disabled) {
+      background-color: #1976d2 !important;
+      color: white !important;
+    }
+    
+    .start-charge-button:disabled {
+      border-color: #ccc !important;
+      color: #ccc !important;
     }
     
     .start-charge-info {
