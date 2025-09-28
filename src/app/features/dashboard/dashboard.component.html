@@ -93,34 +93,25 @@
         
         <div class="transactions-list" *ngIf="!transactionService.loading() && !transactionService.error()">
           <div class="transaction-item" *ngFor="let transaction of recentTransactions()" (click)="openTransactionPreview(transaction)">
-            <div class="transaction-icon">
-              <mat-icon [class.finished]="transaction.is_finished" [class.pending]="!transaction.is_finished">
-                {{ transaction.is_finished ? 'check_circle' : 'schedule' }}
-              </mat-icon>
+            <div class="transaction-left-section">
+              <h4 class="transaction-title">
+                {{ transaction.charge_point_id }} - Connector {{ transaction.connector_id }}
+              </h4>
+              <p class="transaction-duration" *ngIf="transaction.is_finished">
+                Duration: {{ formatDuration(transaction.time_start, transaction.time_stop) }}
+              </p>
+              <p class="transaction-time">
+                {{ formatTransactionDateTime(transaction.time_start) }}
+              </p>
+              <p class="transaction-relative-time">
+                {{ formatTransactionTime(transaction.time_start) }}
+              </p>
             </div>
-            <div class="transaction-content">
-              <div class="transaction-header">
-                <h4 class="transaction-title">
-                  {{ transaction.charge_point_id }} - Connector {{ transaction.connector_id }}
-                </h4>
-                <span class="transaction-status" [class.finished]="transaction.is_finished" [class.pending]="!transaction.is_finished">
-                  {{ transaction.is_finished ? 'Completed' : 'In Progress' }}
-                </span>
+            <div class="transaction-right-section">
+              <div class="transaction-energy-value">
+                {{ formatEnergy(transaction.meter_start, transaction.meter_stop) }}
               </div>
-              <div class="transaction-details">
-                <p class="transaction-energy">
-                  Energy: {{ formatEnergy(transaction.meter_start, transaction.meter_stop) }} kWh
-                </p>
-                <p class="transaction-duration" *ngIf="transaction.is_finished">
-                  Duration: {{ formatDuration(transaction.time_start, transaction.time_stop) }}
-                </p>
-                <p class="transaction-time">
-                  {{ formatTransactionTime(transaction.time_start) }}
-                </p>
-              </div>
-              <div class="transaction-payment" *ngIf="transaction.payment_amount > 0">
-                <span class="payment-amount">${{ transaction.payment_amount.toFixed(2) }}</span>
-              </div>
+              <div class="transaction-energy-unit">kWh</div>
             </div>
           </div>
           
