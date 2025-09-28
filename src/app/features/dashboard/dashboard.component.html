@@ -147,7 +147,7 @@
         </button>
       </div>
       
-      <div class="stats-grid" *ngIf="!chargePointService.loading() && !chargePointService.error()">
+      <div class="stats-grid" *ngIf="!chargePointService.loading() && !chargePointService.error() && chargePointService.chargePoints().length > 0">
         <div class="stat-item">
           <mat-icon class="stat-icon">ev_station</mat-icon>
           <div class="stat-content">
@@ -176,6 +176,14 @@
             <span class="stat-label">Connectors</span>
           </div>
         </div>
+      </div>
+      
+      <div class="no-charge-points" *ngIf="!chargePointService.loading() && !chargePointService.error() && chargePointService.chargePoints().length === 0">
+        <mat-icon class="no-data-icon">ev_station</mat-icon>
+        <p>No charge points available</p>
+        <button mat-button color="primary" (click)="refreshChargePoints()">
+          Refresh
+        </button>
       </div>
     </mat-card-content>
   </mat-card>
