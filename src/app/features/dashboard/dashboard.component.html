@@ -35,11 +35,11 @@
                 <h5 class="connectors-title">Connectors</h5>
                 <div class="connectors-list">
                   <mat-chip 
-                    *ngFor="let connector of cp.connectors" 
+                    *ngFor="let connector of cp.connectors | sortByConnectorId" 
                     [class]="getConnectorStatusClass(connector.status)"
                     class="connector-chip">
                     <mat-icon class="chip-icon">{{ getConnectorTypeIcon(connector.type) }}</mat-icon>
-                    {{ connector.type }} - {{ connector.power }}kW
+                    {{ (connector.connector_id_name || connector.connector_id) }} - {{ connector.type }} - {{ connector.power }}kW
                   </mat-chip>
                 </div>
               </div>

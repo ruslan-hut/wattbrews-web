@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, Pipe, PipeTransform } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,9 +14,23 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChargePointService } from '../../../core/services/chargepoint.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserInfoService } from '../../../core/services/user-info.service';
-import { ChargePoint } from '../../../core/models/chargepoint.model';
+import { ChargePoint, ChargePointConnector } from '../../../core/models/chargepoint.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
+
+@Pipe({
+  name: 'sortByConnectorId',
+  standalone: true
+})
+export class SortByConnectorIdPipe implements PipeTransform {
+  transform(connectors: ChargePointConnector[]): ChargePointConnector[] {
+    if (!connectors || connectors.length === 0) {
+      return connectors;
+    }
+    
+    return [...connectors].sort((a, b) => a.connector_id - b.connector_id);
+  }
+}
 
 @Component({
   selector: 'app-stations-list',
@@ -33,7 +47,8 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     MatProgressSpinnerModule,
     MatTooltipModule,
     LoadingSpinnerComponent,
-    ErrorMessageComponent
+    ErrorMessageComponent,
+    SortByConnectorIdPipe
   ],
   template: `
     <div class="stations-list-container">
@@ -116,26 +131,17 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
               <h4>Connectors</h4>
               <div class="connectors-list">
                 <mat-chip 
-                  *ngFor="let connector of station.connectors" 
+                  *ngFor="let connector of station.connectors | sortByConnectorId" 
                   [class]="getConnectorStatusClass(connector.status)"
                   class="connector-chip">
                   <mat-icon class="chip-icon">{{ getConnectorTypeIcon(connector.type) }}</mat-icon>
-                  {{ connector.type }} - {{ connector.power }}kW
+                  {{ (connector.connector_id_name || connector.connector_id) }} - {{ connector.type }} - {{ connector.power }}kW
                 </mat-chip>
               </div>
             </div>
           </mat-card-content>
 
-          <mat-card-actions>
-            <button 
-              mat-button 
-              color="primary" 
-              [disabled]="!hasViewDetailsAccess()"
-              [matTooltip]="getViewDetailsTooltip(station)"
-              (click)="viewStationDetails(station.charge_point_id)">
-              <mat-icon>visibility</mat-icon>
-              View Details
-            </button>
+          <mat-card-actions class="station-card-actions">
             <button 
               mat-raised-button 
               color="accent" 
@@ -144,6 +150,15 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
               (click)="startCharge(station.charge_point_id)">
               <mat-icon>play_arrow</mat-icon>
               Start Charge
+            </button>
+            <button 
+              mat-button 
+              color="primary" 
+              [disabled]="!hasViewDetailsAccess()"
+              [matTooltip]="getViewDetailsTooltip(station)"
+              (click)="viewStationDetails(station.charge_point_id)">
+              <mat-icon>visibility</mat-icon>
+              View Details
             </button>
           </mat-card-actions>
         </mat-card>
@@ -434,6 +449,26 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     .empty-state p {
       margin: 0;
       color: #6c757d;
+    }
+
+    .station-card-actions {
+      margin-top: 1rem !important;
+      padding-top: 1rem !important;
+      border-top: 1px solid #e9ecef;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .station-card-actions button {
+      margin: 0 0.25rem;
+    }
+
+    .station-card-actions button:first-child {
+      margin-left: 0;
+    }
+
+    .station-card-actions button:last-child {
+      margin-right: 0;
     }
 
     @media (max-width: 768px) {
