@@ -143,7 +143,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
 
           <mat-card-actions class="station-card-actions">
             <button 
-              mat-raised-button 
+              mat-button 
               color="accent" 
               [disabled]="!canStartCharge(station)"
               [matTooltip]="getStartChargeTooltip(station)"
