@@ -707,6 +707,7 @@ export class DashboardComponent implements OnInit {
     this.authService.user$.subscribe(user => {
       if (user) {
         console.log('User authenticated, loading data');
+        this.loadChargePoints();
         this.loadRecentChargePoints();
         this.loadTransactions();
       } else {
