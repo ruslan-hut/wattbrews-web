@@ -679,7 +679,6 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     // Wait for authentication before loading station details
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {
-        console.log('StationDetailComponent: User authenticated, loading station detail');
         if (this.authCheckTimeout) {
           clearTimeout(this.authCheckTimeout);
         }
@@ -693,7 +692,6 @@ export class StationDetailComponent implements OnInit, OnDestroy {
         // Give Firebase auth time to restore session on page reload
         // Only redirect after a short delay to avoid premature redirects
         this.authCheckTimeout = setTimeout(() => {
-          console.log('StationDetailComponent: User not authenticated after timeout, redirecting to login');
           this.router.navigate(['/auth/login']);
         }, 1000); // 1 second delay
       }
@@ -712,26 +710,16 @@ export class StationDetailComponent implements OnInit, OnDestroy {
 
   loadStationDetail(pointId?: string) {
     const id = pointId || this.route.snapshot.params['id'];
-    console.log('StationDetailComponent: Loading station detail for ID:', id);
     
     if (id) {
       this.chargePointService.getStationDetail(id).subscribe({
         next: (station) => {
-          console.log('StationDetailComponent: Station detail loaded successfully:', station);
           this._stationDetail.set(station);
         },
         error: (error) => {
-          console.error('StationDetailComponent: Error loading station detail:', error);
-          console.error('StationDetailComponent: Error details:', {
-            message: error.message,
-            status: error.status,
-            statusText: error.statusText,
-            url: error.url
-          });
+          // Error loading station detail - handled by service
         }
       });
-    } else {
-      console.error('StationDetailComponent: No point ID provided');
     }
   }
 

@@ -54,10 +54,6 @@ export class UserInfoService {
     const params = this.buildFilterParams(filters);
     const endpoint = `${API_ENDPOINTS.USERS.INFO}/0000`; // '0000' is special code for current user
     
-    console.log('UserInfoService: Loading current user info from endpoint:', endpoint);
-    console.log('UserInfoService: Full URL will be:', `${API_ENDPOINTS.USERS.INFO}/0000`);
-    console.log('UserInfoService: Request parameters:', params);
-
     return this.apiService.getDirect<UserInfo>(endpoint, params)
       .pipe(
         tap(userInfo => {

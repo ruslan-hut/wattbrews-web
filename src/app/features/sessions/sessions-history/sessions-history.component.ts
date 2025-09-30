@@ -581,7 +581,6 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
     // Subscribe to auth state changes with timeout to handle page reload
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {
-        console.log('SessionsHistoryComponent: User authenticated, loading transactions');
         this.authLoading.set(false);
         if (this.authCheckTimeout) {
           clearTimeout(this.authCheckTimeout);
@@ -593,7 +592,6 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
       } else {
         // Give Firebase auth time to restore session on page reload
         this.authCheckTimeout = setTimeout(() => {
-          console.log('SessionsHistoryComponent: User not authenticated after timeout');
           this.authLoading.set(false);
         }, 1000); // 1 second delay
       }
@@ -618,24 +616,22 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
       const { startTimestamp, endTimestamp } = this.getMonthTimestampRange(selectedMonth);
       this.transactionService.loadTransactionsByTimeRange(startTimestamp, endTimestamp).subscribe({
         next: (transactions) => {
-          console.log('Transactions loaded for month:', selectedMonth, transactions);
           this.applyFilters();
           this.calculateStatistics();
         },
         error: (error) => {
-          console.error('Error loading transactions for month:', error);
+          // Error loading transactions - handled by service
         }
       });
     } else {
       // Load all transactions
       this.transactionService.loadTransactions().subscribe({
         next: (transactions) => {
-          console.log('All transactions loaded for history:', transactions);
           this.applyFilters();
           this.calculateStatistics();
         },
         error: (error) => {
-          console.error('Error loading transactions for history:', error);
+          // Error loading transactions - handled by service
         }
       });
     }
@@ -778,8 +774,6 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   }
   
   protected onTransactionClick(transaction: Transaction): void {
-    console.log('Transaction clicked:', transaction);
-    
     // Open transaction preview dialog
     this.dialog.open(TransactionPreviewComponent, {
       width: '90vw',

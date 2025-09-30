@@ -525,19 +525,17 @@ export class StationsListComponent implements OnInit, OnDestroy {
     // Listen for auth state changes and load stations when user becomes authenticated
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {
-        console.log('User authenticated, loading stations and user info...');
         this.loadStations();
         // Load user info to get access level for View Details functionality
         this.userInfoService.loadCurrentUserInfo().subscribe({
           next: (userInfo) => {
-            console.log('User info loaded, access level:', userInfo.access_level);
+            // User info loaded successfully
           },
           error: (error) => {
-            console.error('Failed to load user info:', error);
+            // Failed to load user info - handled by service
           }
         });
       } else {
-        console.log('User not authenticated, clearing stations...');
         // Optionally clear stations when user logs out
         // this.chargePointService.clearChargePoints();
       }
