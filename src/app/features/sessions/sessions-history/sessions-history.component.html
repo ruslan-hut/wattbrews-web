@@ -40,9 +40,9 @@
     <mat-card class="stat-card">
       <mat-card-content>
         <div style="display: flex; align-items: center; gap: 16px;">
-          <mat-icon class="stat-icon">attach_money</mat-icon>
+          <mat-icon class="stat-icon">euro_symbol</mat-icon>
           <div>
-            <p class="stat-value">${{ totalCost().toFixed(2) }}</p>
+            <p class="stat-value">€{{ totalCost().toFixed(2) }}</p>
             <p class="stat-label">Total Cost</p>
           </div>
         </div>
@@ -174,7 +174,7 @@
               
               <div class="mobile-detail-row" *ngIf="transaction.payment_amount > 0">
                 <span class="mobile-detail-label">Cost</span>
-                <span class="mobile-detail-value payment">${{ transaction.payment_amount.toFixed(2) }}</span>
+                <span class="mobile-detail-value payment">€{{ (transaction.payment_amount / 100).toFixed(2) }}</span>
               </div>
             </div>
             
@@ -250,7 +250,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header="payment_amount">Payment</th>
             <td mat-cell *matCellDef="let transaction">
               <span *ngIf="transaction.payment_amount > 0; else noPayment" class="payment-amount">
-                ${{ transaction.payment_amount.toFixed(2) }}
+                €{{ (transaction.payment_amount / 100).toFixed(2) }}
               </span>
               <ng-template #noPayment>
                 <span style="color: #999;">Free</span>

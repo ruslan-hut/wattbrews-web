@@ -183,7 +183,7 @@ export class StateService {
   
   readonly totalCost = computed(() => 
     this._state().sessionHistory.reduce((total, session) => 
-      total + session.cost, 0
+      total + (session.cost / 100), 0
     )
   );
   

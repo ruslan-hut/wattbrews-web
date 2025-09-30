@@ -700,8 +700,8 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
           bValue = b.meter_stop - b.meter_start;
           break;
         case 'payment_amount':
-          aValue = a.payment_amount;
-          bValue = b.payment_amount;
+          aValue = a.payment_amount / 100;
+          bValue = b.payment_amount / 100;
           break;
         default:
           return 0;
@@ -725,7 +725,7 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
     const transactions = this.transactionService.transactions();
     
     const totalEnergy = transactions.reduce((sum, t) => sum + (t.meter_stop - t.meter_start) / 1000, 0);
-    const totalCost = transactions.reduce((sum, t) => sum + t.payment_amount, 0);
+    const totalCost = transactions.reduce((sum, t) => sum + (t.payment_amount / 100), 0);
     const completed = transactions.filter(t => t.is_finished).length;
     
     this.totalEnergy.set(totalEnergy);

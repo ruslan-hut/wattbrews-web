@@ -67,10 +67,10 @@
               </div>
             </div>
             <div class="overview-item">
-              <mat-icon>attach_money</mat-icon>
+              <mat-icon>euro_symbol</mat-icon>
               <div class="item-content">
                 <span class="item-label">Cost</span>
-                <span class="item-value">${{ (transactionDetail()?.price || 0).toFixed(2) }}</span>
+                <span class="item-value">€{{ ((transactionDetail()?.price || 0) / 100).toFixed(2) }}</span>
               </div>
             </div>
             <div class="overview-item">

@@ -699,7 +699,7 @@ export class DashboardComponent implements OnInit {
   
   protected readonly totalSessions = signal(24);
   protected readonly totalEnergy = signal(156.8);
-  protected readonly totalCost = signal(89.50);
+  protected readonly totalCost = signal(89.50); // This will be calculated from actual transactions
   
   
   ngOnInit(): void {
