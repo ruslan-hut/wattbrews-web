@@ -1,9 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
+import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 
 @Component({
   selector: 'app-auth-layout',
@@ -11,9 +13,11 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     RouterOutlet,
+    RouterModule,
     MatToolbarModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    LanguageSwitcherComponent
   ],
   template: `
     <div class="auth-container">
@@ -21,12 +25,15 @@ import { MatButtonModule } from '@angular/material/button';
         <div class="toolbar-content">
           <div class="logo-section">
             <mat-icon class="logo-icon">ev_station</mat-icon>
-            <span class="logo-text">{{ appTitle() }}</span>
+            <span class="logo-text">{{ translationService.getReactive('app.title') }}</span>
           </div>
-          <button mat-button routerLink="/" class="home-button">
-            <mat-icon>home</mat-icon>
-            Home
-          </button>
+          <div class="toolbar-actions">
+            <app-language-switcher></app-language-switcher>
+            <button mat-button routerLink="/" class="home-button">
+              <mat-icon>home</mat-icon>
+              {{ translationService.getReactive('nav.home') }}
+            </button>
+          </div>
         </div>
       </mat-toolbar>
       
@@ -35,11 +42,11 @@ import { MatButtonModule } from '@angular/material/button';
       </div>
       
       <footer class="auth-footer">
-        <p>&copy; 2024 {{ appTitle() }}. All rights reserved.</p>
+        <p>&copy; 2024 {{ translationService.getReactive('app.title') }}. All rights reserved.</p>
         <div class="footer-links">
-          <a href="#" class="footer-link">Privacy Policy</a>
-          <a href="#" class="footer-link">Terms of Service</a>
-          <a href="#" class="footer-link">Support</a>
+          <a href="#" class="footer-link">{{ translationService.getReactive('footer.privacy') }}</a>
+          <a href="#" class="footer-link">{{ translationService.getReactive('footer.terms') }}</a>
+          <a href="#" class="footer-link">{{ translationService.getReactive('footer.support') }}</a>
         </div>
       </footer>
     </div>
@@ -68,6 +75,12 @@ import { MatButtonModule } from '@angular/material/button';
       justify-content: space-between;
       align-items: center;
       width: 100%;
+    }
+    
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .logo-section {
@@ -139,5 +152,6 @@ import { MatButtonModule } from '@angular/material/button';
   `]
 })
 export class AuthLayoutComponent {
+  readonly translationService = inject(SimpleTranslationService);
   protected readonly appTitle = signal('WattBrews');
 }

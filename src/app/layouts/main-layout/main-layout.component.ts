@@ -9,6 +9,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../core/services/auth.service';
+import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
+import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -23,7 +25,8 @@ import { AuthService } from '../../core/services/auth.service';
     MatIconModule,
     MatListModule,
     MatBadgeModule,
-    MatMenuModule
+    MatMenuModule,
+    LanguageSwitcherComponent
   ],
   template: `
     <mat-sidenav-container class="sidenav-container">
@@ -36,24 +39,24 @@ import { AuthService } from '../../core/services/auth.service';
         <mat-nav-list>
           <a mat-list-item routerLink="/dashboard" (click)="closeSidenav()">
             <mat-icon matListItemIcon>dashboard</mat-icon>
-            <span matListItemTitle>Dashboard</span>
+            <span matListItemTitle>{{ translationService.getReactive('nav.dashboard') }}</span>
           </a>
           <a mat-list-item routerLink="/stations" (click)="closeSidenav()">
             <mat-icon matListItemIcon>ev_station</mat-icon>
-            <span matListItemTitle>Stations</span>
+            <span matListItemTitle>{{ translationService.getReactive('nav.stations') }}</span>
           </a>
           <a mat-list-item routerLink="/sessions/active" (click)="closeSidenav()">
             <mat-icon matListItemIcon>charging_station</mat-icon>
-            <span matListItemTitle>Active Sessions</span>
+            <span matListItemTitle>{{ translationService.getReactive('session.active') }}</span>
             <mat-icon matListItemMeta *ngIf="hasActiveSessions()" matBadge="1" matBadgeColor="warn">notifications</mat-icon>
           </a>
           <a mat-list-item routerLink="/sessions/history" (click)="closeSidenav()">
             <mat-icon matListItemIcon>history</mat-icon>
-            <span matListItemTitle>History</span>
+            <span matListItemTitle>{{ translationService.getReactive('session.history') }}</span>
           </a>
           <a mat-list-item routerLink="/profile" (click)="closeSidenav()">
             <mat-icon matListItemIcon>person</mat-icon>
-            <span matListItemTitle>Profile</span>
+            <span matListItemTitle>{{ translationService.getReactive('nav.profile') }}</span>
           </a>
         </mat-nav-list>
       </mat-sidenav>
@@ -68,8 +71,12 @@ import { AuthService } from '../../core/services/auth.service';
             (click)="toggleSidenav()">
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
           </button>
-          <span>{{ appTitle() }}</span>
+          <span>{{ translationService.getReactive('app.title') }}</span>
           <span class="spacer"></span>
+          
+          <!-- Language Switcher -->
+          <app-language-switcher></app-language-switcher>
+          
           <!-- Authenticated user menu -->
           <div class="user-info" *ngIf="userName()">
             <span class="user-name">{{ userName() }}</span>
@@ -81,18 +88,18 @@ import { AuthService } from '../../core/services/auth.service';
           <!-- Login button for unauthenticated users -->
           <button mat-button color="accent" (click)="navigateToLogin()" *ngIf="!userName()">
             <mat-icon>login</mat-icon>
-            Login
+            {{ translationService.getReactive('nav.auth') }}
           </button>
           
           <!-- User menu (only visible for authenticated users) -->
           <mat-menu #userMenu="matMenu">
             <button mat-menu-item routerLink="/profile">
               <mat-icon>person</mat-icon>
-              <span>Profile</span>
+              <span>{{ translationService.getReactive('nav.profile') }}</span>
             </button>
             <button mat-menu-item (click)="logout()">
               <mat-icon>logout</mat-icon>
-              <span>Logout</span>
+              <span>{{ translationService.getReactive('auth.signout') }}</span>
             </button>
           </mat-menu>
         </mat-toolbar>
@@ -198,6 +205,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class MainLayoutComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  readonly translationService = inject(SimpleTranslationService);
   
   protected readonly appTitle = signal('WattBrews');
   protected readonly sidenavOpen = signal(false);
@@ -228,4 +236,5 @@ export class MainLayoutComponent {
   navigateToLogin(): void {
     this.router.navigate(['/auth/login']);
   }
+  
 }

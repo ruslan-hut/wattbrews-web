@@ -14,6 +14,7 @@ import { TransactionService } from '../../core/services/transaction.service';
 import { ChargePoint, ChargePointConnector } from '../../core/models/chargepoint.model';
 import { Transaction } from '../../core/models/transaction.model';
 import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
+import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 
 @Pipe({
   name: 'sortByConnectorId',
@@ -694,6 +695,7 @@ export class DashboardComponent implements OnInit {
   protected readonly chargePointService = inject(ChargePointService);
   protected readonly authService = inject(AuthService);
   protected readonly transactionService = inject(TransactionService);
+  protected readonly translationService = inject(SimpleTranslationService);
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
   
@@ -706,12 +708,9 @@ export class DashboardComponent implements OnInit {
     // Wait for authentication before loading data
     this.authService.user$.subscribe(user => {
       if (user) {
-        console.log('User authenticated, loading data');
         this.loadChargePoints();
         this.loadRecentChargePoints();
         this.loadTransactions();
-      } else {
-        console.log('User not authenticated, skipping data load');
       }
     });
   }
@@ -792,7 +791,6 @@ export class DashboardComponent implements OnInit {
   protected startChargingSession(chargePoint: ChargePoint): void {
     if (chargePoint.is_enabled && chargePoint.status === 'Available') {
       // Navigate to station detail or start charging flow
-      console.log('Starting charging session for:', chargePoint.title);
       // TODO: Implement charging session start logic
     }
   }
@@ -805,15 +803,15 @@ export class DashboardComponent implements OnInit {
 
   protected getStartChargeTooltip(chargePoint: ChargePoint): string {
     if (!chargePoint.is_online) {
-      return 'Station is offline';
+      return this.translationService.get('pages.dashboard.tooltips.stationOffline');
     }
     if (!chargePoint.is_enabled) {
-      return 'Station is disabled';
+      return this.translationService.get('pages.dashboard.tooltips.stationDisabled');
     }
     if (this.getAvailableConnectors(chargePoint) === 0) {
-      return 'No available connectors';
+      return this.translationService.get('pages.dashboard.tooltips.noAvailableConnectors');
     }
-    return 'Start charging at this station';
+    return this.translationService.get('pages.dashboard.tooltips.startCharging');
   }
 
   protected startCharge(stationId: string): void {
@@ -822,55 +820,34 @@ export class DashboardComponent implements OnInit {
   }
   
   private loadChargePoints(): void {
-    console.log('Attempting to load charge points...');
     this.chargePointService.loadChargePoints().subscribe({
       next: (chargePoints) => {
-        console.log('Charge points loaded successfully:', chargePoints);
+        // Charge points loaded successfully
       },
       error: (error) => {
-        console.error('Error loading charge points:', error);
-        console.error('Error details:', {
-          message: error.message,
-          status: error.status,
-          statusText: error.statusText,
-          url: error.url
-        });
+        // Error loading charge points - handled by service
       }
     });
   }
 
   private loadRecentChargePoints(): void {
-    console.log('Attempting to load recent charge points...');
     this.transactionService.loadRecentChargePoints().subscribe({
       next: (chargePoints) => {
-        console.log('Recent charge points loaded successfully:', chargePoints);
+        // Recent charge points loaded successfully
       },
       error: (error) => {
-        console.error('Error loading recent charge points:', error);
-        console.error('Error details:', {
-          message: error.message,
-          status: error.status,
-          statusText: error.statusText,
-          url: error.url
-        });
+        // Error loading recent charge points - handled by service
       }
     });
   }
   
   private loadTransactions(): void {
-    console.log('Attempting to load transactions...');
     this.transactionService.loadTransactions().subscribe({
       next: (transactions) => {
-        console.log('Transactions loaded successfully:', transactions);
+        // Transactions loaded successfully
       },
       error: (error) => {
-        console.error('Error loading transactions:', error);
-        console.error('Error details:', {
-          message: error.message,
-          status: error.status,
-          statusText: error.statusText,
-          url: error.url
-        });
+        // Error loading transactions - handled by service
       }
     });
   }
@@ -903,12 +880,15 @@ export class DashboardComponent implements OnInit {
     const diffDays = Math.floor(diffHours / 24);
     
     if (diffDays > 0) {
-      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+      const key = diffDays > 1 ? 'pages.dashboard.timeFormat.daysAgo_plural' : 'pages.dashboard.timeFormat.daysAgo';
+      return this.translationService.get(key).replace('{{count}}', diffDays.toString());
     } else if (diffHours > 0) {
-      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+      const key = diffHours > 1 ? 'pages.dashboard.timeFormat.hoursAgo_plural' : 'pages.dashboard.timeFormat.hoursAgo';
+      return this.translationService.get(key).replace('{{count}}', diffHours.toString());
     } else {
       const diffMinutes = Math.floor(diffMs / (1000 * 60));
-      return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
+      const key = diffMinutes !== 1 ? 'pages.dashboard.timeFormat.minutesAgo_plural' : 'pages.dashboard.timeFormat.minutesAgo';
+      return this.translationService.get(key).replace('{{count}}', diffMinutes.toString());
     }
   }
 

@@ -50,13 +50,9 @@ export class AuthService {
   constructor() {
     // Listen to Firebase auth state changes
     onAuthStateChanged(this.auth, async (firebaseUser) => {
-      console.log('Firebase Auth State Changed:', firebaseUser ? 'User logged in' : 'User logged out');
-      
       if (firebaseUser) {
-        console.log('Loading user profile for:', firebaseUser.uid);
         await this.loadUserProfile(firebaseUser.uid);
       } else {
-        console.log('Clearing user data');
         this._user.set(null);
         this._userProfile.set(null);
         this._userName.set(null);
@@ -283,16 +279,13 @@ export class AuthService {
   async getToken(): Promise<string | null> {
     const user = this.auth.currentUser;
     if (!user) {
-      console.log('No current user for token request');
       return null;
     }
     
     try {
       const token = await user.getIdToken();
-      console.log('Token obtained successfully');
       return token;
     } catch (error) {
-      console.error('Error getting token:', error);
       return null;
     }
   }
@@ -307,7 +300,6 @@ export class AuthService {
     try {
       return await user.getIdToken(true); // Force refresh
     } catch (error) {
-      console.error('Error getting fresh token:', error);
       return null;
     }
   }
@@ -343,7 +335,6 @@ export class AuthService {
         await setDoc(doc(this.firestore, 'users', firebaseUser.uid), userProfile);
       }
     } catch (error) {
-      console.error('Error ensuring user profile:', error);
       throw error;
     }
   }
@@ -400,7 +391,6 @@ export class AuthService {
         }
       }
     } catch (error) {
-      console.error('Error loading user profile:', error);
       this._error.set('Failed to load user profile');
     }
   }

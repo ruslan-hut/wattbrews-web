@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "WattBrews"
+  },
+  "nav": {
+    "dashboard": "Tablero",
+    "profile": "Perfil",
+    "home": "Inicio",
+    "stations": "Estaciones de carga",
+    "auth": "Iniciar sesión"
+  },
+  "auth": {
+    "title": "Acceder",
+    "google": "Continuar con Google",
+    "email": "Correo",
+    "password": "Contraseña",
+    "signin": "Entrar",
+    "signout": "Cerrar sesión",
+    "login": {
+      "remember_me": "Recordarme"
+    }
+  },
+  "stations": {
+    "title": "Estaciones de carga",
+    "search": {
+      "placeholder": "Buscar estaciones..."
+    },
+    "filters": {
+      "status": "Estado",
+      "connector": "Conector",
+      "free": "Carga gratuita"
+    },
+    "start": "Iniciar carga",
+    "details": {
+      "connectors": "Conectores",
+      "tariffs": "Tarifas",
+      "status": "Estado"
+    }
+  },
+  "session": {
+    "active": "Activa",
+    "history": "Historial",
+    "stop": "Detener",
+    "cost": "Costo",
+    "energy": "Energía",
+    "duration": "Duración"
+  },
+  "dashboard": {
+    "title": "Bienvenido a WattBrews",
+    "subtitle": "Elige un cargador para iniciar tu sesión de carga",
+    "recentChargePoints": "Puntos de Carga Recientes",
+    "recentTransactions": "Transacciones Recientes",
+    "overview": "Resumen de Puntos de Carga",
+    "loadingChargePoints": "Cargando puntos de carga recientes...",
+    "noRecentChargePoints": "No se encontraron puntos de carga recientes",
+    "viewAllTransactions": "Ver Todas las Transacciones",
+    "viewAllChargePoints": "Ver Todos los Puntos de Carga",
+    "welcome": "¡Bienvenido!"
+  },
+  "language": {
+    "switcher": "Selector de idioma",
+    "english": "English",
+    "spanish": "Español"
+  },
+  "footer": {
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "support": "Soporte"
+  },
+  "profile": {
+    "settings": {
+      "notifications": "Notificaciones"
+    }
+  },
+  "common": {
+    "buttons": {
+      "save": "Guardar"
+    }
+  }
+}

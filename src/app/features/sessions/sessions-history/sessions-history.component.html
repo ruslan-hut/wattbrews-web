@@ -1,8 +1,8 @@
 <div class="sessions-history-container">
   <!-- Page Header -->
   <div class="page-header">
-    <h1 class="page-title">Sessions History</h1>
-    <p class="page-subtitle">View and manage your charging session history</p>
+    <h1 class="page-title">{{ translationService.getReactive('pages.sessions.history.title') }}</h1>
+    <p class="page-subtitle">{{ translationService.getReactive('pages.sessions.history.subtitle') }}</p>
   </div>
 
   <!-- Authentication Loading State -->
@@ -123,7 +123,7 @@
       <!-- Loading State -->
       <div class="loading-container" *ngIf="transactionService.loading()">
         <mat-spinner diameter="40"></mat-spinner>
-        <p>Loading transactions...</p>
+        <p>{{ translationService.getReactive('pages.sessions.history.loadingTransactions') }}</p>
       </div>
 
       <!-- Error State -->
@@ -313,7 +313,7 @@
         <!-- No Transactions State -->
         <div class="no-transactions" *ngIf="paginatedTransactions().length === 0">
           <mat-icon class="no-data-icon">receipt_long</mat-icon>
-          <h3>No transactions found</h3>
+          <h3>{{ translationService.getReactive('pages.sessions.history.noTransactions') }}</h3>
           <p *ngIf="searchTerm()">
             Try adjusting your search criteria
           </p>

@@ -21,6 +21,7 @@ import { TransactionService } from '../../../core/services/transaction.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Transaction } from '../../../core/models/transaction.model';
 import { TransactionPreviewComponent } from '../../../shared/components/transaction-preview/transaction-preview.component';
+import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 
 @Component({
   selector: 'app-sessions-history',
@@ -532,6 +533,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
 })
 export class SessionsHistoryComponent implements OnInit, OnDestroy {
   protected readonly transactionService = inject(TransactionService);
+  protected readonly translationService = inject(SimpleTranslationService);
   private readonly dialog = inject(MatDialog);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);

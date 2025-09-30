@@ -51,24 +51,20 @@ export class ChargePointService {
    * Load all charge points
    */
   loadChargePoints(filters?: ChargePointFilters): Observable<ChargePoint[]> {
-    console.log('ChargePointService: Starting to load charge points');
     this._loading.set(true);
     this._error.set(null);
 
     const params = this.buildFilterParams(filters);
-    console.log('ChargePointService: API call parameters:', params);
 
     // Use the new getArray method for direct array responses
     return this.apiService.getArray<ChargePoint>(API_ENDPOINTS.CHARGE_POINTS.LIST, params)
       .pipe(
         tap(chargePoints => {
-          console.log('ChargePointService: Successfully loaded charge points:', chargePoints);
           this._chargePoints.set(chargePoints);
           this._lastUpdated.set(new Date());
           this._loading.set(false);
         }),
         catchError(error => {
-          console.error('ChargePointService: Error loading charge points:', error);
           this._error.set(error.message || 'Failed to load charge points');
           this._loading.set(false);
           return throwError(() => error);
@@ -240,18 +236,13 @@ export class ChargePointService {
 
     const endpoint = API_ENDPOINTS.CHARGE_POINTS.POINT_DETAIL.replace(':id', pointId);
     
-    console.log('ChargePointService: Loading station detail for point ID:', pointId);
-    console.log('ChargePointService: Endpoint:', endpoint);
-    
     return this.apiService.getDirect<StationDetail>(endpoint)
       .pipe(
         tap((station) => {
-          console.log('ChargePointService: Station detail loaded successfully:', station);
           this._loading.set(false);
           this._lastUpdated.set(new Date());
         }),
         catchError(error => {
-          console.error('ChargePointService: Error loading station detail:', error);
           this._error.set(error.message || 'Failed to load station details');
           this._loading.set(false);
           return throwError(() => error);

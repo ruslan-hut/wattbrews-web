@@ -1,7 +1,7 @@
 <div class="dashboard-container">
   <div class="dashboard-header">
-    <h1 class="dashboard-title">Welcome to WattBrews</h1>
-    <p class="dashboard-subtitle">Choose a charger to start your charging session</p>
+    <h1 class="dashboard-title">{{ translationService.getReactive('pages.dashboard.title') }}</h1>
+    <p class="dashboard-subtitle">{{ translationService.getReactive('pages.dashboard.subtitle') }}</p>
   </div>
   
   <!-- Main Content: Charge Points and Recent Transactions Lists -->
@@ -9,19 +9,19 @@
     <!-- Recent Charge Points -->
     <mat-card class="dashboard-card recent-charge-points-card">
       <mat-card-header>
-        <mat-card-title>Recent Charge Points</mat-card-title>
+        <mat-card-title>{{ translationService.getReactive('pages.dashboard.recentChargePoints') }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="loading-container" *ngIf="transactionService.loading()">
           <mat-spinner diameter="40"></mat-spinner>
-          <p>Loading recent charge points...</p>
+          <p>{{ translationService.getReactive('pages.dashboard.loadingChargePoints') }}</p>
         </div>
         
         <div class="error-container" *ngIf="transactionService.error()">
           <mat-icon class="error-icon">error</mat-icon>
           <p>{{ transactionService.error() }}</p>
           <button mat-button color="primary" (click)="refreshRecentChargePoints()">
-            Retry
+            {{ translationService.getReactive('common.buttons.retry') }}
           </button>
         </div>
         
@@ -32,7 +32,7 @@
               <h4 class="charge-point-title">{{ cp.title }}</h4>
               <p class="charge-point-address">{{ cp.address }}</p>
               <div class="connectors-section">
-                <h5 class="connectors-title">Connectors</h5>
+                <h5 class="connectors-title">{{ translationService.getReactive('pages.dashboard.connectors') }}</h5>
                 <div class="connectors-list">
                   <mat-chip 
                     *ngFor="let connector of cp.connectors | sortByConnectorId" 
@@ -52,22 +52,22 @@
                 [matTooltip]="getStartChargeTooltip(cp)"
                 (click)="startCharge(cp.charge_point_id)">
                 <mat-icon>play_arrow</mat-icon>
-                Start Charge
+                {{ translationService.getReactive('stations.start') }}
               </button>
             </div>
           </div>
           
           <div class="no-recent-charge-points" *ngIf="recentChargePoints().length === 0">
             <mat-icon class="no-data-icon">ev_station</mat-icon>
-            <p>No recent charge points found</p>
+            <p>{{ translationService.getReactive('pages.dashboard.noRecentChargePoints') }}</p>
             <button mat-raised-button color="primary" routerLink="/stations">
-              Find Stations
+              {{ translationService.getReactive('pages.dashboard.findStations') }}
             </button>
           </div>
         </div>
         
         <button mat-button color="primary" routerLink="/stations" class="view-all-button" *ngIf="!transactionService.loading() && !transactionService.error()">
-          View All Charge Points
+          {{ translationService.getReactive('pages.dashboard.viewAllChargePoints') }}
         </button>
       </mat-card-content>
     </mat-card>
@@ -75,19 +75,19 @@
     <!-- Recent Transactions -->
     <mat-card class="dashboard-card transactions-card">
       <mat-card-header>
-        <mat-card-title>Recent Transactions</mat-card-title>
+        <mat-card-title>{{ translationService.getReactive('pages.dashboard.recentTransactions') }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="loading-container" *ngIf="transactionService.loading()">
           <mat-spinner diameter="40"></mat-spinner>
-          <p>Loading transactions...</p>
+          <p>{{ translationService.getReactive('pages.sessions.history.loadingTransactions') }}</p>
         </div>
         
         <div class="error-container" *ngIf="transactionService.error()">
           <mat-icon class="error-icon">error</mat-icon>
           <p>{{ transactionService.error() }}</p>
           <button mat-button color="primary" (click)="refreshTransactions()">
-            Retry
+            {{ translationService.getReactive('common.buttons.retry') }}
           </button>
         </div>
         
@@ -98,7 +98,7 @@
                 {{ transaction.charge_point_id }} - Connector {{ transaction.connector_id }}
               </h4>
               <p class="transaction-duration" *ngIf="transaction.is_finished">
-                Duration: {{ formatDuration(transaction.time_start, transaction.time_stop) }}
+                {{ translationService.getReactive('pages.dashboard.duration') }}: {{ formatDuration(transaction.time_start, transaction.time_stop) }}
               </p>
               <p class="transaction-time">
                 {{ formatTransactionDateTime(transaction.time_start) }}
@@ -111,18 +111,18 @@
               <div class="transaction-energy-value">
                 {{ formatEnergy(transaction.meter_start, transaction.meter_stop) }}
               </div>
-              <div class="transaction-energy-unit">kWh</div>
+              <div class="transaction-energy-unit">{{ translationService.getReactive('common.units.kWh') }}</div>
             </div>
           </div>
           
           <div class="no-transactions" *ngIf="recentTransactions().length === 0">
             <mat-icon class="no-data-icon">receipt_long</mat-icon>
-            <p>You have no transactions</p>
+            <p>{{ translationService.getReactive('pages.dashboard.noTransactions') }}</p>
           </div>
         </div>
         
         <button mat-button color="primary" routerLink="/sessions/history" class="view-all-button" *ngIf="!transactionService.loading() && !transactionService.error()">
-          View All Transactions
+          {{ translationService.getReactive('pages.dashboard.viewAllTransactions') }}
         </button>
       </mat-card-content>
     </mat-card>
@@ -131,19 +131,19 @@
   <!-- Overview Card at Bottom -->
   <mat-card class="dashboard-card overview-card">
     <mat-card-header>
-      <mat-card-title>Charge Points Overview</mat-card-title>
+      <mat-card-title>{{ translationService.getReactive('pages.dashboard.overview') }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="loading-container" *ngIf="chargePointService.loading()">
         <mat-spinner diameter="40"></mat-spinner>
-        <p>Loading charge points...</p>
+        <p>{{ translationService.getReactive('pages.dashboard.loadingOverview') }}</p>
       </div>
       
       <div class="error-container" *ngIf="chargePointService.error()">
         <mat-icon class="error-icon">error</mat-icon>
         <p>{{ chargePointService.error() }}</p>
         <button mat-button color="primary" (click)="refreshChargePoints()">
-          Retry
+          {{ translationService.getReactive('common.buttons.retry') }}
         </button>
       </div>
       
@@ -152,37 +152,37 @@
           <mat-icon class="stat-icon">ev_station</mat-icon>
           <div class="stat-content">
             <span class="stat-value">{{ chargePointService.chargePoints().length }}</span>
-            <span class="stat-label">Total</span>
+            <span class="stat-label">{{ translationService.getReactive('pages.dashboard.total') }}</span>
           </div>
         </div>
         <div class="stat-item">
           <mat-icon class="stat-icon">wifi</mat-icon>
           <div class="stat-content">
             <span class="stat-value">{{ chargePointService.onlineChargePoints().length }}</span>
-            <span class="stat-label">Online</span>
+            <span class="stat-label">{{ translationService.getReactive('pages.dashboard.online') }}</span>
           </div>
         </div>
         <div class="stat-item">
           <mat-icon class="stat-icon">check_circle</mat-icon>
           <div class="stat-content">
             <span class="stat-value">{{ chargePointService.availableChargePoints().length }}</span>
-            <span class="stat-label">Available</span>
+            <span class="stat-label">{{ translationService.getReactive('pages.dashboard.available') }}</span>
           </div>
         </div>
         <div class="stat-item">
           <mat-icon class="stat-icon">power</mat-icon>
           <div class="stat-content">
             <span class="stat-value">{{ chargePointService.availableConnectors() }}</span>
-            <span class="stat-label">Connectors</span>
+            <span class="stat-label">{{ translationService.getReactive('pages.dashboard.connectors') }}</span>
           </div>
         </div>
       </div>
       
       <div class="no-charge-points" *ngIf="!chargePointService.loading() && !chargePointService.error() && chargePointService.chargePoints().length === 0">
         <mat-icon class="no-data-icon">ev_station</mat-icon>
-        <p>No charge points available</p>
+        <p>{{ translationService.getReactive('pages.dashboard.noChargePoints') }}</p>
         <button mat-button color="primary" (click)="refreshChargePoints()">
-          Refresh
+          {{ translationService.getReactive('common.buttons.refresh') }}
         </button>
       </div>
     </mat-card-content>
