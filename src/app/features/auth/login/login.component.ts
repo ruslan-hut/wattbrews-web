@@ -12,6 +12,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 
 @Component({
   selector: 'app-login',
@@ -33,17 +34,16 @@ import { NotificationService } from '../../../core/services/notification.service
         <mat-card-header>
           <mat-card-title class="login-title">
             <mat-icon class="login-icon">ev_station</mat-icon>
-            <span>WattBrews</span>
+            <span>{{ translationService.getReactive('pages.auth.login.title') }}</span>
           </mat-card-title>
-          <mat-card-subtitle>Access your charging station management</mat-card-subtitle>
+          <mat-card-subtitle>{{ translationService.getReactive('pages.auth.login.subtitle') }}</mat-card-subtitle>
         </mat-card-header>
         
         <mat-card-content>
           <!-- Explanation Text -->
           <div class="login-explanation">
             <p class="explanation-text">
-              You can sign in using your Google account or email address. 
-              If you don't have an account yet, we'll create one for you automatically.
+              {{ translationService.getReactive('pages.auth.login.explanation') }}
             </p>
           </div>
 
@@ -51,13 +51,13 @@ import { NotificationService } from '../../../core/services/notification.service
           <div class="sign-in-options">
             <button mat-raised-button type="button" class="sign-in-button google-button" (click)="signInWithGoogle()" [disabled]="isLoading()">
               <mat-icon class="button-icon">login</mat-icon>
-              <span *ngIf="!isLoading()">Continue with Google</span>
+              <span *ngIf="!isLoading()">{{ translationService.getReactive('pages.auth.login.continueWithGoogle') }}</span>
               <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
             </button>
 
             <button mat-raised-button type="button" class="sign-in-button email-link-button" (click)="toggleEmailLinkForm()" [disabled]="isLoading()">
               <mat-icon class="button-icon">link</mat-icon>
-              <span *ngIf="!isLoading()">Sign in with Email Link</span>
+              <span *ngIf="!isLoading()">{{ translationService.getReactive('pages.auth.login.signInWithEmailLink') }}</span>
               <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
             </button>
           </div>
@@ -69,8 +69,7 @@ import { NotificationService } from '../../../core/services/notification.service
             <form [formGroup]="emailLinkForm" (ngSubmit)="onEmailLinkSubmit()" class="login-form" *ngIf="showEmailLinkForm()">
               <div class="email-link-explanation">
                 <p class="explanation-text">
-                  Enter your email address and we'll send you a secure sign-in link. 
-                  No password required!
+                  {{ translationService.getReactive('pages.auth.login.emailLinkExplanation') }}
                 </p>
               </div>
 
@@ -88,17 +87,17 @@ import { NotificationService } from '../../../core/services/notification.service
 
               <button mat-raised-button type="submit" class="energy-button-secondary" [disabled]="emailLinkForm.invalid || isLoading()">
                 <mat-spinner *ngIf="isLoading()" diameter="20" class="energy-m-sm"></mat-spinner>
-                <span *ngIf="!isLoading()">Send Sign-in Link</span>
+                <span *ngIf="!isLoading()">{{ translationService.getReactive('pages.auth.login.sendSignInLink') }}</span>
               </button>
 
               <!-- Success Message -->
               <div class="email-link-success" *ngIf="emailLinkSent()">
                 <mat-icon class="success-icon">check_circle</mat-icon>
                 <p class="success-message">
-                  Sign-in link sent! Check your email and click the link to sign in.
+                  {{ translationService.getReactive('pages.auth.login.signInLinkSent') }}
                 </p>
                 <p class="success-submessage">
-                  Didn't receive the email? Check your spam folder or try again.
+                  {{ translationService.getReactive('pages.auth.login.checkSpamFolder') }}
                 </p>
               </div>
             </form>
@@ -245,6 +244,7 @@ import { NotificationService } from '../../../core/services/notification.service
 export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
+  protected readonly translationService = inject(SimpleTranslationService);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 

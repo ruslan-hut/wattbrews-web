@@ -33,12 +33,10 @@ export class TransactionService {
     
     return this.apiService.getArray<Transaction>('/transactions/list').pipe(
       tap(transactions => {
-        console.log('Transactions loaded successfully:', transactions);
         this._transactions.set(transactions);
         this._loading.set(false);
       }),
       catchError(error => {
-        console.error('Error loading transactions:', error);
         this._error.set(error.message || 'Failed to load transactions');
         this._loading.set(false);
         throw error;
@@ -55,12 +53,10 @@ export class TransactionService {
     
     return this.apiService.getArray<ChargePoint>('/transactions/recent').pipe(
       tap(chargePoints => {
-        console.log('Recent charge points loaded successfully:', chargePoints);
         this._recentChargePoints.set(chargePoints);
         this._loading.set(false);
       }),
       catchError(error => {
-        console.error('Error loading recent charge points:', error);
         this._error.set(error.message || 'Failed to load recent charge points');
         this._loading.set(false);
         throw error;
@@ -76,16 +72,13 @@ export class TransactionService {
     this._error.set(null);
     
     const endpoint = `/transactions/list/${startTimestamp}-${endTimestamp}`;
-    console.log('Loading transactions for time range:', { startTimestamp, endTimestamp, endpoint });
     
     return this.apiService.getArray<Transaction>(endpoint).pipe(
       tap(transactions => {
-        console.log('Transactions loaded successfully for time range:', transactions);
         this._transactions.set(transactions);
         this._loading.set(false);
       }),
       catchError(error => {
-        console.error('Error loading transactions for time range:', error);
         this._error.set(error.message || 'Failed to load transactions for selected period');
         this._loading.set(false);
         throw error;
@@ -132,14 +125,11 @@ export class TransactionService {
    * Load detailed transaction information by ID
    */
   loadTransactionDetail(transactionId: number): Observable<TransactionDetail> {
-    console.log('Loading transaction detail for ID:', transactionId);
-    
     return this.apiService.getDirect<TransactionDetail>(`/transactions/info/${transactionId}`).pipe(
       tap(transactionDetail => {
-        console.log('Transaction detail loaded successfully:', transactionDetail);
+        // Transaction detail loaded successfully
       }),
       catchError(error => {
-        console.error('Error loading transaction detail:', error);
         throw error;
       })
     );

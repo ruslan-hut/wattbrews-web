@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Debug Helper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .header {
+            background: #2196F3;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+        .button.warn {
+            background: #ff9800;
+        }
+        .button.danger {
+            background: #f44336;
+        }
+        .code-block {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .key-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        .key-item {
+            background: #fff3e0;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 4px solid #ff9800;
+        }
+        .export-section {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌐 Translation Debug Helper</h1>
+        <p>Collect and analyze missing translation keys from your Angular app</p>
+    </div>
+
+    <div class="container">
+        <h2>📊 Current Status</h2>
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-missing">0</div>
+                <div>Total Missing Keys</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="unique-keys">0</div>
+                <div>Unique Keys</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="languages">0</div>
+                <div>Languages Affected</div>
+            </div>
+        </div>
+        
+        <button class="button" onclick="refreshData()">🔄 Refresh Data</button>
+        <button class="button warn" onclick="exportData()">📥 Export JSON</button>
+        <button class="button danger" onclick="clearData()">🗑️ Clear Log</button>
+    </div>
+
+    <div class="container">
+        <h2>🔍 Missing Translation Keys</h2>
+        <div id="missing-keys" class="key-list">
+            <p>No missing translations found. Navigate through your app to collect missing keys.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>📝 Translation Template Generator</h2>
+        <p>Use this to generate translation templates for missing keys:</p>
+        <button class="button" onclick="generateTemplates()">🎯 Generate Templates</button>
+        
+        <div id="templates" style="display: none;">
+            <h3>English Template (en.json)</h3>
+            <div class="code-block" id="en-template"></div>
+            
+            <h3>Spanish Template (es.json)</h3>
+            <div class="code-block" id="es-template"></div>
+        </div>
+    </div>
+
+    <div class="export-section">
+        <h2>🚀 Quick Actions</h2>
+        <p>Copy these commands to your browser console when on your Angular app:</p>
+        
+        <h3>1. Collect Missing Translations</h3>
+        <div class="code-block" id="collect-code">
+// Run this in your Angular app's browser console
+const missing = JSON.parse(localStorage.getItem('missingTranslations') || '[]');
+console.log('Missing translations:', missing);
+        </div>
+        
+        <h3>2. Clear Missing Translations Log</h3>
+        <div class="code-block" id="clear-code">
+// Clear the missing translations log
+localStorage.removeItem('missingTranslations');
+console.log('Missing translations log cleared');
+        </div>
+        
+        <h3>3. Get Statistics</h3>
+        <div class="code-block" id="stats-code">
+// Get statistics about missing translations
+const missing = JSON.parse(localStorage.getItem('missingTranslations') || '[]');
+const byLanguage = missing.reduce((acc, item) => {
+  if (!acc[item.language]) acc[item.language] = [];
+  acc[item.language].push(item.key);
+  return acc;
+}, {});
+const uniqueKeys = [...new Set(missing.map(item => item.key))];
+console.log('Statistics:', { total: missing.length, unique: uniqueKeys.length, byLanguage });
+        </div>
+    </div>
+
+    <script>
+        let currentData = [];
+
+        function refreshData() {
+            try {
+                // Try to get data from localStorage (if running in same domain)
+                const missing = JSON.parse(localStorage.getItem('missingTranslations') || '[]');
+                currentData = missing;
+                updateDisplay();
+            } catch (error) {
+                console.error('Error refreshing data:', error);
+                alert('Could not access localStorage. Make sure you are running this on the same domain as your Angular app.');
+            }
+        }
+
+        function updateDisplay() {
+            const totalMissing = currentData.length;
+            const uniqueKeys = [...new Set(currentData.map(item => item.key))];
+            const languages = [...new Set(currentData.map(item => item.language))];
+
+            document.getElementById('total-missing').textContent = totalMissing;
+            document.getElementById('unique-keys').textContent = uniqueKeys.length;
+            document.getElementById('languages').textContent = languages.length;
+
+            const keysContainer = document.getElementById('missing-keys');
+            if (totalMissing === 0) {
+                keysContainer.innerHTML = '<p>No missing translations found. Navigate through your app to collect missing keys.</p>';
+            } else {
+                keysContainer.innerHTML = currentData.map(item => `
+                    <div class="key-item">
+                        <strong>${item.key}</strong> 
+                        <span style="color: #666;">(${item.language})</span>
+                        <br>
+                        <small>Found at: ${item.url}</small>
+                        <br>
+                        <small>Time: ${new Date(item.timestamp).toLocaleString()}</small>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function exportData() {
+            if (currentData.length === 0) {
+                alert('No data to export');
+                return;
+            }
+
+            const dataStr = JSON.stringify(currentData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `missing-translations-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearData() {
+            if (confirm('Are you sure you want to clear all missing translation data?')) {
+                try {
+                    localStorage.removeItem('missingTranslations');
+                    currentData = [];
+                    updateDisplay();
+                    alert('Missing translations log cleared');
+                } catch (error) {
+                    console.error('Error clearing data:', error);
+                    alert('Could not clear localStorage. Make sure you are running this on the same domain as your Angular app.');
+                }
+            }
+        }
+
+        function generateTemplates() {
+            if (currentData.length === 0) {
+                alert('No missing translations to generate templates for');
+                return;
+            }
+
+            const uniqueKeys = [...new Set(currentData.map(item => item.key))];
+            
+            // Generate nested structure
+            function createNestedStructure(keys) {
+                const result = {};
+                keys.forEach(key => {
+                    const parts = key.split('.');
+                    let current = result;
+                    
+                    for (let i = 0; i < parts.length - 1; i++) {
+                        if (!current[parts[i]]) {
+                            current[parts[i]] = {};
+                        }
+                        current = current[parts[i]];
+                    }
+                    
+                    const lastPart = parts[parts.length - 1];
+                    current[lastPart] = key; // Use key as placeholder
+                });
+                
+                return result;
+            }
+
+            const template = createNestedStructure(uniqueKeys);
+            
+            document.getElementById('en-template').textContent = JSON.stringify(template, null, 2);
+            document.getElementById('es-template').textContent = JSON.stringify(template, null, 2);
+            document.getElementById('templates').style.display = 'block';
+        }
+
+        // Initialize on page load
+        refreshData();
+    </script>
+</body>
+</html>

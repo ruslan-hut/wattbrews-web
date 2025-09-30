@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 
 @Component({
   selector: 'app-active-sessions',
@@ -7,8 +8,9 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="active-sessions-container">
-      <h2>Active Sessions</h2>
-      <p>Active sessions component - Coming soon</p>
+      <h1 class="page-title">{{ translationService.getReactive('pages.sessions.active.title') }}</h1>
+      <p class="page-subtitle">{{ translationService.getReactive('pages.sessions.active.subtitle') }}</p>
+      <p>{{ translationService.getReactive('pages.sessions.active.comingSoon') }}</p>
     </div>
   `,
   styles: [`
@@ -17,4 +19,6 @@ import { CommonModule } from '@angular/common';
     }
   `]
 })
-export class ActiveSessionsComponent {}
+export class ActiveSessionsComponent {
+  protected readonly translationService = inject(SimpleTranslationService);
+}

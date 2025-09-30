@@ -12,6 +12,7 @@ import { UserInfoService } from '../../core/services/user-info.service';
 import { AuthService } from '../../core/services/auth.service';
 import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/models/user-info.model';
 import { Subscription } from 'rxjs';
+import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 
 @Component({
   selector: 'app-profile',
@@ -28,29 +29,29 @@ import { Subscription } from 'rxjs';
   ],
   template: `
     <div class="profile-container">
-      <h1 class="profile-title">User Profile</h1>
+      <h1 class="profile-title">{{ translationService.getReactive('pages.profile.title') }}</h1>
       
       <!-- Authentication Loading State -->
       <div class="loading-container" *ngIf="isAuthLoading()">
         <mat-spinner diameter="40"></mat-spinner>
-        <p>Checking authentication...</p>
+        <p>{{ translationService.getReactive('pages.profile.checkingAuth') }}</p>
       </div>
       
       <!-- Authentication Required Message -->
       <div class="auth-required-message" *ngIf="!isAuthLoading() && !isAuthenticated()">
         <mat-icon class="auth-icon">lock</mat-icon>
-        <h3>Authentication Required</h3>
-        <p>You need to be logged in to view your profile. Please sign in to continue.</p>
+        <h3>{{ translationService.getReactive('pages.profile.authRequired') }}</h3>
+        <p>{{ translationService.getReactive('pages.profile.authRequiredMessage') }}</p>
         <button mat-raised-button color="primary" (click)="navigateToLogin()">
           <mat-icon>login</mat-icon>
-          Sign In
+          {{ translationService.getReactive('common.buttons.signIn') }}
         </button>
       </div>
       
       <!-- User Info Loading State -->
       <div class="loading-container" *ngIf="isAuthenticated() && userInfoService.loading()">
         <mat-spinner diameter="40"></mat-spinner>
-        <p>Loading user information...</p>
+        <p>{{ translationService.getReactive('pages.profile.loadingUserInfo') }}</p>
       </div>
       
       <!-- Error State -->
@@ -58,7 +59,7 @@ import { Subscription } from 'rxjs';
         <mat-icon class="error-icon">error</mat-icon>
         <p>{{ userInfoService.error() }}</p>
         <button mat-button color="primary" (click)="refreshUserInfo()">
-          Retry
+          {{ translationService.getReactive('common.buttons.retry') }}
         </button>
       </div>
       
@@ -69,7 +70,7 @@ import { Subscription } from 'rxjs';
           <mat-card-header>
             <mat-card-title>
               <mat-icon>person</mat-icon>
-              Basic Information
+              {{ translationService.getReactive('pages.profile.basicInformation') }}
             </mat-card-title>
           </mat-card-header>
           <mat-card-content>
@@ -111,7 +112,7 @@ import { Subscription } from 'rxjs';
         <!-- Tabs for detailed information -->
         <mat-tab-group class="profile-tabs">
           <!-- Payment Plans Tab -->
-          <mat-tab label="Payment Plans">
+          <mat-tab [label]="translationService.getReactive('pages.profile.paymentPlans')">
             <div class="tab-content">
               <mat-card class="section-card">
                 <mat-card-header>
@@ -162,7 +163,7 @@ import { Subscription } from 'rxjs';
           </mat-tab>
 
           <!-- User Tags Tab -->
-          <mat-tab label="User Tags">
+          <mat-tab [label]="translationService.getReactive('pages.profile.userTags')">
             <div class="tab-content">
               <mat-card class="section-card">
                 <mat-card-header>
@@ -209,7 +210,7 @@ import { Subscription } from 'rxjs';
           </mat-tab>
 
           <!-- Payment Methods Tab -->
-          <mat-tab label="Payment Methods">
+          <mat-tab [label]="translationService.getReactive('pages.profile.paymentMethods')">
             <div class="tab-content">
               <mat-card class="section-card">
                 <mat-card-header>
@@ -616,6 +617,7 @@ import { Subscription } from 'rxjs';
 export class ProfileComponent implements OnInit, OnDestroy {
   protected readonly userInfoService = inject(UserInfoService);
   protected readonly authService = inject(AuthService);
+  protected readonly translationService = inject(SimpleTranslationService);
   private readonly router = inject(Router);
   
   // Authentication state

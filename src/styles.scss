@@ -182,6 +182,34 @@ body {
   background-color: var(--energy-cyan) !important;
   color: white !important;
   box-shadow: var(--energy-shadow-md) !important;
+  
+  // Ensure language switcher follows energy theme
+  app-language-switcher {
+    .language-switcher {
+      color: var(--energy-amber) !important;
+      background-color: rgba(255, 255, 255, 0.15) !important;
+      border: 1px solid var(--energy-amber) !important;
+      box-shadow: var(--energy-shadow-sm) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      
+      &:hover {
+        background-color: var(--energy-amber) !important;
+        color: var(--energy-gray-800) !important;
+        border-color: var(--energy-amber-dark) !important;
+      }
+      
+      .language-code {
+        color: inherit !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+  }
 }
 
 .mat-mdc-sidenav {
