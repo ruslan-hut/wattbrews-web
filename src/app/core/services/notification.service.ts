@@ -110,7 +110,7 @@ export class NotificationService {
    */
   chargingCompleted(sessionId: string, energyDelivered: number, cost: number): void {
     this.success(
-      `Charging completed! Energy: ${energyDelivered.toFixed(2)} kWh, Cost: €${cost.toFixed(2)}`,
+      `Charging completed! Energy: ${energyDelivered.toFixed(2)} kWh, Cost: €${(cost / 100).toFixed(2)}`,
       'Charging Complete',
       {
         duration: 5000,
@@ -163,7 +163,7 @@ export class NotificationService {
    */
   paymentSuccessful(amount: number): void {
     this.success(
-      `Payment of €${amount.toFixed(2)} processed successfully`,
+      `Payment of €${(amount / 100).toFixed(2)} processed successfully`,
       'Payment Complete'
     );
   }

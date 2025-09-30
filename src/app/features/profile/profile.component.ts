@@ -175,7 +175,7 @@ import { Subscription } from 'rxjs';
                   <div class="user-tags" *ngIf="userInfoService.getUserTags().length > 0; else noTags">
                     <div class="tag-item" *ngFor="let tag of userInfoService.getUserTags()">
                       <div class="tag-header">
-                        <h3>{{ tag.id_tag }}</h3>
+                        <h3>{{ tag.id_tag.substring(0, 4) }}****</h3>
                         <div class="tag-badges">
                           <mat-chip *ngIf="tag.is_enabled" color="accent">Enabled</mat-chip>
                           <mat-chip *ngIf="tag.local" color="primary">Local</mat-chip>

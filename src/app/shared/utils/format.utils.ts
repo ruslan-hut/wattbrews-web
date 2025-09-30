@@ -1,12 +1,14 @@
 export class FormatUtils {
   /**
-   * Format currency amount
+   * Format currency amount (converts from cents to euros)
    */
   static formatCurrency(amount: number, currency: string = 'EUR', locale: string = 'en-US'): string {
+    // Convert from cents to euros
+    const euroAmount = amount / 100;
     return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: currency,
-    }).format(amount);
+    }).format(euroAmount);
   }
   
   /**
