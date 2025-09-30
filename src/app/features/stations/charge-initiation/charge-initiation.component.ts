@@ -693,7 +693,6 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
     // Wait for authentication before loading any data
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {
-        console.log('ChargeInitiationComponent: User authenticated, loading data');
         if (this.authCheckTimeout) {
           clearTimeout(this.authCheckTimeout);
         }
@@ -711,7 +710,6 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
       } else {
         // Give Firebase auth time to restore session on page reload
         this.authCheckTimeout = setTimeout(() => {
-          console.log('ChargeInitiationComponent: User not authenticated after timeout, redirecting to login');
           this.router.navigate(['/auth/login']);
         }, 1000);
       }
@@ -736,7 +734,7 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
           this._stationDetail.set(station);
         },
         error: (error) => {
-          console.error('ChargeInitiationComponent: Error loading station detail:', error);
+          // Error loading station detail - handled by service
         }
       });
     }
@@ -754,7 +752,7 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
         this.preselectDefaultPaymentMethod(this.userInfoService.getPaymentMethods());
       },
       error: (error) => {
-        console.error('ChargeInitiationComponent: Error loading user info:', error);
+        // Error loading user info - handled by service
       }
     });
   }
@@ -898,11 +896,6 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
     }
 
     // TODO: Implement actual charge start logic
-    console.log('Starting charge with:', {
-      connector: connector.connector_id,
-      paymentMethod: paymentMethod.identifier,
-      station: this.stationDetail()?.charge_point_id
-    });
 
     this.notificationService.success('Charging started successfully!');
     this.router.navigate(['/sessions/active']);

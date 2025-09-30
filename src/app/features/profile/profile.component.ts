@@ -628,27 +628,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private authSubscription?: Subscription;
 
   ngOnInit(): void {
-    console.log('ProfileComponent initialized');
-    console.log('Current user from auth service:', this.authService.user());
-    console.log('Is authenticated:', this.isAuthenticated());
-    console.log('Is auth loading:', this.isAuthLoading());
-    
     // Subscribe to auth state changes to handle race conditions
     this.authSubscription = this.authService.user$.subscribe(user => {
-      console.log('Auth state changed in profile component:', user ? 'User logged in' : 'User logged out');
-      
       if (user && this.isAuthenticated()) {
-        console.log('User authenticated, loading profile data');
         this.loadUserInfo();
       } else if (!user) {
-        console.log('User not authenticated, clearing profile data');
         this.userInfoService.clearData();
       }
     });
     
     // Also check immediately in case auth is already resolved
     if (this.isAuthenticated()) {
-      console.log('User already authenticated, loading profile data immediately');
       this.loadUserInfo();
     }
   }
@@ -711,20 +701,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
       
       return timeString;
     } catch (error) {
-      console.warn('Error formatting time:', timeString, error);
       return timeString;
     }
   }
 
   private loadUserInfo(): void {
-    console.log('Loading current user info using /users/info/0000 endpoint');
-    
     this.userInfoService.loadCurrentUserInfo().subscribe({
       next: (userInfo) => {
-        console.log('Current user info loaded successfully:', userInfo);
+        // Current user info loaded successfully
       },
       error: (error) => {
-        console.error('Error loading current user info:', error);
+        // Error loading current user info - handled by service
       }
     });
   }
