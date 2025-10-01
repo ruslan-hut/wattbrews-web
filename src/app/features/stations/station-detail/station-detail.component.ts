@@ -15,6 +15,7 @@ import { StationDetail } from '../../../core/models/station-detail.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { SmallMapComponent } from '../../../shared/components/small-map/small-map.component';
+import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 
 @Pipe({
   name: 'sortByConnectorId',
@@ -55,7 +56,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
           <mat-icon>arrow_back</mat-icon>
         </button>
         <div class="header-content">
-          <h1 class="page-title">Station Details</h1>
+          <h1 class='page-title'>{{ translationService.getReactive('stationDetail.title') }}</h1>
           <p class="page-subtitle" *ngIf="stationDetail()">{{ stationDetail()!.title }}</p>
         </div>
       </div>
@@ -63,7 +64,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
       <!-- Loading State -->
       <div class="loading-container" *ngIf="loading()">
         <app-loading-spinner></app-loading-spinner>
-        <p>Loading station details...</p>
+        <p>{{ translationService.getReactive('stationDetail.loading') }}</p>
       </div>
 
       <!-- Error State -->
@@ -71,7 +72,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
         <app-error-message [message]="error()!"></app-error-message>
         <button mat-raised-button color="primary" (click)="loadStationDetail()">
           <mat-icon>refresh</mat-icon>
-          Try Again
+          {{ translationService.getReactive('stationDetail.tryAgain') }}
         </button>
       </div>
 
@@ -92,7 +93,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
               <div class="info-item">
                 <mat-icon class="info-icon">location_on</mat-icon>
                 <div class="info-content">
-                  <span class="info-label">Address</span>
+                  <span class="info-label">{{ translationService.getReactive('stationDetail.labels.address') }}</span>
                   <span class="info-value">{{ stationDetail()!.address }}</span>
                 </div>
               </div>
@@ -100,7 +101,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
               <div class="info-item">
                 <mat-icon class="info-icon">business</mat-icon>
                 <div class="info-content">
-                  <span class="info-label">Vendor</span>
+                  <span class="info-label">{{ translationService.getReactive('stationDetail.labels.vendor') }}</span>
                   <span class="info-value">{{ stationDetail()!.vendor }}</span>
                 </div>
               </div>
@@ -108,7 +109,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
               <div class="info-item">
                 <mat-icon class="info-icon">memory</mat-icon>
                 <div class="info-content">
-                  <span class="info-label">Model</span>
+                  <span class="info-label">{{ translationService.getReactive('stationDetail.labels.model') }}</span>
                   <span class="info-value">{{ stationDetail()!.model }}</span>
                 </div>
               </div>
@@ -116,7 +117,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
               <div class="info-item">
                 <mat-icon class="info-icon">tag</mat-icon>
                 <div class="info-content">
-                  <span class="info-label">Serial Number</span>
+                  <span class="info-label">{{ translationService.getReactive('stationDetail.labels.serialNumber') }}</span>
                   <span class="info-value">{{ stationDetail()!.serial_number }}</span>
                 </div>
               </div>
@@ -124,7 +125,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
               <div class="info-item">
                 <mat-icon class="info-icon">update</mat-icon>
                 <div class="info-content">
-                  <span class="info-label">Firmware Version</span>
+                  <span class="info-label">{{ translationService.getReactive('stationDetail.labels.firmwareVersion') }}</span>
                   <span class="info-value">{{ stationDetail()!.firmware_version }}</span>
                 </div>
               </div>
@@ -132,7 +133,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
               <div class="info-item">
                 <mat-icon class="info-icon">schedule</mat-icon>
                 <div class="info-content">
-                  <span class="info-label">Last Seen</span>
+                  <span class="info-label">{{ translationService.getReactive('stationDetail.labels.lastSeen') }}</span>
                   <span class="info-value">{{ formatDateTime(stationDetail()!.event_time) }}</span>
                 </div>
               </div>
@@ -143,7 +144,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
         <!-- Status Information -->
         <mat-card class="status-card">
           <mat-card-header>
-            <mat-card-title>Status Information</mat-card-title>
+            <mat-card-title>{{ translationService.getReactive('stationDetail.statusInformation') }}</mat-card-title>
           </mat-card-header>
           
           <mat-card-content>
@@ -152,38 +153,38 @@ export class SortByConnectorIdPipe implements PipeTransform {
                 <mat-chip [class]="getStatusChipClass(stationDetail()!.status)">
                   {{ stationDetail()!.status }}
                 </mat-chip>
-                <span class="status-label">Current Status</span>
+                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.currentStatus') }}</span>
               </div>
               
               <div class="status-item">
                 <mat-chip [class]="getErrorChipClass(stationDetail()!.error_code)">
                   {{ stationDetail()!.error_code }}
                 </mat-chip>
-                <span class="status-label">Error Code</span>
+                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.errorCode') }}</span>
               </div>
               
               <div class="status-item">
                 <mat-chip [class]="stationDetail()!.is_online ? 'online' : 'offline'">
-                  {{ stationDetail()!.is_online ? 'Online' : 'Offline' }}
+                  {{ stationDetail()!.is_online ? translationService.getReactive('stationDetail.status.online') : translationService.getReactive('stationDetail.status.offline') }}
                 </mat-chip>
-                <span class="status-label">Connection</span>
+                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.connection') }}</span>
               </div>
               
               <div class="status-item">
                 <mat-chip [class]="stationDetail()!.is_enabled ? 'enabled' : 'disabled'">
-                  {{ stationDetail()!.is_enabled ? 'Enabled' : 'Disabled' }}
+                  {{ stationDetail()!.is_enabled ? translationService.getReactive('stationDetail.status.enabled') : translationService.getReactive('stationDetail.status.disabled') }}
                 </mat-chip>
-                <span class="status-label">Availability</span>
+                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.availability') }}</span>
               </div>
             </div>
             
             <div class="status-info" *ngIf="stationDetail()!.info">
-              <p><strong>Info:</strong> {{ stationDetail()!.info }}</p>
+              <p><strong>{{ translationService.getReactive('stationDetail.labels.info') }}</strong> {{ stationDetail()!.info }}</p>
             </div>
             
             <div class="status-times">
-              <p><strong>Status Time:</strong> {{ formatDateTime(stationDetail()!.status_time) }}</p>
-              <p><strong>Event Time:</strong> {{ formatDateTime(stationDetail()!.event_time) }}</p>
+              <p><strong>{{ translationService.getReactive('stationDetail.labels.statusTime') }}</strong> {{ formatDateTime(stationDetail()!.status_time) }}</p>
+              <p><strong>{{ translationService.getReactive('stationDetail.labels.eventTime') }}</strong> {{ formatDateTime(stationDetail()!.event_time) }}</p>
             </div>
           </mat-card-content>
         </mat-card>
@@ -191,7 +192,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
         <!-- Location Information -->
         <mat-card class="location-card" *ngIf="stationDetail()!.location">
           <mat-card-header>
-            <mat-card-title>Location</mat-card-title>
+            <mat-card-title>{{ translationService.getReactive('stationDetail.location') }}</mat-card-title>
           </mat-card-header>
           
           <mat-card-content>
@@ -199,7 +200,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
               <div class="location-item">
                 <mat-icon class="location-icon">place</mat-icon>
                 <div class="location-details">
-                  <span class="location-label">Coordinates</span>
+                  <span class="location-label">{{ translationService.getReactive('stationDetail.labels.coordinates') }}</span>
                   <span class="location-value">
                     {{ stationDetail()!.location.latitude }}, {{ stationDetail()!.location.longitude }}
                   </span>
@@ -223,7 +224,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
         <!-- Connectors -->
         <mat-card class="connectors-card">
           <mat-card-header>
-            <mat-card-title>Connectors ({{ stationDetail()!.connectors.length }})</mat-card-title>
+            <mat-card-title>{{ translationService.getReactive('stationDetail.connectors') }} ({{ stationDetail()!.connectors.length }})</mat-card-title>
           </mat-card-header>
           
           <mat-card-content>
@@ -236,7 +237,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
                 [class.out-of-order]="connector.status === 'OutOfOrder'">
                 
                 <div class="connector-header">
-                  <h4>Connector {{ (connector.connector_id_name || connector.connector_id) }}</h4>
+                  <h4>{{ translationService.getReactive('stationDetail.labels.connector') }} {{ (connector.connector_id_name || connector.connector_id) }}</h4>
                   <mat-chip [class]="getConnectorStatusClass(connector.status)">
                     {{ connector.status }}
                   </mat-chip>
@@ -244,37 +245,37 @@ export class SortByConnectorIdPipe implements PipeTransform {
                 
                 <div class="connector-details">
                   <div class="connector-info">
-                    <span class="connector-label">Type:</span>
+                    <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.type') }}</span>
                     <span class="connector-value">{{ connector.type }}</span>
                   </div>
                   
                   <div class="connector-info">
-                    <span class="connector-label">Power:</span>
+                    <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.power') }}</span>
                     <span class="connector-value">{{ connector.power }} kW</span>
                   </div>
                   
                   <div class="connector-info">
-                    <span class="connector-label">Vendor:</span>
+                    <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.vendorWithColon') }}</span>
                     <span class="connector-value">{{ connector.vendor_id }}</span>
                   </div>
                   
                   <div class="connector-info">
-                    <span class="connector-label">Error Code:</span>
+                    <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.errorCodeWithColon') }}</span>
                     <span class="connector-value">{{ connector.error_code }}</span>
                   </div>
                   
                   <div class="connector-info" *ngIf="connector.current_transaction_id > 0">
-                    <span class="connector-label">Transaction ID:</span>
+                    <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.transactionId') }}</span>
                     <span class="connector-value">#{{ connector.current_transaction_id }}</span>
                   </div>
                 </div>
                 
                 <div class="connector-status-info" *ngIf="connector.info">
-                  <p><strong>Info:</strong> {{ connector.info }}</p>
+                  <p><strong>{{ translationService.getReactive('stationDetail.labels.info') }}</strong> {{ connector.info }}</p>
                 </div>
                 
                 <div class="connector-time">
-                  <p><strong>Status Time:</strong> {{ formatDateTime(connector.status_time) }}</p>
+                  <p><strong>{{ translationService.getReactive('stationDetail.labels.statusTimeWithColon') }}</strong> {{ formatDateTime(connector.status_time) }}</p>
                 </div>
               </div>
             </div>
@@ -287,9 +288,9 @@ export class SortByConnectorIdPipe implements PipeTransform {
                 class="start-charge-button"
                 (click)="startCharge()">
                 <mat-icon>play_arrow</mat-icon>
-                Start Charge
+                {{ translationService.getReactive('stationDetail.actions.startCharge') }}
               </button>
-              <p class="start-charge-info">Click to begin charging at this station</p>
+              <p class="start-charge-info">{{ translationService.getReactive('stationDetail.actions.startChargeInfo') }}</p>
             </div>
           </mat-card-content>
         </mat-card>
@@ -664,6 +665,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  protected readonly translationService = inject(SimpleTranslationService);
 
   // Signals
   readonly loading = this.chargePointService.loading;

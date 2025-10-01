@@ -15,6 +15,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../../../core/services/transaction.service';
@@ -41,6 +42,7 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
     MatSortModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTooltipModule,
     FormsModule
   ],
   templateUrl: './sessions-history.component.html',
