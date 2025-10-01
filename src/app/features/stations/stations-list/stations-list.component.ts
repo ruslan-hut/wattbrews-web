@@ -54,8 +54,8 @@ export class SortByConnectorIdPipe implements PipeTransform {
   template: `
     <div class="stations-list-container">
       <div class="page-header">
-        <h1 class="page-title">{{ translationService.getReactive('pages.stations.title') }}</h1>
-        <p class="page-subtitle">{{ translationService.getReactive('pages.stations.subtitle') }}</p>
+        <h1 class="page-title">{{ translationService.getReactive('stations.title') }}</h1>
+        <p class="page-subtitle">{{ translationService.getReactive('stations.subtitle') }}</p>
       </div>
 
       <!-- Authentication Required Message -->
@@ -72,12 +72,12 @@ export class SortByConnectorIdPipe implements PipeTransform {
       <!-- Search Section -->
       <div class="search-section" *ngIf="isAuthenticated()">
         <mat-form-field appearance="outline" class="search-field">
-          <mat-label>{{ translationService.getReactive('pages.stations.searchLabel') }}</mat-label>
+          <mat-label>{{ translationService.getReactive('stations.searchLabel') }}</mat-label>
           <input 
             matInput 
             [(ngModel)]="searchQuery" 
             (input)="onSearchChange()"
-            [placeholder]="translationService.getReactive('pages.stations.searchPlaceholder')"
+            [placeholder]="translationService.getReactive('stations.searchPlaceholder')"
             autocomplete="off">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
@@ -86,7 +86,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
       <!-- Loading State -->
       <div class="loading-container" *ngIf="isAuthenticated() && loading()">
         <app-loading-spinner></app-loading-spinner>
-        <p>{{ translationService.getReactive('pages.stations.loadingStations') }}</p>
+        <p>{{ translationService.getReactive('stations.loadingStations') }}</p>
       </div>
 
       <!-- Error State -->
@@ -124,12 +124,12 @@ export class SortByConnectorIdPipe implements PipeTransform {
               
               <div class="info-row">
                 <mat-icon class="info-icon">electrical_services</mat-icon>
-                <span class="info-text">{{ getAvailableConnectors(station) }} {{ translationService.getReactive('pages.stations.ofConnectorsAvailable').replace('{{total}}', station.connectors.length.toString()) }}</span>
+                <span class="info-text">{{ getAvailableConnectors(station) }} {{ translationService.getReactive('stations.ofConnectorsAvailable').replace('{{total}}', station.connectors.length.toString()) }}</span>
               </div>
             </div>
 
             <div class="connectors-section">
-              <h4>{{ translationService.getReactive('pages.stations.connectors') }}</h4>
+              <h4>{{ translationService.getReactive('stations.connectors') }}</h4>
               <div class="connectors-list">
                 <mat-chip 
                   *ngFor="let connector of station.connectors | sortByConnectorId" 
@@ -150,7 +150,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
               [matTooltip]="getStartChargeTooltip(station)"
               (click)="startCharge(station.charge_point_id)">
               <mat-icon>play_arrow</mat-icon>
-              {{ translationService.getReactive('pages.stations.startCharge') }}
+              {{ translationService.getReactive('stations.startCharge') }}
             </button>
             <button 
               mat-button 
@@ -159,7 +159,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
               [matTooltip]="getViewDetailsTooltip(station)"
               (click)="viewStationDetails(station.charge_point_id)">
               <mat-icon>visibility</mat-icon>
-              {{ translationService.getReactive('pages.stations.viewDetails') }}
+              {{ translationService.getReactive('stations.viewDetails') }}
             </button>
           </mat-card-actions>
         </mat-card>
@@ -168,9 +168,9 @@ export class SortByConnectorIdPipe implements PipeTransform {
       <!-- Empty State -->
       <div class="empty-state" *ngIf="isAuthenticated() && !loading() && !error() && filteredStations().length === 0">
         <mat-icon class="empty-icon">ev_station</mat-icon>
-        <h3>{{ translationService.getReactive('pages.stations.noStationsFound') }}</h3>
-        <p *ngIf="searchQuery">{{ translationService.getReactive('pages.stations.tryAdjustingSearch') }}</p>
-        <p *ngIf="!searchQuery">{{ translationService.getReactive('pages.stations.noStationsAvailable') }}</p>
+        <h3>{{ translationService.getReactive('stations.noStationsFound') }}</h3>
+        <p *ngIf="searchQuery">{{ translationService.getReactive('stations.tryAdjustingSearch') }}</p>
+        <p *ngIf="!searchQuery">{{ translationService.getReactive('stations.noStationsAvailable') }}</p>
         <button mat-raised-button color="primary" (click)="clearSearch()" *ngIf="searchQuery">
           {{ translationService.getReactive('common.buttons.clearSearch') }}
         </button>
@@ -618,9 +618,9 @@ export class StationsListComponent implements OnInit, OnDestroy {
 
   getViewDetailsTooltip(station: ChargePoint): string {
     if (!this.hasViewDetailsAccess()) {
-      return this.translationService.get('pages.stations.tooltips.accessRequired');
+      return this.translationService.get('stations.tooltips.accessRequired');
     }
-    return this.translationService.get('pages.stations.tooltips.viewDetails');
+    return this.translationService.get('stations.tooltips.viewDetails');
   }
 
   navigateToLogin() {
@@ -635,15 +635,15 @@ export class StationsListComponent implements OnInit, OnDestroy {
 
   getStartChargeTooltip(station: ChargePoint): string {
     if (!station.is_online) {
-      return this.translationService.get('pages.stations.tooltips.stationOffline');
+      return this.translationService.get('stations.tooltips.stationOffline');
     }
     if (!station.is_enabled) {
-      return this.translationService.get('pages.stations.tooltips.stationDisabled');
+      return this.translationService.get('stations.tooltips.stationDisabled');
     }
     if (this.getAvailableConnectors(station) === 0) {
-      return this.translationService.get('pages.stations.tooltips.noAvailableConnectors');
+      return this.translationService.get('stations.tooltips.noAvailableConnectors');
     }
-    return this.translationService.get('pages.stations.tooltips.startCharging');
+    return this.translationService.get('stations.tooltips.startCharging');
   }
 
   startCharge(stationId: string): void {

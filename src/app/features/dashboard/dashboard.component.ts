@@ -803,15 +803,15 @@ export class DashboardComponent implements OnInit {
 
   protected getStartChargeTooltip(chargePoint: ChargePoint): string {
     if (!chargePoint.is_online) {
-      return this.translationService.get('pages.dashboard.tooltips.stationOffline');
+      return this.translationService.get('dashboard.tooltips.stationOffline');
     }
     if (!chargePoint.is_enabled) {
-      return this.translationService.get('pages.dashboard.tooltips.stationDisabled');
+      return this.translationService.get('dashboard.tooltips.stationDisabled');
     }
     if (this.getAvailableConnectors(chargePoint) === 0) {
-      return this.translationService.get('pages.dashboard.tooltips.noAvailableConnectors');
+      return this.translationService.get('dashboard.tooltips.noAvailableConnectors');
     }
-    return this.translationService.get('pages.dashboard.tooltips.startCharging');
+    return this.translationService.get('dashboard.tooltips.startCharging');
   }
 
   protected startCharge(stationId: string): void {
@@ -880,14 +880,14 @@ export class DashboardComponent implements OnInit {
     const diffDays = Math.floor(diffHours / 24);
     
     if (diffDays > 0) {
-      const key = diffDays > 1 ? 'pages.dashboard.timeFormat.daysAgo_plural' : 'pages.dashboard.timeFormat.daysAgo';
+      const key = diffDays > 1 ? 'dashboard.timeFormat.daysAgo_plural' : 'dashboard.timeFormat.daysAgo';
       return this.translationService.get(key).replace('{{count}}', diffDays.toString());
     } else if (diffHours > 0) {
-      const key = diffHours > 1 ? 'pages.dashboard.timeFormat.hoursAgo_plural' : 'pages.dashboard.timeFormat.hoursAgo';
+      const key = diffHours > 1 ? 'dashboard.timeFormat.hoursAgo_plural' : 'dashboard.timeFormat.hoursAgo';
       return this.translationService.get(key).replace('{{count}}', diffHours.toString());
     } else {
       const diffMinutes = Math.floor(diffMs / (1000 * 60));
-      const key = diffMinutes !== 1 ? 'pages.dashboard.timeFormat.minutesAgo_plural' : 'pages.dashboard.timeFormat.minutesAgo';
+      const key = diffMinutes !== 1 ? 'dashboard.timeFormat.minutesAgo_plural' : 'dashboard.timeFormat.minutesAgo';
       return this.translationService.get(key).replace('{{count}}', diffMinutes.toString());
     }
   }

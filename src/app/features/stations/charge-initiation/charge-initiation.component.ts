@@ -18,6 +18,7 @@ import { ChargePointService } from '../../../core/services/chargepoint.service';
 import { UserInfoService } from '../../../core/services/user-info.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 import { StationDetail } from '../../../core/models/station-detail.model';
 import { UserPaymentMethod, PaymentPlan } from '../../../core/models/user-info.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
@@ -51,7 +52,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
           <mat-icon>arrow_back</mat-icon>
         </button>
         <div class="header-content">
-          <h1 class="page-title">Start Charging</h1>
+          <h1 class="page-title">{{ translationService.getReactive('chargeInitiation.title') }}</h1>
           <p class="page-subtitle" *ngIf="stationDetail()">{{ stationDetail()!.title }}</p>
         </div>
       </div>
@@ -59,7 +60,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
       <!-- Loading State -->
       <div class="loading-container" *ngIf="loading()">
         <app-loading-spinner></app-loading-spinner>
-        <p>Loading station details...</p>
+        <p>{{ translationService.getReactive('chargeInitiation.loadingStationDetails') }}</p>
       </div>
 
       <!-- Error State -->
@@ -67,7 +68,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
         <app-error-message [message]="error()!"></app-error-message>
         <button mat-raised-button color="primary" (click)="loadStationDetail()">
           <mat-icon>refresh</mat-icon>
-          Try Again
+          {{ translationService.getReactive('common.buttons.tryAgain') }}
         </button>
       </div>
 
@@ -87,8 +88,8 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
         <!-- Connector Selection -->
         <mat-card class="connector-selection-card">
           <mat-card-header>
-            <mat-card-title>Select Connector</mat-card-title>
-            <mat-card-subtitle>Choose a connector to start charging</mat-card-subtitle>
+            <mat-card-title>{{ translationService.getReactive('chargeInitiation.selectConnector') }}</mat-card-title>
+            <mat-card-subtitle>{{ translationService.getReactive('chargeInitiation.selectConnectorSubtitle') }}</mat-card-subtitle>
           </mat-card-header>
           
           <mat-card-content>
@@ -102,7 +103,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
                 (click)="selectConnector(connector)">
                 
                 <div class="connector-header">
-                  <h4>Connector {{ getConnectorDisplayName(connector) }}</h4>
+                  <h4>{{ translationService.getReactive('chargeInitiation.connector') }} {{ getConnectorDisplayName(connector) }}</h4>
                   <mat-chip [class]="getConnectorStatusClass(connector.status)">
                     {{ connector.status }}
                   </mat-chip>
@@ -110,13 +111,13 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
                 
                 <div class="connector-details">
                   <div class="connector-info">
-                    <span class="connector-label">Type:</span>
+                    <span class="connector-label">{{ translationService.getReactive('chargeInitiation.type') }}</span>
                     <span class="connector-value">{{ connector.type }}</span>
                   </div>
                   
                   <div class="connector-info">
-                    <span class="connector-label">Power:</span>
-                    <span class="connector-value">{{ connector.power }} kW</span>
+                    <span class="connector-label">{{ translationService.getReactive('chargeInitiation.power') }}</span>
+                    <span class="connector-value">{{ connector.power }} {{ translationService.getReactive('common.units.kW') }}</span>
                   </div>
                 </div>
                 
@@ -128,22 +129,22 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
         <!-- Payment Method Selection -->
         <mat-card class="payment-method-card">
           <mat-card-header>
-            <mat-card-title>Payment Method</mat-card-title>
-            <mat-card-subtitle>Choose your preferred payment method</mat-card-subtitle>
+            <mat-card-title>{{ translationService.getReactive('chargeInitiation.paymentMethod') }}</mat-card-title>
+            <mat-card-subtitle>{{ translationService.getReactive('chargeInitiation.paymentMethodSubtitle') }}</mat-card-subtitle>
           </mat-card-header>
           
           <mat-card-content>
             <div class="payment-methods-loading" *ngIf="userInfoService.loading()">
               <mat-spinner diameter="30"></mat-spinner>
-              <span>Loading payment methods...</span>
+              <span>{{ translationService.getReactive('chargeInitiation.loadingPaymentMethods') }}</span>
             </div>
             
             <div class="payment-methods-error" *ngIf="userInfoService.error() && !userInfoService.loading()">
               <mat-icon>error</mat-icon>
-              <span>Failed to load payment methods: {{ userInfoService.error() }}</span>
+              <span>{{ translationService.getReactive('chargeInitiation.failedToLoadPaymentMethods') }} {{ userInfoService.error() }}</span>
               <button mat-button color="primary" (click)="loadUserInfo()">
                 <mat-icon>refresh</mat-icon>
-                Retry
+                {{ translationService.getReactive('common.buttons.tryAgain') }}
               </button>
             </div>
             
@@ -173,10 +174,10 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
             <ng-template #noPaymentMethods>
               <div class="no-payment-methods" *ngIf="!userInfoService.loading()">
                 <mat-icon>credit_card_off</mat-icon>
-                <p>No payment methods available. Please add a payment method in your profile.</p>
+                <p>{{ translationService.getReactive('chargeInitiation.noPaymentMethods') }}</p>
                 <button mat-raised-button color="primary" (click)="goToProfile()">
                   <mat-icon>add</mat-icon>
-                  Add Payment Method
+                  {{ translationService.getReactive('chargeInitiation.addPaymentMethod') }}
                 </button>
               </div>
             </ng-template>
@@ -186,33 +187,33 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
         <!-- Tariff Information -->
         <mat-card class="tariff-card">
           <mat-card-header>
-            <mat-card-title>Tariff Information</mat-card-title>
+            <mat-card-title>{{ translationService.getReactive('chargeInitiation.tariffInformation') }}</mat-card-title>
             <mat-card-subtitle>{{ getTariffDescription() }}</mat-card-subtitle>
           </mat-card-header>
           
           <mat-card-content>
             <div class="tariff-loading" *ngIf="userInfoService.loading()">
               <mat-spinner diameter="30"></mat-spinner>
-              <span>Loading tariff information...</span>
+              <span>{{ translationService.getReactive('chargeInitiation.loadingTariffInformation') }}</span>
             </div>
             
             <div class="tariff-error" *ngIf="userInfoService.error() && !userInfoService.loading()">
               <mat-icon>error</mat-icon>
-              <span>Failed to load tariff information: {{ userInfoService.error() }}</span>
+              <span>{{ translationService.getReactive('chargeInitiation.failedToLoadTariffInformation') }} {{ userInfoService.error() }}</span>
               <button mat-button color="primary" (click)="loadUserInfo()">
                 <mat-icon>refresh</mat-icon>
-                Retry
+                {{ translationService.getReactive('common.buttons.tryAgain') }}
               </button>
             </div>
             
             <div class="tariff-info" *ngIf="!userInfoService.loading() && !userInfoService.error() && userInfoService.getPaymentPlans().length > 0">
               <div class="tariff-item">
-                <span class="tariff-label">Price per kWh:</span>
-                <span class="tariff-value">€{{ getTariffPrice() }}/kWh</span>
+                <span class="tariff-label">{{ translationService.getReactive('chargeInitiation.pricePerKwh') }}</span>
+                <span class="tariff-value">€{{ getTariffPrice() }}/{{ translationService.getReactive('common.units.kWh') }}</span>
               </div>
               
               <div class="tariff-item">
-                <span class="tariff-label">Price per Hour:</span>
+                <span class="tariff-label">{{ translationService.getReactive('chargeInitiation.pricePerHour') }}</span>
                 <span class="tariff-value">€{{ getTariffHourlyPrice() }}/hour</span>
               </div>
             </div>
@@ -223,7 +224,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
         <div class="start-charge-section">
           <div class="selected-connector-info" *ngIf="selectedConnector()">
             <mat-icon>power</mat-icon>
-            <span>Selected: Connector {{ getConnectorDisplayName(selectedConnector()!) }}</span>
+            <span>{{ translationService.getReactive('chargeInitiation.selectedConnector') }} {{ getConnectorDisplayName(selectedConnector()!) }}</span>
           </div>
           
           <button 
@@ -233,11 +234,11 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
             [disabled]="!canStartCharge()"
             (click)="startCharge()">
             <mat-icon>play_arrow</mat-icon>
-            Start Charge
+            {{ translationService.getReactive('chargeInitiation.startCharge') }}
           </button>
           
           <div class="start-charge-info" *ngIf="!canStartCharge()">
-            <p>Please select an available connector to start charging.</p>
+            <p>{{ translationService.getReactive('chargeInitiation.selectConnectorToStart') }}</p>
           </div>
         </div>
       </div>
@@ -652,6 +653,7 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
   readonly userInfoService = inject(UserInfoService);
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
+  protected readonly translationService = inject(SimpleTranslationService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
@@ -878,11 +880,11 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
   startCharge() {
     if (!this.canStartCharge()) {
       if (!this.selectedConnector()) {
-        this.notificationService.warning('Please select an available connector to start charging');
+        this.notificationService.warning(this.translationService.get('chargeInitiation.selectConnectorToStart'));
       } else if (!this.selectedPaymentMethod()) {
-        this.notificationService.warning('Please select a payment method to start charging');
+        this.notificationService.warning(this.translationService.get('chargeInitiation.selectPaymentMethodToStart'));
       } else {
-        this.notificationService.warning('Please select an available connector to start charging');
+        this.notificationService.warning(this.translationService.get('chargeInitiation.selectConnectorToStart'));
       }
       return;
     }

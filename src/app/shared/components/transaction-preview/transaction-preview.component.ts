@@ -11,6 +11,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { TransactionDetail } from '../../../core/models/transaction-detail.model';
 import { EnergyChartComponent } from '../energy-chart/energy-chart.component';
+import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 
 @Component({
   selector: 'app-transaction-preview',
@@ -178,6 +179,7 @@ export class TransactionPreviewComponent implements OnInit {
   private readonly transactionService = inject(TransactionService);
   private readonly dialogRef = inject(MatDialogRef<TransactionPreviewComponent>);
   private readonly data = inject(MAT_DIALOG_DATA);
+  protected readonly translationService = inject(SimpleTranslationService);
   
   protected readonly loading = signal(false);
   protected readonly error = signal<string | null>(null);

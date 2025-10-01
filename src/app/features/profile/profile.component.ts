@@ -29,19 +29,19 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
   ],
   template: `
     <div class="profile-container">
-      <h1 class="profile-title">{{ translationService.getReactive('pages.profile.title') }}</h1>
+      <h1 class="profile-title">{{ translationService.getReactive('profile.title') }}</h1>
       
       <!-- Authentication Loading State -->
       <div class="loading-container" *ngIf="isAuthLoading()">
         <mat-spinner diameter="40"></mat-spinner>
-        <p>{{ translationService.getReactive('pages.profile.checkingAuth') }}</p>
+        <p>{{ translationService.getReactive('profile.checkingAuth') }}</p>
       </div>
       
       <!-- Authentication Required Message -->
       <div class="auth-required-message" *ngIf="!isAuthLoading() && !isAuthenticated()">
         <mat-icon class="auth-icon">lock</mat-icon>
-        <h3>{{ translationService.getReactive('pages.profile.authRequired') }}</h3>
-        <p>{{ translationService.getReactive('pages.profile.authRequiredMessage') }}</p>
+        <h3>{{ translationService.getReactive('profile.authRequired') }}</h3>
+        <p>{{ translationService.getReactive('profile.authRequiredMessage') }}</p>
         <button mat-raised-button color="primary" (click)="navigateToLogin()">
           <mat-icon>login</mat-icon>
           {{ translationService.getReactive('common.buttons.signIn') }}
@@ -51,7 +51,7 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
       <!-- User Info Loading State -->
       <div class="loading-container" *ngIf="isAuthenticated() && userInfoService.loading()">
         <mat-spinner diameter="40"></mat-spinner>
-        <p>{{ translationService.getReactive('pages.profile.loadingUserInfo') }}</p>
+        <p>{{ translationService.getReactive('profile.loadingUserInfo') }}</p>
       </div>
       
       <!-- Error State -->
@@ -70,39 +70,39 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
           <mat-card-header>
             <mat-card-title>
               <mat-icon>person</mat-icon>
-              {{ translationService.getReactive('pages.profile.basicInformation') }}
+              {{ translationService.getReactive('profile.basicInformation') }}
             </mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <div class="user-info-grid">
               <div class="info-item">
-                <label>Username</label>
+                <label>{{ translationService.getReactive('profile.labels.username') }}</label>
                 <span>{{ userInfoService.userInfo()?.username }}</span>
               </div>
               <div class="info-item">
-                <label>Name</label>
+                <label>{{ translationService.getReactive('profile.labels.name') }}</label>
                 <span>{{ userInfoService.userInfo()?.name }}</span>
               </div>
               <div class="info-item">
-                <label>Email</label>
+                <label>{{ translationService.getReactive('profile.labels.email') }}</label>
                 <span>{{ userInfoService.userInfo()?.email || 'Not provided' }}</span>
               </div>
               <div class="info-item">
-                <label>Role</label>
+                <label>{{ translationService.getReactive('profile.labels.role') }}</label>
                 <mat-chip [class.admin]="userInfoService.isAdmin()" [class.user]="!userInfoService.isAdmin()">
-                  {{ userInfoService.getUserRole() }}
+                  {{ userInfoService.isAdmin() ? translationService.getReactive('profile.roles.admin') : translationService.getReactive('profile.roles.user') }}
                 </mat-chip>
               </div>
               <div class="info-item">
-                <label>Access Level</label>
+                <label>{{ translationService.getReactive('profile.labels.accessLevel') }}</label>
                 <span>{{ userInfoService.getAccessLevel() }}</span>
               </div>
               <div class="info-item">
-                <label>Registration Date</label>
+                <label>{{ translationService.getReactive('profile.labels.registrationDate') }}</label>
                 <span>{{ formatDate(userInfoService.getRegistrationDate()) }}</span>
               </div>
               <div class="info-item">
-                <label>Last Seen</label>
+                <label>{{ translationService.getReactive('profile.labels.lastSeen') }}</label>
                 <span>{{ formatDate(userInfoService.getLastSeenDate()) }}</span>
               </div>
             </div>
@@ -112,13 +112,13 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
         <!-- Tabs for detailed information -->
         <mat-tab-group class="profile-tabs">
           <!-- Payment Plans Tab -->
-          <mat-tab [label]="translationService.getReactive('pages.profile.paymentPlans')">
+          <mat-tab [label]="translationService.getReactive('profile.paymentPlansTab')">
             <div class="tab-content">
               <mat-card class="section-card">
                 <mat-card-header>
                   <mat-card-title>
                     <mat-icon>payment</mat-icon>
-                    Tariff Plans
+                    {{ translationService.getReactive('profile.paymentPlans.title') }}
                   </mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
@@ -127,8 +127,8 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
                       <div class="plan-header">
                         <h3>{{ plan.description }}</h3>
                         <div class="plan-badges">
-                          <mat-chip *ngIf="plan.is_default" color="primary">Default</mat-chip>
-                          <mat-chip *ngIf="plan.is_active" color="accent">Active</mat-chip>
+                          <mat-chip *ngIf="plan.is_default" color="primary">{{ translationService.getReactive('profile.paymentPlans.default') }}</mat-chip>
+                          <mat-chip *ngIf="plan.is_active" color="accent">{{ translationService.getReactive('profile.paymentPlans.active') }}</mat-chip>
                         </div>
                       </div>
                       <div class="plan-details">
@@ -142,11 +142,11 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
                         </div>
                         <div class="price-item" *ngIf="plan.start_time">
                           <mat-icon>schedule</mat-icon>
-                          <span>Start: {{ formatTime(plan.start_time) }}</span>
+                          <span>{{ translationService.getReactive('profile.paymentPlans.start') }} {{ formatTime(plan.start_time) }}</span>
                         </div>
                         <div class="price-item" *ngIf="plan.end_time">
                           <mat-icon>schedule</mat-icon>
-                          <span>End: {{ formatTime(plan.end_time) }}</span>
+                          <span>{{ translationService.getReactive('profile.paymentPlans.end') }} {{ formatTime(plan.end_time) }}</span>
                         </div>
                       </div>
                     </div>
@@ -154,7 +154,7 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
                   <ng-template #noPlans>
                     <div class="empty-state">
                       <mat-icon>payment</mat-icon>
-                      <p>No payment plans available</p>
+                      <p>{{ translationService.getReactive('profile.paymentPlans.noPlans') }}</p>
                     </div>
                   </ng-template>
                 </mat-card-content>
@@ -163,13 +163,13 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
           </mat-tab>
 
           <!-- User Tags Tab -->
-          <mat-tab [label]="translationService.getReactive('pages.profile.userTags')">
+          <mat-tab [label]="translationService.getReactive('profile.userTagsTab')">
             <div class="tab-content">
               <mat-card class="section-card">
                 <mat-card-header>
                   <mat-card-title>
                     <mat-icon>credit_card</mat-icon>
-                    Registered Tags
+                    {{ translationService.getReactive('profile.userTags.title') }}
                   </mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
@@ -178,21 +178,21 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
                       <div class="tag-header">
                         <h3>{{ tag.id_tag.substring(0, 4) }}****</h3>
                         <div class="tag-badges">
-                          <mat-chip *ngIf="tag.is_enabled" color="accent">Enabled</mat-chip>
-                          <mat-chip *ngIf="tag.local" color="primary">Local</mat-chip>
+                          <mat-chip *ngIf="tag.is_enabled" color="accent">{{ translationService.getReactive('profile.userTags.enabled') }}</mat-chip>
+                          <mat-chip *ngIf="tag.local" color="primary">{{ translationService.getReactive('profile.userTags.local') }}</mat-chip>
                         </div>
                       </div>
                       <div class="tag-details">
                         <div class="tag-info">
-                          <span class="label">Note:</span>
-                          <span>{{ tag.note || 'No note' }}</span>
+                          <span class="label">{{ translationService.getReactive('profile.labels.note') }}</span>
+                          <span>{{ tag.note || translationService.getReactive('profile.userTags.noNote') }}</span>
                         </div>
                         <div class="tag-info">
-                          <span class="label">Last Seen:</span>
+                          <span class="label">{{ translationService.getReactive('profile.labels.lastSeen') }}</span>
                           <span>{{ formatDate(getDateFromString(tag.last_seen)) }}</span>
                         </div>
                         <div class="tag-info">
-                          <span class="label">Registered:</span>
+                          <span class="label">{{ translationService.getReactive('profile.labels.registered') }}</span>
                           <span>{{ formatDate(getDateFromString(tag.date_registered)) }}</span>
                         </div>
                       </div>
@@ -201,7 +201,7 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
                   <ng-template #noTags>
                     <div class="empty-state">
                       <mat-icon>credit_card</mat-icon>
-                      <p>No user tags registered</p>
+                      <p>{{ translationService.getReactive('profile.userTags.noTags') }}</p>
                     </div>
                   </ng-template>
                 </mat-card-content>
@@ -210,13 +210,13 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
           </mat-tab>
 
           <!-- Payment Methods Tab -->
-          <mat-tab [label]="translationService.getReactive('pages.profile.paymentMethods')">
+          <mat-tab [label]="translationService.getReactive('profile.paymentMethodsTab')">
             <div class="tab-content">
               <mat-card class="section-card">
                 <mat-card-header>
                   <mat-card-title>
                     <mat-icon>account_balance_wallet</mat-icon>
-                    Payment Methods
+                    {{ translationService.getReactive('profile.paymentMethods.title') }}
                   </mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
@@ -228,24 +228,24 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
                           <p>{{ userInfoService.getCardBrandName(method.card_brand) }} •••• {{ method.identifier.slice(-4) }}</p>
                         </div>
                         <div class="method-badges">
-                          <mat-chip *ngIf="method.is_default" color="primary">Default</mat-chip>
+                          <mat-chip *ngIf="method.is_default" color="primary">{{ translationService.getReactive('profile.paymentMethods.default') }}</mat-chip>
                           <mat-chip *ngIf="method.fail_count > 0" color="warn">
                             <mat-icon>warning</mat-icon>
-                            {{ method.fail_count }} failures
+                            {{ method.fail_count }} {{ translationService.getReactive('profile.paymentMethods.failures') }}
                           </mat-chip>
                         </div>
                       </div>
                       <div class="method-details">
                         <div class="method-info-item">
-                          <span class="label">Country:</span>
+                          <span class="label">{{ translationService.getReactive('profile.labels.country') }}</span>
                           <span>{{ userInfoService.getCountryName(method.card_country) }}</span>
                         </div>
                         <div class="method-info-item">
-                          <span class="label">Expires:</span>
+                          <span class="label">{{ translationService.getReactive('profile.labels.expires') }}</span>
                           <span>{{ userInfoService.formatExpiryDate(method.expiry_date) }}</span>
                         </div>
                         <div class="method-info-item">
-                          <span class="label">Merchant ID:</span>
+                          <span class="label">{{ translationService.getReactive('profile.labels.merchantId') }}</span>
                           <span>{{ method.merchant_cof_txnid }}</span>
                         </div>
                       </div>
@@ -254,7 +254,7 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
                   <ng-template #noMethods>
                     <div class="empty-state">
                       <mat-icon>account_balance_wallet</mat-icon>
-                      <p>No payment methods registered</p>
+                      <p>{{ translationService.getReactive('profile.paymentMethods.noMethods') }}</p>
                     </div>
                   </ng-template>
                 </mat-card-content>
