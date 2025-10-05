@@ -175,9 +175,10 @@
         "filters": {
           "searchLabel": "Buscar transacciones",
           "searchPlaceholder": "Buscar por ID de transacción, nombre de estación o etiqueta ID...",
+          "yearLabel": "Año",
           "monthLabel": "Mes",
           "monthPlaceholder": "Seleccionar mes",
-          "clearMonthTooltip": "Limpiar filtro de mes"
+          "clearDateTooltip": "Limpiar filtro de fecha"
         },
         "table": {
           "title": "Historial de Transacciones",

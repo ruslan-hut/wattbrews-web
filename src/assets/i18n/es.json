@@ -165,13 +165,65 @@
     },
     "sessions": {
       "history": {
-        "title": "Historial de Transacciones",
+        "title": "Historial de Sesiones",
         "subtitle": "Ver y gestionar tu historial de sesiones de carga",
         "loadingTransactions": "Cargando transacciones...",
         "noTransactions": "No se encontraron transacciones",
-        "totalEnergy": "Energía Total",
-        "totalCost": "Costo Total",
-        "completedSessions": "Sesiones Completadas"
+        "auth": {
+          "checking": "Verificando Autenticación...",
+          "checkingMessage": "Por favor espera mientras verificamos tu estado de inicio de sesión.",
+          "required": "Autenticación Requerida",
+          "requiredMessage": "Necesitas estar conectado para ver tu historial de sesiones. Por favor inicia sesión para continuar.",
+          "signIn": "Iniciar Sesión"
+        },
+        "stats": {
+          "totalEnergy": "Energía Total (kWh)",
+          "totalCost": "Costo Total",
+          "completedSessions": "Sesiones Completadas"
+        },
+        "filters": {
+          "searchLabel": "Buscar transacciones",
+          "searchPlaceholder": "Buscar por ID de transacción, nombre de estación o etiqueta ID...",
+          "yearLabel": "Año",
+          "monthLabel": "Mes",
+          "monthPlaceholder": "Seleccionar mes",
+          "clearDateTooltip": "Limpiar filtro de fecha"
+        },
+        "table": {
+          "title": "Historial de Transacciones",
+          "columns": {
+            "id": "ID",
+            "status": "Estado",
+            "station": "Estación",
+            "energy": "Energía",
+            "duration": "Duración",
+            "payment": "Pago",
+            "startTime": "Hora de Inicio",
+            "endTime": "Hora de Fin",
+            "actions": "Acciones"
+          },
+          "status": {
+            "completed": "Completado",
+            "inProgress": "En Progreso"
+          },
+          "connector": "Conector",
+          "free": "Gratis",
+          "viewDetailsTooltip": "Ver detalles de la transacción"
+        },
+        "mobile": {
+          "station": "Estación",
+          "connector": "Conector",
+          "energy": "Energía",
+          "duration": "Duración",
+          "cost": "Costo"
+        },
+        "noData": {
+          "searchCriteria": "No hay transacciones que coincidan con tus criterios de búsqueda",
+          "noSessions": "No se encontraron sesiones de carga para el período seleccionado"
+        },
+        "buttons": {
+          "retry": "Intentar de Nuevo"
+        }
       },
       "active": {
         "title": "Sesiones Activas",

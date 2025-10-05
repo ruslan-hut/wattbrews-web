@@ -78,28 +78,30 @@
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
 
+          <mat-form-field class="year-filter-field">
+            <mat-label>{{ translationService.getReactive('pages.sessions.history.filters.yearLabel') }}</mat-label>
+            <mat-select 
+              [value]="selectedYear()"
+              (selectionChange)="onYearChange($event.value)"
+            >
+              <mat-option *ngFor="let year of availableYears()" [value]="year">
+                {{ year }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <mat-form-field class="month-filter-field">
             <mat-label>{{ translationService.getReactive('pages.sessions.history.filters.monthLabel') }}</mat-label>
-            <input 
-              matInput 
-              [matDatepicker]="monthPicker"
-              [placeholder]="translationService.getReactive('pages.sessions.history.filters.monthPlaceholder')"
-              [value]="monthFilter()"
-              (dateChange)="onMonthFilterChange($event.value)"
+            <mat-select 
+              [value]="selectedMonth()"
+              (selectionChange)="onMonthChange($event.value)"
             >
-            <mat-datepicker-toggle matSuffix [for]="monthPicker"></mat-datepicker-toggle>
-            <mat-datepicker #monthPicker startView="year"></mat-datepicker>
-            <button 
-              mat-icon-button 
-              matSuffix 
-              class="clear-month-button"
-              *ngIf="monthFilter()"
-              (click)="clearMonthFilter()"
-              [matTooltip]="translationService.getReactive('pages.sessions.history.filters.clearMonthTooltip')"
-            >
-              <mat-icon>clear</mat-icon>
-            </button>
+              <mat-option *ngFor="let month of availableMonths()" [value]="month.value">
+                {{ month.label }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
+
         </div>
       </mat-card-content>
     </mat-card>
