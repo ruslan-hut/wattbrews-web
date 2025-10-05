@@ -2,12 +2,16 @@
   "app": {
     "title": "WattBrews"
   },
+  "language": {
+    "switcher": "Selector de Idioma"
+  },
   "nav": {
-    "dashboard": "Tablero",
+    "dashboard": "Panel",
     "profile": "Perfil",
     "home": "Inicio",
-    "stations": "Estaciones de carga",
-    "auth": "Iniciar sesión"
+    "stations": "Estaciones",
+    "auth": "Entrar",
+    "tools": "Herramientas"
   },
   "auth": {
     "title": "Acceder",
@@ -15,78 +19,64 @@
     "email": "Correo",
     "password": "Contraseña",
     "signin": "Entrar",
-    "signout": "Cerrar sesión",
+    "signout": "Salir",
     "login": {
-      "remember_me": "Recordarme"
+      "remember_me": "auth.login.remember_me"
     }
   },
   "stations": {
-    "title": "Estaciones de Carga",
-    "subtitle": "Encuentra y conéctate a estaciones de carga cerca de ti",
-    "searchLabel": "Buscar estaciones",
-    "searchPlaceholder": "Buscar por nombre de estación, dirección o fabricante...",
+    "title": "Estaciones de carga",
+    "subtitle": "Encuentra y conéctate a estaciones de carga disponibles",
     "loadingStations": "Cargando estaciones de carga...",
-    "connectors": "Conectores",
+    "searchLabel": "Buscar estaciones",
+    "searchPlaceholder": "Escribe para buscar...",
     "ofConnectorsAvailable": "de {{total}} conectores disponibles",
     "startCharge": "Iniciar Carga",
-    "start": "Iniciar",
     "viewDetails": "Ver Detalles",
-    "noStationsFound": "No se encontraron estaciones",
-    "tryAdjustingSearch": "Intenta ajustar tus criterios de búsqueda",
-    "noStationsAvailable": "No hay estaciones de carga disponibles actualmente",
-    "tooltips": {
-      "accessRequired": "Se requiere nivel de acceso 5+ para ver detalles",
-      "viewDetails": "Ver información detallada de la estación",
-      "stationOffline": "La estación está desconectada",
-      "stationDisabled": "La estación está deshabilitada",
-      "noAvailableConnectors": "No hay conectores disponibles",
-        "startCharging": "Iniciar sesión de carga"
-      }
+    "connectors": "Conectores",
+    "search": {
+      "0": "B",
+      "1": "u",
+      "2": "s",
+      "3": "c",
+      "4": "a",
+      "5": "r",
+      "6": " ",
+      "7": "d",
+      "8": "i",
+      "9": "r",
+      "10": "e",
+      "11": "c",
+      "12": "c",
+      "13": "i",
+      "14": "ó",
+      "15": "n",
+      "16": " ",
+      "17": "o",
+      "18": " ",
+      "19": "n",
+      "20": "o",
+      "21": "m",
+      "22": "b",
+      "23": "r",
+      "24": "e",
+      "25": "…",
+      "placeholder": "stations.search.placeholder"
     },
-    "stationDetail": {
-      "title": "Detalles de la Estación",
-      "loading": "Cargando detalles de la estación...",
-      "tryAgain": "Intentar de Nuevo",
-      "basicInformation": "Información Básica",
-      "statusInformation": "Información de Estado",
-      "location": "Ubicación",
+    "filters": {
+      "status": "Estado",
+      "connector": "Conector",
+      "free": "Carga gratuita"
+    },
+    "start": "Iniciar carga",
+    "details": {
       "connectors": "Conectores",
-      "labels": {
-        "address": "Dirección",
-        "vendor": "Fabricante",
-        "model": "Modelo",
-        "serialNumber": "Número de Serie",
-        "firmwareVersion": "Versión del Firmware",
-        "lastSeen": "Última Vez Visto",
-        "currentStatus": "Estado Actual",
-        "errorCode": "Código de Error",
-        "connection": "Conexión",
-        "availability": "Disponibilidad",
-        "info": "Info:",
-        "statusTime": "Hora del Estado:",
-        "eventTime": "Hora del Evento:",
-        "coordinates": "Coordenadas",
-        "connector": "Conector",
-        "type": "Tipo:",
-        "power": "Potencia:",
-        "vendorWithColon": "Fabricante:",
-        "errorCodeWithColon": "Código de Error:",
-        "transactionId": "ID de Transacción:",
-        "statusTimeWithColon": "Hora del Estado:"
-      },
-      "status": {
-        "online": "En Línea",
-        "offline": "Desconectado",
-        "enabled": "Habilitado",
-        "disabled": "Deshabilitado"
-      },
-      "actions": {
-        "startCharge": "Iniciar Carga",
-        "startChargeInfo": "Haz clic para comenzar a cargar en esta estación"
-      }
-    },
+      "tariffs": "Tarifas",
+      "status": "Estado"
+    }
+  },
   "session": {
-    "active": "Activa",
+    "active": "Sesiones activas",
     "history": "Historial",
     "stop": "Detener",
     "cost": "Costo",
@@ -98,20 +88,23 @@
     "subtitle": "Elige un cargador para iniciar tu sesión de carga",
     "recentChargePoints": "Puntos de Carga Recientes",
     "recentTransactions": "Transacciones Recientes",
-    "overview": "Resumen",
-    "loadingChargePoints": "Cargando puntos de carga...",
-    "loadingOverview": "Cargando resumen...",
-    "connectors": "Conectores",
-    "duration": "Duración",
-    "total": "Total",
-    "online": "En Línea",
-    "available": "Disponibles",
+    "overview": "Resumen de Puntos de Carga",
+    "loadingChargePoints": "Cargando puntos de carga recientes...",
     "noRecentChargePoints": "No se encontraron puntos de carga recientes",
-    "noTransactions": "No se encontraron transacciones recientes",
-    "noChargePoints": "No hay puntos de carga disponibles",
-    "findStations": "Buscar Estaciones",
-    "viewAllChargePoints": "Ver Todos los Puntos de Carga",
     "viewAllTransactions": "Ver Todas las Transacciones",
+    "viewAllChargePoints": "Ver Todos los Puntos de Carga",
+    "online": "En línea",
+    "available": "Disponible",
+    "connectors": "Conectores",
+    "total": "Total",
+    "duration": "Duración",
+    "findStations": "Buscar Estaciones",
+    "noTransactions": "No tienes transacciones",
+    "authRequired": "Autenticación Requerida",
+    "authRequiredMessage": "Necesitas iniciar sesión para ver tu perfil. Por favor, inicia sesión para continuar.",
+    "signIn": "Iniciar Sesión",
+    "loadingOverview": "Cargando puntos de carga...",
+    "noChargePoints": "No hay puntos de carga disponibles",
     "timeFormat": {
       "daysAgo": "hace {{count}} día",
       "daysAgo_plural": "hace {{count}} días",
@@ -119,40 +112,137 @@
       "hoursAgo_plural": "hace {{count}} horas",
       "minutesAgo": "hace {{count}} minuto",
       "minutesAgo_plural": "hace {{count}} minutos"
-    },
-    "tooltips": {
-      "stationOffline": "La estación está desconectada",
-      "stationDisabled": "La estación está deshabilitada",
-      "noAvailableConnectors": "No hay conectores disponibles",
-      "startCharging": "Iniciar sesión de carga"
-    },
-    "authRequired": "Autenticación Requerida",
-    "authRequiredMessage": "Necesitas estar conectado para ver el resumen del tablero. Por favor inicia sesión para continuar.",
-    "signIn": "Iniciar Sesión"
-  },
-  "language": {
-    "switcher": "Selector de idioma",
-    "english": "English",
-    "spanish": "Español"
+    }
   },
   "footer": {
     "privacy": "Política de Privacidad",
     "terms": "Términos de Servicio",
     "support": "Soporte"
   },
+  "profile": {
+    "settings": {
+      "notifications": "profile.settings.notifications"
+    },
+    "labels": {
+      "username": "Nombre de Usuario",
+      "name": "Nombre",
+      "email": "Correo Electrónico",
+      "role": "Rol",
+      "accessLevel": "Nivel de Acceso",
+      "registrationDate": "Fecha de Registro",
+      "lastSeen": "Última Vez Visto",
+      "note": "Nota:",
+      "registered": "Registrado:",
+      "country": "País:",
+      "expires": "Expira:",
+      "merchantId": "ID del Comerciante:"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "user": "Usuario"
+    },
+    "paymentPlans": {
+      "title": "Planes de Tarifas",
+      "default": "Por Defecto",
+      "active": "Activo",
+      "start": "Inicio:",
+      "end": "Fin:",
+      "noPlans": "No hay planes de pago disponibles"
+    },
+    "userTags": {
+      "title": "Etiquetas Registradas",
+      "enabled": "Habilitado",
+      "local": "Local",
+      "noNote": "Sin nota",
+      "noTags": "No hay etiquetas de usuario registradas"
+    },
+    "paymentMethods": {
+      "title": "Métodos de Pago",
+      "default": "Por Defecto",
+      "failures": "fallos",
+      "noMethods": "No hay métodos de pago registrados"
+    }
+  },
   "pages": {
-    "auth": {
-      "login": {
-        "title": "Iniciar Sesión en WattBrews",
-        "subtitle": "Accede a tu cuenta de estación de carga",
-        "explanation": "Inicia sesión para acceder a las estaciones de carga, ver tu historial de sesiones y gestionar tu cuenta.",
-        "continueWithGoogle": "Continuar con Google",
-        "signInWithEmailLink": "Iniciar sesión con enlace de correo",
-        "emailLinkExplanation": "Te enviaremos un enlace seguro para iniciar sesión. ¡No se requiere contraseña!",
-        "sendSignInLink": "Enviar Enlace de Inicio de Sesión",
-        "signInLinkSent": "¡Enlace de inicio de sesión enviado!",
-        "checkSpamFolder": "Por favor revisa tu correo y haz clic en el enlace para iniciar sesión. No olvides revisar tu carpeta de spam."
+    "common": {
+      "buttons": {
+        "signIn": "Iniciar Sesión",
+        "tryAgain": "Intentar de Nuevo",
+        "clearSearch": "Limpiar Búsqueda",
+        "refresh": "Actualizar"
+      },
+      "units": {
+        "kWh": "kWh",
+        "kW": "kW"
       }
+    },
+    "dashboard": {
+      "title": "Bienvenido a WattBrews",
+      "subtitle": "Elige un cargador para iniciar tu sesión de carga",
+      "recentChargePoints": "Puntos de Carga Recientes",
+      "recentTransactions": "Transacciones Recientes",
+      "overview": "Resumen de Puntos de Carga",
+      "loadingChargePoints": "Cargando puntos de carga recientes...",
+      "noRecentChargePoints": "No se encontraron puntos de carga recientes",
+      "viewAllTransactions": "Ver Todas las Transacciones",
+      "viewAllChargePoints": "Ver Todos los Puntos de Carga",
+      "connectors": "Conectores",
+      "findStations": "Buscar Estaciones",
+      "noTransactions": "No tienes transacciones",
+      "loadingOverview": "Cargando puntos de carga...",
+      "noChargePoints": "No hay puntos de carga disponibles",
+      "total": "Total",
+      "online": "En línea",
+      "available": "Disponible",
+      "duration": "Duración",
+      "tooltips": {
+        "stationOffline": "Estación fuera de línea",
+        "stationDisabled": "Estación deshabilitada",
+        "noAvailableConnectors": "No hay conectores disponibles",
+        "startCharging": "Iniciar carga en esta estación"
+      },
+      "timeFormat": {
+        "daysAgo": "hace {{count}} día",
+        "daysAgo_plural": "hace {{count}} días",
+        "hoursAgo": "hace {{count}} hora",
+        "hoursAgo_plural": "hace {{count}} horas",
+        "minutesAgo": "hace {{count}} minuto",
+        "minutesAgo_plural": "hace {{count}} minutos"
+      }
+    },
+    "stations": {
+      "title": "Estaciones de Carga",
+      "subtitle": "Encuentra y conéctate a estaciones de carga disponibles",
+      "loadingStations": "Cargando estaciones de carga...",
+      "noStationsFound": "No se encontraron estaciones",
+      "tryAdjustingSearch": "Intenta ajustar tus términos de búsqueda",
+      "noStationsAvailable": "No hay estaciones de carga disponibles actualmente",
+      "clearSearch": "Limpiar Búsqueda",
+      "searchLabel": "Buscar estaciones por nombre o dirección",
+      "searchPlaceholder": "Escribe para buscar...",
+      "connectors": "Conectores",
+      "ofConnectorsAvailable": "de {{total}} conectores disponibles",
+      "startCharge": "Iniciar Carga",
+      "viewDetails": "Ver Detalles",
+      "tooltips": {
+        "stationOffline": "Estación fuera de línea",
+        "stationDisabled": "Estación deshabilitada",
+        "noAvailableConnectors": "No hay conectores disponibles",
+        "startCharging": "Iniciar carga en esta estación",
+        "viewDetails": "Ver detalles de la estación",
+        "accessRequired": "Se requiere nivel de acceso 5 o superior para ver los detalles de la estación"
+      }
+    },
+    "profile": {
+      "title": "Perfil de Usuario",
+      "authRequired": "Autenticación Requerida",
+      "authRequiredMessage": "Necesitas iniciar sesión para ver tu perfil. Por favor, inicia sesión para continuar.",
+      "basicInformation": "Información Básica",
+      "paymentPlans": "Planes de Pago",
+      "userTags": "Etiquetas de Usuario",
+      "paymentMethods": "Métodos de Pago",
+      "loadingUserInfo": "Cargando información del usuario...",
+      "checkingAuth": "Verificando autenticación..."
     },
     "sessions": {
       "history": {
@@ -194,12 +284,12 @@
             "actions": "Acciones"
           },
           "status": {
-            "completed": "Completada",
+            "completed": "Completado",
             "inProgress": "En Progreso"
           },
           "connector": "Conector",
           "free": "Gratis",
-          "viewDetailsTooltip": "Ver Detalles"
+          "viewDetailsTooltip": "Ver detalles de la transacción"
         },
         "mobile": {
           "station": "Estación",
@@ -209,158 +299,84 @@
           "cost": "Costo"
         },
         "noData": {
-          "searchCriteria": "Intenta ajustar tus criterios de búsqueda",
-          "noSessions": "Aún no has realizado ninguna sesión de carga"
+          "searchCriteria": "No hay transacciones que coincidan con tus criterios de búsqueda",
+          "noSessions": "No se encontraron sesiones de carga para el período seleccionado"
         },
         "buttons": {
-          "retry": "Reintentar"
+          "retry": "Intentar de Nuevo"
         }
+      },
+      "active": {
+        "title": "Sesiones Activas",
+        "subtitle": "Monitorea tus sesiones de carga actuales",
+        "comingSoon": "Componente de sesiones activas - Próximamente"
       }
     },
-    "transactionDetails": {
-      "title": "Detalles de la Transacción",
-      "loading": "Cargando detalles de la transacción...",
-      "retry": "Reintentar",
-      "close": "Cerrar",
-      "overview": {
-        "station": "Estación",
-        "connector": "Conector",
-        "duration": "Duración",
-        "energyConsumed": "Energía Consumida",
-        "cost": "Costo",
-        "averagePower": "Potencia Promedio"
-      },
-      "timing": {
-        "title": "Tiempo",
-        "started": "Iniciado:",
-        "ended": "Finalizado:"
-      },
-      "chart": {
-        "title": "Consumo de Energía en el Tiempo"
+    "auth": {
+      "login": {
+        "title": "WattBrews",
+        "subtitle": "Accede a la gestión de tu estación de carga",
+        "explanation": "Puedes iniciar sesión usando tu cuenta de Google o dirección de correo. Si aún no tienes una cuenta, crearemos una para ti automáticamente.",
+        "continueWithGoogle": "Continuar con Google",
+        "signInWithEmailLink": "Iniciar sesión con enlace de correo",
+        "emailLinkExplanation": "Ingresa tu dirección de correo y te enviaremos un enlace seguro para iniciar sesión. ¡No se requiere contraseña!",
+        "sendSignInLink": "Enviar Enlace de Inicio de Sesión",
+        "signInLinkSent": "¡Enlace de inicio de sesión enviado! Revisa tu correo y haz clic en el enlace para iniciar sesión.",
+        "checkSpamFolder": "¿No recibiste el correo? Revisa tu carpeta de spam o inténtalo de nuevo.",
+        "emailRequired": "El correo es requerido",
+        "emailInvalid": "Por favor ingresa un correo válido"
       }
-    },
-    "profile": {
-      "title": "Perfil",
-      "checkingAuth": "Verificando autenticación...",
-      "authRequired": "Autenticación Requerida",
-      "authRequiredMessage": "Necesitas estar conectado para ver tu perfil. Por favor inicia sesión para continuar.",
-      "loadingUserInfo": "Cargando información del usuario...",
-      "basicInformation": "Información Básica",
-      "paymentPlansTab": "Planes de Pago",
-      "userTagsTab": "Etiquetas de Usuario",
-      "paymentMethodsTab": "Métodos de Pago",
-      "labels": {
-        "username": "Nombre de Usuario",
-        "name": "Nombre",
-        "email": "Correo Electrónico",
-        "role": "Rol",
-        "accessLevel": "Nivel de Acceso",
-        "registrationDate": "Fecha de Registro",
-        "lastSeen": "Última Vez Visto",
-        "note": "Nota:",
-        "lastSeenWithColon": "Última Vez Visto:",
-        "registered": "Registrado:",
-        "country": "País:",
-        "expires": "Expira:",
-        "merchantId": "ID del Comerciante:"
-      },
-      "roles": {
-        "admin": "Administrador",
-        "user": "Usuario"
-      },
-      "paymentPlans": {
-        "title": "Planes de Tarifas",
-        "default": "Por Defecto",
-        "active": "Activo",
-        "start": "Inicio:",
-        "end": "Fin:",
-        "noPlans": "No hay planes de pago disponibles"
-      },
-      "userTags": {
-        "title": "Etiquetas Registradas",
-        "enabled": "Habilitado",
-        "local": "Local",
-        "noNote": "Sin nota",
-        "noTags": "No hay etiquetas de usuario registradas"
-      },
-      "paymentMethods": {
-        "title": "Métodos de Pago",
-        "default": "Por Defecto",
-        "failures": "fallos",
-        "noMethods": "No hay métodos de pago registrados"
-      }
-    },
-    "common": {
-      "buttons": {
-        "save": "Guardar",
-        "signIn": "Iniciar Sesión",
-        "tryAgain": "Intentar de Nuevo",
-        "clearSearch": "Limpiar Búsqueda",
-        "refresh": "Actualizar"
-      },
-      "units": {
-        "kW": "kW",
-        "kWh": "kWh"
-      }
-    }
-  },
-  "transactionDetails": {
-    "title": "Detalles de la Transacción",
-    "loading": "Cargando detalles de la transacción...",
-    "retry": "Reintentar",
-    "close": "Cerrar",
-    "overview": {
-      "station": "Estación",
-      "connector": "Conector",
-      "duration": "Duración",
-      "energyConsumed": "Energía Consumida",
-      "cost": "Costo",
-      "averagePower": "Potencia Promedio"
-    },
-    "timing": {
-      "title": "Tiempo",
-      "started": "Iniciado:",
-      "ended": "Finalizado:"
-    },
-    "chart": {
-      "title": "Consumo de Energía en el Tiempo"
     }
   },
   "chargeInitiation": {
     "title": "Iniciar Carga",
     "loadingStationDetails": "Cargando detalles de la estación...",
     "selectConnector": "Seleccionar Conector",
-    "selectConnectorSubtitle": "Elige un conector para iniciar la carga",
+    "selectConnectorSubtitle": "Elige un conector disponible para iniciar la carga",
     "connector": "Conector",
-    "type": "Tipo:",
-    "power": "Potencia:",
+    "type": "Tipo",
+    "power": "Potencia",
     "paymentMethod": "Método de Pago",
-    "paymentMethodSubtitle": "Elige tu método de pago preferido",
+    "paymentMethodSubtitle": "Selecciona tu método de pago preferido",
     "loadingPaymentMethods": "Cargando métodos de pago...",
     "failedToLoadPaymentMethods": "Error al cargar métodos de pago:",
-    "noPaymentMethods": "No hay métodos de pago disponibles. Por favor añade un método de pago en tu perfil.",
-    "addPaymentMethod": "Añadir Método de Pago",
+    "noPaymentMethods": "No hay métodos de pago disponibles",
+    "addPaymentMethod": "Agregar Método de Pago",
     "tariffInformation": "Información de Tarifas",
     "loadingTariffInformation": "Cargando información de tarifas...",
     "failedToLoadTariffInformation": "Error al cargar información de tarifas:",
-    "pricePerKwh": "Precio por kWh:",
-    "pricePerHour": "Precio por Hora:",
-    "selectedConnector": "Seleccionado: Conector",
+    "pricePerKwh": "Precio por kWh",
+    "pricePerHour": "Precio por hora",
+    "selectedConnector": "Conector Seleccionado",
     "startCharge": "Iniciar Carga",
-    "selectConnectorToStart": "Por favor selecciona un conector disponible para iniciar la carga.",
+    "selectConnectorToStart": "Por favor selecciona un conector para iniciar la carga",
     "selectPaymentMethodToStart": "Por favor selecciona un método de pago para iniciar la carga"
+  },
+  "transactionDetails": {
+    "title": "Detalles de la Transacción",
+    "subtitle": "Ver y gestionar tus transacciones",
+    "loadingTransactions": "Cargando transacciones...",
+    "noTransactions": "No se encontraron transacciones",
+    "authRequired": "Autenticación Requerida"
   },
   "common": {
     "buttons": {
       "save": "Guardar",
+      "retry": "Reintentar",
+      "refresh": "Actualizar",
       "signIn": "Iniciar Sesión",
       "tryAgain": "Intentar de Nuevo",
-      "clearSearch": "Limpiar Búsqueda",
-      "refresh": "Actualizar"
+      "clearSearch": "Limpiar Búsqueda"
+    },
+    "messages": {
+      "loading": "Cargando...",
+      "error": "Algo salió mal",
+      "success": "Éxito",
+      "noData": "No hay datos disponibles"
     },
     "units": {
-      "kW": "kW",
-      "kWh": "kWh"
+      "kWh": "kWh",
+      "kW": "kW"
     }
   }
 }

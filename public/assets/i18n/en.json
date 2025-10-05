@@ -1,91 +1,211 @@
 {
-    "app": {"title": "WattBrews"},
-    "auth": {"title": "Sign in", "google": "Continue with Google", "email": "Email", "password": "Password", "signin": "Sign in", "signout": "Sign out"},
-    "stations": {
-      "title": "Charging Stations",
-      "subtitle": "Find and connect to charging stations near you",
-      "searchLabel": "Search stations",
-      "searchPlaceholder": "Search by station name, address, or vendor...",
-      "loadingStations": "Loading charging stations...",
+  "app": {
+    "title": "WattBrews"
+  },
+  "language": {
+    "switcher": "Language Switcher"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "home": "Home",
+    "stations": "Stations",
+    "auth": "Sign In",
+    "tools": "Tools"
+  },
+  "auth": {
+    "title": "Sign in",
+    "google": "Continue with Google",
+    "email": "Email",
+    "password": "Password",
+    "signin": "Sign in",
+    "signout": "Sign out",
+    "login": {
+      "remember_me": "auth.login.remember_me"
+    }
+  },
+  "stations": {
+    "title": "Charging Stations",
+    "subtitle": "Find and connect to available charging stations",
+    "loadingStations": "Loading charging stations...",
+    "searchLabel": "Search stations",
+    "searchPlaceholder": "Type to search...",
+    "ofConnectorsAvailable": "of {{total}} connectors available",
+    "startCharge": "Start Charge",
+    "viewDetails": "View Details",
+    "connectors": "Connectors",
+    "tooltips": {
+      "stationOffline": "Station is offline",
+      "stationDisabled": "Station is disabled",
+      "noAvailableConnectors": "No available connectors",
+      "startCharging": "Start charging at this station",
+      "viewDetails": "View station details",
+      "accessRequired": "Higher access level required to view station details"
+    },
+    "search": {
+      "0": "S",
+      "1": "e",
+      "2": "a",
+      "3": "r",
+      "4": "c",
+      "5": "h",
+      "6": " ",
+      "7": "a",
+      "8": "d",
+      "9": "d",
+      "10": "r",
+      "11": "e",
+      "12": "s",
+      "13": "s",
+      "14": " ",
+      "15": "o",
+      "16": "r",
+      "17": " ",
+      "18": "n",
+      "19": "a",
+      "20": "m",
+      "21": "e",
+      "22": "…",
+      "placeholder": "stations.search.placeholder"
+    },
+    "filters": {
+      "status": "Status",
+      "connector": "Connector",
+      "free": "Free charging"
+    },
+    "start": "Start charging",
+    "details": {
       "connectors": "Connectors",
-      "ofConnectorsAvailable": "of {{total}} connectors available",
-      "startCharge": "Start Charge",
-      "start": "Start",
-      "viewDetails": "View Details",
-      "noStationsFound": "No stations found",
-      "tryAdjustingSearch": "Try adjusting your search criteria",
-      "noStationsAvailable": "No charging stations are currently available",
-      "tooltips": {
-        "accessRequired": "Access level 5+ required to view details",
-        "viewDetails": "View detailed station information",
-        "stationOffline": "Station is offline",
-        "stationDisabled": "Station is disabled",
-        "noAvailableConnectors": "No available connectors",
-        "startCharging": "Start charging session"
+      "tariffs": "Tariffs",
+      "status": "Status"
+    }
+  },
+  "session": {
+    "active": "Active sessions",
+    "history": "History",
+    "stop": "Stop",
+    "cost": "Cost",
+    "energy": "Energy",
+    "duration": "Duration"
+  },
+  "dashboard": {
+    "title": "Welcome to WattBrews",
+    "subtitle": "Choose a charger to start your charging session",
+    "recentChargePoints": "Recent Charge Points",
+    "recentTransactions": "Recent Transactions",
+    "overview": "Charge Points Overview",
+    "loadingChargePoints": "Loading recent charge points...",
+    "noRecentChargePoints": "No recent charge points found",
+    "viewAllTransactions": "View All Transactions",
+    "viewAllChargePoints": "View All Charge Points",
+    "online": "Online",
+    "available": "Available",
+    "connectors": "Connectors",
+    "total": "Total",
+    "duration": "Duration",
+    "findStations": "Find Stations",
+    "noTransactions": "You have no transactions",
+    "authRequired": "Authentication Required",
+    "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
+    "signIn": "Sign In",
+    "loadingOverview": "Loading charge points...",
+    "noChargePoints": "No charge points available",
+    "timeFormat": {
+      "daysAgo": "{{count}} day ago",
+      "daysAgo_plural": "{{count}} days ago",
+      "hoursAgo": "{{count}} hour ago",
+      "hoursAgo_plural": "{{count}} hours ago",
+      "minutesAgo": "{{count}} minute ago",
+      "minutesAgo_plural": "{{count}} minutes ago"
+    }
+  },
+  "footer": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "support": "Support"
+  },
+  "profile": {
+    "settings": {
+      "notifications": "profile.settings.notifications"
+    },
+    "labels": {
+      "username": "Username",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "accessLevel": "Access Level",
+      "registrationDate": "Registration Date",
+      "lastSeen": "Last Seen",
+      "note": "Note:",
+      "registered": "Registered:",
+      "country": "Country:",
+      "expires": "Expires:",
+      "merchantId": "Merchant ID:"
+    },
+    "roles": {
+      "admin": "Admin",
+      "user": "User"
+    },
+    "paymentPlans": {
+      "title": "Tariff Plans",
+      "default": "Default",
+      "active": "Active",
+      "start": "Start:",
+      "end": "End:",
+      "noPlans": "No payment plans available"
+    },
+    "userTags": {
+      "title": "Registered Tags",
+      "enabled": "Enabled",
+      "local": "Local",
+      "noNote": "No note",
+      "noTags": "No user tags registered"
+    },
+    "paymentMethods": {
+      "title": "Payment Methods",
+      "default": "Default",
+      "failures": "failures",
+      "noMethods": "No payment methods registered"
+    }
+  },
+  "pages": {
+    "common": {
+      "buttons": {
+        "signIn": "Sign In",
+        "tryAgain": "Try Again",
+        "clearSearch": "Clear Search",
+        "refresh": "Refresh"
+      },
+      "units": {
+        "kWh": "kWh",
+        "kW": "kW"
       }
     },
-    "stationDetail": {
-      "title": "Station Details",
-      "loading": "Loading station details...",
-      "tryAgain": "Try Again",
-      "basicInformation": "Basic Information",
-      "statusInformation": "Status Information",
-      "location": "Location",
-      "connectors": "Connectors",
-      "labels": {
-        "address": "Address",
-        "vendor": "Vendor",
-        "model": "Model",
-        "serialNumber": "Serial Number",
-        "firmwareVersion": "Firmware Version",
-        "lastSeen": "Last Seen",
-        "currentStatus": "Current Status",
-        "errorCode": "Error Code",
-        "connection": "Connection",
-        "availability": "Availability",
-        "info": "Info:",
-        "statusTime": "Status Time:",
-        "eventTime": "Event Time:",
-        "coordinates": "Coordinates",
-        "connector": "Connector",
-        "type": "Type:",
-        "power": "Power:",
-        "vendorWithColon": "Vendor:",
-        "errorCodeWithColon": "Error Code:",
-        "transactionId": "Transaction ID:",
-        "statusTimeWithColon": "Status Time:"
-      },
-      "status": {
-        "online": "Online",
-        "offline": "Offline",
-        "enabled": "Enabled",
-        "disabled": "Disabled"
-      },
-      "actions": {
-        "startCharge": "Start Charge",
-        "startChargeInfo": "Click to begin charging at this station"
-      }
-    },
-    "session": {"active": "Active sessions", "history": "History", "stop": "Stop", "cost": "Cost", "energy": "Energy", "duration": "Duration"},
     "dashboard": {
       "title": "Welcome to WattBrews",
       "subtitle": "Choose a charger to start your charging session",
       "recentChargePoints": "Recent Charge Points",
       "recentTransactions": "Recent Transactions",
-      "overview": "Overview",
-      "loadingChargePoints": "Loading charge points...",
-      "loadingOverview": "Loading overview...",
+      "overview": "Charge Points Overview",
+      "loadingChargePoints": "Loading recent charge points...",
+      "noRecentChargePoints": "No recent charge points found",
+      "viewAllTransactions": "View All Transactions",
+      "viewAllChargePoints": "View All Charge Points",
       "connectors": "Connectors",
-      "duration": "Duration",
+      "findStations": "Find Stations",
+      "noTransactions": "You have no transactions",
+      "loadingOverview": "Loading charge points...",
+      "noChargePoints": "No charge points available",
       "total": "Total",
       "online": "Online",
       "available": "Available",
-      "noRecentChargePoints": "No recent charge points found",
-      "noTransactions": "No recent transactions found",
-      "noChargePoints": "No charge points available",
-      "findStations": "Find Stations",
-      "viewAllChargePoints": "View All Charge Points",
-      "viewAllTransactions": "View All Transactions",
+      "duration": "Duration",
+      "tooltips": {
+        "stationOffline": "Station is offline",
+        "stationDisabled": "Station is disabled",
+        "noAvailableConnectors": "No available connectors",
+        "startCharging": "Start charging at this station"
+      },
       "timeFormat": {
         "daysAgo": "{{count}} day ago",
         "daysAgo_plural": "{{count}} days ago",
@@ -93,233 +213,168 @@
         "hoursAgo_plural": "{{count}} hours ago",
         "minutesAgo": "{{count}} minute ago",
         "minutesAgo_plural": "{{count}} minutes ago"
-      },
+      }
+    },
+    "stations": {
+      "title": "Charging Stations",
+      "subtitle": "Find and connect to available charging stations",
+      "loadingStations": "Loading charging stations...",
+      "noStationsFound": "No stations found",
+      "tryAdjustingSearch": "Try adjusting your search terms",
+      "noStationsAvailable": "No charging stations are currently available",
+      "clearSearch": "Clear Search",
+      "searchLabel": "Search stations by name or address",
+      "searchPlaceholder": "Type to search...",
+      "connectors": "Connectors",
+      "ofConnectorsAvailable": "of {{total}} connectors available",
+      "startCharge": "Start Charge",
+      "viewDetails": "View Details",
       "tooltips": {
         "stationOffline": "Station is offline",
         "stationDisabled": "Station is disabled",
         "noAvailableConnectors": "No available connectors",
-        "startCharging": "Start charging session"
-      },
+        "startCharging": "Start charging at this station",
+        "viewDetails": "View station details",
+        "accessRequired": "Access level 5 or higher required to view station details"
+      }
+    },
+    "profile": {
+      "title": "User Profile",
       "authRequired": "Authentication Required",
-      "authRequiredMessage": "You need to be logged in to view the dashboard overview. Please sign in to continue.",
-      "signIn": "Sign In"
+      "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
+      "basicInformation": "Basic Information",
+      "paymentPlans": "Payment Plans",
+      "userTags": "User Tags",
+      "paymentMethods": "Payment Methods",
+      "loadingUserInfo": "Loading user information...",
+      "checkingAuth": "Checking authentication..."
     },
-    "language": {
-      "switcher": "Change language",
-      "english": "English",
-      "spanish": "Español"
-    },
-    "nav": {
-      "dashboard": "Dashboard",
-      "profile": "Profile",
-      "home": "Home",
-      "stations": "Stations",
-      "auth": "Sign In"
-    },
-    "footer": {
-      "privacy": "Privacy Policy",
-      "terms": "Terms of Service",
-      "support": "Support"
-    },
-    "pages": {
-      "auth": {
-        "login": {
-          "title": "Sign In to WattBrews",
-          "subtitle": "Access your charging station account",
-          "explanation": "Sign in to access charging stations, view your session history, and manage your account.",
-          "continueWithGoogle": "Continue with Google",
-          "signInWithEmailLink": "Sign in with Email Link",
-          "emailLinkExplanation": "We'll send you a secure link to sign in. No password required!",
-          "sendSignInLink": "Send Sign-in Link",
-          "signInLinkSent": "Sign-in link sent!",
-          "checkSpamFolder": "Please check your email and click the link to sign in. Don't forget to check your spam folder."
-        }
-      },
-      "sessions": {
-        "history": {
-          "title": "Session History",
-          "subtitle": "View and manage your charging session history",
-          "loadingTransactions": "Loading transactions...",
-          "noTransactions": "No transactions found",
-          "auth": {
-            "checking": "Checking Authentication...",
-            "checkingMessage": "Please wait while we verify your login status.",
-            "required": "Authentication Required",
-            "requiredMessage": "You need to be logged in to view your session history. Please sign in to continue.",
-            "signIn": "Sign In"
-          },
-          "stats": {
-            "totalEnergy": "Total Energy (kWh)",
-            "totalCost": "Total Cost",
-            "completedSessions": "Completed Sessions"
-          },
-          "filters": {
-            "searchLabel": "Search transactions",
-            "searchPlaceholder": "Search by transaction ID, station name, or ID tag...",
-            "yearLabel": "Year",
-            "monthLabel": "Month",
-            "monthPlaceholder": "Select month",
-            "clearDateTooltip": "Clear date filter"
-          },
-          "table": {
-            "title": "Transaction History",
-            "columns": {
-              "id": "ID",
-              "status": "Status",
-              "station": "Station",
-              "energy": "Energy",
-              "duration": "Duration",
-              "payment": "Payment",
-              "startTime": "Start Time",
-              "endTime": "End Time",
-              "actions": "Actions"
-            },
-            "status": {
-              "completed": "Completed",
-              "inProgress": "In Progress"
-            },
-            "connector": "Connector",
-            "free": "Free",
-            "viewDetailsTooltip": "View Details"
-          },
-          "mobile": {
+    "sessions": {
+      "history": {
+        "title": "Session History",
+        "subtitle": "View and manage your charging session history",
+        "loadingTransactions": "Loading transactions...",
+        "noTransactions": "No transactions found",
+        "auth": {
+          "checking": "Checking Authentication...",
+          "checkingMessage": "Please wait while we verify your login status.",
+          "required": "Authentication Required",
+          "requiredMessage": "You need to be logged in to view your session history. Please sign in to continue.",
+          "signIn": "Sign In"
+        },
+        "stats": {
+          "totalEnergy": "Total Energy (kWh)",
+          "totalCost": "Total Cost",
+          "completedSessions": "Completed Sessions"
+        },
+        "filters": {
+          "searchLabel": "Search transactions",
+          "searchPlaceholder": "Search by transaction ID, station name, or ID tag...",
+          "yearLabel": "Year",
+          "monthLabel": "Month",
+          "monthPlaceholder": "Select month",
+          "clearDateTooltip": "Clear date filter"
+        },
+        "table": {
+          "title": "Transaction History",
+          "columns": {
+            "id": "ID",
+            "status": "Status",
             "station": "Station",
-            "connector": "Connector",
             "energy": "Energy",
             "duration": "Duration",
-            "cost": "Cost"
+            "payment": "Payment",
+            "startTime": "Start Time",
+            "endTime": "End Time",
+            "actions": "Actions"
           },
-          "noData": {
-            "searchCriteria": "Try adjusting your search criteria",
-            "noSessions": "You haven't made any charging sessions yet"
+          "status": {
+            "completed": "Completed",
+            "inProgress": "In Progress"
           },
-          "buttons": {
-            "retry": "Retry"
-          }
-        }
-      },
-      "common": {
+          "connector": "Connector",
+          "free": "Free",
+          "viewDetailsTooltip": "View transaction details"
+        },
+        "mobile": {
+          "station": "Station",
+          "connector": "Connector",
+          "energy": "Energy",
+          "duration": "Duration",
+          "cost": "Cost"
+        },
+        "noData": {
+          "searchCriteria": "No transactions match your search criteria",
+          "noSessions": "No charging sessions found for the selected period"
+        },
         "buttons": {
-          "save": "Save",
-          "signIn": "Sign In",
-          "tryAgain": "Try Again",
-          "clearSearch": "Clear Search",
-          "refresh": "Refresh"
-        },
-        "units": {
-          "kW": "kW",
-          "kWh": "kWh"
+          "retry": "Try Again"
         }
       },
-      "profile": {
-        "title": "Profile",
-        "checkingAuth": "Checking authentication...",
-        "authRequired": "Authentication Required",
-        "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
-        "loadingUserInfo": "Loading user information...",
-        "basicInformation": "Basic Information",
-        "paymentPlansTab": "Payment Plans",
-        "userTagsTab": "User Tags",
-        "paymentMethodsTab": "Payment Methods",
-        "labels": {
-          "username": "Username",
-          "name": "Name",
-          "email": "Email",
-          "role": "Role",
-          "accessLevel": "Access Level",
-          "registrationDate": "Registration Date",
-          "lastSeen": "Last Seen",
-          "note": "Note:",
-          "lastSeenWithColon": "Last Seen:",
-          "registered": "Registered:",
-          "country": "Country:",
-          "expires": "Expires:",
-          "merchantId": "Merchant ID:"
-        },
-        "roles": {
-          "admin": "Admin",
-          "user": "User"
-        },
-        "paymentPlans": {
-          "title": "Tariff Plans",
-          "default": "Default",
-          "active": "Active",
-          "start": "Start:",
-          "end": "End:",
-          "noPlans": "No payment plans available"
-        },
-        "userTags": {
-          "title": "Registered Tags",
-          "enabled": "Enabled",
-          "local": "Local",
-          "noNote": "No note",
-          "noTags": "No user tags registered"
-        },
-        "paymentMethods": {
-          "title": "Payment Methods",
-          "default": "Default",
-          "failures": "failures",
-          "noMethods": "No payment methods registered"
-        }
+      "active": {
+        "title": "Active Sessions",
+        "subtitle": "Monitor your current charging sessions",
+        "comingSoon": "Active sessions component - Coming soon"
       }
     },
-    "transactionDetails": {
-      "title": "Transaction Details",
-      "loading": "Loading transaction details...",
-      "retry": "Retry",
-      "close": "Close",
-      "overview": {
-        "station": "Station",
-        "connector": "Connector",
-        "duration": "Duration",
-        "energyConsumed": "Energy Consumed",
-        "cost": "Cost",
-        "averagePower": "Average Power"
-      },
-      "timing": {
-        "title": "Timing",
-        "started": "Started:",
-        "ended": "Ended:"
-      },
-      "chart": {
-        "title": "Energy Consumption Over Time"
-      }
-    },
-    "chargeInitiation": {
-      "title": "Start Charging",
-      "loadingStationDetails": "Loading station details...",
-      "selectConnector": "Select Connector",
-      "selectConnectorSubtitle": "Choose a connector to start charging",
-      "connector": "Connector",
-      "type": "Type:",
-      "power": "Power:",
-      "paymentMethod": "Payment Method",
-      "paymentMethodSubtitle": "Choose your preferred payment method",
-      "loadingPaymentMethods": "Loading payment methods...",
-      "failedToLoadPaymentMethods": "Failed to load payment methods:",
-      "noPaymentMethods": "No payment methods available. Please add a payment method in your profile.",
-      "addPaymentMethod": "Add Payment Method",
-      "tariffInformation": "Tariff Information",
-      "loadingTariffInformation": "Loading tariff information...",
-      "failedToLoadTariffInformation": "Failed to load tariff information:",
-      "pricePerKwh": "Price per kWh:",
-      "pricePerHour": "Price per Hour:",
-      "selectedConnector": "Selected: Connector",
-      "startCharge": "Start Charge",
-      "selectConnectorToStart": "Please select an available connector to start charging.",
-      "selectPaymentMethodToStart": "Please select a payment method to start charging"
-    },
-    "common": {
-      "buttons": {
-        "save": "Save",
-        "signIn": "Sign In",
-        "tryAgain": "Try Again",
-        "clearSearch": "Clear Search",
-        "refresh": "Refresh"
-      },
-      "units": {
-        "kW": "kW",
-        "kWh": "kWh"
+    "auth": {
+      "login": {
+        "title": "WattBrews",
+        "subtitle": "Access your charging station management",
+        "explanation": "You can sign in using your Google account or email address. If you don't have an account yet, we'll create one for you automatically.",
+        "continueWithGoogle": "Continue with Google",
+        "signInWithEmailLink": "Sign in with Email Link",
+        "emailLinkExplanation": "Enter your email address and we'll send you a secure sign-in link. No password required!",
+        "sendSignInLink": "Send Sign-in Link",
+        "signInLinkSent": "Sign-in link sent! Check your email and click the link to sign in.",
+        "checkSpamFolder": "Didn't receive the email? Check your spam folder or try again.",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email"
       }
     }
+  },
+  "chargeInitiation": {
+    "title": "Start Charge",
+    "loadingStationDetails": "Loading station details...",
+    "selectConnector": "Select Connector",
+    "selectConnectorSubtitle": "Choose an available connector to start charging",
+    "connector": "Connector",
+    "type": "Type",
+    "power": "Power",
+    "paymentMethod": "Payment Method",
+    "paymentMethodSubtitle": "Select your preferred payment method",
+    "loadingPaymentMethods": "Loading payment methods...",
+    "failedToLoadPaymentMethods": "Failed to load payment methods:",
+    "noPaymentMethods": "No payment methods available",
+    "addPaymentMethod": "Add Payment Method",
+    "tariffInformation": "Tariff Information",
+    "loadingTariffInformation": "Loading tariff information...",
+    "failedToLoadTariffInformation": "Failed to load tariff information:",
+    "pricePerKwh": "Price per kWh",
+    "pricePerHour": "Price per hour",
+    "selectedConnector": "Selected Connector",
+    "startCharge": "Start Charge",
+    "selectConnectorToStart": "Please select a connector to start charging",
+    "selectPaymentMethodToStart": "Please select a payment method to start charging"
+  },
+  "common": {
+    "buttons": {
+      "save": "Save",
+      "retry": "Retry",
+      "refresh": "Refresh",
+      "signIn": "Sign In",
+      "tryAgain": "Try Again",
+      "clearSearch": "Clear Search"
+    },
+    "messages": {
+      "loading": "Loading...",
+      "error": "Something went wrong",
+      "success": "Success",
+      "noData": "No data available"
+    },
+    "units": {
+      "kWh": "kWh",
+      "kW": "kW"
+    }
   }
+}
