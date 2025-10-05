@@ -207,9 +207,10 @@ export class SimpleTranslationService {
               "filters": {
                 "searchLabel": "Search transactions",
                 "searchPlaceholder": "Search by transaction ID, station name, or ID tag...",
+                "yearLabel": "Year",
                 "monthLabel": "Month",
                 "monthPlaceholder": "Select month",
-                "clearMonthTooltip": "Clear month filter"
+                "clearDateTooltip": "Clear date filter"
               },
               "table": {
                 "title": "Transaction History",
@@ -507,9 +508,10 @@ export class SimpleTranslationService {
               "filters": {
                 "searchLabel": "Buscar transacciones",
                 "searchPlaceholder": "Buscar por ID de transacción, nombre de estación o etiqueta ID...",
+                "yearLabel": "Año",
                 "monthLabel": "Mes",
                 "monthPlaceholder": "Seleccionar mes",
-                "clearMonthTooltip": "Limpiar filtro de mes"
+                "clearDateTooltip": "Limpiar filtro de fecha"
               },
               "table": {
                 "title": "Historial de Transacciones",

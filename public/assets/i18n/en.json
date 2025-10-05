@@ -156,9 +156,10 @@
           "filters": {
             "searchLabel": "Search transactions",
             "searchPlaceholder": "Search by transaction ID, station name, or ID tag...",
+            "yearLabel": "Year",
             "monthLabel": "Month",
             "monthPlaceholder": "Select month",
-            "clearMonthTooltip": "Clear month filter"
+            "clearDateTooltip": "Clear date filter"
           },
           "table": {
             "title": "Transaction History",

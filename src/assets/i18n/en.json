@@ -161,13 +161,65 @@
     },
     "sessions": {
       "history": {
-        "title": "Transaction History",
+        "title": "Session History",
         "subtitle": "View and manage your charging session history",
         "loadingTransactions": "Loading transactions...",
         "noTransactions": "No transactions found",
-        "totalEnergy": "Total Energy",
-        "totalCost": "Total Cost",
-        "completedSessions": "Completed Sessions"
+        "auth": {
+          "checking": "Checking Authentication...",
+          "checkingMessage": "Please wait while we verify your login status.",
+          "required": "Authentication Required",
+          "requiredMessage": "You need to be logged in to view your session history. Please sign in to continue.",
+          "signIn": "Sign In"
+        },
+        "stats": {
+          "totalEnergy": "Total Energy (kWh)",
+          "totalCost": "Total Cost",
+          "completedSessions": "Completed Sessions"
+        },
+        "filters": {
+          "searchLabel": "Search transactions",
+          "searchPlaceholder": "Search by transaction ID, station name, or ID tag...",
+          "yearLabel": "Year",
+          "monthLabel": "Month",
+          "monthPlaceholder": "Select month",
+          "clearDateTooltip": "Clear date filter"
+        },
+        "table": {
+          "title": "Transaction History",
+          "columns": {
+            "id": "ID",
+            "status": "Status",
+            "station": "Station",
+            "energy": "Energy",
+            "duration": "Duration",
+            "payment": "Payment",
+            "startTime": "Start Time",
+            "endTime": "End Time",
+            "actions": "Actions"
+          },
+          "status": {
+            "completed": "Completed",
+            "inProgress": "In Progress"
+          },
+          "connector": "Connector",
+          "free": "Free",
+          "viewDetailsTooltip": "View transaction details"
+        },
+        "mobile": {
+          "station": "Station",
+          "connector": "Connector",
+          "energy": "Energy",
+          "duration": "Duration",
+          "cost": "Cost"
+        },
+        "noData": {
+          "searchCriteria": "No transactions match your search criteria",
+          "noSessions": "No charging sessions found for the selected period"
+        },
+        "buttons": {
+          "retry": "Try Again"
+        }
       },
       "active": {
         "title": "Active Sessions",

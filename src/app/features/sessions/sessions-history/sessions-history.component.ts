@@ -127,8 +127,12 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
       min-width: 300px;
     }
     
+    .year-filter-field {
+      min-width: 120px;
+    }
+    
     .month-filter-field {
-      min-width: 220px;
+      min-width: 160px;
     }
     
     .clear-month-button {
@@ -368,6 +372,7 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
       }
       
       .search-field,
+      .year-filter-field,
       .month-filter-field {
         min-width: auto;
         width: 100%;
@@ -559,7 +564,8 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   
   // Filter and pagination state
   protected readonly searchTerm = signal('');
-  protected readonly monthFilter = signal<Date | null>(null);
+  protected readonly selectedYear = signal<number | null>(null);
+  protected readonly selectedMonth = signal<number | null>(null);
   protected readonly sortField = signal<string>('time_start');
   protected readonly sortDirection = signal<'asc' | 'desc'>('desc');
   protected readonly pageSize = signal(10);
@@ -578,8 +584,15 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   // Authentication
   protected readonly isAuthenticated = this.authService.isAuthenticated;
   protected readonly authLoading = signal(true);
+
+  // Available years and months
+  protected readonly availableYears = signal<number[]>([]);
+  protected readonly availableMonths = signal<{value: number, label: string}[]>([]);
   
   ngOnInit(): void {
+    // Initialize available years and months
+    this.initializeDateOptions();
+    
     // Subscribe to auth state changes with timeout to handle page reload
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {
@@ -587,9 +600,10 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
         if (this.authCheckTimeout) {
           clearTimeout(this.authCheckTimeout);
         }
-        // Set current month as default filter
-        const currentMonth = new Date();
-        this.monthFilter.set(currentMonth);
+        // Set current year and month as default filter
+        const currentDate = new Date();
+        this.selectedYear.set(currentDate.getFullYear());
+        this.selectedMonth.set(currentDate.getMonth() + 1); // Month is 1-based for display
         this.loadTransactions();
       } else {
         // Give Firebase auth time to restore session on page reload
@@ -611,11 +625,12 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   }
   
   protected loadTransactions(): void {
-    const selectedMonth = this.monthFilter();
+    const year = this.selectedYear();
+    const month = this.selectedMonth();
     
-    if (selectedMonth) {
-      // Load transactions for the selected month
-      const { startTimestamp, endTimestamp } = this.getMonthTimestampRange(selectedMonth);
+    if (year && month) {
+      // Load transactions for the selected year and month
+      const { startTimestamp, endTimestamp } = this.getYearMonthTimestampRange(year, month);
       this.transactionService.loadTransactionsByTimeRange(startTimestamp, endTimestamp).subscribe({
         next: (transactions) => {
           this.applyFilters();
@@ -649,8 +664,14 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
   
-  protected onMonthFilterChange(month: Date | null): void {
-    this.monthFilter.set(month);
+  protected onYearChange(year: number | null): void {
+    this.selectedYear.set(year);
+    this.currentPage.set(0); // Reset to first page when changing year
+    this.loadTransactions(); // Reload data with new time range
+  }
+
+  protected onMonthChange(month: number | null): void {
+    this.selectedMonth.set(month);
     this.currentPage.set(0); // Reset to first page when changing month
     this.loadTransactions(); // Reload data with new time range
   }
@@ -789,15 +810,15 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   }
   
   /**
-   * Get timestamp range for a given month
+   * Get timestamp range for a given year and month
    */
-  private getMonthTimestampRange(month: Date): { startTimestamp: number; endTimestamp: number } {
+  private getYearMonthTimestampRange(year: number, month: number): { startTimestamp: number; endTimestamp: number } {
     // Get the first day of the month at 00:00:00
-    const startOfMonth = new Date(month.getFullYear(), month.getMonth(), 1);
+    const startOfMonth = new Date(year, month - 1, 1); // month is 1-based, Date constructor expects 0-based
     startOfMonth.setHours(0, 0, 0, 0);
     
     // Get the last day of the month at 23:59:59
-    const endOfMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+    const endOfMonth = new Date(year, month, 0); // month is 1-based, so month gives us the last day of previous month
     endOfMonth.setHours(23, 59, 59, 999);
     
     return {
@@ -807,10 +828,11 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   }
   
   /**
-   * Clear month filter and load all transactions
+   * Clear date filter and load all transactions
    */
-  protected clearMonthFilter(): void {
-    this.monthFilter.set(null);
+  protected clearDateFilter(): void {
+    this.selectedYear.set(null);
+    this.selectedMonth.set(null);
     this.currentPage.set(0);
     this.loadTransactions();
   }
@@ -820,5 +842,30 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
    */
   protected navigateToLogin(): void {
     this.router.navigate(['/auth/login']);
+  }
+
+  /**
+   * Initialize available years and months
+   */
+  private initializeDateOptions(): void {
+    const currentYear = new Date().getFullYear();
+    const years = [currentYear - 2, currentYear - 1, currentYear];
+    this.availableYears.set(years);
+
+    const months = [
+      { value: 1, label: 'January' },
+      { value: 2, label: 'February' },
+      { value: 3, label: 'March' },
+      { value: 4, label: 'April' },
+      { value: 5, label: 'May' },
+      { value: 6, label: 'June' },
+      { value: 7, label: 'July' },
+      { value: 8, label: 'August' },
+      { value: 9, label: 'September' },
+      { value: 10, label: 'October' },
+      { value: 11, label: 'November' },
+      { value: 12, label: 'December' }
+    ];
+    this.availableMonths.set(months);
   }
 }
