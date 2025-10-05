@@ -1,6 +1,5 @@
 {
     "app": {"title": "WattBrews"},
-    "nav": {"stations": "Stations", "my": "My Charges", "auth": "Sign In"},
     "auth": {"title": "Sign in", "google": "Continue with Google", "email": "Email", "password": "Password", "signin": "Sign in", "signout": "Sign out"},
     "stations": {
       "title": "Charging Stations",
@@ -100,7 +99,10 @@
         "stationDisabled": "Station is disabled",
         "noAvailableConnectors": "No available connectors",
         "startCharging": "Start charging session"
-      }
+      },
+      "authRequired": "Authentication Required",
+      "authRequiredMessage": "You need to be logged in to view the dashboard overview. Please sign in to continue.",
+      "signIn": "Sign In"
     },
     "language": {
       "switcher": "Change language",
@@ -120,6 +122,19 @@
       "support": "Support"
     },
     "pages": {
+      "auth": {
+        "login": {
+          "title": "Sign In to WattBrews",
+          "subtitle": "Access your charging station account",
+          "explanation": "Sign in to access charging stations, view your session history, and manage your account.",
+          "continueWithGoogle": "Continue with Google",
+          "signInWithEmailLink": "Sign in with Email Link",
+          "emailLinkExplanation": "We'll send you a secure link to sign in. No password required!",
+          "sendSignInLink": "Send Sign-in Link",
+          "signInLinkSent": "Sign-in link sent!",
+          "checkSpamFolder": "Please check your email and click the link to sign in. Don't forget to check your spam folder."
+        }
+      },
       "sessions": {
         "history": {
           "title": "Session History",
@@ -181,6 +196,70 @@
             "retry": "Retry"
           }
         }
+      },
+      "common": {
+        "buttons": {
+          "save": "Save",
+          "signIn": "Sign In",
+          "tryAgain": "Try Again",
+          "clearSearch": "Clear Search",
+          "refresh": "Refresh"
+        },
+        "units": {
+          "kW": "kW",
+          "kWh": "kWh"
+        }
+      },
+      "profile": {
+        "title": "Profile",
+        "checkingAuth": "Checking authentication...",
+        "authRequired": "Authentication Required",
+        "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
+        "loadingUserInfo": "Loading user information...",
+        "basicInformation": "Basic Information",
+        "paymentPlansTab": "Payment Plans",
+        "userTagsTab": "User Tags",
+        "paymentMethodsTab": "Payment Methods",
+        "labels": {
+          "username": "Username",
+          "name": "Name",
+          "email": "Email",
+          "role": "Role",
+          "accessLevel": "Access Level",
+          "registrationDate": "Registration Date",
+          "lastSeen": "Last Seen",
+          "note": "Note:",
+          "lastSeenWithColon": "Last Seen:",
+          "registered": "Registered:",
+          "country": "Country:",
+          "expires": "Expires:",
+          "merchantId": "Merchant ID:"
+        },
+        "roles": {
+          "admin": "Admin",
+          "user": "User"
+        },
+        "paymentPlans": {
+          "title": "Tariff Plans",
+          "default": "Default",
+          "active": "Active",
+          "start": "Start:",
+          "end": "End:",
+          "noPlans": "No payment plans available"
+        },
+        "userTags": {
+          "title": "Registered Tags",
+          "enabled": "Enabled",
+          "local": "Local",
+          "noNote": "No note",
+          "noTags": "No user tags registered"
+        },
+        "paymentMethods": {
+          "title": "Payment Methods",
+          "default": "Default",
+          "failures": "failures",
+          "noMethods": "No payment methods registered"
+        }
       }
     },
     "transactionDetails": {
@@ -203,57 +282,6 @@
       },
       "chart": {
         "title": "Energy Consumption Over Time"
-      }
-    },
-    "profile": {
-      "title": "Profile",
-      "checkingAuth": "Checking authentication...",
-      "authRequired": "Authentication Required",
-      "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
-      "loadingUserInfo": "Loading user information...",
-      "basicInformation": "Basic Information",
-      "paymentPlansTab": "Payment Plans",
-      "userTagsTab": "User Tags",
-      "paymentMethodsTab": "Payment Methods",
-      "labels": {
-        "username": "Username",
-        "name": "Name",
-        "email": "Email",
-        "role": "Role",
-        "accessLevel": "Access Level",
-        "registrationDate": "Registration Date",
-        "lastSeen": "Last Seen",
-        "note": "Note:",
-        "lastSeenWithColon": "Last Seen:",
-        "registered": "Registered:",
-        "country": "Country:",
-        "expires": "Expires:",
-        "merchantId": "Merchant ID:"
-      },
-      "roles": {
-        "admin": "Admin",
-        "user": "User"
-      },
-      "paymentPlans": {
-        "title": "Tariff Plans",
-        "default": "Default",
-        "active": "Active",
-        "start": "Start:",
-        "end": "End:",
-        "noPlans": "No payment plans available"
-      },
-      "userTags": {
-        "title": "Registered Tags",
-        "enabled": "Enabled",
-        "local": "Local",
-        "noNote": "No note",
-        "noTags": "No user tags registered"
-      },
-      "paymentMethods": {
-        "title": "Payment Methods",
-        "default": "Default",
-        "failures": "failures",
-        "noMethods": "No payment methods registered"
       }
     },
     "chargeInitiation": {

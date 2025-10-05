@@ -65,7 +65,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
         <p>{{ translationService.getReactive('pages.profile.authRequiredMessage') }}</p>
         <button mat-raised-button color="primary" (click)="navigateToLogin()">
           <mat-icon>login</mat-icon>
-          {{ translationService.getReactive('common.buttons.signIn') }}
+          {{ translationService.getReactive('pages.common.buttons.signIn') }}
         </button>
       </div>
 
@@ -94,7 +94,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
         <app-error-message [message]="error()!"></app-error-message>
         <button mat-raised-button color="primary" (click)="loadStations()">
           <mat-icon>refresh</mat-icon>
-          {{ translationService.getReactive('common.buttons.tryAgain') }}
+          {{ translationService.getReactive('pages.common.buttons.tryAgain') }}
         </button>
       </div>
 
@@ -136,7 +136,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
                   [class]="getConnectorStatusClass(connector.status)"
                   class="connector-chip">
                   <mat-icon class="chip-icon">{{ getConnectorTypeIcon(connector.type) }}</mat-icon>
-                  {{ (connector.connector_id_name || connector.connector_id) }} - {{ connector.type }} - {{ connector.power }}{{ translationService.getReactive('common.units.kW') }}
+                  {{ (connector.connector_id_name || connector.connector_id) }} - {{ connector.type }} - {{ connector.power }}{{ translationService.getReactive('pages.common.units.kW') }}
                 </mat-chip>
               </div>
             </div>
@@ -172,7 +172,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
         <p *ngIf="searchQuery">{{ translationService.getReactive('stations.tryAdjustingSearch') }}</p>
         <p *ngIf="!searchQuery">{{ translationService.getReactive('stations.noStationsAvailable') }}</p>
         <button mat-raised-button color="primary" (click)="clearSearch()" *ngIf="searchQuery">
-          {{ translationService.getReactive('common.buttons.clearSearch') }}
+          {{ translationService.getReactive('pages.common.buttons.clearSearch') }}
         </button>
       </div>
     </div>
