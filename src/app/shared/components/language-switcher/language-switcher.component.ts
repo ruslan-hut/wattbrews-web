@@ -44,31 +44,31 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
     }
     
     .language-switcher {
-      color: var(--energy-amber, #ffc107) !important;
+      color: var(--energy-gray-700, #334155) !important;
       border-radius: var(--energy-radius-lg, 12px);
       transition: all 0.2s ease;
-      background-color: rgba(255, 255, 255, 0.15) !important;
-      border: 1px solid var(--energy-amber, #ffc107) !important;
-      backdrop-filter: blur(4px);
+      background-color: transparent !important;
+      border: none !important;
       margin: 0 var(--energy-space-sm, 8px);
-      box-shadow: var(--energy-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.1));
+      box-shadow: none !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
       min-width: 40px !important;
       height: 40px !important;
+      font-weight: 500 !important;
       
       &:hover {
-        background-color: var(--energy-amber, #ffc107) !important;
-        color: var(--energy-gray-800, #1e293b) !important;
-        border-color: var(--energy-amber-dark, #ff8f00) !important;
-        transform: translateY(-1px);
-        box-shadow: var(--energy-shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+        background-color: transparent !important;
+        color: var(--energy-cyan, #00bcd4) !important;
+        border: none !important;
+        transform: none;
+        box-shadow: none !important;
       }
       
       &:active {
-        transform: translateY(0);
-        box-shadow: var(--energy-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+        transform: none;
+        box-shadow: none !important;
       }
       
       .language-code {
@@ -94,7 +94,7 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
       right: 0;
       min-width: 140px;
       border-radius: var(--energy-radius-lg, 12px);
-      box-shadow: var(--energy-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+      box-shadow: var(--energy-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.1));
       border: 1px solid var(--energy-gray-200, #e2e8f0);
       background: white;
       z-index: 1000 !important;
@@ -125,19 +125,31 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
       text-align: left !important;
       border: none !important;
       background: transparent !important;
+      color: var(--energy-gray-700, #334155) !important;
+      
+      &:first-child {
+        border-top-left-radius: var(--energy-radius-lg, 12px);
+        border-top-right-radius: var(--energy-radius-lg, 12px);
+      }
+      
+      &:last-child {
+        border-bottom-left-radius: var(--energy-radius-lg, 12px);
+        border-bottom-right-radius: var(--energy-radius-lg, 12px);
+      }
       
       &:hover {
-        background-color: var(--energy-cyan-light, #4dd0e1) !important;
-        color: white !important;
+        background-color: var(--energy-gray-100, #f1f5f9) !important;
+        color: var(--energy-cyan, #00bcd4) !important;
+        font-weight: 500 !important;
       }
       
       &.active {
-        background-color: var(--energy-cyan, #00bcd4) !important;
-        color: white !important;
+        background-color: var(--energy-gray-100, #f1f5f9) !important;
+        color: var(--energy-cyan, #00bcd4) !important;
         font-weight: 600 !important;
         
         mat-icon {
-          color: white !important;
+          color: var(--energy-cyan, #00bcd4) !important;
         }
       }
       

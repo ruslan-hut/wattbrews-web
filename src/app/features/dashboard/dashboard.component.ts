@@ -545,6 +545,45 @@ export class SortByConnectorIdPipe implements PipeTransform {
       color: #5a6c7d;
       font-size: 1rem;
     }
+    
+    .auth-required-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .auth-required-icon {
+      font-size: 4rem;
+      color: #6c757d;
+      margin-bottom: 8px;
+    }
+    
+    .auth-required-title {
+      margin: 0 0 8px 0;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    
+    .auth-required-message {
+      margin: 0 0 16px 0;
+      color: #5a6c7d;
+      font-size: 1rem;
+      max-width: 400px;
+      line-height: 1.5;
+    }
+    
+    .auth-required-container button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 500;
+    }
 
     .no-recent-charge-points {
       display: flex;
@@ -662,6 +701,23 @@ export class SortByConnectorIdPipe implements PipeTransform {
       .charge-points-list {
         max-height: 300px;
       }
+      
+      .auth-required-container {
+        padding: 30px 15px;
+      }
+      
+      .auth-required-icon {
+        font-size: 3rem;
+      }
+      
+      .auth-required-title {
+        font-size: 1.3rem;
+      }
+      
+      .auth-required-message {
+        font-size: 0.9rem;
+        max-width: 300px;
+      }
     }
     
     @media (max-width: 480px) {
@@ -688,6 +744,22 @@ export class SortByConnectorIdPipe implements PipeTransform {
         gap: 12px;
       }
       
+      .auth-required-container {
+        padding: 20px 10px;
+      }
+      
+      .auth-required-icon {
+        font-size: 2.5rem;
+      }
+      
+      .auth-required-title {
+        font-size: 1.2rem;
+      }
+      
+      .auth-required-message {
+        font-size: 0.85rem;
+        max-width: 250px;
+      }
     }
   `]
 })

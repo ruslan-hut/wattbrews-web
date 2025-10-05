@@ -125,7 +125,10 @@
       "stationDisabled": "La estación está deshabilitada",
       "noAvailableConnectors": "No hay conectores disponibles",
       "startCharging": "Iniciar sesión de carga"
-    }
+    },
+    "authRequired": "Autenticación Requerida",
+    "authRequiredMessage": "Necesitas estar conectado para ver el resumen del tablero. Por favor inicia sesión para continuar.",
+    "signIn": "Iniciar Sesión"
   },
   "language": {
     "switcher": "Selector de idioma",
@@ -137,17 +140,20 @@
     "terms": "Términos de Servicio",
     "support": "Soporte"
   },
-  "profile": {
-    "settings": {
-      "notifications": "Notificaciones"
-    }
-  },
-  "common": {
-    "buttons": {
-      "save": "Guardar"
-    }
-  },
   "pages": {
+    "auth": {
+      "login": {
+        "title": "Iniciar Sesión en WattBrews",
+        "subtitle": "Accede a tu cuenta de estación de carga",
+        "explanation": "Inicia sesión para acceder a las estaciones de carga, ver tu historial de sesiones y gestionar tu cuenta.",
+        "continueWithGoogle": "Continuar con Google",
+        "signInWithEmailLink": "Iniciar sesión con enlace de correo",
+        "emailLinkExplanation": "Te enviaremos un enlace seguro para iniciar sesión. ¡No se requiere contraseña!",
+        "sendSignInLink": "Enviar Enlace de Inicio de Sesión",
+        "signInLinkSent": "¡Enlace de inicio de sesión enviado!",
+        "checkSpamFolder": "Por favor revisa tu correo y haz clic en el enlace para iniciar sesión. No olvides revisar tu carpeta de spam."
+      }
+    },
     "sessions": {
       "history": {
         "title": "Historial de Sesiones",
@@ -283,30 +289,6 @@
         "noMethods": "No hay métodos de pago registrados"
       }
     },
-    "chargeInitiation": {
-      "title": "Iniciar Carga",
-      "loadingStationDetails": "Cargando detalles de la estación...",
-      "selectConnector": "Seleccionar Conector",
-      "selectConnectorSubtitle": "Elige un conector para iniciar la carga",
-      "connector": "Conector",
-      "type": "Tipo:",
-      "power": "Potencia:",
-      "paymentMethod": "Método de Pago",
-      "paymentMethodSubtitle": "Elige tu método de pago preferido",
-      "loadingPaymentMethods": "Cargando métodos de pago...",
-      "failedToLoadPaymentMethods": "Error al cargar métodos de pago:",
-      "noPaymentMethods": "No hay métodos de pago disponibles. Por favor añade un método de pago en tu perfil.",
-      "addPaymentMethod": "Añadir Método de Pago",
-      "tariffInformation": "Información de Tarifas",
-      "loadingTariffInformation": "Cargando información de tarifas...",
-      "failedToLoadTariffInformation": "Error al cargar información de tarifas:",
-      "pricePerKwh": "Precio por kWh:",
-      "pricePerHour": "Precio por Hora:",
-      "selectedConnector": "Seleccionado: Conector",
-      "startCharge": "Iniciar Carga",
-      "selectConnectorToStart": "Por favor selecciona un conector disponible para iniciar la carga.",
-      "selectPaymentMethodToStart": "Por favor selecciona un método de pago para iniciar la carga"
-    },
     "common": {
       "buttons": {
         "save": "Guardar",
@@ -319,6 +301,65 @@
         "kW": "kW",
         "kWh": "kWh"
       }
+    }
+  },
+  "transactionDetails": {
+    "title": "Detalles de la Transacción",
+    "loading": "Cargando detalles de la transacción...",
+    "retry": "Reintentar",
+    "close": "Cerrar",
+    "overview": {
+      "station": "Estación",
+      "connector": "Conector",
+      "duration": "Duración",
+      "energyConsumed": "Energía Consumida",
+      "cost": "Costo",
+      "averagePower": "Potencia Promedio"
+    },
+    "timing": {
+      "title": "Tiempo",
+      "started": "Iniciado:",
+      "ended": "Finalizado:"
+    },
+    "chart": {
+      "title": "Consumo de Energía en el Tiempo"
+    }
+  },
+  "chargeInitiation": {
+    "title": "Iniciar Carga",
+    "loadingStationDetails": "Cargando detalles de la estación...",
+    "selectConnector": "Seleccionar Conector",
+    "selectConnectorSubtitle": "Elige un conector para iniciar la carga",
+    "connector": "Conector",
+    "type": "Tipo:",
+    "power": "Potencia:",
+    "paymentMethod": "Método de Pago",
+    "paymentMethodSubtitle": "Elige tu método de pago preferido",
+    "loadingPaymentMethods": "Cargando métodos de pago...",
+    "failedToLoadPaymentMethods": "Error al cargar métodos de pago:",
+    "noPaymentMethods": "No hay métodos de pago disponibles. Por favor añade un método de pago en tu perfil.",
+    "addPaymentMethod": "Añadir Método de Pago",
+    "tariffInformation": "Información de Tarifas",
+    "loadingTariffInformation": "Cargando información de tarifas...",
+    "failedToLoadTariffInformation": "Error al cargar información de tarifas:",
+    "pricePerKwh": "Precio por kWh:",
+    "pricePerHour": "Precio por Hora:",
+    "selectedConnector": "Seleccionado: Conector",
+    "startCharge": "Iniciar Carga",
+    "selectConnectorToStart": "Por favor selecciona un conector disponible para iniciar la carga.",
+    "selectPaymentMethodToStart": "Por favor selecciona un método de pago para iniciar la carga"
+  },
+  "common": {
+    "buttons": {
+      "save": "Guardar",
+      "signIn": "Iniciar Sesión",
+      "tryAgain": "Intentar de Nuevo",
+      "clearSearch": "Limpiar Búsqueda",
+      "refresh": "Actualizar"
+    },
+    "units": {
+      "kW": "kW",
+      "kWh": "kWh"
     }
   }
 }

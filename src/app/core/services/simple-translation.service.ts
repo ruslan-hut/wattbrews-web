@@ -185,19 +185,6 @@ export class SimpleTranslationService {
           "selectConnectorToStart": "Please select an available connector to start charging.",
           "selectPaymentMethodToStart": "Please select a payment method to start charging"
         },
-        "common": {
-          "buttons": {
-            "save": "Save",
-            "signIn": "Sign In",
-            "tryAgain": "Try Again",
-            "clearSearch": "Clear Search",
-            "refresh": "Refresh"
-          },
-          "units": {
-            "kW": "kW",
-            "kWh": "kWh"
-          }
-        },
         "pages": {
           "sessions": {
             "history": {
@@ -260,6 +247,85 @@ export class SimpleTranslationService {
                 "retry": "Retry"
               }
             }
+          },
+          "auth": {
+            "login": {
+              "title": "WattBrews",
+              "subtitle": "Access your charging station management",
+              "explanation": "You can sign in using your Google account or email address. If you don't have an account yet, we'll create one for you automatically.",
+              "continueWithGoogle": "Continue with Google",
+              "signInWithEmailLink": "Sign in with Email Link",
+              "emailLinkExplanation": "Enter your email address and we'll send you a secure sign-in link. No password required!",
+              "sendSignInLink": "Send Sign-in Link",
+              "signInLinkSent": "Sign-in link sent! Check your email and click the link to sign in.",
+              "checkSpamFolder": "Didn't receive the email? Check your spam folder or try again.",
+              "emailRequired": "Email is required",
+              "emailInvalid": "Please enter a valid email"
+            }
+          },
+          "common": {
+            "buttons": {
+              "save": "Save",
+              "signIn": "Sign In",
+              "tryAgain": "Try Again",
+              "clearSearch": "Clear Search",
+              "refresh": "Refresh"
+            },
+            "units": {
+              "kW": "kW",
+              "kWh": "kWh"
+            }
+          },
+          "profile": {
+            "title": "Profile",
+            "checkingAuth": "Checking authentication...",
+            "authRequired": "Authentication Required",
+            "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
+            "loadingUserInfo": "Loading user information...",
+            "basicInformation": "Basic Information",
+            "paymentPlansTab": "Payment Plans",
+            "userTagsTab": "User Tags",
+            "paymentMethodsTab": "Payment Methods",
+            "labels": {
+              "username": "Username",
+              "name": "Name",
+              "email": "Email",
+              "role": "Role",
+              "accessLevel": "Access Level",
+              "registrationDate": "Registration Date",
+              "lastSeen": "Last Seen",
+              "note": "Note:",
+              "lastSeenWithColon": "Last Seen:",
+              "registered": "Registered:",
+              "country": "Country:",
+              "expires": "Expires:",
+              "merchantId": "Merchant ID:"
+            },
+            "roles": {
+              "admin": "Admin",
+              "user": "User"
+            },
+            "paymentPlans": {
+              "title": "Tariff Plans",
+              "default": "Default",
+              "active": "Active",
+              "start": "Start:",
+              "end": "End:",
+              "noPlans": "No payment plans available"
+            },
+            "userTags": {
+              "title": "Registered Tags",
+              "enabled": "Enabled",
+              "local": "Local",
+              "noNote": "No note",
+              "noTags": "No user tags registered"
+            },
+            "paymentMethods": {
+              "title": "Payment Methods",
+              "default": "Default",
+              "failures": "failures",
+              "noMethods": "No payment methods registered"
+            }
           }
         },
         "transactionDetails": {
@@ -284,57 +350,6 @@ export class SimpleTranslationService {
             "title": "Energy Consumption Over Time"
           }
         },
-        "profile": {
-          "title": "Profile",
-          "checkingAuth": "Checking authentication...",
-          "authRequired": "Authentication Required",
-          "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
-          "loadingUserInfo": "Loading user information...",
-          "basicInformation": "Basic Information",
-          "paymentPlansTab": "Payment Plans",
-          "userTagsTab": "User Tags",
-          "paymentMethodsTab": "Payment Methods",
-          "labels": {
-            "username": "Username",
-            "name": "Name",
-            "email": "Email",
-            "role": "Role",
-            "accessLevel": "Access Level",
-            "registrationDate": "Registration Date",
-            "lastSeen": "Last Seen",
-            "note": "Note:",
-            "lastSeenWithColon": "Last Seen:",
-            "registered": "Registered:",
-            "country": "Country:",
-            "expires": "Expires:",
-            "merchantId": "Merchant ID:"
-          },
-          "roles": {
-            "admin": "Admin",
-            "user": "User"
-          },
-          "paymentPlans": {
-            "title": "Tariff Plans",
-            "default": "Default",
-            "active": "Active",
-            "start": "Start:",
-            "end": "End:",
-            "noPlans": "No payment plans available"
-          },
-          "userTags": {
-            "title": "Registered Tags",
-            "enabled": "Enabled",
-            "local": "Local",
-            "noNote": "No note",
-            "noTags": "No user tags registered"
-          },
-          "paymentMethods": {
-            "title": "Payment Methods",
-            "default": "Default",
-            "failures": "failures",
-            "noMethods": "No payment methods registered"
-          }
-        }
       };
     } else {
       this.translations['es'] = {
@@ -470,19 +485,6 @@ export class SimpleTranslationService {
           "selectConnectorToStart": "Por favor selecciona un conector disponible para iniciar la carga.",
           "selectPaymentMethodToStart": "Por favor selecciona un método de pago para iniciar la carga"
         },
-        "common": {
-          "buttons": {
-            "save": "Guardar",
-            "signIn": "Iniciar Sesión",
-            "tryAgain": "Intentar de Nuevo",
-            "clearSearch": "Limpiar Búsqueda",
-            "refresh": "Actualizar"
-          },
-          "units": {
-            "kW": "kW",
-            "kWh": "kWh"
-          }
-        },
         "pages": {
           "sessions": {
             "history": {
@@ -545,6 +547,85 @@ export class SimpleTranslationService {
                 "retry": "Reintentar"
               }
             }
+          },
+          "auth": {
+            "login": {
+              "title": "WattBrews",
+              "subtitle": "Accede a la gestión de tu estación de carga",
+              "explanation": "Puedes iniciar sesión usando tu cuenta de Google o dirección de correo. Si aún no tienes una cuenta, crearemos una para ti automáticamente.",
+              "continueWithGoogle": "Continuar con Google",
+              "signInWithEmailLink": "Iniciar sesión con enlace de correo",
+              "emailLinkExplanation": "Ingresa tu dirección de correo y te enviaremos un enlace seguro para iniciar sesión. ¡No se requiere contraseña!",
+              "sendSignInLink": "Enviar Enlace de Inicio de Sesión",
+              "signInLinkSent": "¡Enlace de inicio de sesión enviado! Revisa tu correo y haz clic en el enlace para iniciar sesión.",
+              "checkSpamFolder": "¿No recibiste el correo? Revisa tu carpeta de spam o inténtalo de nuevo.",
+              "emailRequired": "El correo es requerido",
+              "emailInvalid": "Por favor ingresa un correo válido"
+            }
+          },
+          "common": {
+            "buttons": {
+              "save": "Guardar",
+              "signIn": "Iniciar Sesión",
+              "tryAgain": "Intentar de Nuevo",
+              "clearSearch": "Limpiar Búsqueda",
+              "refresh": "Actualizar"
+            },
+            "units": {
+              "kW": "kW",
+              "kWh": "kWh"
+            }
+          },
+          "profile": {
+            "title": "Perfil",
+            "checkingAuth": "Verificando autenticación...",
+            "authRequired": "Autenticación Requerida",
+            "authRequiredMessage": "Necesitas estar conectado para ver tu perfil. Por favor inicia sesión para continuar.",
+            "loadingUserInfo": "Cargando información del usuario...",
+            "basicInformation": "Información Básica",
+            "paymentPlansTab": "Planes de Pago",
+            "userTagsTab": "Etiquetas de Usuario",
+            "paymentMethodsTab": "Métodos de Pago",
+            "labels": {
+              "username": "Nombre de Usuario",
+              "name": "Nombre",
+              "email": "Correo Electrónico",
+              "role": "Rol",
+              "accessLevel": "Nivel de Acceso",
+              "registrationDate": "Fecha de Registro",
+              "lastSeen": "Última Vez Visto",
+              "note": "Nota:",
+              "lastSeenWithColon": "Última Vez Visto:",
+              "registered": "Registrado:",
+              "country": "País:",
+              "expires": "Expira:",
+              "merchantId": "ID del Comerciante:"
+            },
+            "roles": {
+              "admin": "Administrador",
+              "user": "Usuario"
+            },
+            "paymentPlans": {
+              "title": "Planes de Tarifas",
+              "default": "Por Defecto",
+              "active": "Activo",
+              "start": "Inicio:",
+              "end": "Fin:",
+              "noPlans": "No hay planes de pago disponibles"
+            },
+            "userTags": {
+              "title": "Etiquetas Registradas",
+              "enabled": "Habilitado",
+              "local": "Local",
+              "noNote": "Sin nota",
+              "noTags": "No hay etiquetas de usuario registradas"
+            },
+            "paymentMethods": {
+              "title": "Métodos de Pago",
+              "default": "Por Defecto",
+              "failures": "fallos",
+              "noMethods": "No hay métodos de pago registrados"
+            }
           }
         },
         "transactionDetails": {
@@ -569,57 +650,6 @@ export class SimpleTranslationService {
             "title": "Consumo de Energía en el Tiempo"
           }
         },
-        "profile": {
-          "title": "Perfil",
-          "checkingAuth": "Verificando autenticación...",
-          "authRequired": "Autenticación Requerida",
-          "authRequiredMessage": "Necesitas estar conectado para ver tu perfil. Por favor inicia sesión para continuar.",
-          "loadingUserInfo": "Cargando información del usuario...",
-          "basicInformation": "Información Básica",
-          "paymentPlansTab": "Planes de Pago",
-          "userTagsTab": "Etiquetas de Usuario",
-          "paymentMethodsTab": "Métodos de Pago",
-          "labels": {
-            "username": "Nombre de Usuario",
-            "name": "Nombre",
-            "email": "Correo Electrónico",
-            "role": "Rol",
-            "accessLevel": "Nivel de Acceso",
-            "registrationDate": "Fecha de Registro",
-            "lastSeen": "Última Vez Visto",
-            "note": "Nota:",
-            "lastSeenWithColon": "Última Vez Visto:",
-            "registered": "Registrado:",
-            "country": "País:",
-            "expires": "Expira:",
-            "merchantId": "ID del Comerciante:"
-          },
-          "roles": {
-            "admin": "Administrador",
-            "user": "Usuario"
-          },
-          "paymentPlans": {
-            "title": "Planes de Tarifas",
-            "default": "Por Defecto",
-            "active": "Activo",
-            "start": "Inicio:",
-            "end": "Fin:",
-            "noPlans": "No hay planes de pago disponibles"
-          },
-          "userTags": {
-            "title": "Etiquetas Registradas",
-            "enabled": "Habilitado",
-            "local": "Local",
-            "noNote": "Sin nota",
-            "noTags": "No hay etiquetas de usuario registradas"
-          },
-          "paymentMethods": {
-            "title": "Métodos de Pago",
-            "default": "Por Defecto",
-            "failures": "fallos",
-            "noMethods": "No hay métodos de pago registrados"
-          }
-        }
       };
     }
   }
