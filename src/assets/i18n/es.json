@@ -2,6 +2,9 @@
   "app": {
     "title": "WattBrews"
   },
+  "language": {
+    "switcher": "Selector de Idioma"
+  },
   "nav": {
     "dashboard": "Panel",
     "profile": "Perfil",
@@ -23,6 +26,11 @@
   },
   "stations": {
     "title": "Estaciones de carga",
+    "searchLabel": "Buscar estaciones",
+    "searchPlaceholder": "Escribe para buscar...",
+    "ofConnectorsAvailable": "de {{total}} conectores disponibles",
+    "startCharge": "Iniciar Carga",
+    "viewDetails": "Ver Detalles",
     "search": {
       "0": "B",
       "1": "u",
@@ -77,12 +85,23 @@
     "subtitle": "Elige un cargador para iniciar tu sesión de carga",
     "recentChargePoints": "Puntos de Carga Recientes",
     "recentTransactions": "Transacciones Recientes",
-    "overview": "dashboard.overview",
+    "overview": "Resumen de Puntos de Carga",
     "loadingChargePoints": "Cargando puntos de carga recientes...",
     "noRecentChargePoints": "No se encontraron puntos de carga recientes",
     "viewAllTransactions": "Ver Todas las Transacciones",
     "viewAllChargePoints": "Ver Todos los Puntos de Carga",
-    "welcome": "dashboard.welcome"
+    "online": "En línea",
+    "available": "Disponible",
+    "connectors": "Conectores",
+    "total": "Total",
+    "duration": "Duración",
+    "findStations": "Buscar Estaciones",
+    "noTransactions": "No tienes transacciones",
+    "authRequired": "Autenticación Requerida",
+    "authRequiredMessage": "Necesitas iniciar sesión para ver tu perfil. Por favor, inicia sesión para continuar.",
+    "signIn": "Iniciar Sesión",
+    "loadingOverview": "Cargando puntos de carga...",
+    "noChargePoints": "No hay puntos de carga disponibles"
   },
   "footer": {
     "privacy": "Política de Privacidad",
@@ -95,6 +114,18 @@
     }
   },
   "pages": {
+    "common": {
+      "buttons": {
+        "signIn": "Iniciar Sesión",
+        "tryAgain": "Intentar de Nuevo",
+        "clearSearch": "Limpiar Búsqueda",
+        "refresh": "Actualizar"
+      },
+      "units": {
+        "kWh": "kWh",
+        "kW": "kW"
+      }
+    },
     "dashboard": {
       "title": "Bienvenido a WattBrews",
       "subtitle": "Elige un cargador para iniciar tu sesión de carga",
@@ -161,7 +192,46 @@
       "userTags": "Etiquetas de Usuario",
       "paymentMethods": "Métodos de Pago",
       "loadingUserInfo": "Cargando información del usuario...",
-      "checkingAuth": "Verificando autenticación..."
+      "checkingAuth": "Verificando autenticación...",
+      "labels": {
+        "username": "Nombre de Usuario",
+        "name": "Nombre",
+        "email": "Correo Electrónico",
+        "role": "Rol",
+        "accessLevel": "Nivel de Acceso",
+        "registrationDate": "Fecha de Registro",
+        "lastSeen": "Última Vez Visto",
+        "note": "Nota:",
+        "registered": "Registrado:",
+        "country": "País:",
+        "expires": "Expira:",
+        "merchantId": "ID del Comerciante:"
+      },
+      "roles": {
+        "admin": "Administrador",
+        "user": "Usuario"
+      },
+      "paymentPlans": {
+        "title": "Planes de Tarifas",
+        "default": "Por Defecto",
+        "active": "Activo",
+        "start": "Inicio:",
+        "end": "Fin:",
+        "noPlans": "No hay planes de pago disponibles"
+      },
+      "userTags": {
+        "title": "Etiquetas Registradas",
+        "enabled": "Habilitado",
+        "local": "Local",
+        "noNote": "Sin nota",
+        "noTags": "No hay etiquetas de usuario registradas"
+      },
+      "paymentMethods": {
+        "title": "Métodos de Pago",
+        "default": "Por Defecto",
+        "failures": "fallos",
+        "noMethods": "No hay métodos de pago registrados"
+      }
     },
     "sessions": {
       "history": {
@@ -246,6 +316,30 @@
         "emailInvalid": "Por favor ingresa un correo válido"
       }
     }
+  },
+  "chargeInitiation": {
+    "title": "Iniciar Carga",
+    "loadingStationDetails": "Cargando detalles de la estación...",
+    "selectConnector": "Seleccionar Conector",
+    "selectConnectorSubtitle": "Elige un conector disponible para iniciar la carga",
+    "connector": "Conector",
+    "type": "Tipo",
+    "power": "Potencia",
+    "paymentMethod": "Método de Pago",
+    "paymentMethodSubtitle": "Selecciona tu método de pago preferido",
+    "loadingPaymentMethods": "Cargando métodos de pago...",
+    "failedToLoadPaymentMethods": "Error al cargar métodos de pago:",
+    "noPaymentMethods": "No hay métodos de pago disponibles",
+    "addPaymentMethod": "Agregar Método de Pago",
+    "tariffInformation": "Información de Tarifas",
+    "loadingTariffInformation": "Cargando información de tarifas...",
+    "failedToLoadTariffInformation": "Error al cargar información de tarifas:",
+    "pricePerKwh": "Precio por kWh",
+    "pricePerHour": "Precio por hora",
+    "selectedConnector": "Conector Seleccionado",
+    "startCharge": "Iniciar Carga",
+    "selectConnectorToStart": "Por favor selecciona un conector para iniciar la carga",
+    "selectPaymentMethodToStart": "Por favor selecciona un método de pago para iniciar la carga"
   },
   "common": {
     "buttons": {

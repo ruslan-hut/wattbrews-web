@@ -2,6 +2,9 @@
   "app": {
     "title": "WattBrews"
   },
+  "language": {
+    "switcher": "Language Switcher"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "profile": "Profile",
@@ -23,6 +26,11 @@
   },
   "stations": {
     "title": "Charging Stations",
+    "searchLabel": "Search stations",
+    "searchPlaceholder": "Type to search...",
+    "ofConnectorsAvailable": "of {{total}} connectors available",
+    "startCharge": "Start Charge",
+    "viewDetails": "View Details",
     "search": {
       "0": "S",
       "1": "e",
@@ -78,7 +86,19 @@
     "loadingChargePoints": "Loading recent charge points...",
     "noRecentChargePoints": "No recent charge points found",
     "viewAllTransactions": "View All Transactions",
-    "viewAllChargePoints": "View All Charge Points"
+    "viewAllChargePoints": "View All Charge Points",
+    "online": "Online",
+    "available": "Available",
+    "connectors": "Connectors",
+    "total": "Total",
+    "duration": "Duration",
+    "findStations": "Find Stations",
+    "noTransactions": "You have no transactions",
+    "authRequired": "Authentication Required",
+    "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
+    "signIn": "Sign In",
+    "loadingOverview": "Loading charge points...",
+    "noChargePoints": "No charge points available"
   },
   "footer": {
     "privacy": "Privacy Policy",
@@ -91,6 +111,18 @@
     }
   },
   "pages": {
+    "common": {
+      "buttons": {
+        "signIn": "Sign In",
+        "tryAgain": "Try Again",
+        "clearSearch": "Clear Search",
+        "refresh": "Refresh"
+      },
+      "units": {
+        "kWh": "kWh",
+        "kW": "kW"
+      }
+    },
     "dashboard": {
       "title": "Welcome to WattBrews",
       "subtitle": "Choose a charger to start your charging session",
@@ -157,7 +189,46 @@
       "userTags": "User Tags",
       "paymentMethods": "Payment Methods",
       "loadingUserInfo": "Loading user information...",
-      "checkingAuth": "Checking authentication..."
+      "checkingAuth": "Checking authentication...",
+      "labels": {
+        "username": "Username",
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "accessLevel": "Access Level",
+        "registrationDate": "Registration Date",
+        "lastSeen": "Last Seen",
+        "note": "Note:",
+        "registered": "Registered:",
+        "country": "Country:",
+        "expires": "Expires:",
+        "merchantId": "Merchant ID:"
+      },
+      "roles": {
+        "admin": "Admin",
+        "user": "User"
+      },
+      "paymentPlans": {
+        "title": "Tariff Plans",
+        "default": "Default",
+        "active": "Active",
+        "start": "Start:",
+        "end": "End:",
+        "noPlans": "No payment plans available"
+      },
+      "userTags": {
+        "title": "Registered Tags",
+        "enabled": "Enabled",
+        "local": "Local",
+        "noNote": "No note",
+        "noTags": "No user tags registered"
+      },
+      "paymentMethods": {
+        "title": "Payment Methods",
+        "default": "Default",
+        "failures": "failures",
+        "noMethods": "No payment methods registered"
+      }
     },
     "sessions": {
       "history": {
@@ -242,6 +313,30 @@
         "emailInvalid": "Please enter a valid email"
       }
     }
+  },
+  "chargeInitiation": {
+    "title": "Start Charge",
+    "loadingStationDetails": "Loading station details...",
+    "selectConnector": "Select Connector",
+    "selectConnectorSubtitle": "Choose an available connector to start charging",
+    "connector": "Connector",
+    "type": "Type",
+    "power": "Power",
+    "paymentMethod": "Payment Method",
+    "paymentMethodSubtitle": "Select your preferred payment method",
+    "loadingPaymentMethods": "Loading payment methods...",
+    "failedToLoadPaymentMethods": "Failed to load payment methods:",
+    "noPaymentMethods": "No payment methods available",
+    "addPaymentMethod": "Add Payment Method",
+    "tariffInformation": "Tariff Information",
+    "loadingTariffInformation": "Loading tariff information...",
+    "failedToLoadTariffInformation": "Failed to load tariff information:",
+    "pricePerKwh": "Price per kWh",
+    "pricePerHour": "Price per hour",
+    "selectedConnector": "Selected Connector",
+    "startCharge": "Start Charge",
+    "selectConnectorToStart": "Please select a connector to start charging",
+    "selectPaymentMethodToStart": "Please select a payment method to start charging"
   },
   "common": {
     "buttons": {
