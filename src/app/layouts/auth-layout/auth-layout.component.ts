@@ -1,9 +1,11 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Subscription } from 'rxjs';
 import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 
@@ -17,10 +19,18 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     LanguageSwitcherComponent
   ],
   template: `
-    <div class="auth-container">
+    <!-- Translation Loading State -->
+    <div class="loading-container" *ngIf="translationsLoading()">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading translations...</p>
+    </div>
+
+    <!-- Auth Layout (only show when translations are loaded) -->
+    <div class="auth-container" *ngIf="!translationsLoading()">
       <mat-toolbar color="primary" class="auth-toolbar">
         <div class="toolbar-content">
           <div class="logo-section">
@@ -138,6 +148,23 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
       opacity: 1;
     }
     
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .loading-container p {
+      margin: 0;
+      color: white;
+      font-size: 1rem;
+    }
+    
     @media (max-width: 768px) {
       .auth-content {
         padding: 0;
@@ -151,7 +178,35 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
     }
   `]
 })
-export class AuthLayoutComponent {
+export class AuthLayoutComponent implements OnInit, OnDestroy {
   readonly translationService = inject(SimpleTranslationService);
   protected readonly appTitle = signal('WattBrews');
+  
+  // Translation loading state
+  protected readonly translationsLoading = signal(true);
+  
+  // Subscription management
+  private languageSubscription?: Subscription;
+
+  ngOnInit(): void {
+    // Initialize translations first
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
+  }
 }

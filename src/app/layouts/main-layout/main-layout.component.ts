@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
@@ -26,10 +28,18 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
     MatListModule,
     MatBadgeModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
     LanguageSwitcherComponent
   ],
   template: `
-    <mat-sidenav-container class="sidenav-container">
+    <!-- Translation Loading State -->
+    <div class="loading-container" *ngIf="translationsLoading()">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading translations...</p>
+    </div>
+
+    <!-- Main Layout (only show when translations are loaded) -->
+    <mat-sidenav-container class="sidenav-container" *ngIf="!translationsLoading()">
       <!-- Sidebar -->
       <mat-sidenav #drawer class="sidenav" fixedInViewport
           [attr.role]="'navigation'"
@@ -195,6 +205,22 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
       min-height: calc(100vh - 64px);
     }
     
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      height: 100vh;
+      background-color: #f8f9fa;
+    }
+    
+    .loading-container p {
+      margin: 0;
+      color: #5a6c7d;
+      font-size: 1rem;
+    }
+    
     @media (max-width: 768px) {
       .main-content {
         padding: 10px;
@@ -202,14 +228,42 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
     }
   `]
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   readonly translationService = inject(SimpleTranslationService);
   
+  // Translation loading state
+  protected readonly translationsLoading = signal(true);
+  
+  // Subscription management
+  private languageSubscription?: Subscription;
+  
   protected readonly appTitle = signal('WattBrews');
   protected readonly sidenavOpen = signal(false);
   protected readonly userName = this.authService.userName;
+
+  ngOnInit(): void {
+    // Initialize translations first
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
+  }
   
   toggleSidenav(): void {
     this.sidenavOpen.update(open => !open);
