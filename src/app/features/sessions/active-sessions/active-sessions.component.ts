@@ -6,18 +6,8 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
   selector: 'app-active-sessions',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="active-sessions-container">
-      <h1 class="page-title">{{ translationService.getReactive('sessions.active.title') }}</h1>
-      <p class="page-subtitle">{{ translationService.getReactive('sessions.active.subtitle') }}</p>
-      <p>{{ translationService.getReactive('sessions.active.comingSoon') }}</p>
-    </div>
-  `,
-  styles: [`
-    .active-sessions-container {
-      padding: 20px;
-    }
-  `]
+  templateUrl: './active-sessions.component.html',
+  styleUrl: './active-sessions.component.scss'
 })
 export class ActiveSessionsComponent {
   protected readonly translationService = inject(SimpleTranslationService);

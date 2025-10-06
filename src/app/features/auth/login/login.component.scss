@@ -1,0 +1,132 @@
+// Minimal component-specific styles - most styling handled by global energy theme
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--energy-space-lg);
+  margin-top: var(--energy-space-lg);
+  padding: var(--energy-space-xl);
+  background: var(--energy-gray-100);
+  border-radius: var(--energy-radius-xl);
+  border: 1px solid var(--energy-gray-200);
+  width: 100%;
+  max-width: 400px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.sign-in-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--energy-space-md);
+  margin-bottom: var(--energy-space-lg);
+}
+
+.sign-in-button {
+  width: 100%;
+  height: 48px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: var(--energy-radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--energy-space-sm);
+  transition: all 0.2s ease;
+}
+
+.google-button {
+  background: #4285f4;
+  color: white;
+  border: none;
+}
+
+.google-button:hover:not(:disabled) {
+  background: #3367d6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+.email-link-button {
+  background: var(--energy-blue);
+  color: white;
+  border: none;
+}
+
+.email-link-button:hover:not(:disabled) {
+  background: var(--energy-blue-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.button-icon {
+  font-size: 1.2rem;
+}
+
+.button-spinner {
+  margin: 0;
+}
+
+.email-link-form-container {
+  margin-top: var(--energy-space-lg);
+}
+
+.email-link-explanation {
+  margin-bottom: var(--energy-space-lg);
+  padding: var(--energy-space-md);
+  background: var(--energy-blue-50);
+  border-radius: var(--energy-radius-lg);
+  border-left: 4px solid var(--energy-blue);
+}
+
+.email-link-explanation .explanation-text {
+  margin: 0;
+  color: var(--energy-blue-dark);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.email-link-success {
+  margin-top: var(--energy-space-lg);
+  padding: var(--energy-space-lg);
+  background: var(--energy-green-50);
+  border-radius: var(--energy-radius-lg);
+  border: 1px solid var(--energy-green-200);
+  text-align: center;
+}
+
+.success-icon {
+  color: var(--energy-green);
+  font-size: 2rem;
+  margin-bottom: var(--energy-space-sm);
+}
+
+.success-message {
+  margin: 0 0 var(--energy-space-sm) 0;
+  color: var(--energy-green-dark);
+  font-weight: 500;
+}
+
+.success-submessage {
+  margin: 0;
+  color: var(--energy-gray-600);
+  font-size: 0.9rem;
+}
+
+// Responsive adjustments
+@media (max-width: 480px) {
+  .login-form {
+    padding: var(--energy-space-lg);
+    max-width: 100%;
+  }
+
+  .sign-in-options {
+    gap: var(--energy-space-sm);
+  }
+
+  .sign-in-button {
+    height: 44px;
+    font-size: 0.95rem;
+  }
+}

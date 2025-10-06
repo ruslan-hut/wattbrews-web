@@ -1,0 +1,21 @@
+<div class="language-switcher-container">
+  <button 
+    mat-icon-button 
+    (click)="toggleMenu()"
+    [attr.aria-label]="translationService.getReactive('language.switcher')"
+    class="language-switcher">
+    <span class="language-code">{{ currentLanguage().toUpperCase() }}</span>
+  </button>
+  
+  <div class="language-dropdown" [class.show]="isMenuOpen()">
+    <button 
+      *ngFor="let lang of availableLanguages"
+      (click)="switchLanguage(lang.code)"
+      [class.active]="lang.code === currentLanguage()"
+      type="button"
+      class="menu-item">
+      <mat-icon *ngIf="lang.code === currentLanguage()">check</mat-icon>
+      <span>{{ lang.name }}</span>
+    </button>
+  </div>
+</div>
