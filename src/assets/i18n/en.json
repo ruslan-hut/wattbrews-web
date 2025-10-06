@@ -75,7 +75,8 @@
       "viewDetails": "View station details",
       "startCharging": "Start charging at this station",
       "noAvailableConnectors": "No connectors available",
-      "stationOffline": "Station offline"
+      "stationOffline": "Station offline",
+      "accessRequired": "Access required"
     }
   },
   "session": {
