@@ -101,7 +101,18 @@
     "authRequiredMessage": "Necesitas iniciar sesión para ver tu perfil. Por favor, inicia sesión para continuar.",
     "signIn": "Iniciar Sesión",
     "loadingOverview": "Cargando puntos de carga...",
-    "noChargePoints": "No hay puntos de carga disponibles"
+    "noChargePoints": "No hay puntos de carga disponibles",
+    "timeFormat": {
+      "daysAgo": "hace {{count}} día",
+      "daysAgo_plural": "hace {{count}} días",
+      "hoursAgo": "hace {{count}} hora",
+      "hoursAgo_plural": "hace {{count}} horas",
+      "minutesAgo": "hace {{count}} minuto",
+      "minutesAgo_plural": "hace {{count}} minutos"
+    },
+    "tooltips": {
+      "startCharging": "Iniciar carga en esta estación"
+    }
   },
   "footer": {
     "privacy": "Política de Privacidad",
@@ -111,6 +122,30 @@
   "profile": {
     "settings": {
       "notifications": "profile.settings.notifications"
+    }
+  },
+  "transactionDetails": {
+    "title": "Detalles de la Transacción",
+    "subtitle": "Ver y gestionar los detalles de tu transacción",
+    "loadingTransaction": "Cargando transacción...",
+    "noTransactionFound": "No se encontró la transacción",
+    "close": "Cerrar",
+    "overview": {
+      "title": "Resumen de la Transacción",
+      "station": "Estación",
+      "connector": "Conector",
+      "duration": "Duración",
+      "energyConsumed": "Energía Consumida",
+      "cost": "Costo",
+      "averagePower": "Potencia Promedio"
+    },
+    "timing": {
+      "title": "Tiempo de la Transacción",
+      "started": "Inicio",
+      "ended": "Fin"
+    },
+    "chart": {
+      "title": "Gráfico de Energía Consumida"
     }
   },
   "pages": {
@@ -124,40 +159,6 @@
       "units": {
         "kWh": "kWh",
         "kW": "kW"
-      }
-    },
-    "dashboard": {
-      "title": "Bienvenido a WattBrews",
-      "subtitle": "Elige un cargador para iniciar tu sesión de carga",
-      "recentChargePoints": "Puntos de Carga Recientes",
-      "recentTransactions": "Transacciones Recientes",
-      "overview": "Resumen de Puntos de Carga",
-      "loadingChargePoints": "Cargando puntos de carga recientes...",
-      "noRecentChargePoints": "No se encontraron puntos de carga recientes",
-      "viewAllTransactions": "Ver Todas las Transacciones",
-      "viewAllChargePoints": "Ver Todos los Puntos de Carga",
-      "connectors": "Conectores",
-      "findStations": "Buscar Estaciones",
-      "noTransactions": "No tienes transacciones",
-      "loadingOverview": "Cargando puntos de carga...",
-      "noChargePoints": "No hay puntos de carga disponibles",
-      "total": "Total",
-      "online": "En línea",
-      "available": "Disponible",
-      "duration": "Duración",
-      "tooltips": {
-        "stationOffline": "Estación fuera de línea",
-        "stationDisabled": "Estación deshabilitada",
-        "noAvailableConnectors": "No hay conectores disponibles",
-        "startCharging": "Iniciar carga en esta estación"
-      },
-      "timeFormat": {
-        "daysAgo": "hace {{count}} día",
-        "daysAgo_plural": "hace {{count}} días",
-        "hoursAgo": "hace {{count}} hora",
-        "hoursAgo_plural": "hace {{count}} horas",
-        "minutesAgo": "hace {{count}} minuto",
-        "minutesAgo_plural": "hace {{count}} minutos"
       }
     },
     "stations": {
