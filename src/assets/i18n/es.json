@@ -27,6 +27,7 @@
   "stations": {
     "title": "Estaciones de carga",
     "subtitle": "Encuentra y conéctate a estaciones de carga disponibles",
+    "loadingStations": "Cargando estaciones...",
     "searchLabel": "Buscar estaciones",
     "searchPlaceholder": "Escribe para buscar...",
     "ofConnectorsAvailable": "de {{total}} conectores disponibles",
