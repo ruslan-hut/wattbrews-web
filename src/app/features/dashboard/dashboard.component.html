@@ -1,8 +1,16 @@
 <div class="dashboard-container">
-  <div class="dashboard-header">
-    <h1 class="dashboard-title">{{ translationService.getReactive('dashboard.title') }}</h1>
-    <p class="dashboard-subtitle">{{ translationService.getReactive('dashboard.subtitle') }}</p>
+  <!-- Translation Loading State -->
+  <div class="loading-container" *ngIf="translationsLoading()">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading translations...</p>
   </div>
+
+  <!-- Dashboard Content (only show when translations are loaded) -->
+  <div *ngIf="!translationsLoading()">
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">{{ translationService.getReactive('dashboard.title') }}</h1>
+      <p class="dashboard-subtitle">{{ translationService.getReactive('dashboard.subtitle') }}</p>
+    </div>
   
   <!-- Main Content: Charge Points and Recent Transactions Lists -->
   <div class="dashboard-main-content">
@@ -201,5 +209,6 @@
       </div>
     </mat-card-content>
   </mat-card>
+  </div>
 </div>
 

@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, signal, inject, OnInit, OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterModule, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ChargePointService } from '../../core/services/chargepoint.service';
 import { AuthService } from '../../core/services/auth.service';
 import { TransactionService } from '../../core/services/transaction.service';
@@ -763,7 +764,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
     }
   `]
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   protected readonly chargePointService = inject(ChargePointService);
   protected readonly authService = inject(AuthService);
   protected readonly transactionService = inject(TransactionService);
@@ -771,20 +772,46 @@ export class DashboardComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
   
+  // Translation loading state
+  protected readonly translationsLoading = signal(true);
+  
+  // Subscription management
+  private authSubscription?: Subscription;
+  
   protected readonly totalSessions = signal(24);
   protected readonly totalEnergy = signal(156.8);
   protected readonly totalCost = signal(89.50); // This will be calculated from actual transactions
   
   
   ngOnInit(): void {
+    // Initialize translations first
+    this.initializeTranslations();
+    
     // Wait for authentication before loading data
-    this.authService.user$.subscribe(user => {
+    this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {
         this.loadChargePoints();
         this.loadRecentChargePoints();
         this.loadTransactions();
       }
     });
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
   
   protected recentChargePoints(): ChargePoint[] {
