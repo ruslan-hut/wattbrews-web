@@ -271,6 +271,14 @@
         "duration": "Duración",
         "cost": "Costo",
         "energy": "Energía"
+      },
+      "timeFormat": {
+        "daysAgo": "hace {{count}} día",
+        "daysAgo_plural": "hace {{count}} días",
+        "hoursAgo": "hace {{count}} hora",
+        "hoursAgo_plural": "hace {{count}} horas",
+        "minutesAgo": "hace {{count}} minuto",
+        "minutesAgo_plural": "hace {{count}} minutos"
       }
     }
   },
