@@ -1,19 +1,26 @@
 <div class="sessions-history-container">
   <!-- Page Header -->
-  <div class="page-header">
+  <div class="page-header" *ngIf="!translationsLoading()">
     <h1 class="page-title">{{ translationService.getReactive('sessions.history.title') }}</h1>
     <p class="page-subtitle">{{ translationService.getReactive('sessions.history.subtitle') }}</p>
   </div>
 
+  <!-- Translation Loading State -->
+  <div class="auth-required-message" *ngIf="translationsLoading()">
+    <mat-spinner diameter="40"></mat-spinner>
+    <h3>Loading translations...</h3>
+    <p>Please wait while we load the interface...</p>
+  </div>
+
   <!-- Authentication Loading State -->
-  <div class="auth-required-message" *ngIf="authLoading()">
+  <div class="auth-required-message" *ngIf="!translationsLoading() && authLoading()">
     <mat-spinner diameter="40"></mat-spinner>
     <h3>{{ translationService.getReactive('sessions.history.auth.checking') }}</h3>
     <p>{{ translationService.getReactive('sessions.history.auth.checkingMessage') }}</p>
   </div>
 
   <!-- Authentication Required Message -->
-  <div class="auth-required-message" *ngIf="!authLoading() && !isAuthenticated()">
+  <div class="auth-required-message" *ngIf="!translationsLoading() && !authLoading() && !isAuthenticated()">
     <mat-icon class="auth-icon">lock</mat-icon>
     <h3>{{ translationService.getReactive('sessions.history.auth.required') }}</h3>
     <p>{{ translationService.getReactive('sessions.history.auth.requiredMessage') }}</p>
@@ -24,7 +31,7 @@
   </div>
 
   <!-- Statistics Row -->
-  <div class="stats-row" *ngIf="!authLoading() && isAuthenticated()">
+  <div class="stats-row" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
     <mat-card class="stat-card">
       <mat-card-content>
         <div style="display: flex; align-items: center; gap: 16px;">
@@ -63,7 +70,7 @@
   </div>
 
   <!-- Filters Section -->
-  <div class="filters-section" *ngIf="!authLoading() && isAuthenticated()">
+  <div class="filters-section" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
     <mat-card class="filters-card">
       <mat-card-content>
         <div class="filters-row">
@@ -108,7 +115,7 @@
   </div>
 
   <!-- Transactions Section -->
-  <div class="transactions-section" *ngIf="!authLoading() && isAuthenticated()">
+  <div class="transactions-section" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
     <mat-card class="transactions-card">
       <div class="card-header">
         <h2 class="card-title">{{ translationService.getReactive('sessions.history.table.title') }}</h2>

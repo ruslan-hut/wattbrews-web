@@ -57,6 +57,34 @@ export class SimpleTranslationService {
       });
     });
   }
+
+  /**
+   * Initialize translations asynchronously - call this after user authentication
+   */
+  async initializeTranslationsAsync(): Promise<void> {
+    const savedLanguage = this.getSavedLanguage();
+    const browserLanguage = this.getBrowserLanguage();
+    const languageToUse = savedLanguage || browserLanguage || 'es';
+    
+    try {
+      await this.loadTranslations(languageToUse);
+      this.currentLang = languageToUse;
+      this._currentLanguage.set(languageToUse);
+      this.languageSubject.next(languageToUse);
+    } catch (error) {
+      console.error('Failed to load initial translations:', error);
+      // Fallback to default language
+      try {
+        await this.loadTranslations('es');
+        this.currentLang = 'es';
+        this._currentLanguage.set('es');
+        this.languageSubject.next('es');
+      } catch (fallbackError) {
+        console.error('Failed to load fallback translations:', fallbackError);
+        throw fallbackError;
+      }
+    }
+  }
   
   
   /**

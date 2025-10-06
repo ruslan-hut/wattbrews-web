@@ -584,6 +584,7 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   // Authentication
   protected readonly isAuthenticated = this.authService.isAuthenticated;
   protected readonly authLoading = signal(true);
+  protected readonly translationsLoading = signal(true);
 
   // Available years and months
   protected readonly availableYears = signal<number[]>([]);
@@ -593,13 +594,17 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
     // Initialize available years and months
     this.initializeDateOptions();
     
+    // Initialize translations first, regardless of auth state
+    this.initializeTranslations();
+    
     // Subscribe to auth state changes with timeout to handle page reload
-    this.authSubscription = this.authService.user$.subscribe(user => {
+    this.authSubscription = this.authService.user$.subscribe(async user => {
       if (user) {
         this.authLoading.set(false);
         if (this.authCheckTimeout) {
           clearTimeout(this.authCheckTimeout);
         }
+        
         // Set current year and month as default filter
         const currentDate = new Date();
         this.selectedYear.set(currentDate.getFullYear());
@@ -612,6 +617,17 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
         }, 1000); // 1 second delay
       }
     });
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
   }
   
   ngOnDestroy(): void {
