@@ -61,11 +61,11 @@ export class SortByConnectorIdPipe implements PipeTransform {
       <!-- Authentication Required Message -->
       <div class="auth-required-message" *ngIf="!isAuthenticated()">
         <mat-icon class="auth-icon">lock</mat-icon>
-        <h3>{{ translationService.getReactive('pages.profile.authRequired') }}</h3>
-        <p>{{ translationService.getReactive('pages.profile.authRequiredMessage') }}</p>
+        <h3>{{ translationService.getReactive('profile.authRequired') }}</h3>
+        <p>{{ translationService.getReactive('profile.authRequiredMessage') }}</p>
         <button mat-raised-button color="primary" (click)="navigateToLogin()">
           <mat-icon>login</mat-icon>
-          {{ translationService.getReactive('pages.common.buttons.signIn') }}
+          {{ translationService.getReactive('common.buttons.signIn') }}
         </button>
       </div>
 
@@ -94,7 +94,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
         <app-error-message [message]="error()!"></app-error-message>
         <button mat-raised-button color="primary" (click)="loadStations()">
           <mat-icon>refresh</mat-icon>
-          {{ translationService.getReactive('pages.common.buttons.tryAgain') }}
+          {{ translationService.getReactive('common.buttons.tryAgain') }}
         </button>
       </div>
 
@@ -136,7 +136,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
                   [class]="getConnectorStatusClass(connector.status)"
                   class="connector-chip">
                   <mat-icon class="chip-icon">{{ getConnectorTypeIcon(connector.type) }}</mat-icon>
-                  {{ (connector.connector_id_name || connector.connector_id) }} - {{ connector.type }} - {{ connector.power }}{{ translationService.getReactive('pages.common.units.kW') }}
+                  {{ (connector.connector_id_name || connector.connector_id) }} - {{ connector.type }} - {{ connector.power }}{{ translationService.getReactive('common.units.kW') }}
                 </mat-chip>
               </div>
             </div>
@@ -172,7 +172,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
         <p *ngIf="searchQuery">{{ translationService.getReactive('stations.tryAdjustingSearch') }}</p>
         <p *ngIf="!searchQuery">{{ translationService.getReactive('stations.noStationsAvailable') }}</p>
         <button mat-raised-button color="primary" (click)="clearSearch()" *ngIf="searchQuery">
-          {{ translationService.getReactive('pages.common.buttons.clearSearch') }}
+          {{ translationService.getReactive('common.buttons.clearSearch') }}
         </button>
       </div>
     </div>

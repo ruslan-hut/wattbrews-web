@@ -8,9 +8,9 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
   imports: [CommonModule],
   template: `
     <div class="active-sessions-container">
-      <h1 class="page-title">{{ translationService.getReactive('pages.sessions.active.title') }}</h1>
-      <p class="page-subtitle">{{ translationService.getReactive('pages.sessions.active.subtitle') }}</p>
-      <p>{{ translationService.getReactive('pages.sessions.active.comingSoon') }}</p>
+      <h1 class="page-title">{{ translationService.getReactive('sessions.active.title') }}</h1>
+      <p class="page-subtitle">{{ translationService.getReactive('sessions.active.subtitle') }}</p>
+      <p>{{ translationService.getReactive('sessions.active.comingSoon') }}</p>
     </div>
   `,
   styles: [`

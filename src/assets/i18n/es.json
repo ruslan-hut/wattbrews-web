@@ -154,6 +154,46 @@
       "title": "Gráfico de Energía Consumida"
     }
   },
+  "stationDetail": {
+    "title": "Detalles de la Estación",
+    "subtitle": "Ver y gestionar los detalles de la estación",
+    "loadingStation": "Cargando estación...",
+    "noStationFound": "No se encontró la estación",
+    "statusInformation": "Información de Estado",
+    "close": "Cerrar",
+    "location": "Ubicación",
+    "connectors": "Conectores",
+    "labels": {
+      "address": "Dirección",
+      "vendor": "Proveedor",
+      "model": "Modelo",
+      "serialNumber": "Número de Serie",
+      "firmwareVersion": "Versión de Firmware",
+      "lastSeen": "Último Visible",
+      "currentStatus": "Estado Actual",
+      "errorCode": "Código de Error",
+      "connection": "Conexión",
+      "availability": "Disponibilidad",
+      "info": "Información",
+      "statusTime": "Tiempo de Estado",
+      "eventTime": "Tiempo de Evento",
+      "coordinates": "Coordenadas",
+      "connector": "Conector",
+      "type": "Tipo",
+      "power": "Potencia",
+      "vendorWithColon": "Proveedor:",
+      "errorCodeWithColon": "Código de Error:",
+      "statusTimeWithColon": "Tiempo de Estado:"
+    },
+    "actions": {
+      "startCharge": "Iniciar Carga",
+      "startChargeInfo": "Iniciar carga en esta estación"
+    },
+    "status": {
+      "online": "En línea",
+      "enabled": "Habilitado"
+    }
+  },
   "chargeInitiation": {
     "title": "Iniciar Carga",
     "loadingStationDetails": "Cargando detalles de la estación...",

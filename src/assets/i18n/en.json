@@ -151,6 +151,46 @@
       "title": "Energy Consumption Chart"
     }
   },
+  "stationDetail": {
+    "title": "Station Details",
+    "subtitle": "View and manage the details of the station",
+    "loadingStation": "Loading station...",
+    "noStationFound": "No station found",
+    "statusInformation": "Status Information",
+    "close": "Close",
+    "location": "Location",
+    "connectors": "Connectors",
+    "labels": {
+      "address": "Address",
+      "vendor": "Vendor",
+      "model": "Model",
+      "serialNumber": "Serial Number",
+      "firmwareVersion": "Firmware Version",
+      "lastSeen": "Last Seen",
+      "currentStatus": "Current Status",
+      "errorCode": "Error Code",
+      "connection": "Connection",
+      "availability": "Availability",
+      "info": "Info",
+      "statusTime": "Status Time",
+      "eventTime": "Event Time",
+      "coordinates": "Coordinates",
+      "connector": "Connector",
+      "type": "Type",
+      "power": "Power",
+      "vendorWithColon": "Vendor:",
+      "errorCodeWithColon": "Error Code:",
+      "statusTimeWithColon": "Status Time:"
+    },
+    "actions": {
+      "startCharge": "Start Charge",
+      "startChargeInfo": "Start charging at this station"
+    },
+    "status": {
+      "online": "Online",
+      "enabled": "Enabled"
+    }
+  },
   "chargeInitiation": {
     "title": "Start Charge",
     "loadingStationDetails": "Loading station details...",
