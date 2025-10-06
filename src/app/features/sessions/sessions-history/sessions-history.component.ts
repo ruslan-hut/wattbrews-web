@@ -787,12 +787,15 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
     const diffDays = Math.floor(diffHours / 24);
     
     if (diffDays > 0) {
-      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+      const key = diffDays === 1 ? 'sessions.history.timeFormat.daysAgo' : 'sessions.history.timeFormat.daysAgo_plural';
+      return this.translationService.get(key, { count: diffDays });
     } else if (diffHours > 0) {
-      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+      const key = diffHours === 1 ? 'sessions.history.timeFormat.hoursAgo' : 'sessions.history.timeFormat.hoursAgo_plural';
+      return this.translationService.get(key, { count: diffHours });
     } else {
       const diffMinutes = Math.floor(diffMs / (1000 * 60));
-      return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
+      const key = diffMinutes === 1 ? 'sessions.history.timeFormat.minutesAgo' : 'sessions.history.timeFormat.minutesAgo_plural';
+      return this.translationService.get(key, { count: diffMinutes });
     }
   }
   
