@@ -181,7 +181,7 @@
   "transactionDetails": {
     "title": "Detalles de la Transacción",
     "subtitle": "Ver y gestionar los detalles de tu transacción",
-    "loadingTransaction": "Cargando transacción...",
+    "loading": "Cargando transacción...",
     "noTransactionFound": "No se encontró la transacción",
     "close": "Cerrar",
     "overview": {
