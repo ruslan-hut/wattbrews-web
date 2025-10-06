@@ -218,6 +218,62 @@
     "selectConnectorToStart": "Por favor selecciona un conector para iniciar la carga",
     "selectPaymentMethodToStart": "Por favor selecciona un método de pago para iniciar la carga"
   },
+  "sessions":{
+    "history": {
+      "title": "Historial de Sesiones",
+      "subtitle": "Ver y gestionar el historial de tus sesiones de carga",
+      "loadingTransactions": "Cargando sesiones...",
+      "noTransactions": "No hay sesiones",
+      "close": "Cerrar",
+      "noData": {
+          "noSessions": "No se encontraron sesiones en este mes",
+          "searchCriteria": "No se encontraron sesiones que coincidan con los criterios de búsqueda"
+      },
+      "auth":{
+        "checking": "Verificando sesión...",
+        "checkingMessage": "Verificando sesión..."
+      },
+      "stats": {
+        "totalEnergy": "Total de Energía",
+        "totalCost": "Total de Costo",
+        "completedSessions": "Sesiones Completadas"
+      },
+      "filters": {
+        "searchLabel": "Buscar Sesiones",
+        "searchPlaceholder": "Buscar sesiones por ID, conector, usuario, estación, etc.",
+        "yearLabel": "Año",
+        "monthLabel": "Mes"
+      },
+      "table": {
+        "title": "Historial de Sesiones",
+        "connector": "Conector",
+        "free": "Gratis",
+        "viewDetailsTooltip": "Ver detalles de la sesión",
+        "columns": {
+          "id": "ID",
+          "status": "Estado",
+          "station": "Estación",
+          "energy": "Energía",
+          "duration": "Duración",
+          "payment": "Pago",
+          "startTime": "Inicio",
+          "endTime": "Fin",
+          "actions": "Acciones"
+        },
+        "status": {
+          "completed": "Completado",
+          "inProgress": "En Progreso"
+        }
+      },
+      "mobile": {
+        "station": "Estación",
+        "connector": "Conector",
+        "duration": "Duración",
+        "cost": "Costo",
+        "energy": "Energía"
+      }
+    }
+  },
   "common": {
     "buttons": {
       "save": "Guardar",
