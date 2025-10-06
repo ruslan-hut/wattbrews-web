@@ -1,8 +1,16 @@
 <div class="stations-list-container">
-  <div class="page-header">
-    <h1 class="page-title">{{ translationService.getReactive('stations.title') }}</h1>
-    <p class="page-subtitle">{{ translationService.getReactive('stations.subtitle') }}</p>
+  <!-- Translation Loading State -->
+  <div class="loading-container" *ngIf="translationsLoading()">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading translations...</p>
   </div>
+
+  <!-- Content (only show when translations are loaded) -->
+  <div *ngIf="!translationsLoading()">
+    <div class="page-header">
+      <h1 class="page-title">{{ translationService.getReactive('stations.title') }}</h1>
+      <p class="page-subtitle">{{ translationService.getReactive('stations.subtitle') }}</p>
+    </div>
 
   <!-- Authentication Required Message -->
   <div class="auth-required-message" *ngIf="!isAuthenticated()">
@@ -120,6 +128,7 @@
     <button mat-raised-button color="primary" (click)="clearSearch()" *ngIf="searchQuery">
       {{ translationService.getReactive('common.buttons.clearSearch') }}
     </button>
+  </div>
   </div>
 </div>
 

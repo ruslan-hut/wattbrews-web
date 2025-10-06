@@ -1,11 +1,19 @@
 <div class="transaction-preview-container">
-  <!-- Header -->
-  <div class="preview-header">
-    <h2 mat-dialog-title>{{ translationService.getReactive('transactionDetails.title') }}</h2>
-    <button mat-icon-button (click)="closeDialog($event)" class="close-button">
-      <mat-icon>close</mat-icon>
-    </button>
+  <!-- Translation Loading State -->
+  <div class="loading-container" *ngIf="translationsLoading()">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading translations...</p>
   </div>
+
+  <!-- Content (only show when translations are loaded) -->
+  <div *ngIf="!translationsLoading()">
+    <!-- Header -->
+    <div class="preview-header">
+      <h2 mat-dialog-title>{{ translationService.getReactive('transactionDetails.title') }}</h2>
+      <button mat-icon-button (click)="closeDialog($event)" class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
 
   <!-- Loading State -->
   <div class="loading-container" *ngIf="loading()">
@@ -119,5 +127,6 @@
     <mat-dialog-actions>
       <button mat-button (click)="closeDialog($event)">{{ translationService.getReactive('transactionDetails.close') }}</button>
     </mat-dialog-actions>
+  </div>
   </div>
 </div>
