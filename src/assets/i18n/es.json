@@ -126,6 +126,54 @@
     "support": "Soporte"
   },
   "profile": {
+    "title": "Perfil",
+    "checkingAuth": "Verificando autenticación...",
+    "authRequired": "Autenticación Requerida",
+    "authRequiredMessage": "Necesitas iniciar sesión para ver tu perfil. Por favor, inicia sesión para continuar.",
+    "loadingUserInfo": "Cargando información del usuario...",
+    "basicInformation": "Información Básica",
+    "paymentPlansTab": "Planes de Pago",
+    "userTagsTab": "Etiquetas de Usuario",
+    "paymentMethodsTab": "Métodos de Pago",
+    "labels": {
+      "username": "Nombre de Usuario",
+      "name": "Nombre",
+      "email": "Correo",
+      "role": "Rol",
+      "accessLevel": "Nivel de Acceso",
+      "registrationDate": "Fecha de Registro",
+      "lastSeen": "Último Acceso",
+      "note": "Nota",
+      "registered": "Registrado",
+      "country": "País",
+      "expires": "Expira",
+      "merchantId": "ID del Comerciante"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "user": "Usuario"
+    },
+    "paymentPlans": {
+      "title": "Planes de Pago",
+      "default": "Predeterminado",
+      "active": "Activo",
+      "start": "Inicio",
+      "end": "Fin",
+      "noPlans": "No hay planes de pago disponibles"
+    },
+    "userTags": {
+      "title": "Etiquetas de Usuario",
+      "enabled": "Habilitado",
+      "local": "Local",
+      "noNote": "Sin nota",
+      "noTags": "No hay etiquetas de usuario disponibles"
+    },
+    "paymentMethods": {
+      "title": "Métodos de Pago",
+      "default": "Predeterminado",
+      "failures": "Fallos",
+      "noMethods": "No hay métodos de pago disponibles"
+    },
     "settings": {
       "notifications": "profile.settings.notifications"
     }
@@ -231,7 +279,10 @@
       },
       "auth":{
         "checking": "Verificando sesión...",
-        "checkingMessage": "Verificando sesión..."
+        "checkingMessage": "Verificando sesión...",
+        "required": "Autenticación Requerida",
+        "requiredMessage": "Necesitas iniciar sesión para ver tu historial de sesiones. Por favor, inicia sesión para continuar.",
+        "signIn": "Iniciar Sesión"
       },
       "stats": {
         "totalEnergy": "Total de Energía",

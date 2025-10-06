@@ -123,6 +123,54 @@
     "support": "Support"
   },
   "profile": {
+    "title": "Profile",
+    "checkingAuth": "Checking authentication...",
+    "authRequired": "Authentication Required",
+    "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
+    "loadingUserInfo": "Loading user information...",
+    "basicInformation": "Basic Information",
+    "paymentPlansTab": "Payment Plans",
+    "userTagsTab": "User Tags",
+    "paymentMethodsTab": "Payment Methods",
+    "labels": {
+      "username": "Username",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "accessLevel": "Access Level",
+      "registrationDate": "Registration Date",
+      "lastSeen": "Last Seen",
+      "note": "Note",
+      "registered": "Registered",
+      "country": "Country",
+      "expires": "Expires",
+      "merchantId": "Merchant ID"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "user": "User"
+    },
+    "paymentPlans": {
+      "title": "Payment Plans",
+      "default": "Default",
+      "active": "Active",
+      "start": "Start",
+      "end": "End",
+      "noPlans": "No payment plans available"
+    },
+    "userTags": {
+      "title": "User Tags",
+      "enabled": "Enabled",
+      "local": "Local",
+      "noNote": "No note",
+      "noTags": "No user tags available"
+    },
+    "paymentMethods": {
+      "title": "Payment Methods",
+      "default": "Default",
+      "failures": "Failures",
+      "noMethods": "No payment methods available"
+    },
     "settings": {
       "notifications": "profile.settings.notifications"
     }
@@ -228,7 +276,10 @@
       },
       "auth":{
         "checking": "Checking session...",
-        "checkingMessage": "Checking session..."
+        "checkingMessage": "Checking session...",
+        "required": "Authentication Required",
+        "requiredMessage": "You need to be logged in to view your session history. Please sign in to continue.",
+        "signIn": "Sign In"
       },
       "stats": {
         "totalEnergy": "Total Energy",

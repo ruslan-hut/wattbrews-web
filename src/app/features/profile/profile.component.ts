@@ -29,42 +29,50 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
   ],
   template: `
     <div class="profile-container">
-      <h1 class="profile-title">{{ translationService.getReactive('profile.title') }}</h1>
-      
-      <!-- Authentication Loading State -->
-      <div class="loading-container" *ngIf="isAuthLoading()">
+      <!-- Translation Loading State -->
+      <div class="loading-container" *ngIf="translationsLoading()">
         <mat-spinner diameter="40"></mat-spinner>
-        <p>{{ translationService.getReactive('profile.checkingAuth') }}</p>
+        <p>Loading translations...</p>
       </div>
-      
-      <!-- Authentication Required Message -->
-      <div class="auth-required-message" *ngIf="!isAuthLoading() && !isAuthenticated()">
-        <mat-icon class="auth-icon">lock</mat-icon>
-        <h3>{{ translationService.getReactive('profile.authRequired') }}</h3>
-        <p>{{ translationService.getReactive('profile.authRequiredMessage') }}</p>
-        <button mat-raised-button color="primary" (click)="navigateToLogin()">
-          <mat-icon>login</mat-icon>
-          {{ translationService.getReactive('common.buttons.signIn') }}
-        </button>
-      </div>
-      
-      <!-- User Info Loading State -->
-      <div class="loading-container" *ngIf="isAuthenticated() && userInfoService.loading()">
-        <mat-spinner diameter="40"></mat-spinner>
-        <p>{{ translationService.getReactive('profile.loadingUserInfo') }}</p>
-      </div>
-      
-      <!-- Error State -->
-      <div class="error-container" *ngIf="!isAuthLoading() && isAuthenticated() && userInfoService.error()">
-        <mat-icon class="error-icon">error</mat-icon>
-        <p>{{ userInfoService.error() }}</p>
-        <button mat-button color="primary" (click)="refreshUserInfo()">
-          {{ translationService.getReactive('common.buttons.tryAgain') }}
-        </button>
-      </div>
-      
-      <!-- Profile Content -->
-      <div class="profile-content" *ngIf="!isAuthLoading() && isAuthenticated() && !userInfoService.loading() && !userInfoService.error() && userInfoService.userInfo()">
+
+      <!-- Profile Content (only show when translations are loaded) -->
+      <div *ngIf="!translationsLoading()">
+        <h1 class="profile-title">{{ translationService.getReactive('profile.title') }}</h1>
+        
+        <!-- Authentication Loading State -->
+        <div class="loading-container" *ngIf="isAuthLoading()">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>{{ translationService.getReactive('profile.checkingAuth') }}</p>
+        </div>
+        
+        <!-- Authentication Required Message -->
+        <div class="auth-required-message" *ngIf="!isAuthLoading() && !isAuthenticated()">
+          <mat-icon class="auth-icon">lock</mat-icon>
+          <h3>{{ translationService.getReactive('profile.authRequired') }}</h3>
+          <p>{{ translationService.getReactive('profile.authRequiredMessage') }}</p>
+          <button mat-raised-button color="primary" (click)="navigateToLogin()">
+            <mat-icon>login</mat-icon>
+            {{ translationService.getReactive('common.buttons.signIn') }}
+          </button>
+        </div>
+        
+        <!-- User Info Loading State -->
+        <div class="loading-container" *ngIf="isAuthenticated() && userInfoService.loading()">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>{{ translationService.getReactive('profile.loadingUserInfo') }}</p>
+        </div>
+        
+        <!-- Error State -->
+        <div class="error-container" *ngIf="!isAuthLoading() && isAuthenticated() && userInfoService.error()">
+          <mat-icon class="error-icon">error</mat-icon>
+          <p>{{ userInfoService.error() }}</p>
+          <button mat-button color="primary" (click)="refreshUserInfo()">
+            {{ translationService.getReactive('common.buttons.tryAgain') }}
+          </button>
+        </div>
+        
+        <!-- Profile Content -->
+        <div class="profile-content" *ngIf="!isAuthLoading() && isAuthenticated() && !userInfoService.loading() && !userInfoService.error() && userInfoService.userInfo()">
         <!-- User Basic Info -->
         <mat-card class="profile-card">
           <mat-card-header>
@@ -262,6 +270,7 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
             </div>
           </mat-tab>
         </mat-tab-group>
+        </div>
       </div>
     </div>
   `,
@@ -623,11 +632,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   // Authentication state
   protected readonly isAuthenticated = this.authService.isAuthenticated;
   protected readonly isAuthLoading = this.authService.isLoading;
+  protected readonly translationsLoading = signal(true);
   
   // Subscription management
   private authSubscription?: Subscription;
 
   ngOnInit(): void {
+    // Initialize translations first
+    this.initializeTranslations();
+    
     // Subscribe to auth state changes to handle race conditions
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user && this.isAuthenticated()) {
@@ -640,6 +653,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
     // Also check immediately in case auth is already resolved
     if (this.isAuthenticated()) {
       this.loadUserInfo();
+    }
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
     }
   }
 
