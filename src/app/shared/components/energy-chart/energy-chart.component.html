@@ -1,0 +1,137 @@
+<div class="chart-container">
+  <!-- No data message -->
+  <div class="no-data-message" *ngIf="!meterValues || meterValues.length === 0">
+    <mat-icon>show_chart</mat-icon>
+    <p>No energy consumption data available</p>
+  </div>
+  
+  <!-- SVG Chart -->
+  <svg *ngIf="meterValues && meterValues.length > 0"
+       class="chart-svg"
+       [attr.width]="chartWidth"
+       [attr.height]="chartHeight"
+       (mousemove)="onMouseMove($event)"
+       (mouseleave)="onMouseLeave()">
+    
+    <!-- Grid lines -->
+    <g class="grid">
+      <!-- Vertical grid lines -->
+      <line *ngFor="let x of gridLines().vertical; let i = index"
+            [attr.x1]="x"
+            [attr.y1]="padding.top"
+            [attr.x2]="x"
+            [attr.y2]="chartHeight - padding.bottom"
+            class="grid-line" />
+      
+      <!-- Horizontal grid lines -->
+      <line *ngFor="let y of gridLines().horizontal; let i = index"
+            [attr.x1]="padding.left"
+            [attr.y1]="y"
+            [attr.x2]="chartWidth - padding.right"
+            [attr.y2]="y"
+            class="grid-line" />
+    </g>
+    
+    <!-- Axes -->
+    <g class="axes">
+      <!-- X axis -->
+      <line [attr.x1]="padding.left"
+            [attr.y1]="chartHeight - padding.bottom"
+            [attr.x2]="chartWidth - padding.right"
+            [attr.y2]="chartHeight - padding.bottom"
+            class="axis" />
+      
+      <!-- Y axis -->
+      <line [attr.x1]="padding.left"
+            [attr.y1]="padding.top"
+            [attr.x2]="padding.left"
+            [attr.y2]="chartHeight - padding.bottom"
+            class="axis" />
+    </g>
+    
+    <!-- Y-axis labels -->
+    <g class="y-axis-labels">
+      <text *ngFor="let label of yAxisLabels(); let i = index"
+            [attr.x]="padding.left - 10"
+            [attr.y]="label.y + 4"
+            class="y-axis-label">
+        {{ label.value }}
+      </text>
+    </g>
+    
+    <!-- X-axis labels -->
+    <g class="x-axis-labels">
+      <text *ngFor="let label of xAxisLabels(); let i = index"
+            [attr.x]="label.x"
+            [attr.y]="chartHeight - padding.bottom + 20"
+            class="x-axis-label">
+        {{ label.value }}
+      </text>
+    </g>
+    
+    <!-- Energy data line -->
+    <path [attr.d]="energyDataPath()"
+          class="energy-line"
+          fill="none" />
+    
+    <!-- Power data line -->
+    <path [attr.d]="powerDataPath()"
+          class="power-line"
+          fill="none" />
+    
+    <!-- Energy data points -->
+    <circle *ngFor="let point of energyDataPoints(); let i = index"
+            [attr.cx]="point.x"
+            [attr.cy]="point.y"
+            [attr.r]="point.hovered ? 6 : 4"
+            class="energy-point"
+            [class.hovered]="point.hovered" />
+    
+    <!-- Power data points -->
+    <circle *ngFor="let point of powerDataPoints(); let i = index"
+            [attr.cx]="point.x"
+            [attr.cy]="point.y"
+            [attr.r]="point.hovered ? 6 : 4"
+            class="power-point"
+            [class.hovered]="point.hovered" />
+    
+    <!-- Hover line -->
+    <line *ngIf="hoverLine().x > 0"
+          [attr.x1]="hoverLine().x"
+          [attr.y1]="padding.top"
+          [attr.x2]="hoverLine().x"
+          [attr.y2]="chartHeight - padding.bottom"
+          class="hover-line" />
+    
+    <!-- Hover point -->
+    <circle *ngIf="hoverPoint().x > 0"
+            [attr.cx]="hoverPoint().x"
+            [attr.cy]="hoverPoint().y"
+            r="6"
+            class="hover-point" />
+  </svg>
+  
+  <!-- Legend -->
+  <div class="chart-legend" *ngIf="meterValues && meterValues.length > 0">
+    <div class="legend-item">
+      <div class="legend-color energy"></div>
+      <span class="legend-text">Consumed Energy (Wh)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color power"></div>
+      <span class="legend-text">Power Level (W)</span>
+    </div>
+  </div>
+  
+  <!-- Tooltip -->
+  <div class="chart-tooltip" 
+       [style.left.px]="tooltipX()" 
+       [style.top.px]="tooltipY()"
+       [style.display]="showTooltip() ? 'block' : 'none'">
+    <div class="tooltip-content">
+      <div class="tooltip-time">{{ tooltipTime() }}</div>
+      <div class="tooltip-value">{{ tooltipValue() }} Wh</div>
+      <div class="tooltip-power" *ngIf="tooltipPower() > 0">{{ tooltipPower() }} W</div>
+    </div>
+  </div>
+</div>

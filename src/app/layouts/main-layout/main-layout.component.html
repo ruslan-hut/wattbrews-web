@@ -1,0 +1,87 @@
+<!-- Translation Loading State -->
+<div class="loading-container" *ngIf="translationsLoading()">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Loading translations...</p>
+</div>
+
+<!-- Main Layout (only show when translations are loaded) -->
+<mat-sidenav-container class="sidenav-container" *ngIf="!translationsLoading()">
+  <!-- Sidebar -->
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="'navigation'"
+      [mode]="'over'"
+      [opened]="sidenavOpen()">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" (click)="closeSidenav()">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>{{ translationService.getReactive('nav.dashboard') }}</span>
+      </a>
+      <a mat-list-item routerLink="/stations" (click)="closeSidenav()">
+        <mat-icon matListItemIcon>ev_station</mat-icon>
+        <span matListItemTitle>{{ translationService.getReactive('nav.stations') }}</span>
+      </a>
+      <a mat-list-item routerLink="/sessions/active" (click)="closeSidenav()">
+        <mat-icon matListItemIcon>charging_station</mat-icon>
+        <span matListItemTitle>{{ translationService.getReactive('session.active') }}</span>
+        <mat-icon matListItemMeta *ngIf="hasActiveSessions()" matBadge="1" matBadgeColor="warn">notifications</mat-icon>
+      </a>
+      <a mat-list-item routerLink="/sessions/history" (click)="closeSidenav()">
+        <mat-icon matListItemIcon>history</mat-icon>
+        <span matListItemTitle>{{ translationService.getReactive('session.history') }}</span>
+      </a>
+      <a mat-list-item routerLink="/profile" (click)="closeSidenav()">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>{{ translationService.getReactive('nav.profile') }}</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  
+  <!-- Main content -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="toggleSidenav()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>{{ translationService.getReactive('app.title') }}</span>
+      <span class="spacer"></span>
+      
+      <!-- Language Switcher -->
+      <app-language-switcher></app-language-switcher>
+      
+      <!-- Authenticated user menu -->
+      <div class="user-info" *ngIf="userName()">
+        <span class="user-name">{{ userName() }}</span>
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+      </div>
+      
+      <!-- Login button for unauthenticated users -->
+      <button mat-button color="accent" (click)="navigateToLogin()" *ngIf="!userName()">
+        <mat-icon>login</mat-icon>
+        {{ translationService.getReactive('nav.auth') }}
+      </button>
+      
+      <!-- User menu (only visible for authenticated users) -->
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon>
+          <span>{{ translationService.getReactive('nav.profile') }}</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>{{ translationService.getReactive('auth.signout') }}</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+    
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

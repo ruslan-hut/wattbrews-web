@@ -1,0 +1,105 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: inherit;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 1;
+}
+
+button[mat-button] {
+  color: white !important;
+  background-color: var(--energy-cyan, #00bcd4) !important;
+  border: 1px solid var(--energy-cyan-dark, #0097a7) !important;
+  border-radius: var(--energy-radius-lg, 12px);
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: var(--energy-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  
+  &:hover {
+    background-color: var(--energy-cyan-dark, #0097a7) !important;
+    border-color: var(--energy-cyan-dark, #0097a7) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--energy-shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--energy-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  }
+  
+  mat-icon {
+    margin-right: 8px;
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    color: white !important;
+  }
+}
+
+.main-content {
+  padding: 20px;
+  min-height: calc(100vh - 64px);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.loading-container p {
+  margin: 0;
+  color: #5a6c7d;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px;
+  }
+}
