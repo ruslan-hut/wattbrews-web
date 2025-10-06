@@ -206,7 +206,7 @@
   "stationDetail": {
     "title": "Detalles de la Estación",
     "subtitle": "Ver y gestionar los detalles de la estación",
-    "loadingStation": "Cargando estación...",
+    "loading": "Cargando estación...",
     "noStationFound": "No se encontró la estación",
     "statusInformation": "Información de Estado",
     "close": "Cerrar",
@@ -240,6 +240,7 @@
     },
     "status": {
       "online": "En línea",
+      "offline": "Offline",
       "enabled": "Habilitado"
     }
   },
