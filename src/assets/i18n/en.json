@@ -98,7 +98,18 @@
     "authRequiredMessage": "You need to be logged in to view your profile. Please sign in to continue.",
     "signIn": "Sign In",
     "loadingOverview": "Loading charge points...",
-    "noChargePoints": "No charge points available"
+    "noChargePoints": "No charge points available",
+    "timeFormat": {
+      "daysAgo": "{{count}} day ago",
+      "daysAgo_plural": "{{count}} days ago",
+      "hoursAgo": "{{count}} hour ago",
+      "hoursAgo_plural": "{{count}} hours ago",
+      "minutesAgo": "{{count}} minute ago",
+      "minutesAgo_plural": "{{count}} minutes ago"
+    },
+    "tooltips": {
+      "startCharging": "Start charging at this station"
+    }
   },
   "footer": {
     "privacy": "Privacy Policy",
@@ -108,6 +119,30 @@
   "profile": {
     "settings": {
       "notifications": "profile.settings.notifications"
+    }
+  },
+  "transactionDetails": {
+    "title": "Transaction Details",
+    "subtitle": "View and manage the details of your transaction",
+    "loadingTransaction": "Loading transaction...",
+    "noTransactionFound": "No transaction found",
+    "close": "Close",
+    "overview": {
+      "title": "Transaction Overview",
+      "station": "Station",
+      "connector": "Connector",
+      "duration": "Duration",
+      "energyConsumed": "Energy Consumed",
+      "cost": "Cost",
+      "averagePower": "Average Power"
+    },
+    "timing": {
+      "title": "Transaction Timing",
+      "started": "Started",
+      "ended": "Ended"
+    },
+    "chart": {
+      "title": "Energy Consumption Chart"
     }
   },
   "pages": {
@@ -121,40 +156,6 @@
       "units": {
         "kWh": "kWh",
         "kW": "kW"
-      }
-    },
-    "dashboard": {
-      "title": "Welcome to WattBrews",
-      "subtitle": "Choose a charger to start your charging session",
-      "recentChargePoints": "Recent Charge Points",
-      "recentTransactions": "Recent Transactions",
-      "overview": "Charge Points Overview",
-      "loadingChargePoints": "Loading recent charge points...",
-      "noRecentChargePoints": "No recent charge points found",
-      "viewAllTransactions": "View All Transactions",
-      "viewAllChargePoints": "View All Charge Points",
-      "connectors": "Connectors",
-      "findStations": "Find Stations",
-      "noTransactions": "You have no transactions",
-      "loadingOverview": "Loading charge points...",
-      "noChargePoints": "No charge points available",
-      "total": "Total",
-      "online": "Online",
-      "available": "Available",
-      "duration": "Duration",
-      "tooltips": {
-        "stationOffline": "Station is offline",
-        "stationDisabled": "Station is disabled",
-        "noAvailableConnectors": "No available connectors",
-        "startCharging": "Start charging at this station"
-      },
-      "timeFormat": {
-        "daysAgo": "{{count}} day ago",
-        "daysAgo_plural": "{{count}} days ago",
-        "hoursAgo": "{{count}} hour ago",
-        "hoursAgo_plural": "{{count}} hours ago",
-        "minutesAgo": "{{count}} minute ago",
-        "minutesAgo_plural": "{{count}} minutes ago"
       }
     },
     "stations": {
