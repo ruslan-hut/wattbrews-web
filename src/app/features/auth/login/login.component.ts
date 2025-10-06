@@ -34,16 +34,16 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
         <mat-card-header>
           <mat-card-title class="login-title">
             <mat-icon class="login-icon">ev_station</mat-icon>
-            <span>{{ translationService.getReactive('pages.auth.login.title') }}</span>
+            <span>{{ translationService.getReactive('auth.login.title') }}</span>
           </mat-card-title>
-          <mat-card-subtitle>{{ translationService.getReactive('pages.auth.login.subtitle') }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ translationService.getReactive('auth.login.subtitle') }}</mat-card-subtitle>
         </mat-card-header>
         
         <mat-card-content>
           <!-- Explanation Text -->
           <div class="login-explanation">
             <p class="explanation-text">
-              {{ translationService.getReactive('pages.auth.login.explanation') }}
+              {{ translationService.getReactive('auth.login.explanation') }}
             </p>
           </div>
 
@@ -51,13 +51,13 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
           <div class="sign-in-options">
             <button mat-raised-button type="button" class="sign-in-button google-button" (click)="signInWithGoogle()" [disabled]="isLoading()">
               <mat-icon class="button-icon">login</mat-icon>
-              <span *ngIf="!isLoading()">{{ translationService.getReactive('pages.auth.login.continueWithGoogle') }}</span>
+              <span *ngIf="!isLoading()">{{ translationService.getReactive('auth.login.continueWithGoogle') }}</span>
               <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
             </button>
 
             <button mat-raised-button type="button" class="sign-in-button email-link-button" (click)="toggleEmailLinkForm()" [disabled]="isLoading()">
               <mat-icon class="button-icon">link</mat-icon>
-              <span *ngIf="!isLoading()">{{ translationService.getReactive('pages.auth.login.signInWithEmailLink') }}</span>
+              <span *ngIf="!isLoading()">{{ translationService.getReactive('auth.login.signInWithEmailLink') }}</span>
               <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
             </button>
           </div>
@@ -69,7 +69,7 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
             <form [formGroup]="emailLinkForm" (ngSubmit)="onEmailLinkSubmit()" class="login-form" *ngIf="showEmailLinkForm()">
               <div class="email-link-explanation">
                 <p class="explanation-text">
-                  {{ translationService.getReactive('pages.auth.login.emailLinkExplanation') }}
+                  {{ translationService.getReactive('auth.login.emailLinkExplanation') }}
                 </p>
               </div>
 
@@ -87,17 +87,17 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
 
               <button mat-raised-button type="submit" class="energy-button-secondary" [disabled]="emailLinkForm.invalid || isLoading()">
                 <mat-spinner *ngIf="isLoading()" diameter="20" class="energy-m-sm"></mat-spinner>
-                <span *ngIf="!isLoading()">{{ translationService.getReactive('pages.auth.login.sendSignInLink') }}</span>
+                <span *ngIf="!isLoading()">{{ translationService.getReactive('auth.login.sendSignInLink') }}</span>
               </button>
 
               <!-- Success Message -->
               <div class="email-link-success" *ngIf="emailLinkSent()">
                 <mat-icon class="success-icon">check_circle</mat-icon>
                 <p class="success-message">
-                  {{ translationService.getReactive('pages.auth.login.signInLinkSent') }}
+                  {{ translationService.getReactive('auth.login.signInLinkSent') }}
                 </p>
                 <p class="success-submessage">
-                  {{ translationService.getReactive('pages.auth.login.checkSpamFolder') }}
+                  {{ translationService.getReactive('auth.login.checkSpamFolder') }}
                 </p>
               </div>
             </form>

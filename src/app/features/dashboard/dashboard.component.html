@@ -21,7 +21,7 @@
           <mat-icon class="error-icon">error</mat-icon>
           <p>{{ transactionService.error() }}</p>
           <button mat-button color="primary" (click)="refreshRecentChargePoints()">
-            {{ translationService.getReactive('pages.common.buttons.tryAgain') }}
+            {{ translationService.getReactive('common.buttons.tryAgain') }}
           </button>
         </div>
         
@@ -80,14 +80,14 @@
       <mat-card-content>
         <div class="loading-container" *ngIf="transactionService.loading()">
           <mat-spinner diameter="40"></mat-spinner>
-          <p>{{ translationService.getReactive('pages.sessions.history.loadingTransactions') }}</p>
+          <p>{{ translationService.getReactive('sessions.history.loadingTransactions') }}</p>
         </div>
         
         <div class="error-container" *ngIf="transactionService.error()">
           <mat-icon class="error-icon">error</mat-icon>
           <p>{{ transactionService.error() }}</p>
           <button mat-button color="primary" (click)="refreshTransactions()">
-            {{ translationService.getReactive('pages.common.buttons.tryAgain') }}
+            {{ translationService.getReactive('common.buttons.tryAgain') }}
           </button>
         </div>
         
@@ -111,7 +111,7 @@
               <div class="transaction-energy-value">
                 {{ formatEnergy(transaction.meter_start, transaction.meter_stop) }}
               </div>
-              <div class="transaction-energy-unit">{{ translationService.getReactive('pages.common.units.kWh') }}</div>
+              <div class="transaction-energy-unit">{{ translationService.getReactive('common.units.kWh') }}</div>
             </div>
           </div>
           
@@ -156,7 +156,7 @@
           <mat-icon class="error-icon">error</mat-icon>
           <p>{{ chargePointService.error() }}</p>
           <button mat-button color="primary" (click)="refreshChargePoints()">
-            {{ translationService.getReactive('pages.common.buttons.tryAgain') }}
+            {{ translationService.getReactive('common.buttons.tryAgain') }}
           </button>
         </div>
         
@@ -195,7 +195,7 @@
           <mat-icon class="no-data-icon">ev_station</mat-icon>
           <p>{{ translationService.getReactive('dashboard.noChargePoints') }}</p>
           <button mat-button color="primary" (click)="refreshChargePoints()">
-            {{ translationService.getReactive('pages.common.buttons.refresh') }}
+            {{ translationService.getReactive('common.buttons.refresh') }}
           </button>
         </div>
       </div>
