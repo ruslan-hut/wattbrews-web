@@ -1,6 +1,6 @@
 <div class="station-detail-container">
   <!-- Header -->
-  <div class="page-header">
+  <div class="page-header" *ngIf="!translationsLoading()">
     <button mat-icon-button (click)="goBack()" class="back-button">
       <mat-icon>arrow_back</mat-icon>
     </button>
@@ -11,13 +11,13 @@
   </div>
 
   <!-- Loading State -->
-  <div class="loading-container" *ngIf="loading()">
+  <div class="loading-container" *ngIf="loading() || translationsLoading()">
     <app-loading-spinner></app-loading-spinner>
-    <p>{{ translationService.getReactive('stationDetail.loading') }}</p>
+    <p *ngIf="!translationsLoading()">{{ translationService.getReactive('stationDetail.loading') }}</p>
   </div>
 
   <!-- Error State -->
-  <div class="error-container" *ngIf="error() && !loading()">
+  <div class="error-container" *ngIf="error() && !loading() && !translationsLoading()">
     <app-error-message [message]="error()!"></app-error-message>
     <button mat-raised-button color="primary" (click)="loadStationDetail()">
       <mat-icon>refresh</mat-icon>
@@ -26,7 +26,7 @@
   </div>
 
   <!-- Station Details -->
-  <div class="station-details" *ngIf="stationDetail() && !loading() && !error()">
+  <div class="station-details" *ngIf="stationDetail() && !loading() && !error() && !translationsLoading()">
     <!-- Basic Information -->
     <mat-card class="info-card">
       <mat-card-header>
