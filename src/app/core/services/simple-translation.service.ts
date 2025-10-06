@@ -170,7 +170,6 @@ export class SimpleTranslationService {
     
     if (!translation) {
       // Debug logging for missing translations
-      console.warn(`🌐 Translation not found for key: "${key}" in language: "${currentLang}"`);
       this.logMissingTranslation(key);
       return key;
     }
@@ -209,28 +208,7 @@ export class SimpleTranslationService {
    * Log missing translation key for debugging
    */
   private logMissingTranslation(key: string): void {
-    const missingKey = {
-      key,
-      language: this.currentLang,
-      timestamp: new Date().toISOString(),
-      url: window.location.href
-    };
-    
-    // Store in localStorage for collection
-    try {
-      const existingMissing = JSON.parse(localStorage.getItem('missingTranslations') || '[]');
-      const isAlreadyLogged = existingMissing.some((item: any) => 
-        item.key === key && item.language === this.currentLang
-      );
-      
-      if (!isAlreadyLogged) {
-        existingMissing.push(missingKey);
-        localStorage.setItem('missingTranslations', JSON.stringify(existingMissing));
-        console.warn(`🌐 Missing translation: "${key}" in ${this.currentLang}`, missingKey);
-      }
-    } catch (error) {
-      console.error('Error logging missing translation:', error);
-    }
+    console.warn(`🌐 Missing translation: "${key}" in ${this.currentLang}`);
   }
 
   /**
@@ -287,26 +265,6 @@ export class SimpleTranslationService {
     });
     
     return missing;
-  }
-  
-  /**
-   * Get all missing translation keys (for debugging)
-   */
-  getMissingTranslations(): any[] {
-    try {
-      return JSON.parse(localStorage.getItem('missingTranslations') || '[]');
-    } catch (error) {
-      console.error('Error getting missing translations:', error);
-      return [];
-    }
-  }
-  
-  /**
-   * Clear missing translations log (for debugging)
-   */
-  clearMissingTranslations(): void {
-    localStorage.removeItem('missingTranslations');
-    console.log('🌐 Missing translations log cleared');
   }
   
   /**
