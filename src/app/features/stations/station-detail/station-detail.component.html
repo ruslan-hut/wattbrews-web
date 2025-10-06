@@ -139,7 +139,7 @@
     </mat-card>
 
     <!-- Location Information -->
-    <mat-card class="location-card" *ngIf="stationDetail()!.location">
+    <mat-card class="location-card" *ngIf="stationDetail()!.location && stationDetail()!.location.latitude && stationDetail()!.location.longitude">
       <mat-card-header>
         <mat-card-title>{{ translationService.getReactive('stationDetail.location') }}</mat-card-title>
       </mat-card-header>
