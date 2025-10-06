@@ -215,6 +215,62 @@
     "selectConnectorToStart": "Please select a connector to start charging",
     "selectPaymentMethodToStart": "Please select a payment method to start charging"
   },
+  "sessions":{
+    "history": {
+      "title": "Sessions History",
+      "subtitle": "View and manage the history of your charging sessions",
+      "loadingTransactions": "Loading sessions...",
+      "noTransactions": "No sessions found",
+      "close": "Close",
+      "noData": {
+        "noSessions": "No sessions found in this month",
+        "searchCriteria": "No sessions found that match the search criteria"
+      },
+      "auth":{
+        "checking": "Checking session...",
+        "checkingMessage": "Checking session..."
+      },
+      "stats": {
+        "totalEnergy": "Total Energy",
+        "totalCost": "Total Cost",
+        "completedSessions": "Completed Sessions"
+      },
+      "filters": {
+        "searchLabel": "Search Sessions",
+        "searchPlaceholder": "Search sessions by ID, connector, user, station, etc.",
+        "yearLabel": "Year",
+        "monthLabel": "Month"
+      },
+      "table": {
+        "title": "Sessions History",
+        "connector": "Connector",
+        "free": "Free",
+        "viewDetailsTooltip": "View session details",
+        "columns": {
+          "id": "ID",
+          "status": "Status",
+          "station": "Station",
+          "energy": "Energy",
+          "duration": "Duration",
+          "payment": "Payment",
+          "startTime": "Start Time",
+          "endTime": "End Time",
+          "actions": "Actions"
+        },
+        "status": {
+          "completed": "Completed",
+          "inProgress": "In Progress"
+        }
+      },
+      "mobile": {
+        "station": "Station",
+        "connector": "Connector",
+        "duration": "Duration",
+        "cost": "Cost",
+        "energy": "Energy"
+      }
+    }
+  },
   "common": {
     "buttons": {
       "save": "Save",
