@@ -76,7 +76,9 @@
     },
     "tooltips": {
       "viewDetails": "Ver detalles de la estación",
-      "startCharging": "Iniciar carga en esta estación"
+      "startCharging": "Iniciar carga en esta estación",
+      "noAvailableConnectors": "No hay conectores disponibles",
+      "stationOffline": "Estación offline"
     }
   },
   "session": {

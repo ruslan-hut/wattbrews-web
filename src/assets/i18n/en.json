@@ -73,7 +73,9 @@
     },
     "tooltips": {
       "viewDetails": "View station details",
-      "startCharging": "Start charging at this station"
+      "startCharging": "Start charging at this station",
+      "noAvailableConnectors": "No connectors available",
+      "stationOffline": "Station offline"
     }
   },
   "session": {
@@ -237,6 +239,7 @@
     },
     "status": {
       "online": "Online",
+      "offline": "Offline",
       "enabled": "Enabled"
     }
   },
