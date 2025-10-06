@@ -547,6 +547,7 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   
   // Subscription management
   private authSubscription?: Subscription;
+  private languageSubscription?: Subscription;
   private authCheckTimeout?: any;
   
   // Table configuration
@@ -591,11 +592,16 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   protected readonly availableMonths = signal<{value: number, label: string}[]>([]);
   
   ngOnInit(): void {
-    // Initialize available years and months
-    this.initializeDateOptions();
+    // Initialize available years
+    this.initializeYears();
     
     // Initialize translations first, regardless of auth state
     this.initializeTranslations();
+    
+    // Subscribe to language changes to update month names
+    this.languageSubscription = this.translationService.language$.subscribe(() => {
+      this.initializeMonths();
+    });
     
     // Subscribe to auth state changes with timeout to handle page reload
     this.authSubscription = this.authService.user$.subscribe(async user => {
@@ -623,6 +629,8 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
     try {
       this.translationsLoading.set(true);
       await this.translationService.initializeTranslationsAsync();
+      // Initialize months after translations are loaded
+      this.initializeMonths();
       this.translationsLoading.set(false);
     } catch (error) {
       console.error('Failed to initialize translations:', error);
@@ -631,9 +639,12 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    // Clean up subscription and timeout
+    // Clean up subscriptions and timeout
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
+    }
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
     }
     if (this.authCheckTimeout) {
       clearTimeout(this.authCheckTimeout);
@@ -864,26 +875,31 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Initialize available years and months
+   * Initialize available years
    */
-  private initializeDateOptions(): void {
+  private initializeYears(): void {
     const currentYear = new Date().getFullYear();
     const years = [currentYear - 2, currentYear - 1, currentYear];
     this.availableYears.set(years);
+  }
 
+  /**
+   * Initialize available months with translated names
+   */
+  private initializeMonths(): void {
     const months = [
-      { value: 1, label: 'January' },
-      { value: 2, label: 'February' },
-      { value: 3, label: 'March' },
-      { value: 4, label: 'April' },
-      { value: 5, label: 'May' },
-      { value: 6, label: 'June' },
-      { value: 7, label: 'July' },
-      { value: 8, label: 'August' },
-      { value: 9, label: 'September' },
-      { value: 10, label: 'October' },
-      { value: 11, label: 'November' },
-      { value: 12, label: 'December' }
+      { value: 1, label: this.translationService.get('common.months.1') },
+      { value: 2, label: this.translationService.get('common.months.2') },
+      { value: 3, label: this.translationService.get('common.months.3') },
+      { value: 4, label: this.translationService.get('common.months.4') },
+      { value: 5, label: this.translationService.get('common.months.5') },
+      { value: 6, label: this.translationService.get('common.months.6') },
+      { value: 7, label: this.translationService.get('common.months.7') },
+      { value: 8, label: this.translationService.get('common.months.8') },
+      { value: 9, label: this.translationService.get('common.months.9') },
+      { value: 10, label: this.translationService.get('common.months.10') },
+      { value: 11, label: this.translationService.get('common.months.11') },
+      { value: 12, label: this.translationService.get('common.months.12') }
     ];
     this.availableMonths.set(months);
   }
