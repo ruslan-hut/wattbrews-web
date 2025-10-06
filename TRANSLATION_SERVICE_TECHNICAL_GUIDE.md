@@ -2,7 +2,50 @@
 
 ## Overview
 
-The WattBrews application uses a custom `SimpleTranslationService` for internationalization (i18n) support. This service provides reactive translations with fallback mechanisms to ensure translations are always available, even when server loading fails.
+The WattBrews application uses a custom `SimpleTranslationService` for internationalization (i18n) support. This service provides reactive translations with async loading mechanisms to ensure translations are properly loaded before being displayed.
+
+## ⚠️ Important: Async Initialization Required
+
+**All components using translations MUST implement async initialization** to prevent showing raw translation keys to users. This is a critical requirement for proper user experience.
+
+### Required Implementation Pattern
+
+Every component using translations must follow this exact pattern:
+
+```typescript
+export class YourComponent implements OnInit {
+  protected readonly translationService = inject(SimpleTranslationService);
+  protected readonly translationsLoading = signal(true);
+
+  ngOnInit(): void {
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
+  }
+}
+```
+
+```html
+<!-- Translation Loading State -->
+<div class="loading-container" *ngIf="translationsLoading()">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Loading translations...</p>
+</div>
+
+<!-- Content (only show when translations are loaded) -->
+<div *ngIf="!translationsLoading()">
+  <!-- All translation content goes here -->
+</div>
+```
 
 ## Architecture
 
@@ -16,10 +59,15 @@ The WattBrews application uses a custom `SimpleTranslationService` for internati
 - **Supported Languages**: English (`en.json`), Spanish (`es.json`)
 - **Format**: JSON with nested object structure
 
+### App Configuration
+- **File**: `src/app/app.config.ts`
+- **Provider**: `SimpleTranslationService` is automatically provided at root level
+- **Note**: ngx-translate has been removed; only `SimpleTranslationService` is used
+
 ## Core Features
 
-### 1. Synchronous Initialization
-The service loads translations synchronously during initialization to ensure immediate availability:
+### 1. Async Initialization
+The service loads translations asynchronously from JSON files with proper loading states:
 
 ```typescript
 constructor() {
@@ -28,31 +76,65 @@ constructor() {
 
 private initializeTranslation(): void {
   const languageToUse = this.getSavedLanguage() || this.getBrowserLanguage() || 'es';
-  this.loadTranslationsSync(languageToUse);
-  this.currentLang = languageToUse;
-  this._currentLanguage.set(languageToUse);
-  this.languageSubject.next(languageToUse);
+  this.loadTranslations(languageToUse).then(() => {
+    this.currentLang = languageToUse;
+    this._currentLanguage.set(languageToUse);
+    this.languageSubject.next(languageToUse);
+  }).catch((error) => {
+    console.error('Failed to load initial translations:', error);
+    // Fallback to default language
+    this.loadTranslations('es').then(() => {
+      this.currentLang = 'es';
+      this._currentLanguage.set('es');
+      this.languageSubject.next('es');
+    });
+  });
 }
 ```
 
-### 2. Fallback Mechanism
-The service includes embedded fallback translations to ensure functionality even when server files are unavailable:
+### 2. Component-Level Async Initialization
+Components must initialize translations asynchronously in their `ngOnInit()` method:
 
 ```typescript
-private loadTranslationsSync(language: string): void {
-  if (language === 'en') {
-    this.translations['en'] = {
-      // Embedded English translations
-    };
-  } else {
-    this.translations['es'] = {
-      // Embedded Spanish translations
-    };
+export class YourComponent implements OnInit {
+  protected readonly translationService = inject(SimpleTranslationService);
+  protected readonly translationsLoading = signal(true);
+
+  ngOnInit(): void {
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
   }
 }
 ```
 
-### 3. Reactive Translation Methods
+### 3. Loading State Management
+Components must handle translation loading states in templates:
+
+```html
+<!-- Translation Loading State -->
+<div class="loading-container" *ngIf="translationsLoading()">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Loading translations...</p>
+</div>
+
+<!-- Content (only show when translations are loaded) -->
+<div *ngIf="!translationsLoading()">
+  <h1>{{ translationService.getReactive('page.title') }}</h1>
+  <!-- Rest of content -->
+</div>
+```
+
+### 4. Reactive Translation Methods
 
 #### `getReactive(key: string, params?: any): string`
 - **Purpose**: Get translation with reactive change detection
@@ -64,43 +146,94 @@ private loadTranslationsSync(language: string): void {
 - **Usage**: Use in component logic when reactivity not needed
 - **Returns**: Translated string or key if translation not found
 
+#### `initializeTranslationsAsync(): Promise<void>`
+- **Purpose**: Initialize translations asynchronously at component level
+- **Usage**: Call in component `ngOnInit()` before using translations
+- **Returns**: Promise that resolves when translations are loaded
+
 ## Integration Guide
 
-### 1. Service Injection
+### 1. Service Injection and Async Initialization
 
 ```typescript
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 
 @Component({...})
-export class YourComponent {
+export class YourComponent implements OnInit {
   protected readonly translationService = inject(SimpleTranslationService);
+  protected readonly translationsLoading = signal(true);
+
+  ngOnInit(): void {
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
+  }
 }
 ```
 
-### 2. Template Usage
+### 2. Template Usage with Loading States
 
-#### Basic Translation
+#### Basic Translation with Loading State
 ```html
-<h1>{{ translationService.getReactive('pages.sessions.history.title') }}</h1>
+<!-- Translation Loading State -->
+<div class="loading-container" *ngIf="translationsLoading()">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Loading translations...</p>
+</div>
+
+<!-- Content (only show when translations are loaded) -->
+<div *ngIf="!translationsLoading()">
+  <h1>{{ translationService.getReactive('pages.sessions.history.title') }}</h1>
+</div>
 ```
 
 #### Translation with Parameters
 ```html
-<p>{{ translationService.getReactive('welcome.message', { name: userName }) }}</p>
+<div *ngIf="!translationsLoading()">
+  <p>{{ translationService.getReactive('welcome.message', { name: userName }) }}</p>
+</div>
 ```
 
 #### Conditional Translation
 ```html
-<span *ngIf="isLoading">
-  {{ translationService.getReactive('common.loading') }}
-</span>
+<div *ngIf="!translationsLoading()">
+  <span *ngIf="isLoading">
+    {{ translationService.getReactive('common.loading') }}
+  </span>
+</div>
 ```
 
 ### 3. Component Logic Usage
 
 ```typescript
-export class YourComponent {
+export class YourComponent implements OnInit {
   protected readonly translationService = inject(SimpleTranslationService);
+  protected readonly translationsLoading = signal(true);
+  
+  ngOnInit(): void {
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
+  }
   
   getErrorMessage(): string {
     return this.translationService.get('errors.validation.required');
@@ -188,44 +321,57 @@ Use dot notation for nested keys: `category.section.item`
 }
 ```
 
-### 2. Update Fallback Translations
-Add the same translations to the `loadTranslationsSync()` method in the service:
+### 2. Update Translation Files
+Ensure both language files are updated with the same keys:
 
-```typescript
-private loadTranslationsSync(language: string): void {
-  if (language === 'en') {
-    this.translations['en'] = {
-      // ... existing translations
-      "newFeature": {
-        "title": "New Feature",
-        "description": "This is a new feature",
-        "buttons": {
-          "activate": "Activate",
-          "deactivate": "Deactivate"
-        }
-      }
-    };
-  } else {
-    this.translations['es'] = {
-      // ... existing translations
-      "newFeature": {
-        "title": "Nueva Característica",
-        "description": "Esta es una nueva característica",
-        "buttons": {
-          "activate": "Activar",
-          "deactivate": "Desactivar"
-        }
-      }
-    };
+#### English (`public/assets/i18n/en.json`)
+```json
+{
+  "app": {
+    "title": "WattBrews"
+  },
+  "newFeature": {
+    "title": "New Feature",
+    "description": "This is a new feature",
+    "buttons": {
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    }
+  }
+}
+```
+
+#### Spanish (`public/assets/i18n/es.json`)
+```json
+{
+  "app": {
+    "title": "WattBrews"
+  },
+  "newFeature": {
+    "title": "Nueva Característica",
+    "description": "Esta es una nueva característica",
+    "buttons": {
+      "activate": "Activar",
+      "deactivate": "Desactivar"
+    }
   }
 }
 ```
 
 ### 3. Use in Components
 ```html
-<h2>{{ translationService.getReactive('newFeature.title') }}</h2>
-<p>{{ translationService.getReactive('newFeature.description') }}</p>
-<button>{{ translationService.getReactive('newFeature.buttons.activate') }}</button>
+<!-- Translation Loading State -->
+<div class="loading-container" *ngIf="translationsLoading()">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Loading translations...</p>
+</div>
+
+<!-- Content (only show when translations are loaded) -->
+<div *ngIf="!translationsLoading()">
+  <h2>{{ translationService.getReactive('newFeature.title') }}</h2>
+  <p>{{ translationService.getReactive('newFeature.description') }}</p>
+  <button>{{ translationService.getReactive('newFeature.buttons.activate') }}</button>
+</div>
 ```
 
 ## Error Handling
@@ -269,9 +415,10 @@ this.translationService.clearMissingTranslations();
 - Use `get()` for static translations that don't change during component lifecycle
 
 ### 2. Translation Loading
-- Fallback translations are loaded synchronously for immediate availability
-- Server translations are loaded asynchronously as a fallback
+- Translations are loaded asynchronously from JSON files at component initialization
+- Components must handle loading states to prevent showing raw translation keys
 - Language switching triggers reactive updates across all components
+- Failed translations gracefully degrade with fallback behavior
 
 ### 3. Memory Usage
 - Translations are cached in memory after loading
@@ -319,12 +466,15 @@ it('should update translations when language changes', async () => {
 
 ### 2. Component Integration
 - Always inject the service as `protected readonly`
+- Implement `OnInit` interface and call `initializeTranslations()` in `ngOnInit()`
+- Add `translationsLoading` signal for loading state management
 - Use `getReactive()` in templates for reactive updates
 - Use `get()` in component logic when reactivity not needed
+- Always wrap template content with `*ngIf="!translationsLoading()"` to prevent showing raw keys
 
 ### 3. Translation Management
 - Keep translation files in sync between languages
-- Update both server files and fallback translations
+- Update JSON files in `public/assets/i18n/` directory
 - Test all language combinations
 
 ### 4. Error Handling
@@ -337,20 +487,20 @@ it('should update translations when language changes', async () => {
 ### Common Issues
 
 #### 1. Keys Showing Instead of Translations
-- **Cause**: Service not properly initialized or translations not loaded
-- **Solution**: Check service initialization and fallback translations
+- **Cause**: Component not properly initializing translations or missing loading state handling
+- **Solution**: Ensure component implements `OnInit`, calls `initializeTranslations()`, and wraps content with `*ngIf="!translationsLoading()"`
 
 #### 2. Translations Not Updating on Language Change
 - **Cause**: Using `get()` instead of `getReactive()`
 - **Solution**: Use `getReactive()` for reactive translations
 
 #### 3. Missing Translations
-- **Cause**: Translation key not found in current language
-- **Solution**: Add missing translation to both language files and fallback
+- **Cause**: Translation key not found in current language JSON file
+- **Solution**: Add missing translation to both language files in `public/assets/i18n/`
 
-#### 4. Server Loading Failures
+#### 4. Translation Loading Failures
 - **Cause**: Translation files not accessible or network issues
-- **Solution**: Service automatically falls back to embedded translations
+- **Solution**: Service includes error handling with graceful degradation; check console for errors
 
 ### Debug Commands
 ```typescript
@@ -391,32 +541,60 @@ When upgrading the translation service:
 ### Service Methods
 - `get(key, params?)` - Get translation without reactivity
 - `getReactive(key, params?)` - Get translation with reactivity
+- `initializeTranslationsAsync()` - Initialize translations asynchronously at component level
 - `setLanguage(lang)` - Change current language
 - `currentLanguage()` - Get current language signal
 - `getMissingTranslations()` - Get missing translation log
 
 ### Template Usage
 ```html
-<!-- Basic translation -->
-{{ translationService.getReactive('key') }}
+<!-- Translation Loading State -->
+<div class="loading-container" *ngIf="translationsLoading()">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Loading translations...</p>
+</div>
 
-<!-- Translation with parameters -->
-{{ translationService.getReactive('key', { param: value }) }}
+<!-- Content (only show when translations are loaded) -->
+<div *ngIf="!translationsLoading()">
+  <!-- Basic translation -->
+  {{ translationService.getReactive('key') }}
 
-<!-- Conditional translation -->
-*ngIf="condition" && translationService.getReactive('key')
+  <!-- Translation with parameters -->
+  {{ translationService.getReactive('key', { param: value }) }}
+
+  <!-- Conditional translation -->
+  <span *ngIf="condition">{{ translationService.getReactive('key') }}</span>
+</div>
 ```
 
 ### Component Integration
 ```typescript
-// Service injection
-protected readonly translationService = inject(SimpleTranslationService);
+// Service injection and initialization
+export class YourComponent implements OnInit {
+  protected readonly translationService = inject(SimpleTranslationService);
+  protected readonly translationsLoading = signal(true);
 
-// Get translation in logic
-const text = this.translationService.get('key');
+  ngOnInit(): void {
+    this.initializeTranslations();
+  }
 
-// Language switching
-await this.translationService.setLanguage('es');
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
+  }
+
+  // Get translation in logic
+  const text = this.translationService.get('key');
+
+  // Language switching
+  await this.translationService.setLanguage('es');
+}
 ```
 
 This guide serves as the definitive reference for working with the translation service in the WattBrews application.

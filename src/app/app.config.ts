@@ -12,12 +12,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { firebaseAuthInterceptor } from './core/interceptors/firebase-auth.interceptor';
 
-import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader();
-}
+// Translation service is now handled by SimpleTranslationService
 
 const firebaseProviders = [
   provideFirebaseApp(() => initializeApp(environment.firebase)),
@@ -36,14 +31,7 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      },
-      fallbackLang: 'es'
-    }).providers!,
+    // SimpleTranslationService is provided at root level automatically
     ...firebaseProviders
   ]
 };

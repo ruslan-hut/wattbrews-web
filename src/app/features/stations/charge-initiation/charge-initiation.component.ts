@@ -672,6 +672,9 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
   
   // Payment methods and plans are accessed directly from UserInfoService
   
+  // Translation loading state
+  protected readonly translationsLoading = signal(true);
+  
   // Subscription management
   private authSubscription?: Subscription;
   private authCheckTimeout?: any;
@@ -692,6 +695,27 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
   );
 
   ngOnInit() {
+    // Initialize translations first
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+      
+      // After translations are loaded, set up auth subscription
+      this.setupAuthSubscription();
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+      // Still set up auth subscription even if translations fail
+      this.setupAuthSubscription();
+    }
+  }
+
+  private setupAuthSubscription(): void {
     // Wait for authentication before loading any data
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {

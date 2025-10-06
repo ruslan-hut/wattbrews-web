@@ -185,8 +185,28 @@ export class TransactionPreviewComponent implements OnInit {
   protected readonly error = signal<string | null>(null);
   protected readonly transactionDetail = signal<TransactionDetail | null>(null);
   
+  // Translation loading state
+  protected readonly translationsLoading = signal(true);
+  
   ngOnInit(): void {
-    this.loadTransactionDetail();
+    // Initialize translations first
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+      
+      // After translations are loaded, load transaction detail
+      this.loadTransactionDetail();
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+      // Still load transaction detail even if translations fail
+      this.loadTransactionDetail();
+    }
   }
   
   protected loadTransactionDetail(): void {
