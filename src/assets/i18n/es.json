@@ -243,7 +243,8 @@
     "status": {
       "online": "En línea",
       "offline": "Offline",
-      "enabled": "Habilitado"
+      "enabled": "Habilitado",
+      "disabled": "Deshabilitado"
     }
   },
   "chargeInitiation": {

@@ -240,7 +240,8 @@
     "status": {
       "online": "Online",
       "offline": "Offline",
-      "enabled": "Enabled"
+      "enabled": "Enabled",
+      "disabled": "Disabled"
     }
   },
   "chargeInitiation": {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 
@@ -126,6 +126,8 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
   private marker: L.Marker | null = null;
   isMapReady = false;
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   ngOnInit() {
     // Set container height from input
     if (this.height) {
@@ -147,6 +149,7 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.latitude || !this.longitude) {
       console.warn('SmallMapComponent: Latitude and longitude are required');
       this.isMapReady = true;
+      this.cdr.detectChanges();
       return;
     }
 
@@ -156,6 +159,7 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!this.mapContainer?.nativeElement) {
           console.error('Map container not found');
           this.isMapReady = true;
+          this.cdr.detectChanges();
           return;
         }
 
@@ -219,6 +223,7 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // Set map ready and trigger resize
         this.isMapReady = true;
+        this.cdr.detectChanges();
         
         // Trigger resize to ensure proper rendering
         setTimeout(() => {
@@ -232,6 +237,7 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
     } catch (error) {
       console.error('Error initializing small map:', error);
       this.isMapReady = true; // Hide loading overlay even on error
+      this.cdr.detectChanges();
     }
   }
 
