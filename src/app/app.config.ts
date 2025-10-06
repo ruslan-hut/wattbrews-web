@@ -42,7 +42,7 @@ export const appConfig: ApplicationConfig = {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       },
-      defaultLanguage: 'es'
+      fallbackLang: 'es'
     }).providers!,
     ...firebaseProviders
   ]
