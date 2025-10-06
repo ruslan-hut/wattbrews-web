@@ -178,7 +178,7 @@
   "transactionDetails": {
     "title": "Transaction Details",
     "subtitle": "View and manage the details of your transaction",
-    "loadingTransaction": "Loading transaction...",
+    "loading": "Loading transaction...",
     "noTransactionFound": "No transaction found",
     "close": "Close",
     "overview": {
