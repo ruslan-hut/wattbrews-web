@@ -27,6 +27,7 @@
   "stations": {
     "title": "Charging Stations",
     "subtitle": "Find and connect to available charging stations",
+    "loadingStations": "Loading stations...",
     "searchLabel": "Search stations",
     "searchPlaceholder": "Type to search...",
     "ofConnectorsAvailable": "of {{total}} connectors available",
