@@ -183,8 +183,11 @@ export class StationsListComponent implements OnInit, OnDestroy {
   getConnectorStatusClass(status: string): string {
     switch (status.toLowerCase()) {
       case 'available': return 'available';
+      case 'charging': return 'occupied';
+      case 'preparing': return 'occupied';
       case 'occupied': return 'occupied';
       case 'out_of_order': return 'out_of_order';
+      case 'unavailable': return 'out_of_order';
       case 'reserved': return 'reserved';
       default: return 'out_of_order';
     }
