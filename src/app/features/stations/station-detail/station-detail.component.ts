@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, signal, computed, inject, Pipe, PipeTransform } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
@@ -58,6 +58,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
   private readonly dialog = inject(MatDialog);
   protected readonly translationService = inject(SimpleTranslationService);
 
@@ -144,7 +145,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this.router.navigate(['/stations']);
+    this.location.back();
   }
 
   getStatusIcon(): string {

@@ -358,6 +358,11 @@
   display: flex;
   align-items: center;
   margin-left: 12px;
+  gap: 8px;
+}
+
+.charge-point-actions button {
+  flex-shrink: 0;
 }
 
 .charge-point-status-indicator {
@@ -649,6 +654,17 @@
   
   .charge-points-list {
     max-height: 300px;
+  }
+  
+  .charge-point-actions {
+    flex-direction: column;
+    gap: 4px;
+    margin-left: 8px;
+  }
+  
+  .charge-point-actions button {
+    font-size: 0.8rem;
+    padding: 4px 8px;
   }
   
   .auth-required-container {

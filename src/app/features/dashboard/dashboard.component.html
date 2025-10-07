@@ -62,6 +62,15 @@
                 <mat-icon>play_arrow</mat-icon>
                 {{ translationService.getReactive('stations.start') }}
               </button>
+              <button 
+                mat-button 
+                color="primary" 
+                [disabled]="!hasViewDetailsAccess()"
+                [matTooltip]="getViewDetailsTooltip(cp)"
+                (click)="viewStationDetails(cp.charge_point_id)">
+                <mat-icon>visibility</mat-icon>
+                {{ translationService.getReactive('stations.viewDetails') }}
+              </button>
             </div>
           </div>
           
