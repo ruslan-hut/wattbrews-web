@@ -248,7 +248,8 @@
       "power": "Potencia",
       "vendorWithColon": "Proveedor:",
       "errorCodeWithColon": "Código de Error:",
-      "statusTimeWithColon": "Tiempo de Estado:"
+      "statusTimeWithColon": "Tiempo de Estado:",
+      "transactionId": "ID de Transacción"
     },
     "actions": {
       "startCharge": "Iniciar Carga",
