@@ -260,6 +260,9 @@
       "offline": "Offline",
       "enabled": "Habilitado",
       "disabled": "Deshabilitado"
+    },
+    "tooltips": {
+      "viewTransaction": "Ver detalles de la transacción"
     }
   },
   "chargeInitiation": {

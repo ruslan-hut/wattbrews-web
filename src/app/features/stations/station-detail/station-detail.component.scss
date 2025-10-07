@@ -272,6 +272,37 @@ mat-card {
   font-weight: 400;
 }
 
+.transaction-id-button {
+  padding: 8px 16px !important;
+  min-width: auto !important;
+  height: auto !important;
+  font-size: 0.9rem !important;
+  border: 1px solid #1976d2 !important;
+  color: #1976d2 !important;
+  background-color: transparent !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  border-radius: 4px !important;
+  
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  &:hover {
+    background-color: #1976d2 !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(25, 118, 210, 0.3);
+  }
+  
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
 .connector-status-info, .connector-time {
   margin-top: 0.5rem;
   padding: 0.5rem;
