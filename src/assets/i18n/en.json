@@ -21,7 +21,20 @@
     "signin": "Sign in",
     "signout": "Sign out",
     "login": {
-      "remember_me": "auth.login.remember_me"
+      "title": "Sign in to WattBrews",
+      "subtitle": "Access your EV charging account",
+      "explanation": "Sign in to access your charging history, manage your account, and start charging sessions at any WattBrews station.",
+      "continueWithGoogle": "Continue with Google",
+      "signInWithEmailLink": "Sign in with Email Link",
+      "emailLinkExplanation": "Enter your email address and we'll send you a secure sign-in link. No password required!",
+      "sendSignInLink": "Send Sign-in Link",
+      "signInLinkSent": "Sign-in link sent successfully!",
+      "checkSpamFolder": "Please check your email inbox (and spam folder) for the sign-in link.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "remember_me": "Remember me"
     }
   },
   "stations": {

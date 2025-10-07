@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -31,7 +31,7 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
   protected readonly translationService = inject(SimpleTranslationService);
@@ -40,7 +40,23 @@ export class LoginComponent {
 
   protected readonly showEmailLinkForm = signal(false);
   protected readonly emailLinkSent = signal(false);
+  protected readonly translationsLoading = signal(true);
   protected readonly isLoading = this.authService.isLoading;
+
+  ngOnInit(): void {
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+    }
+  }
 
   emailLinkForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]]
