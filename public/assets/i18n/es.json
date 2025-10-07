@@ -21,7 +21,20 @@
     "signin": "Entrar",
     "signout": "Salir",
     "login": {
-      "remember_me": "auth.login.remember_me"
+      "title": "Acceder a WattBrews",
+      "subtitle": "Accede a tu cuenta de carga de VE",
+      "explanation": "Inicia sesión para acceder a tu historial de carga, gestionar tu cuenta e iniciar sesiones de carga en cualquier estación WattBrews.",
+      "continueWithGoogle": "Continuar con Google",
+      "signInWithEmailLink": "Acceder con Enlace de Correo",
+      "emailLinkExplanation": "Ingresa tu dirección de correo y te enviaremos un enlace seguro de acceso. ¡No se requiere contraseña!",
+      "sendSignInLink": "Enviar Enlace de Acceso",
+      "signInLinkSent": "¡Enlace de acceso enviado exitosamente!",
+      "checkSpamFolder": "Por favor revisa tu bandeja de entrada (y carpeta de spam) para el enlace de acceso.",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "Ingresa tu dirección de correo",
+      "emailRequired": "El correo es requerido",
+      "emailInvalid": "Por favor ingresa un correo válido",
+      "remember_me": "Recordarme"
     }
   },
   "stations": {
@@ -314,15 +327,17 @@
     },
     "auth": {
       "login": {
-        "title": "WattBrews",
-        "subtitle": "Accede a la gestión de tu estación de carga",
-        "explanation": "Puedes iniciar sesión usando tu cuenta de Google o dirección de correo. Si aún no tienes una cuenta, crearemos una para ti automáticamente.",
+        "title": "Acceder a WattBrews",
+        "subtitle": "Accede a tu cuenta de carga de VE",
+        "explanation": "Inicia sesión para acceder a tu historial de carga, gestionar tu cuenta e iniciar sesiones de carga en cualquier estación WattBrews.",
         "continueWithGoogle": "Continuar con Google",
-        "signInWithEmailLink": "Iniciar sesión con enlace de correo",
-        "emailLinkExplanation": "Ingresa tu dirección de correo y te enviaremos un enlace seguro para iniciar sesión. ¡No se requiere contraseña!",
-        "sendSignInLink": "Enviar Enlace de Inicio de Sesión",
-        "signInLinkSent": "¡Enlace de inicio de sesión enviado! Revisa tu correo y haz clic en el enlace para iniciar sesión.",
-        "checkSpamFolder": "¿No recibiste el correo? Revisa tu carpeta de spam o inténtalo de nuevo.",
+        "signInWithEmailLink": "Acceder con Enlace de Correo",
+        "emailLinkExplanation": "Ingresa tu dirección de correo y te enviaremos un enlace seguro de acceso. ¡No se requiere contraseña!",
+        "sendSignInLink": "Enviar Enlace de Acceso",
+        "signInLinkSent": "¡Enlace de acceso enviado exitosamente!",
+        "checkSpamFolder": "Por favor revisa tu bandeja de entrada (y carpeta de spam) para el enlace de acceso.",
+        "emailLabel": "Correo Electrónico",
+        "emailPlaceholder": "Ingresa tu dirección de correo",
         "emailRequired": "El correo es requerido",
         "emailInvalid": "Por favor ingresa un correo válido"
       }

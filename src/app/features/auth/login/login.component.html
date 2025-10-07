@@ -1,5 +1,11 @@
 <div class="login-container">
-  <mat-card class="login-card">
+  <!-- Translation Loading State -->
+  <div class="loading-container" *ngIf="translationsLoading()">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <!-- Content (only show when translations are loaded) -->
+  <mat-card class="login-card" *ngIf="!translationsLoading()">
     <mat-card-header>
       <mat-card-title class="login-title">
         <mat-icon class="login-icon">ev_station</mat-icon>
@@ -43,14 +49,14 @@
           </div>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="Enter your email address">
+            <mat-label>{{ translationService.getReactive('auth.login.emailLabel') }}</mat-label>
+            <input matInput type="email" formControlName="email" [placeholder]="translationService.getReactive('auth.login.emailPlaceholder')">
             <mat-icon matSuffix>email</mat-icon>
             <mat-error *ngIf="emailLinkForm.get('email')?.hasError('required')">
-              Email is required
+              {{ translationService.getReactive('auth.login.emailRequired') }}
             </mat-error>
             <mat-error *ngIf="emailLinkForm.get('email')?.hasError('email')">
-              Please enter a valid email
+              {{ translationService.getReactive('auth.login.emailInvalid') }}
             </mat-error>
           </mat-form-field>
 
