@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { ChargePointService } from '../../core/services/chargepoint.service';
 import { AuthService } from '../../core/services/auth.service';
 import { TransactionService } from '../../core/services/transaction.service';
+import { UserInfoService } from '../../core/services/user-info.service';
 import { ChargePoint, ChargePointConnector } from '../../core/models/chargepoint.model';
 import { Transaction } from '../../core/models/transaction.model';
 import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
@@ -53,6 +54,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   protected readonly authService = inject(AuthService);
   protected readonly transactionService = inject(TransactionService);
   protected readonly translationService = inject(SimpleTranslationService);
+  private readonly userInfoService = inject(UserInfoService);
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
   
@@ -77,6 +79,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.loadChargePoints();
         this.loadRecentChargePoints();
         this.loadTransactions();
+        this.loadUserInfo();
       }
     });
   }
@@ -282,6 +285,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
+    });
+  }
+
+  protected hasViewDetailsAccess(): boolean {
+    return this.userInfoService.getAccessLevel() >= 5;
+  }
+
+  protected getViewDetailsTooltip(chargePoint: ChargePoint): string {
+    if (!this.hasViewDetailsAccess()) {
+      return this.translationService.get('stations.tooltips.accessRequired');
+    }
+    return this.translationService.get('stations.tooltips.viewDetails');
+  }
+
+  protected viewStationDetails(stationId: string): void {
+    this.router.navigate(['/stations', stationId]);
+  }
+
+  private loadUserInfo(): void {
+    this.userInfoService.loadCurrentUserInfo().subscribe({
+      next: (userInfo) => {
+        // User info loaded successfully
+      },
+      error: (error) => {
+        // Failed to load user info - handled by service
+      }
     });
   }
 }
