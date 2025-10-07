@@ -9,12 +9,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog } from '@angular/material/dialog';
 import { ChargePointService } from '../../../core/services/chargepoint.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { StationDetail } from '../../../core/models/station-detail.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { SmallMapComponent } from '../../../shared/components/small-map/small-map.component';
+import { TransactionPreviewComponent } from '../../../shared/components/transaction-preview/transaction-preview.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 
 @Pipe({
@@ -56,6 +58,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
   protected readonly translationService = inject(SimpleTranslationService);
 
   // Signals
@@ -207,5 +210,22 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     if (!station) return;
     
     this.router.navigate(['/stations', station.charge_point_id, 'charge']);
+  }
+
+  openTransactionDetails(transactionId: number, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+
+    this.dialog.open(TransactionPreviewComponent, {
+      width: '90vw',
+      maxWidth: '800px',
+      maxHeight: '90vh',
+      data: { transactionId },
+      disableClose: false,
+      autoFocus: false,
+      restoreFocus: false
+    });
   }
 }

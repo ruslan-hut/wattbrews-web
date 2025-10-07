@@ -215,7 +215,15 @@
               
               <div class="connector-info" *ngIf="connector.current_transaction_id > 0">
                 <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.transactionId') }}</span>
-                <span class="connector-value">#{{ connector.current_transaction_id }}</span>
+                <button 
+                  mat-button 
+                  class="transaction-id-button"
+                  (click)="openTransactionDetails(connector.current_transaction_id, $event)"
+                  [matTooltip]="translationService.getReactive('stationDetail.tooltips.viewTransaction')"
+                >
+                  <mat-icon>receipt</mat-icon>
+                  #{{ connector.current_transaction_id }}
+                </button>
               </div>
             </div>
             
