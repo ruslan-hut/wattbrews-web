@@ -245,7 +245,8 @@
       "power": "Power",
       "vendorWithColon": "Vendor:",
       "errorCodeWithColon": "Error Code:",
-      "statusTimeWithColon": "Status Time:"
+      "statusTimeWithColon": "Status Time:",
+      "transactionId": "Transaction ID"
     },
     "actions": {
       "startCharge": "Start Charge",
