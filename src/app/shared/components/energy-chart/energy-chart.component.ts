@@ -70,8 +70,15 @@ export class EnergyChartComponent implements OnInit, OnChanges {
       new Date(a.time).getTime() - new Date(b.time).getTime()
     );
 
+    // Transform energy values to start from 0 (difference from first value)
+    const firstEnergyValue = sortedData[0]?.value || 0;
+    const transformedData = sortedData.map(d => ({
+      ...d,
+      value: (d.value || 0) - firstEnergyValue
+    }));
+
     // Calculate ranges for both energy and power
-    const energyValues = sortedData.map(d => d.value || 0);
+    const energyValues = transformedData.map(d => d.value);
     const powerValues = sortedData.map(d => d.power_rate || 0);
     
     const energyMin = Math.min(...energyValues);
@@ -90,8 +97,8 @@ export class EnergyChartComponent implements OnInit, OnChanges {
     const chartAreaWidth = this.chartWidth - this.padding.left - this.padding.right;
     const chartAreaHeight = this.chartHeight - this.padding.top - this.padding.bottom;
 
-    const energyPoints = sortedData.map((item, index) => {
-      const x = this.padding.left + (index / (sortedData.length - 1)) * chartAreaWidth;
+    const energyPoints = transformedData.map((item, index) => {
+      const x = this.padding.left + (index / (transformedData.length - 1)) * chartAreaWidth;
       const y = this.padding.top + chartAreaHeight - 
         ((item.value - energyMin) / (energyMax - energyMin)) * chartAreaHeight;
       
