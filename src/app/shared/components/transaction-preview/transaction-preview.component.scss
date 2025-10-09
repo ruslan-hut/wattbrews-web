@@ -1,0 +1,144 @@
+.transaction-preview-container {
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+::ng-deep .mat-dialog-content {
+  padding: 24px !important;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.preview-header h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.close-button {
+  color: #5a6c7d;
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px;
+  text-align: center;
+}
+
+.error-icon {
+  color: #f44336;
+  font-size: 3rem;
+}
+
+.transaction-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.overview-card,
+.status-card,
+.chart-card {
+  margin-bottom: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #e9ecef;
+}
+
+.overview-card {
+  margin-top: 0;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.overview-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+}
+
+.overview-item mat-icon {
+  color: #6c757d;
+  font-size: 1.5rem;
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-label {
+  font-size: 0.8rem;
+  color: #5a6c7d;
+  margin-bottom: 2px;
+}
+
+.item-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.status-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-label {
+  font-weight: 500;
+  color: #5a6c7d;
+  min-width: 80px;
+}
+
+.status-value {
+  color: #2c3e50;
+}
+
+.mat-chip.completed {
+  background-color: #e8f5e8;
+  color: #4caf50;
+}
+
+.mat-chip.charging {
+  background-color: #fff3e0;
+  color: #ff9800;
+}
+
+
+@media (max-width: 768px) {
+  .transaction-preview-container {
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
