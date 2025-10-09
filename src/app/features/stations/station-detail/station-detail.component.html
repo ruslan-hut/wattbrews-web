@@ -187,9 +187,21 @@
             
             <div class="connector-header">
               <h4>{{ translationService.getReactive('stationDetail.labels.connector') }} {{ (connector.connector_id_name || connector.connector_id) }}</h4>
-              <mat-chip [class]="getConnectorStatusClass(connector.status)">
-                {{ connector.status }}
-              </mat-chip>
+              <div class="connector-status-actions">
+                <button 
+                  *ngIf="connector.current_transaction_id > 0"
+                  mat-button 
+                  class="transaction-id-button"
+                  (click)="openTransactionDetails(connector.current_transaction_id, $event)"
+                  [matTooltip]="translationService.getReactive('stationDetail.tooltips.viewTransaction')"
+                >
+                  <mat-icon>receipt</mat-icon>
+                  #{{ connector.current_transaction_id }}
+                </button>
+                <mat-chip [class]="getConnectorStatusClass(connector.status)">
+                  {{ connector.status }}
+                </mat-chip>
+              </div>
             </div>
             
             <div class="connector-details">
@@ -211,19 +223,6 @@
               <div class="connector-info">
                 <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.errorCodeWithColon') }}</span>
                 <span class="connector-value">{{ connector.error_code }}</span>
-              </div>
-              
-              <div class="connector-info" *ngIf="connector.current_transaction_id > 0">
-                <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.transactionId') }}</span>
-                <button 
-                  mat-button 
-                  class="transaction-id-button"
-                  (click)="openTransactionDetails(connector.current_transaction_id, $event)"
-                  [matTooltip]="translationService.getReactive('stationDetail.tooltips.viewTransaction')"
-                >
-                  <mat-icon>receipt</mat-icon>
-                  #{{ connector.current_transaction_id }}
-                </button>
               </div>
             </div>
             

@@ -239,6 +239,12 @@ mat-card {
   color: #2c3e50;
 }
 
+.connector-status-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--energy-space-sm, 0.5rem);
+}
+
 .connector-details {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -273,29 +279,30 @@ mat-card {
 }
 
 .transaction-id-button {
-  padding: 8px 16px !important;
+  padding: 6px 12px !important;
   min-width: auto !important;
-  height: auto !important;
-  font-size: 0.9rem !important;
-  border: 1px solid #1976d2 !important;
-  color: #1976d2 !important;
-  background-color: transparent !important;
+  height: 32px !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  border: none !important;
+  color: white !important;
+  background-color: var(--energy-cyan, #00bcd4) !important;
+  border-radius: var(--energy-radius-xl, 1rem) !important;
   transition: all 0.2s ease !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 6px !important;
-  border-radius: 4px !important;
+  gap: 4px !important;
   
   mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
   }
   
   &:hover {
-    background-color: #1976d2 !important;
+    background-color: var(--energy-cyan-dark, #0097a7) !important;
     color: white !important;
-    box-shadow: 0 2px 4px rgba(25, 118, 210, 0.3);
+    box-shadow: var(--energy-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
   }
   
   &:active {
