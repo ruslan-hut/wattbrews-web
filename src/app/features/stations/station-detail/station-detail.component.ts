@@ -18,6 +18,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
 import { SmallMapComponent } from '../../../shared/components/small-map/small-map.component';
 import { TransactionPreviewComponent } from '../../../shared/components/transaction-preview/transaction-preview.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
+import { DateUtils } from '../../../shared/utils/date.utils';
 
 @Pipe({
   name: 'sortByConnectorId',
@@ -198,6 +199,11 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     } catch {
       return dateString;
     }
+  }
+
+  getTimeAgo(dateString: string): string {
+    if (!dateString) return 'Unknown';
+    return DateUtils.getTimeAgo(dateString);
   }
 
   hasAvailableConnectors(): boolean {

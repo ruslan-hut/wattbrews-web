@@ -12,6 +12,7 @@ import { TransactionService } from '../../../core/services/transaction.service';
 import { TransactionDetail } from '../../../core/models/transaction-detail.model';
 import { EnergyChartComponent } from '../energy-chart/energy-chart.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
+import { SmallMapComponent } from '../small-map/small-map.component';
 
 @Component({
   selector: 'app-transaction-preview',
@@ -26,7 +27,8 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
     MatChipsModule,
     MatDividerModule,
     MatTabsModule,
-    EnergyChartComponent
+    EnergyChartComponent,
+    SmallMapComponent
   ],
   templateUrl: './transaction-preview.component.html',
   styleUrl: './transaction-preview.component.scss'
@@ -140,5 +142,18 @@ export class TransactionPreviewComponent implements OnInit {
     } else {
       return `${powerInWatts.toFixed(0)} W`;
     }
+  }
+
+  protected hasLocation(): boolean {
+    const detail = this.transactionDetail();
+    return !!(detail?.charge_point_location?.latitude && detail?.charge_point_location?.longitude);
+  }
+
+  protected getLatitude(): number {
+    return this.transactionDetail()?.charge_point_location?.latitude || 0;
+  }
+
+  protected getLongitude(): number {
+    return this.transactionDetail()?.charge_point_location?.longitude || 0;
   }
 }

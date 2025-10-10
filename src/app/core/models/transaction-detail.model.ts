@@ -36,6 +36,10 @@ export interface TransactionDetail {
   charge_point_id: string;
   charge_point_title: string;
   charge_point_address: string;
+  charge_point_location?: {
+    latitude: number;
+    longitude: number;
+  };
   time_started: string;
   meter_start: number;
   duration: number;

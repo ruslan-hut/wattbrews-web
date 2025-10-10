@@ -211,9 +211,10 @@
       "averagePower": "Potencia Promedio"
     },
     "timing": {
-      "title": "Tiempo de la Transacción",
+      "title": "Tiempo y Ubicación de la Transacción",
       "started": "Inicio",
-      "ended": "Fin"
+      "ended": "Fin",
+      "location": "Ubicación"
     },
     "chart": {
       "title": "Gráfico de Energía Consumida"
@@ -240,8 +241,7 @@
       "connection": "Conexión",
       "availability": "Disponibilidad",
       "info": "Información",
-      "statusTime": "Tiempo de Estado",
-      "eventTime": "Tiempo de Evento",
+      "statusUpdated": "Estado actualizado:",
       "coordinates": "Coordenadas",
       "connector": "Conector",
       "type": "Tipo",

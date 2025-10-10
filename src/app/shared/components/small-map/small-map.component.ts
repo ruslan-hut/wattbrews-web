@@ -18,13 +18,17 @@ import * as L from 'leaflet';
     </div>
   `,
   styles: [`
+    :host {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
     .small-map-container {
       position: relative;
       width: 100%;
-      height: 200px;
-      border-radius: 8px;
+      height: 100%;
       overflow: hidden;
-      border: 1px solid #e0e0e0;
     }
 
     .map-container {
@@ -129,10 +133,8 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    // Set container height from input
-    if (this.height) {
-      this.mapContainer.nativeElement.style.height = this.height;
-    }
+    // Height is now controlled by the parent container
+    // The component fills 100% of its parent
   }
 
   ngAfterViewInit() {

@@ -100,4 +100,51 @@ export class DateUtils {
     
     return this.formatDate(date, 'short');
   }
+  
+  /**
+   * Get time ago string (e.g., "2 minutes ago", "3 hours ago", "5 days ago")
+   */
+  static getTimeAgo(date: Date | string): string {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    
+    if (isNaN(dateObj.getTime())) {
+      return 'Unknown';
+    }
+    
+    const now = new Date();
+    const diffInMs = now.getTime() - dateObj.getTime();
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    
+    if (diffInSeconds < 60) {
+      return 'Just now';
+    }
+    
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes} ${diffInMinutes === 1 ? 'minute' : 'minutes'} ago`;
+    }
+    
+    if (diffInHours < 24) {
+      return `${diffInHours} ${diffInHours === 1 ? 'hour' : 'hours'} ago`;
+    }
+    
+    if (diffInDays < 7) {
+      return `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`;
+    }
+    
+    if (diffInDays < 30) {
+      const weeks = Math.floor(diffInDays / 7);
+      return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+    }
+    
+    if (diffInDays < 365) {
+      const months = Math.floor(diffInDays / 30);
+      return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+    }
+    
+    const years = Math.floor(diffInDays / 365);
+    return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+  }
 }

@@ -98,26 +98,56 @@
   color: #2c3e50;
 }
 
+.status-map-container {
+  display: flex;
+  gap: var(--energy-space-lg, 24px);
+  align-items: flex-start;
+}
+
 .status-grid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--energy-space-md, 16px);
+  flex: 1;
+  min-width: 0;
 }
 
 .status-item {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .status-label {
   font-weight: 500;
-  color: #5a6c7d;
-  min-width: 80px;
+  color: var(--energy-gray-600, #475569);
+  font-size: 0.875rem;
 }
 
 .status-value {
-  color: #2c3e50;
+  color: var(--energy-gray-800, #1e293b);
+  font-size: 1rem;
+  word-break: break-word;
+}
+
+.map-container {
+  flex-shrink: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: var(--energy-radius-lg, 12px);
+  overflow: hidden;
+  box-shadow: var(--energy-shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));
+  
+  ::ng-deep app-small-map {
+    display: block;
+    width: 100%;
+    height: 100%;
+    
+    .small-map-container {
+      height: 100%;
+      border-radius: 0;
+    }
+  }
 }
 
 .mat-chip.completed {
@@ -131,6 +161,7 @@
 }
 
 
+// Mobile responsiveness following design policy
 @media (max-width: 768px) {
   .transaction-preview-container {
     max-width: 100%;
@@ -139,6 +170,21 @@
   
   .overview-grid {
     grid-template-columns: 1fr;
+  }
+  
+  // Stack status and map vertically on mobile
+  .status-map-container {
+    flex-direction: column;
+    gap: var(--energy-space-md, 16px);
+  }
+  
+  .map-container {
+    width: 100%;
+    height: 250px; // Slightly taller on mobile for better visibility
+  }
+  
+  .status-grid {
+    width: 100%;
   }
 }
 

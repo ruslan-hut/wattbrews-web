@@ -208,9 +208,10 @@
       "averagePower": "Average Power"
     },
     "timing": {
-      "title": "Transaction Timing",
+      "title": "Transaction Timing & Location",
       "started": "Started",
-      "ended": "Ended"
+      "ended": "Ended",
+      "location": "Location"
     },
     "chart": {
       "title": "Energy Consumption Chart"
@@ -237,8 +238,7 @@
       "connection": "Connection",
       "availability": "Availability",
       "info": "Info",
-      "statusTime": "Status Time",
-      "eventTime": "Event Time",
+      "statusUpdated": "Status updated:",
       "coordinates": "Coordinates",
       "connector": "Connector",
       "type": "Type",
