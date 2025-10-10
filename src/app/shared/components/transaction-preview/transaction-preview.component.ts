@@ -120,10 +120,10 @@ export class TransactionPreviewComponent implements OnInit {
     return !!(detail?.meter_values && detail.meter_values.length > 0);
   }
 
-  protected calculateAveragePower(): number {
+  protected calculateAveragePower(): string {
     const detail = this.transactionDetail();
     if (!detail || !detail.consumed || !detail.duration || detail.duration === 0) {
-      return 0;
+      return '0 W';
     }
     
     // Convert consumed energy from Wh to W and duration from seconds to hours
@@ -131,6 +131,14 @@ export class TransactionPreviewComponent implements OnInit {
     const energyWh = detail.consumed;
     const durationHours = detail.duration / 3600; // Convert seconds to hours
     
-    return energyWh / durationHours;
+    const powerInWatts = energyWh / durationHours;
+    
+    // Return in kW if >= 1000 W, otherwise in W
+    if (powerInWatts >= 1000) {
+      const powerInKw = powerInWatts / 1000;
+      return `${powerInKw.toFixed(1)} kW`;
+    } else {
+      return `${powerInWatts.toFixed(0)} W`;
+    }
   }
 }
