@@ -1,128 +1,21 @@
-import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-small-map',
-  standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="small-map-container">
-      <div #mapContainer class="map-container"></div>
-      <div class="map-overlay" *ngIf="!isMapReady">
-        <div class="loading-spinner">
-          <div class="spinner"></div>
-          <span>Loading map...</span>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    :host {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    .small-map-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .map-container {
-      width: 100%;
-      height: 100%;
-    }
-
-    .map-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(255, 255, 255, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .loading-spinner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid #f3f3f3;
-      border-top: 2px solid #007bff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .loading-spinner span {
-      font-size: 12px;
-      color: #666;
-    }
-
-    /* Leaflet map styles */
-    :host ::ng-deep .leaflet-container {
-      height: 100% !important;
-      width: 100% !important;
-      background-color: #f8f9fa !important;
-    }
-
-    :host ::ng-deep .leaflet-tile {
-      filter: none !important;
-    }
-
-    :host ::ng-deep .leaflet-popup-content {
-      font-size: 12px;
-      margin: 8px 12px;
-    }
-
-    :host ::ng-deep .leaflet-popup-content-wrapper {
-      border-radius: 6px;
-      box-shadow: 0 3px 14px rgba(0,0,0,0.4);
-    }
-
-    :host ::ng-deep .leaflet-control-zoom {
-      border-radius: 4px;
-      box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-    }
-
-    :host ::ng-deep .leaflet-control-zoom a {
-      border-radius: 4px;
-      font-size: 18px;
-      line-height: 26px;
-    }
-
-    :host ::ng-deep .leaflet-control-zoom a:hover {
-      background-color: #f4f4f4;
-    }
-
-    :host ::ng-deep .custom-marker {
-      background: transparent !important;
-      border: none !important;
-    }
-  `]
+  templateUrl: './small-map.component.html',
+  styleUrl: './small-map.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() latitude!: number;
-  @Input() longitude!: number;
-  @Input() title?: string;
-  @Input() zoom: number = 15;
-  @Input() height: string = '200px';
+  latitude = input.required<number>();
+  longitude = input.required<number>();
+  title = input<string>();
+  zoom = input<number>(15);
+  height = input<string>('200px');
 
   @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef;
 
@@ -130,7 +23,7 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
   private marker: L.Marker | null = null;
   isMapReady = false;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     // Height is now controlled by the parent container
@@ -148,7 +41,10 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private initializeMap() {
-    if (!this.latitude || !this.longitude) {
+    const lat = this.latitude();
+    const lng = this.longitude();
+    
+    if (!lat || !lng) {
       console.warn('SmallMapComponent: Latitude and longitude are required');
       this.isMapReady = true;
       this.cdr.detectChanges();
@@ -167,8 +63,8 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // Initialize the map
         this.map = L.map(this.mapContainer.nativeElement, {
-          center: [this.latitude, this.longitude],
-          zoom: this.zoom,
+          center: [lat, lng],
+          zoom: this.zoom(),
           zoomControl: true,
           attributionControl: false,
           dragging: true,
@@ -209,16 +105,17 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
           popupAnchor: [0, -10]
         });
 
-        this.marker = L.marker([this.latitude, this.longitude], {
+        this.marker = L.marker([lat, lng], {
           icon: markerIcon
         }).addTo(this.map);
 
         // Add popup if title is provided
-        if (this.title) {
+        const mapTitle = this.title();
+        if (mapTitle) {
           this.marker.bindPopup(`
             <div style="text-align: center;">
-              <strong>${this.title}</strong><br>
-              <small>${this.latitude.toFixed(6)}, ${this.longitude.toFixed(6)}</small>
+              <strong>${mapTitle}</strong><br>
+              <small>${lat.toFixed(6)}, ${lng.toFixed(6)}</small>
             </div>
           `);
         }
@@ -247,11 +144,8 @@ export class SmallMapComponent implements OnInit, AfterViewInit, OnDestroy {
    * Update map center and marker position
    */
   updateLocation(lat: number, lng: number, title?: string) {
-    this.latitude = lat;
-    this.longitude = lng;
-    
     if (this.map) {
-      this.map.setView([lat, lng], this.zoom);
+      this.map.setView([lat, lng], this.zoom());
       
       if (this.marker) {
         this.marker.setLatLng([lat, lng]);
