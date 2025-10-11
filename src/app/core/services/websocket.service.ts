@@ -31,6 +31,9 @@ export class WebsocketService {
   private readonly _connectionStartTime = signal<Date | null>(null);
   private readonly _reconnectCount = signal<number>(0);
   private readonly _lastPingTime = signal<Date | null>(null);
+  
+  // Charge point update signal
+  private readonly _chargePointUpdate = signal<{ chargePointId: string; connectorId?: number; timestamp: Date } | null>(null);
 
   // Public readonly signals
   readonly connectionState = this._connectionState.asReadonly();
@@ -40,6 +43,7 @@ export class WebsocketService {
   readonly connectionStartTime = this._connectionStartTime.asReadonly();
   readonly reconnectCount = this._reconnectCount.asReadonly();
   readonly lastPingTime = this._lastPingTime.asReadonly();
+  readonly chargePointUpdate = this._chargePointUpdate.asReadonly();
 
   readonly isConnected = computed(() =>
     this._connectionState() === ConnectionState.Connected
@@ -302,6 +306,15 @@ export class WebsocketService {
         this._lastPingTime.set(new Date());
       }
 
+      // Handle charge point events - update signal for reactive components
+      if (message.stage === ResponseStage.ChargePointEvent && message.data) {
+        this._chargePointUpdate.set({
+          chargePointId: message.data,
+          connectorId: message.connector_id,
+          timestamp: new Date()
+        });
+      }
+
       // Broadcast to subscribers
       this.messageSubject.next(message);
 
@@ -411,6 +424,14 @@ export class WebsocketService {
     this._messageCount.set(0);
     this._reconnectCount.set(0);
     this._lastPingTime.set(null);
+  }
+
+  /**
+   * Clear the charge point update signal
+   * Useful for components that want to consume updates once
+   */
+  clearChargePointUpdate(): void {
+    this._chargePointUpdate.set(null);
   }
 }
 

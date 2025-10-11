@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, Pipe, PipeTransform, effect } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -83,6 +83,28 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   private authSubscription?: Subscription;
   private websocketSubscription?: Subscription;
   private authCheckTimeout?: any;
+
+  constructor() {
+    // Set up effect to react to charge point updates for this specific station
+    effect(() => {
+      const update = this.websocketService.chargePointUpdate();
+      const currentStation = this.stationDetail();
+      
+      if (update && currentStation && update.chargePointId === currentStation.charge_point_id) {
+        // Refresh station detail
+        this.loadStationDetail();
+        
+        // Highlight updated connector if connector_id is present
+        if (update.connectorId) {
+          this.highlightConnector(update.connectorId);
+        }
+        
+        // Set real-time indicator
+        this.realtimeActive.set(true);
+        setTimeout(() => this.realtimeActive.set(false), 2000);
+      }
+    });
+  }
 
   ngOnInit() {
     // Initialize translations first
