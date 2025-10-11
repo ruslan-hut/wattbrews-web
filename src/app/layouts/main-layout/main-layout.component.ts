@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, computed, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -48,6 +48,9 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   protected readonly appTitle = signal('WattBrews');
   protected readonly sidenavOpen = signal(false);
   protected readonly userName = this.authService.userName;
+  protected readonly isAdmin = computed(() => 
+    this.authService.hasAnyRole(['admin'])
+  );
 
   ngOnInit(): void {
     // Initialize translations first

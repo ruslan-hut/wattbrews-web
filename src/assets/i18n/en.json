@@ -386,5 +386,65 @@
       "11": "November",
       "12": "December"
     }
+  },
+  "tools": {
+    "websocket": {
+      "title": "WebSocket Test & Monitor",
+      "connection": {
+        "connected": "Connected",
+        "disconnected": "Disconnected",
+        "connecting": "Connecting...",
+        "reconnecting": "Reconnecting...",
+        "error": "Connection Error",
+        "duration": "Connected for {{duration}}",
+        "lastPing": "Last ping: {{time}}"
+      },
+      "commands": {
+        "title": "Send Command",
+        "select": "Select Command",
+        "StartTransaction": "Start Transaction",
+        "StopTransaction": "Stop Transaction",
+        "CheckStatus": "Check Status",
+        "ListenTransaction": "Listen Transaction",
+        "StopListenTransaction": "Stop Listen Transaction",
+        "ListenChargePoints": "Listen Charge Points",
+        "ListenLog": "Listen Log",
+        "PingConnection": "Ping Connection",
+        "send": "Send Command",
+        "quickActions": "Quick Actions"
+      },
+      "fields": {
+        "chargePointId": "Charge Point ID",
+        "connectorId": "Connector ID",
+        "transactionId": "Transaction ID"
+      },
+      "messages": {
+        "title": "Message Log",
+        "count": "{{count}} messages",
+        "noMessages": "No messages yet",
+        "clear": "Clear Log",
+        "export": "Export Log",
+        "autoScroll": "Auto-scroll",
+        "filter": "Filter"
+      },
+      "inspector": {
+        "title": "Message Inspector",
+        "noSelection": "Select a message to inspect",
+        "copy": "Copy JSON",
+        "copied": "Copied to clipboard"
+      },
+      "statistics": {
+        "title": "Statistics",
+        "uptime": "Uptime",
+        "totalMessages": "Total Messages",
+        "byStatus": "By Status",
+        "byStage": "By Stage",
+        "reconnections": "Reconnections"
+      }
+    }
+  },
+  "connection": {
+    "warning": "Real-time connection lost. Reconnecting...",
+    "reconnecting": "Attempting to reconnect..."
   }
 }

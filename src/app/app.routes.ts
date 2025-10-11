@@ -27,6 +27,10 @@ export const routes: Routes = [
     loadChildren: () => import('./features/profile/profile.routes').then(m => m.profileRoutes)
   },
   {
+    path: 'tools',
+    loadChildren: () => import('./features/tools/tools.routes').then(m => m.toolsRoutes)
+  },
+  {
     path: '**',
     redirectTo: '/dashboard'
   }

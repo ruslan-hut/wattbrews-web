@@ -34,6 +34,10 @@
         <mat-icon matListItemIcon>person</mat-icon>
         <span matListItemTitle>{{ translationService.getReactive('nav.profile') }}</span>
       </a>
+      <a mat-list-item routerLink="/tools" (click)="closeSidenav()" *ngIf="isAdmin()">
+        <mat-icon matListItemIcon>build</mat-icon>
+        <span matListItemTitle>{{ translationService.getReactive('nav.tools') }}</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   
