@@ -85,8 +85,6 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   private initializeWebSocket(): void {
     // Connect to WebSocket server
     this.websocketService.connect();
-    
-    console.log('[MainLayout] WebSocket connection initialized');
   }
 
   ngOnDestroy(): void {

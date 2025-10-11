@@ -112,8 +112,6 @@ export class WebsocketService {
       this._connectionState.set(ConnectionState.Connecting);
       this._lastError.set(null);
 
-      if (this.debug) console.log('[WebSocket] Connecting to', environment.wsBaseUrl);
-
       this.ws = new WebSocket(environment.wsBaseUrl);
 
       // Set up event handlers
@@ -185,7 +183,7 @@ export class WebsocketService {
       
       // Log all commands except pings to reduce console clutter
       if (this.debug && request.command !== WsCommand.PingConnection) {
-        console.log('[WebSocket] Sending:', fullRequest);
+        console.log('[WebSocket] >>', request.command);
       }
       
       this.ws.send(message);
@@ -294,7 +292,7 @@ export class WebsocketService {
       
       // Log all messages except pings to reduce console clutter
       if (this.debug && message.status !== ResponseStatus.Ping) {
-        console.log('[WebSocket] Received:', message);
+        console.log('[WebSocket] << ', message);
       }
 
       // Update state
