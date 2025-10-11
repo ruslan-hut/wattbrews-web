@@ -16,6 +16,29 @@
   font-weight: 300;
   margin-bottom: 0.5rem;
   color: #2c3e50;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.realtime-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  animation: pulse 1s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.3);
+  }
 }
 
 .dashboard-subtitle {

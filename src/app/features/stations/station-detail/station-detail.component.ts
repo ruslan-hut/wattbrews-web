@@ -12,7 +12,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { ChargePointService } from '../../../core/services/chargepoint.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { WebsocketService } from '../../../core/services/websocket.service';
 import { StationDetail } from '../../../core/models/station-detail.model';
+import { WsCommand, WsResponse, ResponseStage } from '../../../core/models/websocket.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { SmallMapComponent } from '../../../shared/components/small-map/small-map.component';
@@ -57,6 +59,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
 export class StationDetailComponent implements OnInit, OnDestroy {
   private readonly chargePointService = inject(ChargePointService);
   private readonly authService = inject(AuthService);
+  private readonly websocketService = inject(WebsocketService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
@@ -69,11 +72,16 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   private readonly _stationDetail = signal<StationDetail | null>(null);
   readonly stationDetail = this._stationDetail.asReadonly();
   
+  // Real-time updates
+  protected readonly realtimeActive = signal(false);
+  protected readonly updatedConnectorIds = signal<Set<number>>(new Set());
+  
   // Translation loading state
   protected readonly translationsLoading = signal(true);
   
   // Subscription management
   private authSubscription?: Subscription;
+  private websocketSubscription?: Subscription;
   private authCheckTimeout?: any;
 
   ngOnInit() {
@@ -121,9 +129,12 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Clean up subscription to prevent memory leaks
+    // Clean up subscriptions to prevent memory leaks
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
+    }
+    if (this.websocketSubscription) {
+      this.websocketSubscription.unsubscribe();
     }
     if (this.authCheckTimeout) {
       clearTimeout(this.authCheckTimeout);
@@ -137,12 +148,91 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       this.chargePointService.getStationDetail(id).subscribe({
         next: (station) => {
           this._stationDetail.set(station);
+          
+          // Initialize WebSocket subscriptions after station detail is loaded
+          this.initializeWebSocketSubscriptions();
         },
         error: (error) => {
           // Error loading station detail - handled by service
         }
       });
     }
+  }
+  
+  /**
+   * Initialize WebSocket subscriptions for real-time updates
+   * Note: WebSocket is already connected globally
+   */
+  private initializeWebSocketSubscriptions(): void {
+    // Only subscribe if not already subscribed
+    if (this.websocketSubscription) {
+      return;
+    }
+    
+    // Subscribe to charge-point events
+    this.websocketService.sendCommand(WsCommand.ListenChargePoints).catch(error => {
+      console.error('[StationDetail] Failed to subscribe to charge points:', error);
+    });
+    
+    // Listen for charge-point events
+    this.websocketSubscription = this.websocketService.subscribeToStage(
+      ResponseStage.ChargePointEvent,
+      (message) => {
+        this.handleChargePointEvent(message);
+      }
+    );
+  }
+  
+  /**
+   * Handle charge point event from WebSocket
+   */
+  private handleChargePointEvent(message: WsResponse): void {
+    const chargePointId = message.data;
+    const station = this.stationDetail();
+    
+    // Only handle events for this station
+    if (!chargePointId || !station || chargePointId !== station.charge_point_id) {
+      return;
+    }
+    
+    // Refresh station detail
+    this.loadStationDetail();
+    
+    // Highlight updated connector if connector_id is present
+    if (message.connector_id) {
+      this.highlightConnector(message.connector_id);
+    }
+    
+    // Set real-time indicator
+    this.realtimeActive.set(true);
+    setTimeout(() => this.realtimeActive.set(false), 2000);
+  }
+  
+  /**
+   * Highlight a connector temporarily
+   */
+  private highlightConnector(connectorId: number): void {
+    this.updatedConnectorIds.update(set => {
+      const newSet = new Set(set);
+      newSet.add(connectorId);
+      return newSet;
+    });
+    
+    // Remove highlight after 3 seconds
+    setTimeout(() => {
+      this.updatedConnectorIds.update(set => {
+        const newSet = new Set(set);
+        newSet.delete(connectorId);
+        return newSet;
+      });
+    }, 3000);
+  }
+  
+  /**
+   * Check if a connector should be highlighted
+   */
+  protected isConnectorUpdated(connectorId: number): boolean {
+    return this.updatedConnectorIds().has(connectorId);
   }
 
   goBack() {

@@ -6,7 +6,10 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <div class="header-content">
-        <h1 class='page-title'>{{ translationService.getReactive('stationDetail.title') }}</h1>
+        <h1 class='page-title'>
+          {{ translationService.getReactive('stationDetail.title') }}
+          <span class="realtime-indicator" *ngIf="realtimeActive()"></span>
+        </h1>
         @if (stationDetail()) {
           <p class="page-subtitle">{{ stationDetail()!.title }}</p>
         }
@@ -181,7 +184,8 @@
               class="connector-item"
               [class.available]="connector.status === 'Available'"
               [class.occupied]="connector.status === 'Occupied'"
-              [class.out-of-order]="connector.status === 'OutOfOrder'">
+              [class.out-of-order]="connector.status === 'OutOfOrder'"
+              [class.updated]="isConnectorUpdated(connector.connector_id)">
               
               <div class="connector-header">
                 <h4>{{ translationService.getReactive('stationDetail.labels.connector') }} {{ (connector.connector_id_name || connector.connector_id) }}</h4>

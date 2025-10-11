@@ -8,7 +8,10 @@
   <!-- Dashboard Content (only show when translations are loaded) -->
   <div *ngIf="!translationsLoading()">
     <div class="dashboard-header">
-      <h1 class="dashboard-title">{{ translationService.getReactive('dashboard.title') }}</h1>
+      <h1 class="dashboard-title">
+        {{ translationService.getReactive('dashboard.title') }}
+        <span class="realtime-indicator" *ngIf="realtimeActive()"></span>
+      </h1>
       <p class="dashboard-subtitle">{{ translationService.getReactive('dashboard.subtitle') }}</p>
     </div>
   
