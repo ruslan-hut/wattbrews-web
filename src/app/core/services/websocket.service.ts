@@ -77,10 +77,6 @@ export class WebsocketService {
 
     document.addEventListener('visibilitychange', () => {
       this.isTabVisible = !document.hidden;
-      
-      if (this.debug) {
-        console.log('[WebSocket] Tab visibility changed:', this.isTabVisible ? 'visible' : 'hidden');
-      }
 
       if (this.isTabVisible) {
         // Tab became visible - resume ping if connected
@@ -183,7 +179,10 @@ export class WebsocketService {
 
       const message = JSON.stringify(fullRequest);
       
-      if (this.debug) console.log('[WebSocket] Sending:', fullRequest);
+      // Log all commands except pings to reduce console clutter
+      if (this.debug && request.command !== WsCommand.PingConnection) {
+        console.log('[WebSocket] Sending:', fullRequest);
+      }
       
       this.ws.send(message);
     } catch (error: any) {
@@ -266,7 +265,7 @@ export class WebsocketService {
 
       // Send initial ping
       await this.sendCommand(WsCommand.PingConnection).catch(error => {
-        if (this.debug) console.error('[WebSocket] Initial ping failed:', error);
+        // Silently fail - ping errors are not critical
       });
 
       // If this was a reconnection, send CheckStatus to resume state
@@ -289,7 +288,10 @@ export class WebsocketService {
     try {
       const message: WsResponse = JSON.parse(event.data);
       
-      if (this.debug) console.log('[WebSocket] Received:', message);
+      // Log all messages except pings to reduce console clutter
+      if (this.debug && message.status !== ResponseStatus.Ping) {
+        console.log('[WebSocket] Received:', message);
+      }
 
       // Update state
       this._lastMessage.set(message);
@@ -386,10 +388,8 @@ export class WebsocketService {
           }
           // Silently skip ping if no token (user not authenticated)
         } catch (error: any) {
-          // Only log if it's not a token error
-          if (this.debug && error.message !== 'No authentication token available') {
-            console.error('[WebSocket] Ping failed:', error);
-          }
+          // Silently fail - periodic ping errors are not critical
+          // Connection issues will be caught by onclose event
         }
       }
     }, APP_CONSTANTS.WEBSOCKET.PING_INTERVAL);
