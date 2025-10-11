@@ -1,0 +1,17 @@
+@if (showBanner()) {
+  <div class="connection-warning">
+    <mat-icon>cloud_off</mat-icon>
+    
+    @if (connectionState() === ConnectionState.Reconnecting) {
+      <span>{{ translationService.getReactive('connection.reconnecting') }}</span>
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      <span>{{ translationService.getReactive('connection.warning') }}</span>
+    }
+    
+    <button mat-icon-button (click)="dismiss()" class="dismiss-button" [attr.aria-label]="translationService.getReactive('common.close')">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+}
+

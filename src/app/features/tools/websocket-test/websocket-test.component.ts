@@ -19,6 +19,12 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
 import { WsCommand, WsResponse, ResponseStatus, ResponseStage, ConnectionState } from '../../../core/models/websocket.model';
 import { APP_CONSTANTS } from '../../../core/constants/app.constants';
 
+// Message wrapper with timestamp
+interface MessageWithTimestamp {
+  message: WsResponse;
+  timestamp: Date;
+}
+
 @Component({
   selector: 'app-websocket-test',
   imports: [
@@ -54,8 +60,8 @@ export class WebsocketTestComponent implements OnInit {
   protected readonly ConnectionState = ConnectionState;
 
   // Signals
-  protected readonly messages = signal<WsResponse[]>([]);
-  protected readonly selectedMessage = signal<WsResponse | null>(null);
+  protected readonly messages = signal<MessageWithTimestamp[]>([]);
+  protected readonly selectedMessage = signal<MessageWithTimestamp | null>(null);
   protected readonly selectedCommand = signal<WsCommand>(WsCommand.PingConnection);
   protected readonly filterStatus = signal<ResponseStatus | 'all'>('all');
   protected readonly filterStage = signal<ResponseStage | 'all'>('all');
@@ -70,12 +76,12 @@ export class WebsocketTestComponent implements OnInit {
     
     const statusFilter = this.filterStatus();
     if (statusFilter !== 'all') {
-      msgs = msgs.filter(m => m.status === statusFilter);
+      msgs = msgs.filter(m => m.message.status === statusFilter);
     }
     
     const stageFilter = this.filterStage();
     if (stageFilter !== 'all') {
-      msgs = msgs.filter(m => m.stage === stageFilter);
+      msgs = msgs.filter(m => m.message.stage === stageFilter);
     }
     
     return msgs;
@@ -98,7 +104,7 @@ export class WebsocketTestComponent implements OnInit {
     const stats: Record<string, number> = {};
     
     Object.values(ResponseStatus).forEach(status => {
-      stats[status] = msgs.filter(m => m.status === status).length;
+      stats[status] = msgs.filter(m => m.message.status === status).length;
     });
     
     return stats;
@@ -109,7 +115,7 @@ export class WebsocketTestComponent implements OnInit {
     const stats: Record<string, number> = {};
     
     Object.values(ResponseStage).forEach(stage => {
-      stats[stage] = msgs.filter(m => m.stage === stage).length;
+      stats[stage] = msgs.filter(m => m.message.stage === stage).length;
     });
     
     return stats;
@@ -146,7 +152,7 @@ export class WebsocketTestComponent implements OnInit {
     // Subscribe to messages
     const subscription = this.websocketService.subscribe((message) => {
       this.messages.update(msgs => {
-        const newMessages = [...msgs, message];
+        const newMessages = [...msgs, { message, timestamp: new Date() }];
         // Limit history
         if (newMessages.length > APP_CONSTANTS.WEBSOCKET.MESSAGE_HISTORY_LIMIT) {
           return newMessages.slice(-APP_CONSTANTS.WEBSOCKET.MESSAGE_HISTORY_LIMIT);
@@ -225,8 +231,8 @@ export class WebsocketTestComponent implements OnInit {
   }
 
   // Message methods
-  protected selectMessage(message: WsResponse): void {
-    this.selectedMessage.set(message);
+  protected selectMessage(messageWithTimestamp: MessageWithTimestamp): void {
+    this.selectedMessage.set(messageWithTimestamp);
   }
 
   protected clearLog(): void {
@@ -245,9 +251,9 @@ export class WebsocketTestComponent implements OnInit {
     URL.revokeObjectURL(url);
   }
 
-  protected async copyMessage(message: WsResponse): Promise<void> {
+  protected async copyMessage(messageWithTimestamp: MessageWithTimestamp): Promise<void> {
     try {
-      await navigator.clipboard.writeText(JSON.stringify(message, null, 2));
+      await navigator.clipboard.writeText(JSON.stringify(messageWithTimestamp, null, 2));
     } catch (error) {
       console.error('Failed to copy:', error);
     }

@@ -357,6 +357,7 @@
     }
   },
   "common": {
+    "close": "Cerrar",
     "buttons": {
       "save": "Guardar",
       "retry": "Reintentar",

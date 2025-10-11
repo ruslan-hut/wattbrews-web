@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
+import { ConnectionStatusComponent } from '../../shared/components/connection-status/connection-status.component';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 
 @Component({
@@ -29,7 +30,8 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
     MatBadgeModule,
     MatMenuModule,
     MatProgressSpinnerModule,
-    LanguageSwitcherComponent
+    LanguageSwitcherComponent,
+    ConnectionStatusComponent
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss'

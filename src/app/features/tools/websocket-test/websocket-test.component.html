@@ -167,41 +167,41 @@
               <p>{{ translationService.getReactive('tools.websocket.messages.noMessages') }}</p>
             </div>
           } @else {
-            @for (message of filteredMessages(); track $index) {
+            @for (msgWrapper of filteredMessages(); track $index) {
               <div 
                 class="message-card"
-                [class.selected]="selectedMessage() === message"
-                (click)="selectMessage(message)">
+                [class.selected]="selectedMessage() === msgWrapper"
+                (click)="selectMessage(msgWrapper)">
                 <div class="message-header">
-                  <span class="timestamp">{{ formatTimestamp() }}</span>
-                  <mat-chip [class]="'status-chip status-' + getStatusColor(message.status)">
-                    {{ message.status }}
+                  <span class="timestamp">{{ formatTimestamp(msgWrapper.timestamp) }}</span>
+                  <mat-chip [class]="'status-chip status-' + getStatusColor(msgWrapper.message.status)">
+                    {{ msgWrapper.message.status }}
                   </mat-chip>
                   <mat-chip class="stage-chip">
-                    <mat-icon>{{ getStageIcon(message.stage) }}</mat-icon>
-                    {{ message.stage }}
+                    <mat-icon>{{ getStageIcon(msgWrapper.message.stage) }}</mat-icon>
+                    {{ msgWrapper.message.stage }}
                   </mat-chip>
                 </div>
                 
-                @if (message.info) {
-                  <div class="message-info">{{ message.info }}</div>
+                @if (msgWrapper.message.info) {
+                  <div class="message-info">{{ msgWrapper.message.info }}</div>
                 }
                 
                 <div class="message-fields">
-                  @if (message.id !== undefined) {
-                    <span class="field"><strong>ID:</strong> {{ message.id }}</span>
+                  @if (msgWrapper.message.id !== undefined) {
+                    <span class="field"><strong>ID:</strong> {{ msgWrapper.message.id }}</span>
                   }
-                  @if (message.progress !== undefined) {
-                    <span class="field"><strong>Progress:</strong> {{ message.progress }}%</span>
+                  @if (msgWrapper.message.progress !== undefined) {
+                    <span class="field"><strong>Progress:</strong> {{ msgWrapper.message.progress }}%</span>
                   }
-                  @if (message.power !== undefined) {
-                    <span class="field"><strong>Power:</strong> {{ message.power }} kW</span>
+                  @if (msgWrapper.message.power !== undefined) {
+                    <span class="field"><strong>Power:</strong> {{ msgWrapper.message.power }} kW</span>
                   }
-                  @if (message.soc !== undefined) {
-                    <span class="field"><strong>SoC:</strong> {{ message.soc }}%</span>
+                  @if (msgWrapper.message.soc !== undefined) {
+                    <span class="field"><strong>SoC:</strong> {{ msgWrapper.message.soc }}%</span>
                   }
-                  @if (message.connector_status) {
-                    <span class="field"><strong>Status:</strong> {{ message.connector_status }}</span>
+                  @if (msgWrapper.message.connector_status) {
+                    <span class="field"><strong>Status:</strong> {{ msgWrapper.message.connector_status }}</span>
                   }
                 </div>
               </div>
@@ -240,76 +240,80 @@
             <div class="parsed-fields">
               <h3>Parsed Fields</h3>
               <div class="field-list">
-                @if (selectedMessage()!.status) {
+                <div class="field-item">
+                  <span class="field-label">Received At:</span>
+                  <span class="field-value">{{ formatTimestamp(selectedMessage()!.timestamp) }}</span>
+                </div>
+                @if (selectedMessage()!.message.status) {
                   <div class="field-item">
                     <span class="field-label">Status:</span>
-                    <span class="field-value">{{ selectedMessage()!.status }}</span>
+                    <span class="field-value">{{ selectedMessage()!.message.status }}</span>
                   </div>
                 }
-                @if (selectedMessage()!.stage) {
+                @if (selectedMessage()!.message.stage) {
                   <div class="field-item">
                     <span class="field-label">Stage:</span>
-                    <span class="field-value">{{ selectedMessage()!.stage }}</span>
+                    <span class="field-value">{{ selectedMessage()!.message.stage }}</span>
                   </div>
                 }
-                @if (selectedMessage()!.info) {
+                @if (selectedMessage()!.message.info) {
                   <div class="field-item">
                     <span class="field-label">Info:</span>
-                    <span class="field-value">{{ selectedMessage()!.info }}</span>
+                    <span class="field-value">{{ selectedMessage()!.message.info }}</span>
                   </div>
                 }
-                @if (selectedMessage()!.id !== undefined) {
+                @if (selectedMessage()!.message.id !== undefined) {
                   <div class="field-item">
                     <span class="field-label">Transaction ID:</span>
-                    <span class="field-value">{{ selectedMessage()!.id }}</span>
+                    <span class="field-value">{{ selectedMessage()!.message.id }}</span>
                   </div>
                 }
-                @if (selectedMessage()!.progress !== undefined) {
+                @if (selectedMessage()!.message.progress !== undefined) {
                   <div class="field-item">
                     <span class="field-label">Progress:</span>
-                    <span class="field-value">{{ selectedMessage()!.progress }}%</span>
+                    <span class="field-value">{{ selectedMessage()!.message.progress }}%</span>
                   </div>
                 }
-                @if (selectedMessage()!.power !== undefined) {
+                @if (selectedMessage()!.message.power !== undefined) {
                   <div class="field-item">
                     <span class="field-label">Power:</span>
-                    <span class="field-value">{{ selectedMessage()!.power }} kW</span>
+                    <span class="field-value">{{ selectedMessage()!.message.power }} kW</span>
                   </div>
                 }
-                @if (selectedMessage()!.power_rate !== undefined) {
+                @if (selectedMessage()!.message.power_rate !== undefined) {
                   <div class="field-item">
                     <span class="field-label">Power Rate:</span>
-                    <span class="field-value">{{ selectedMessage()!.power_rate }} kW</span>
+                    <span class="field-value">{{ selectedMessage()!.message.power_rate }} kW</span>
                   </div>
                 }
-                @if (selectedMessage()!.soc !== undefined) {
+                @if (selectedMessage()!.message.soc !== undefined) {
                   <div class="field-item">
                     <span class="field-label">State of Charge:</span>
-                    <span class="field-value">{{ selectedMessage()!.soc }}%</span>
+                    <span class="field-value">{{ selectedMessage()!.message.soc }}%</span>
                   </div>
                 }
-                @if (selectedMessage()!.price !== undefined) {
+                @if (selectedMessage()!.message.price !== undefined) {
                   <div class="field-item">
                     <span class="field-label">Price:</span>
-                    <span class="field-value">€{{ selectedMessage()!.price }}</span>
+                    <span class="field-value">€{{ selectedMessage()!.message.price }}</span>
                   </div>
                 }
-                @if (selectedMessage()!.minute !== undefined) {
+                @if (selectedMessage()!.message.minute !== undefined) {
                   <div class="field-item">
                     <span class="field-label">Duration:</span>
-                    <span class="field-value">{{ selectedMessage()!.minute }} min</span>
+                    <span class="field-value">{{ selectedMessage()!.message.minute }} min</span>
                   </div>
                 }
-                @if (selectedMessage()!.connector_id !== undefined) {
+                @if (selectedMessage()!.message.connector_id !== undefined) {
                   <div class="field-item">
                     <span class="field-label">Connector ID:</span>
-                    <span class="field-value">{{ selectedMessage()!.connector_id }}</span>
+                    <span class="field-value">{{ selectedMessage()!.message.connector_id }}</span>
                   </div>
                 }
-                @if (selectedMessage()!.connector_status) {
+                @if (selectedMessage()!.message.connector_status) {
                   <div class="field-item">
                     <span class="field-label">Connector Status:</span>
-                    <span class="field-value">{{ selectedMessage()!.connector_status }}</span>
+                    <span class="field-value">{{ selectedMessage()!.message.connector_status }}</span>
                   </div>
                 }
               </div>

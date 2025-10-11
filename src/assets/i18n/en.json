@@ -354,6 +354,7 @@
     }
   },
   "common": {
+    "close": "Close",
     "buttons": {
       "save": "Save",
       "retry": "Retry",
