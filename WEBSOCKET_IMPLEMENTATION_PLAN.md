@@ -3,6 +3,22 @@
 ## Overview
 Implement WebSocket connection for real-time data updates with a test/debug page for admins, global connectivity monitoring, and integration with Dashboard, Active Sessions, and Station Details pages.
 
+## Implementation Status
+✅ **Phase 1**: Core WebSocket Infrastructure - COMPLETE  
+✅ **Phase 2**: Admin Tools - WebSocket Test Page - COMPLETE  
+✅ **Phase 3**: Global Connection Monitoring - COMPLETE  
+⏸️ **Phase 4**: Real-Time Updates Integration - PENDING  
+✅ **Phase 5**: Translations & Styling - COMPLETE
+
+## Global Connection Strategy
+The WebSocket connection is now **globally managed** and maintains a persistent connection:
+- Connection established automatically in `MainLayoutComponent` on app startup
+- Maintained throughout entire app lifecycle
+- Automatically reconnects on network issues
+- Token availability checked before sending any commands
+- Browser visibility changes handled (pause/resume ping)
+- **Components only need to subscribe to messages, not manage connections**
+
 ---
 
 ## Phase 1: Core WebSocket Infrastructure
@@ -162,8 +178,16 @@ Implement singleton service with the following features:
 - Use RxJS Subject for message broadcasting
 - Inject AuthService for token management
 - Use environment.wsBaseUrl for endpoint
-- Handle browser visibility changes (pause/resume ping)
-- Log all WebSocket events to console (debug mode)
+- Handle browser visibility changes (pause/resume ping) ✅ IMPLEMENTED
+- Log all WebSocket events to console (debug mode) ✅ IMPLEMENTED
+- Check token availability before sending commands ✅ IMPLEMENTED
+- Silently skip commands when user is not authenticated ✅ IMPLEMENTED
+
+**Global Connection Management** ✅ IMPLEMENTED:
+- Connection initialized in `MainLayoutComponent.ngOnInit()`
+- Persistent connection maintained throughout app lifecycle
+- Components subscribe to messages but don't manage connection
+- No need to call `connect()` in individual components
 
 ---
 
@@ -340,7 +364,7 @@ Add after profile route:
 
 ---
 
-### 7. Update Main Layout Navigation
+### 7. Update Main Layout Navigation ✅ COMPLETE
 **File**: `src/app/layouts/main-layout/main-layout.component.ts`
 
 Add computed signal:
@@ -350,10 +374,34 @@ protected readonly isAdmin = computed(() =>
 );
 ```
 
+**Initialize WebSocket Connection** ✅ IMPLEMENTED:
+```typescript
+private initializeWebSocket(): void {
+  // Connect to WebSocket server
+  // Connection is maintained throughout app lifecycle
+  this.websocketService.connect();
+  console.log('[MainLayout] WebSocket connection initialized');
+}
+
+ngOnInit(): void {
+  // Initialize translations first
+  this.initializeTranslations();
+  
+  // Initialize WebSocket connection for real-time updates
+  this.initializeWebSocket();
+}
+```
+
 **File**: `src/app/layouts/main-layout/main-layout.component.html`
 
-Add menu item in sidenav (after profile item):
+Add connection status component and menu item:
 ```html
+<main class="main-content">
+  <app-connection-status></app-connection-status>
+  <router-outlet></router-outlet>
+</main>
+
+<!-- In sidenav (after profile item): -->
 <a mat-list-item routerLink="/tools" (click)="closeSidenav()" *ngIf="isAdmin()">
   <mat-icon matListItemIcon>build</mat-icon>
   <span matListItemTitle>{{ translationService.getReactive('nav.tools') }}</span>
@@ -362,9 +410,9 @@ Add menu item in sidenav (after profile item):
 
 ---
 
-## Phase 3: Global Connection Monitoring
+## Phase 3: Global Connection Monitoring ✅ COMPLETE
 
-### 8. Create Connection Status Component
+### 8. Create Connection Status Component ✅ COMPLETE
 **Files**:
 - `src/app/shared/components/connection-status/connection-status.component.ts`
 - `src/app/shared/components/connection-status/connection-status.component.html`
@@ -403,7 +451,7 @@ Add menu item in sidenav (after profile item):
 
 ---
 
-### 9. Integrate Connection Status in Main Layout
+### 9. Integrate Connection Status in Main Layout ✅ COMPLETE
 **File**: `src/app/layouts/main-layout/main-layout.component.html`
 
 Add before router-outlet in main content:
@@ -425,6 +473,9 @@ import { ConnectionStatusComponent } from '../../shared/components/connection-st
 
 ## Phase 4: Real-Time Updates Integration
 
+> **Note**: WebSocket connection is now globally managed in `MainLayoutComponent`.  
+> Components only need to **subscribe to messages**, not manage connections.
+
 ### 10. Dashboard Real-Time Updates
 **File**: `src/app/features/dashboard/dashboard.component.ts`
 
@@ -433,8 +484,8 @@ import { ConnectionStatusComponent } from '../../shared/components/connection-st
 2. Add signal for real-time indicator: `realtimeActive = signal(false)`
 3. In `ngOnInit()`:
    ```typescript
-   // Connect to WebSocket if not connected
-   this.websocketService.connect();
+   // Note: WebSocket is already connected globally
+   // No need to call connect()
    
    // Subscribe to charge-point events
    this.websocketService.sendCommand(WsCommand.ListenChargePoints);
@@ -476,8 +527,8 @@ import { ConnectionStatusComponent } from '../../shared/components/connection-st
    - `updatedConnectorIds = signal<Set<number>>(new Set())`
 3. After loading station detail:
    ```typescript
-   // Connect to WebSocket if not connected
-   this.websocketService.connect();
+   // Note: WebSocket is already connected globally
+   // No need to call connect()
    
    // Subscribe to charge-point events
    this.websocketService.sendCommand(WsCommand.ListenChargePoints);
@@ -831,30 +882,35 @@ Add Spanish translations:
 
 ## Implementation Checklist
 
-### Phase 1: Core Infrastructure
-- [ ] Create `websocket.model.ts` with all interfaces and enums
-- [ ] Create `websocket.service.ts` with connection management
-- [ ] Add WebSocket constants to `app.constants.ts`
-- [ ] Test service connection manually in browser console
+### Phase 1: Core Infrastructure ✅ COMPLETE
+- [x] Create `websocket.model.ts` with all interfaces and enums
+- [x] Create `websocket.service.ts` with connection management
+- [x] Add WebSocket constants to `app.constants.ts`
+- [x] Test service connection manually in browser console
+- [x] Implement browser visibility change handling
+- [x] Add token availability checks before sending commands
+- [x] Initialize global connection in MainLayoutComponent
 
-### Phase 2: Test Page
-- [ ] Create `tools.routes.ts` with route guard
-- [ ] Create WebSocket test component (3 files)
-- [ ] Implement command sending form
-- [ ] Implement message log with filtering
-- [ ] Implement message inspector panel
-- [ ] Add statistics display
-- [ ] Update app routes to include tools
-- [ ] Update main layout with admin menu item
-- [ ] Test all commands and verify responses
+### Phase 2: Test Page ✅ COMPLETE
+- [x] Create `tools.routes.ts` with route guard
+- [x] Create WebSocket test component (3 files)
+- [x] Implement command sending form
+- [x] Implement message log with filtering
+- [x] Implement message inspector panel
+- [x] Add statistics display
+- [x] Update app routes to include tools
+- [x] Update main layout with admin menu item
+- [x] Test all commands and verify responses
+- [x] Fix timestamp change detection error
 
-### Phase 3: Connection Monitoring
-- [ ] Create connection status component (3 files)
-- [ ] Implement show/hide logic based on connection state
-- [ ] Add to main layout above router-outlet
-- [ ] Test disconnect/reconnect scenarios
+### Phase 3: Connection Monitoring ✅ COMPLETE
+- [x] Create connection status component (3 files)
+- [x] Implement show/hide logic based on connection state
+- [x] Add to main layout above router-outlet
+- [x] Test disconnect/reconnect scenarios
+- [x] Add responsive styling for mobile devices
 
-### Phase 4: Real-Time Integration
+### Phase 4: Real-Time Integration ⏸️ PENDING
 - [ ] Integrate WebSocket in dashboard component
 - [ ] Subscribe to charge-point events in dashboard
 - [ ] Add real-time indicator to dashboard UI
@@ -862,14 +918,14 @@ Add Spanish translations:
 - [ ] Implement connector highlight on updates
 - [ ] Add placeholder methods in transaction service
 
-### Phase 5: Polish
-- [ ] Add all English translations
-- [ ] Add all Spanish translations
-- [ ] Apply styling to test page
-- [ ] Apply styling to connection banner
-- [ ] Add animations (pulse, highlight, slide)
-- [ ] Test responsive layout on mobile/tablet
-- [ ] Test with real WebSocket server
+### Phase 5: Polish ✅ COMPLETE
+- [x] Add all English translations
+- [x] Add all Spanish translations
+- [x] Apply styling to test page
+- [x] Apply styling to connection banner
+- [x] Add animations (pulse, highlight, slide)
+- [x] Test responsive layout on mobile/tablet
+- [ ] Test with real WebSocket server (backend dependent)
 
 ---
 
@@ -1071,4 +1127,88 @@ src/app/
 - Admin-only test page prevents exposing technical details to regular users
 - Connection monitoring provides transparency about system status
 - Future active session page will heavily leverage WebSocket for live transaction monitoring
+
+## Architecture Decisions
+
+### Global Connection Strategy (Implemented)
+**Decision**: Maintain a single, persistent WebSocket connection throughout the app lifecycle.
+
+**Rationale**:
+- Eliminates connection delays when navigating between pages
+- Reduces server load (single connection per user vs multiple)
+- Simplifies component code (subscribe only, no connection management)
+- Enables instant real-time updates across all pages
+- Better user experience with connection status banner
+
+**Implementation**:
+- Connection initialized in `MainLayoutComponent.ngOnInit()`
+- Service cleanup handled by Angular's `DestroyRef`
+- Token availability checked before sending commands
+- Browser visibility changes handled gracefully
+- Components only call `subscribe()` and `sendCommand()`
+
+### Token-Aware Command Sending (Implemented)
+**Decision**: Check authentication token availability before sending any WebSocket commands.
+
+**Rationale**:
+- Prevents errors on app startup before user is authenticated
+- Allows unauthenticated users to receive public broadcasts
+- Gracefully handles token expiration
+- No error spam in console for normal operation
+
+**Implementation**:
+- `sendInitialMessages()` checks token before initial ping
+- `startPing()` checks token before each periodic ping
+- Commands silently skipped when no token available
+- Works seamlessly when user logs in (no reconnection needed)
+
+---
+
+## Implementation Summary
+
+### ✅ Completed (Phases 1-3, 5)
+
+**Infrastructure**:
+- WebSocket service with full state management using signals
+- Global connection initialization in MainLayoutComponent
+- Browser visibility change handling (pause/resume ping)
+- Token availability checks before all commands
+- Automatic reconnection with exponential backoff
+- Clean resource management with DestroyRef
+
+**Admin Tools**:
+- Complete WebSocket test/monitor page for admins
+- Real-time message log with filtering by status/stage
+- Message inspector with JSON formatting
+- Connection statistics and uptime tracking
+- Manual connect/disconnect for testing
+- Quick action buttons for common commands
+
+**Global Monitoring**:
+- Connection status banner component
+- Automatic show/hide based on connection state
+- Dismiss functionality with auto-reappear on reconnection
+- Responsive design for mobile/tablet
+- Smooth animations and transitions
+
+**Internationalization**:
+- Full English translations
+- Full Spanish translations
+- All UI text properly internationalized
+
+### ⏸️ Pending (Phase 4)
+
+**Real-Time Integration** - Ready to implement when needed:
+- Dashboard real-time charge point updates
+- Station detail live connector status
+- Active session transaction monitoring
+- Notification system for events
+
+**Key Point**: All infrastructure is in place. Components only need to:
+1. Inject `WebsocketService`
+2. Call `sendCommand()` to subscribe to events
+3. Call `subscribe()` or `subscribeToStage()` to receive updates
+4. Handle incoming messages in their logic
+
+No connection management needed in components!
 
