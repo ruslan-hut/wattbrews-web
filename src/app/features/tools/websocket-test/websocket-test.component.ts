@@ -146,9 +146,9 @@ export class WebsocketTestComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Auto-connect to WebSocket
-    this.websocketService.connect();
-
+    // Note: WebSocket connection is managed globally in MainLayoutComponent
+    // No need to connect here
+    
     // Subscribe to messages
     const subscription = this.websocketService.subscribe((message) => {
       this.messages.update(msgs => {

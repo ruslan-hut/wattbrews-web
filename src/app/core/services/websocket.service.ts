@@ -52,14 +52,48 @@ export class WebsocketService {
   private reconnectTimeout: any = null;
   private currentReconnectDelay: number = APP_CONSTANTS.WEBSOCKET.RECONNECT_INITIAL_DELAY;
   private pingInterval: any = null;
+  
+  // Visibility state
+  private isTabVisible: boolean = true;
 
   // Debug mode
   private debug = true;
 
   constructor() {
+    // Set up visibility change handler
+    this.setupVisibilityHandler();
+    
     // Clean up on destroy
     this.destroyRef.onDestroy(() => {
       this.disconnect();
+    });
+  }
+  
+  /**
+   * Set up browser visibility change handler
+   */
+  private setupVisibilityHandler(): void {
+    if (typeof document === 'undefined') return;
+
+    document.addEventListener('visibilitychange', () => {
+      this.isTabVisible = !document.hidden;
+      
+      if (this.debug) {
+        console.log('[WebSocket] Tab visibility changed:', this.isTabVisible ? 'visible' : 'hidden');
+      }
+
+      if (this.isTabVisible) {
+        // Tab became visible - resume ping if connected
+        if (this.isConnected() && !this.pingInterval) {
+          this.startPing();
+        }
+      } else {
+        // Tab became hidden - pause ping to save resources
+        if (this.pingInterval) {
+          clearInterval(this.pingInterval);
+          this.pingInterval = null;
+        }
+      }
     });
   }
 
@@ -197,7 +231,7 @@ export class WebsocketService {
   /**
    * Handle WebSocket open event
    */
-  private handleOpen(): void {
+  private async handleOpen(): Promise<void> {
     if (this.debug) console.log('[WebSocket] Connected');
 
     this._connectionState.set(ConnectionState.Connected);
@@ -210,16 +244,41 @@ export class WebsocketService {
     // Start periodic ping
     this.startPing();
 
-    // Send initial ping
-    this.sendCommand(WsCommand.PingConnection).catch(error => {
-      if (this.debug) console.error('[WebSocket] Initial ping failed:', error);
-    });
+    // Wait for authentication token before sending initial messages
+    await this.sendInitialMessages();
+  }
 
-    // If this was a reconnection, send CheckStatus to resume state
-    if (this._reconnectCount() > 0) {
-      this.sendCommand(WsCommand.CheckStatus).catch(error => {
-        if (this.debug) console.error('[WebSocket] CheckStatus failed:', error);
+  /**
+   * Send initial messages after connection is established
+   * Waits for authentication token to be available
+   */
+  private async sendInitialMessages(): Promise<void> {
+    try {
+      // Check if token is available
+      const token = await this.authService.getToken();
+      
+      if (!token) {
+        if (this.debug) {
+          console.log('[WebSocket] No authentication token available yet, skipping initial messages');
+        }
+        return;
+      }
+
+      // Send initial ping
+      await this.sendCommand(WsCommand.PingConnection).catch(error => {
+        if (this.debug) console.error('[WebSocket] Initial ping failed:', error);
       });
+
+      // If this was a reconnection, send CheckStatus to resume state
+      if (this._reconnectCount() > 0) {
+        await this.sendCommand(WsCommand.CheckStatus).catch(error => {
+          if (this.debug) console.error('[WebSocket] CheckStatus failed:', error);
+        });
+      }
+    } catch (error) {
+      if (this.debug) {
+        console.log('[WebSocket] Could not send initial messages, token not available:', error);
+      }
     }
   }
 
@@ -317,11 +376,21 @@ export class WebsocketService {
     }
 
     // Send ping every PING_INTERVAL
-    this.pingInterval = setInterval(() => {
+    this.pingInterval = setInterval(async () => {
       if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-        this.sendCommand(WsCommand.PingConnection).catch(error => {
-          if (this.debug) console.error('[WebSocket] Ping failed:', error);
-        });
+        try {
+          // Check if token is available before sending ping
+          const token = await this.authService.getToken();
+          if (token) {
+            await this.sendCommand(WsCommand.PingConnection);
+          }
+          // Silently skip ping if no token (user not authenticated)
+        } catch (error: any) {
+          // Only log if it's not a token error
+          if (this.debug && error.message !== 'No authentication token available') {
+            console.error('[WebSocket] Ping failed:', error);
+          }
+        }
       }
     }, APP_CONSTANTS.WEBSOCKET.PING_INTERVAL);
   }
