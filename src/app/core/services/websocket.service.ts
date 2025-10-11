@@ -50,7 +50,7 @@ export class WebsocketService {
 
   // Reconnection state
   private reconnectTimeout: any = null;
-  private currentReconnectDelay = APP_CONSTANTS.WEBSOCKET.RECONNECT_INITIAL_DELAY;
+  private currentReconnectDelay: number = APP_CONSTANTS.WEBSOCKET.RECONNECT_INITIAL_DELAY;
   private pingInterval: any = null;
 
   // Debug mode
