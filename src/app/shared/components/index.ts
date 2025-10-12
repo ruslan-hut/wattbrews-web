@@ -5,3 +5,4 @@ export * from './energy-chart/energy-chart.component';
 export * from './small-map/small-map.component';
 export * from './language-switcher/language-switcher.component';
 export * from './connection-status/connection-status.component';
+export * from './transaction-start-dialog/transaction-start-dialog.component';

@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ChargePointService } from '../../../core/services/chargepoint.service';
 import { UserInfoService } from '../../../core/services/user-info.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -23,6 +24,7 @@ import { StationDetail } from '../../../core/models/station-detail.model';
 import { UserPaymentMethod, PaymentPlan } from '../../../core/models/user-info.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
+import { TransactionStartDialogComponent } from '../../../shared/components/transaction-start-dialog/transaction-start-dialog.component';
 
 @Component({
   selector: 'app-charge-initiation',
@@ -41,6 +43,7 @@ import { ErrorMessageComponent } from '../../../shared/components/error-message/
     MatSelectModule,
     MatInputModule,
     MatSnackBarModule,
+    MatDialogModule,
     LoadingSpinnerComponent,
     ErrorMessageComponent
   ],
@@ -657,6 +660,7 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+  private readonly dialog = inject(MatDialog);
 
   // Signals
   readonly loading = this.chargePointService.loading;
@@ -915,16 +919,33 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
 
     const connector = this.selectedConnector();
     const paymentMethod = this.selectedPaymentMethod();
+    const station = this.stationDetail();
     
-    if (!connector || !paymentMethod) {
+    if (!connector || !paymentMethod || !station) {
       this.notificationService.error('Missing required information');
       return;
     }
 
-    // TODO: Implement actual charge start logic
+    // Open transaction start dialog
+    const dialogRef = this.dialog.open(TransactionStartDialogComponent, {
+      data: {
+        chargePointId: station.charge_point_id,
+        connectorId: connector.connector_id,
+        stationTitle: station.title
+      },
+      disableClose: true, // Prevent closing by clicking outside
+      width: '500px',
+      maxWidth: '95vw'
+    });
 
-    this.notificationService.success('Charging started successfully!');
-    this.router.navigate(['/sessions/active']);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.success) {
+        console.log('Transaction started successfully with ID:', result.transactionId);
+        // Navigation is handled by the dialog component
+      } else {
+        console.log('Transaction start cancelled or failed');
+      }
+    });
   }
 
   goBack() {

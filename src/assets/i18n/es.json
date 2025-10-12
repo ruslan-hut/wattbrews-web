@@ -89,6 +89,7 @@
     },
     "tooltips": {
       "viewDetails": "Ver detalles de la estación",
+      "clickToViewDetails": "Haga clic para ver detalles de la estación",
       "startCharging": "Iniciar carga en esta estación",
       "noAvailableConnectors": "No hay conectores disponibles",
       "stationOffline": "Estación offline",
@@ -450,5 +451,20 @@
   "connection": {
     "warning": "Conexión en tiempo real perdida. Reconectando...",
     "reconnecting": "Intentando reconectar..."
+  },
+  "transactionStart": {
+    "initializing": "Inicializando Transacción",
+    "startingTransaction": "Iniciando Transacción",
+    "transactionStarted": "Transacción Iniciada",
+    "failed": "Transacción Fallida",
+    "connector": "Conector",
+    "waiting": "Esperando a que inicie la transacción...",
+    "preparing": "Preparando para iniciar la transacción...",
+    "success": "¡Transacción iniciada con éxito!",
+    "errorSendingCommand": "Error al enviar comando de inicio",
+    "errorOccurred": "No se pudo iniciar la transacción. Por favor, inténtelo de nuevo o contacte al soporte si el problema persiste.",
+    "sendingCommand": "Enviando comando de inicio...",
+    "waitingForResponse": "Esperando respuesta de la estación de carga...",
+    "redirecting": "Redirigiendo a sesión activa..."
   }
 }

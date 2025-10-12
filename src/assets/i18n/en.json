@@ -86,6 +86,7 @@
     },
     "tooltips": {
       "viewDetails": "View station details",
+      "clickToViewDetails": "Click to view station details",
       "startCharging": "Start charging at this station",
       "noAvailableConnectors": "No connectors available",
       "stationOffline": "Station offline",
@@ -447,5 +448,20 @@
   "connection": {
     "warning": "Real-time connection lost. Reconnecting...",
     "reconnecting": "Attempting to reconnect..."
+  },
+  "transactionStart": {
+    "initializing": "Initializing Transaction",
+    "startingTransaction": "Starting Transaction",
+    "transactionStarted": "Transaction Started",
+    "failed": "Transaction Failed",
+    "connector": "Connector",
+    "waiting": "Waiting for transaction to start...",
+    "preparing": "Preparing to start transaction...",
+    "success": "Transaction started successfully!",
+    "errorSendingCommand": "Failed to send start command",
+    "errorOccurred": "Unable to start transaction. Please try again or contact support if the problem persists.",
+    "sendingCommand": "Sending start command...",
+    "waitingForResponse": "Waiting for response from charging station...",
+    "redirecting": "Redirecting to active session..."
   }
 }

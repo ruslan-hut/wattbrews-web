@@ -360,6 +360,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['/stations', stationId]);
   }
 
+  protected onCardClick(stationId: string): void {
+    if (this.hasViewDetailsAccess()) {
+      this.viewStationDetails(stationId);
+    }
+  }
+
   private loadUserInfo(): void {
     this.userInfoService.loadCurrentUserInfo().subscribe({
       next: (userInfo) => {

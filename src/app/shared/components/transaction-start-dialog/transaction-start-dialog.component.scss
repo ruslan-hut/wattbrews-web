@@ -1,0 +1,140 @@
+.transaction-start-dialog {
+  min-width: 400px;
+  max-width: 500px;
+}
+
+h2[mat-dialog-title] {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+h2[mat-dialog-title] mat-icon {
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+h2[mat-dialog-title] mat-icon.initializing,
+h2[mat-dialog-title] mat-icon.waiting {
+  color: #1976d2;
+}
+
+h2[mat-dialog-title] mat-icon.success {
+  color: #28a745;
+}
+
+h2[mat-dialog-title] mat-icon.error {
+  color: #dc3545;
+}
+
+mat-dialog-content {
+  padding: 2rem 1.5rem;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.station-info {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.station-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+}
+
+.connector-info {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.progress-text {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1976d2;
+  margin: 0;
+}
+
+.status-message {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.status-message.initializing,
+.status-message.waiting {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-message.success {
+  background-color: #d1fae5;
+  color: #10b981;
+}
+
+.status-message.error {
+  background-color: #fee;
+  color: #dc3545;
+}
+
+.status-message p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.error-details {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+}
+
+.error-details mat-icon {
+  color: #ff9800;
+  flex-shrink: 0;
+}
+
+.error-details p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #856404;
+}
+
+mat-dialog-actions {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+mat-dialog-actions button {
+  min-width: 80px;
+}
+
+@media (max-width: 600px) {
+  .transaction-start-dialog {
+    min-width: 300px;
+  }
+}
+

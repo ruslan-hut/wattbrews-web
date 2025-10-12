@@ -37,7 +37,11 @@
         </div>
         
         <div class="recent-charge-points-list" *ngIf="!transactionService.loading() && !transactionService.error()">
-          <div class="recent-charge-point-item" *ngFor="let cp of recentChargePoints()">
+          <div 
+            class="recent-charge-point-item" 
+            *ngFor="let cp of recentChargePoints()"
+            [class.clickable]="hasViewDetailsAccess()"
+            (click)="onCardClick(cp.charge_point_id)">
             <div class="charge-point-status-indicator" [class.available]="cp.status === 'Available'" [class.busy]="cp.status !== 'Available'"></div>
             <div class="charge-point-info">
               <h4 class="charge-point-title">{{ cp.title }}</h4>
@@ -57,22 +61,13 @@
             </div>
             <div class="charge-point-actions">
               <button 
-                mat-button 
-                color="accent" 
+                mat-mini-fab 
+                color="secondary" 
                 [disabled]="!canStartCharge(cp)"
                 [matTooltip]="getStartChargeTooltip(cp)"
-                (click)="startCharge(cp.charge_point_id)">
+                (click)="startCharge(cp.charge_point_id); $event.stopPropagation()"
+                class="action-button start-charge-button">
                 <mat-icon>play_arrow</mat-icon>
-                {{ translationService.getReactive('stations.start') }}
-              </button>
-              <button 
-                mat-button 
-                color="primary" 
-                [disabled]="!hasViewDetailsAccess()"
-                [matTooltip]="getViewDetailsTooltip(cp)"
-                (click)="viewStationDetails(cp.charge_point_id)">
-                <mat-icon>visibility</mat-icon>
-                {{ translationService.getReactive('stations.viewDetails') }}
               </button>
             </div>
           </div>

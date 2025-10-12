@@ -358,19 +358,26 @@
   border: 1px solid #e9ecef;
   border-radius: 12px;
   transition: all 0.2s ease;
-  cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   position: relative;
+  
+  &.clickable {
+    cursor: pointer;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #ced4da;
+    }
+  }
+  
+  &:not(.clickable) {
+    cursor: default;
+  }
 }
 
 .charge-point-item:hover {
-  background: rgba(255, 255, 255, 0.95);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: #ced4da;
-}
-
-.recent-charge-point-item:hover {
   background: rgba(255, 255, 255, 0.95);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -384,8 +391,22 @@
   gap: 8px;
 }
 
-.charge-point-actions button {
+.charge-point-actions .action-button {
   flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.start-charge-button {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  
+  &:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
 }
 
 .charge-point-status-indicator {
@@ -680,14 +701,18 @@
   }
   
   .charge-point-actions {
-    flex-direction: column;
-    gap: 4px;
+    flex-direction: row;
+    gap: 6px;
     margin-left: 8px;
   }
   
-  .charge-point-actions button {
-    font-size: 0.8rem;
-    padding: 4px 8px;
+  .start-charge-button {
+    width: 36px;
+    height: 36px;
+    
+    mat-icon {
+      font-size: 20px;
+    }
   }
   
   .auth-required-container {
