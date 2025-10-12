@@ -18,28 +18,30 @@
   }
 
   <!-- Loading State -->
-  @if (loading() || translationsLoading()) {
+  @if (loading() || translationsLoading() || initializing()) {
     <div class="loading-container">
       <app-loading-spinner></app-loading-spinner>
-      @if (!translationsLoading()) {
-        <p>{{ translationService.getReactive('stationDetail.loading') }}</p>
+      @if (translationsLoading()) {
+        <p>Loading...</p>
+      } @else {
+        <p>{{ translationService.getReactive('stationDetail.loadingStation') }}</p>
       }
     </div>
   }
 
   <!-- Error State -->
-  @if (error() && !loading() && !translationsLoading()) {
+  @if (error() && !loading() && !translationsLoading() && !initializing()) {
     <div class="error-container">
       <app-error-message [message]="error()!"></app-error-message>
       <button mat-raised-button color="primary" (click)="loadStationDetail()">
         <mat-icon>refresh</mat-icon>
-        {{ translationService.getReactive('stationDetail.tryAgain') }}
+        {{ translationService.getReactive('common.buttons.retry') }}
       </button>
     </div>
   }
 
   <!-- Station Details -->
-  @if (stationDetail() && !loading() && !error() && !translationsLoading()) {
+  @if (stationDetail() && !loading() && !error() && !translationsLoading() && !initializing()) {
     <div class="station-details">
     <!-- Basic Information -->
     <mat-card class="info-card">

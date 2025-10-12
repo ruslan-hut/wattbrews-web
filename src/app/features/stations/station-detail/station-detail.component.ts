@@ -76,8 +76,9 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   protected readonly realtimeActive = signal(false);
   protected readonly updatedConnectorIds = signal<Set<number>>(new Set());
   
-  // Translation loading state
+  // Loading states
   protected readonly translationsLoading = signal(true);
+  protected readonly initializing = signal(true);
   
   // Subscription management
   private authSubscription?: Subscription;
@@ -138,12 +139,15 @@ export class StationDetailComponent implements OnInit, OnDestroy {
           const pointId = params['id'];
           if (pointId) {
             this.loadStationDetail(pointId);
+            // Set initializing to false once we start loading data
+            this.initializing.set(false);
           }
         });
       } else {
         // Give Firebase auth time to restore session on page reload
         // Only redirect after a short delay to avoid premature redirects
         this.authCheckTimeout = setTimeout(() => {
+          this.initializing.set(false);
           this.router.navigate(['/auth/login']);
         }, 1000); // 1 second delay
       }
