@@ -357,6 +357,7 @@
     }
   },
   "common": {
+    "close": "Cerrar",
     "buttons": {
       "save": "Guardar",
       "retry": "Reintentar",
@@ -389,5 +390,20 @@
       "11": "Noviembre",
       "12": "Diciembre"
     }
+  },
+  "transactionStart": {
+    "connector": "Conector",
+    "initializing": "Inicializando",
+    "startingTransaction": "Iniciando Transacción",
+    "transactionStarted": "Transacción Iniciada",
+    "failed": "Transacción Fallida",
+    "sendingCommand": "Enviando comando...",
+    "waitingForResponse": "Esperando respuesta...",
+    "waiting": "Esperando...",
+    "preparing": "Preparando transacción...",
+    "success": "¡Transacción iniciada exitosamente!",
+    "redirecting": "Redirigiendo a sesiones activas...",
+    "errorSendingCommand": "Error al enviar comando",
+    "errorOccurred": "Ocurrió un error al iniciar la transacción"
   }
 }

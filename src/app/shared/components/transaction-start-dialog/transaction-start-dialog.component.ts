@@ -45,6 +45,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
 
   readonly data = signal<TransactionStartDialogData>(inject(MAT_DIALOG_DATA));
+  protected readonly translationsLoading = signal(true);
 
   readonly state = signal<TransactionStartState>({
     status: 'initializing',
@@ -56,7 +57,22 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
   private autoCloseTimeout?: any;
 
   ngOnInit(): void {
-    this.startTransaction();
+    this.initializeTranslations();
+  }
+
+  private async initializeTranslations(): Promise<void> {
+    try {
+      this.translationsLoading.set(true);
+      await this.translationService.initializeTranslationsAsync();
+      this.translationsLoading.set(false);
+      // Start transaction only after translations are loaded
+      this.startTransaction();
+    } catch (error) {
+      console.error('Failed to initialize translations:', error);
+      this.translationsLoading.set(false);
+      // Start transaction anyway to prevent blocking
+      this.startTransaction();
+    }
   }
 
   ngOnDestroy(): void {
@@ -83,7 +99,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
       this.state.update(s => ({
         ...s,
         status: 'waiting',
-        info: this.translationService.get('transactionStart.waiting')
+        info: this.translationService.getReactive('transactionStart.waiting')
       }));
 
     } catch (error: any) {
@@ -92,7 +108,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
         status: 'error',
         progress: 0,
         info: '',
-        errorMessage: error.message || this.translationService.get('transactionStart.errorSendingCommand')
+        errorMessage: error.message || this.translationService.getReactive('transactionStart.errorSendingCommand')
       });
     }
   }
@@ -126,7 +142,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
       ...s,
       status: 'waiting',
       progress: message.progress || 0,
-      info: this.translationService.get('transactionStart.preparing')
+      info: this.translationService.getReactive('transactionStart.preparing')
     }));
   }
 
@@ -134,7 +150,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
     this.state.set({
       status: 'success',
       progress: 100,
-      info: this.translationService.get('transactionStart.success'),
+      info: this.translationService.getReactive('transactionStart.success'),
       transactionId: message.id
     });
 
@@ -151,7 +167,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
       status: 'error',
       progress: 0,
       info: '',
-      errorMessage: this.translationService.get('transactionStart.errorOccurred')
+      errorMessage: this.translationService.getReactive('transactionStart.errorOccurred')
     });
   }
 
@@ -178,13 +194,13 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
     const status = this.state().status;
     switch (status) {
       case 'initializing':
-        return this.translationService.get('transactionStart.initializing');
+        return this.translationService.getReactive('transactionStart.initializing');
       case 'waiting':
-        return this.translationService.get('transactionStart.startingTransaction');
+        return this.translationService.getReactive('transactionStart.startingTransaction');
       case 'success':
-        return this.translationService.get('transactionStart.transactionStarted');
+        return this.translationService.getReactive('transactionStart.transactionStarted');
       case 'error':
-        return this.translationService.get('transactionStart.failed');
+        return this.translationService.getReactive('transactionStart.failed');
       default:
         return '';
     }
@@ -213,11 +229,11 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
     
     switch (status) {
       case 'initializing':
-        return this.translationService.get('transactionStart.sendingCommand');
+        return this.translationService.getReactive('transactionStart.sendingCommand');
       case 'waiting':
-        return this.translationService.get('transactionStart.waitingForResponse');
+        return this.translationService.getReactive('transactionStart.waitingForResponse');
       case 'success':
-        return this.translationService.get('transactionStart.redirecting');
+        return this.translationService.getReactive('transactionStart.redirecting');
       default:
         return '';
     }

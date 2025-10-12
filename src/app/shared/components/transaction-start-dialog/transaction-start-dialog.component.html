@@ -1,61 +1,72 @@
 <div class="transaction-start-dialog">
-  <h2 mat-dialog-title>
-    <mat-icon [class]="getIconClass()">{{ getIcon() }}</mat-icon>
-    {{ getTitle() }}
-  </h2>
-  
-  <mat-dialog-content>
-    <div class="dialog-content">
-      <!-- Station Info -->
-      <div class="station-info">
-        <p class="station-title">{{ data().stationTitle }}</p>
-        <p class="connector-info">
-          {{ translationService.getReactive('transactionStart.connector') }} {{ data().connectorId }}
-        </p>
-      </div>
-
-      <!-- Progress Indicator -->
-      @if (state().status !== 'error') {
-        <div class="progress-section">
-          <mat-progress-bar 
-            [mode]="getProgressMode()"
-            [value]="state().progress"
-            [color]="getProgressColor()">
-          </mat-progress-bar>
-          <p class="progress-text">{{ state().progress }}%</p>
-        </div>
-      }
-
-      <!-- Status Message -->
-      <div class="status-message" [class]="getMessageClass()">
-        <p>{{ getStatusMessage() }}</p>
-      </div>
-
-      <!-- Error Details -->
-      @if (state().status === 'error' && state().errorMessage) {
-        <div class="error-details">
-          <mat-icon>error_outline</mat-icon>
-          <p>{{ state().errorMessage }}</p>
-        </div>
-      }
+  <!-- Translation Loading State -->
+  @if (translationsLoading()) {
+    <div class="loading-container">
+      <mat-icon>hourglass_empty</mat-icon>
+      <p>Loading...</p>
     </div>
-  </mat-dialog-content>
+  }
 
-  <mat-dialog-actions align="end">
-    @if (state().status === 'error') {
-      <button 
-        mat-button 
-        (click)="retry()">
-        <mat-icon>refresh</mat-icon>
-        {{ translationService.getReactive('common.buttons.retry') }}
-      </button>
-      
-      <button 
-        mat-button 
-        (click)="close()">
-        {{ translationService.getReactive('common.close') }}
-      </button>
-    }
-  </mat-dialog-actions>
+  <!-- Content (only show when translations are loaded) -->
+  @if (!translationsLoading()) {
+    <h2 mat-dialog-title>
+      <mat-icon [class]="getIconClass()">{{ getIcon() }}</mat-icon>
+      {{ getTitle() }}
+    </h2>
+    
+    <mat-dialog-content>
+      <div class="dialog-content">
+        <!-- Station Info -->
+        <div class="station-info">
+          <p class="station-title">{{ data().stationTitle }}</p>
+          <p class="connector-info">
+            {{ translationService.getReactive('transactionStart.connector') }} {{ data().connectorId }}
+          </p>
+        </div>
+
+        <!-- Progress Indicator -->
+        @if (state().status !== 'error') {
+          <div class="progress-section">
+            <mat-progress-bar 
+              [mode]="getProgressMode()"
+              [value]="state().progress"
+              [color]="getProgressColor()">
+            </mat-progress-bar>
+            <p class="progress-text">{{ state().progress }}%</p>
+          </div>
+        }
+
+        <!-- Status Message -->
+        <div class="status-message" [class]="getMessageClass()">
+          <p>{{ getStatusMessage() }}</p>
+        </div>
+
+        <!-- Error Details -->
+        @if (state().status === 'error' && state().errorMessage) {
+          <div class="error-details">
+            <mat-icon>error_outline</mat-icon>
+            <p>{{ state().errorMessage }}</p>
+          </div>
+        }
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      @if (state().status === 'error') {
+        <button 
+          mat-button 
+          (click)="retry()">
+          <mat-icon>refresh</mat-icon>
+          {{ translationService.getReactive('common.buttons.retry') }}
+        </button>
+        
+        <button 
+          mat-button 
+          (click)="close()">
+          {{ translationService.getReactive('common.close') }}
+        </button>
+      }
+    </mat-dialog-actions>
+  }
 </div>
 

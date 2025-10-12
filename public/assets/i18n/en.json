@@ -354,6 +354,7 @@
     }
   },
   "common": {
+    "close": "Close",
     "buttons": {
       "save": "Save",
       "retry": "Retry",
@@ -386,5 +387,20 @@
       "11": "November",
       "12": "December"
     }
+  },
+  "transactionStart": {
+    "connector": "Connector",
+    "initializing": "Initializing",
+    "startingTransaction": "Starting Transaction",
+    "transactionStarted": "Transaction Started",
+    "failed": "Transaction Failed",
+    "sendingCommand": "Sending command...",
+    "waitingForResponse": "Waiting for response...",
+    "waiting": "Waiting...",
+    "preparing": "Preparing transaction...",
+    "success": "Transaction started successfully!",
+    "redirecting": "Redirecting to active sessions...",
+    "errorSendingCommand": "Failed to send command",
+    "errorOccurred": "An error occurred while starting the transaction"
   }
 }
