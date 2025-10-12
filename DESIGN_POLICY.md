@@ -307,6 +307,5 @@ The design system is prepared for dark mode implementation:
 
 ---
 
-**Last Updated**: December 2024
-**Version**: 1.0
-**Maintainer**: Development Team
+**Version**: 1.0  
+**Last Updated**: October 2025

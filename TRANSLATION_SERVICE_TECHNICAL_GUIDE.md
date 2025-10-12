@@ -682,3 +682,8 @@ export class YourComponent implements OnInit {
 ```
 
 This guide serves as the definitive reference for working with the translation service in the WattBrews application.
+
+---
+
+**Version**: 1.0  
+**Last Updated**: October 2025

@@ -410,3 +410,7 @@ The new signal-based charge point update system provides:
 
 Both the stations-list and station-detail components now automatically stay in sync with the backend via WebSocket messages, providing users with real-time visibility into station status changes.
 
+---
+
+**Version**: 1.0  
+**Last Updated**: October 2025

@@ -126,3 +126,8 @@ To debug deployment issues:
 - Use repository secrets for sensitive information
 - Regularly rotate SSH keys
 - Consider using deploy keys for better security isolation
+
+---
+
+**Version**: 1.0  
+**Last Updated**: October 2025

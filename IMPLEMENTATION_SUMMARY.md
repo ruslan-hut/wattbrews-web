@@ -248,3 +248,7 @@ Can use either:
 
 The implementation provides a **modern, reactive, signal-based approach** to handling real-time charge point updates while maintaining full compatibility with the existing architecture. Components can now easily react to station changes without complex subscription management, providing users with seamless real-time updates.
 
+---
+
+**Version**: 1.0  
+**Last Updated**: October 2025

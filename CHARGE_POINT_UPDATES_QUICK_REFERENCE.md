@@ -265,6 +265,10 @@ effect(() => {
 ## See Also
 
 - [Full Documentation](./CHARGE_POINT_UPDATES.md)
-- [WebSocket Implementation Plan](./WEBSOCKET_IMPLEMENTATION_PLAN.md)
+- [WebSocket Technical Guide](./WEBSOCKET_TECHNICAL_GUIDE.md)
 - [WebSocket Description](./WEBSOCKET_DESCRIPTION.md)
 
+---
+
+**Version**: 1.0  
+**Last Updated**: October 2025

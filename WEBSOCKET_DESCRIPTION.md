@@ -1,15 +1,18 @@
-### Overview
+# WebSocket API Description
+
+## Overview
+
 The backend exposes a WebSocket endpoint at `/ws`. It is used for real‑time updates and control around user transactions, logs, and charge‑point events. The handshake itself does not enforce authentication; instead, token-based authentication happens on the first (and subsequent) messages sent over the socket.
 
 Below is how it works end‑to‑end: authentication, commands, message formats, subscriptions, and what the server sends back.
 
-### Endpoint and Handshake
+## Endpoint and Handshake
 - URL: `ws(s)://<host>:<port>/ws`
 - Origin check: allowed unconditionally (`CheckOrigin` returns `true`). Use TLS at the HTTP server level if you need transport security.
 - Proxy note: the server logs/annotates connection remote with `X-Forwarded-For` if present.
 - No auth on the handshake. The client must authenticate via the first message payload.
 
-### Authentication Flow
+## Authentication Flow
 1. Client connects to `/ws`.
 2. The client must send a JSON message containing a `token` (typically a previously issued auth token).
 3. On the first valid message with `token`, the server:
@@ -22,7 +25,7 @@ Notes:
 - The server does not close the connection immediately on an invalid message, but it will respond with `status: "error"`.
 - Once authenticated, the connection logger is augmented with user context.
 
-### Client → Server Message Format
+## Client → Server Message Format
 All client messages are JSON and conform to `entity.UserRequest`:
 
 ```json
@@ -50,7 +53,7 @@ Fields:
   - `ListenLog`
   - `PingConnection`
 
-### Server → Client Message Format
+## Server → Client Message Format
 All server messages are JSON and conform to `entity.WsResponse`:
 
 ```json
@@ -92,7 +95,7 @@ Notes:
 - Not all fields are present in every message; only relevant ones are filled (`omitempty`).
 - For streaming meter updates, `meter_value` contains a `TransactionMeter` payload plus related summary fields (e.g., `power`, `power_rate`, `soc`, `price`, and `minute`).
 
-### Commands and Their Behavior
+## Commands and Their Behavior
 After authentication, each inbound `UserRequest` is handed to `core.WsRequest`. Additionally, the WebSocket layer manages some long‑polling/stream behaviors:
 
 - `StartTransaction`
@@ -128,7 +131,7 @@ After authentication, each inbound `UserRequest` is handed to `core.WsRequest`. 
 - `PingConnection`
   - Immediate response with `status: "success"` and `info: "pong <idTag>"`.
 
-### Subscriptions and Broadcasts
+## Subscriptions and Broadcasts
 - Internally, clients maintain a `subscription` setting. Possible values:
   - `broadcast` (not used by the provided routes but supported)
   - `log-event`
@@ -138,12 +141,12 @@ After authentication, each inbound `UserRequest` is handed to `core.WsRequest`. 
   - Charge‑point events to all clients subscribed to `charge-point-event`.
   - Log events to all clients subscribed to `log-event`.
 
-### Heartbeats and Keep‑alive
+## Heartbeats and Keep‑alive
 - The server ignores raw text `"ping"` messages from the client (no response needed) to avoid noise.
 - A formal `PingConnection` command yields a `success`/`pong` response.
 - The write loop will close on channel close or write errors; the read loop closes on unexpected close codes.
 
-### Connection Lifecycle
+## Connection Lifecycle
 - On connect, the client is added to a `Pool` and immediately sent a `ping` response: `{ "status": "ping", "stage": "info", "info": "new connection" }`.
 - Two goroutines run per client:
   - `readPump` to read and process messages.
@@ -151,7 +154,7 @@ After authentication, each inbound `UserRequest` is handed to `core.WsRequest`. 
 - On close or error:
   - The client is unregistered from the pool, the socket is closed, and the internal `send` channel is closed to signal the writer.
 
-### Example Client Messages
+## Example Client Messages
 - Authenticate and start a transaction on connector 1 of a charge point:
 
 ```json
@@ -201,7 +204,7 @@ After authentication, each inbound `UserRequest` is handed to `core.WsRequest`. 
 }
 ```
 
-### Example Server Responses
+## Example Server Responses
 - New connection (from pool):
 
 ```json
@@ -261,13 +264,19 @@ After authentication, each inbound `UserRequest` is handed to `core.WsRequest`. 
 }
 ```
 
-### Timeouts and Recovery
+## Timeouts and Recovery
 - Start/Stop flows time out after approximately 90 seconds with an `error` response.
 - On reconnect, clients can send `CheckStatus` to resume any in‑progress waiting or listening.
 
-### Implementation Pointers
+## Implementation Pointers
+
 - File: `internal/api/http/server.go` — WebSocket server, pool, client lifecycle, routing.
 - Message types:
   - `entity/user_request.go` — client request schema and command names.
   - `entity/ws_response.go` — server response schema.
   - `entity/types.go` — status and stage enums used in responses.
+
+---
+
+**Version**: 1.0  
+**Last Updated**: October 2025
