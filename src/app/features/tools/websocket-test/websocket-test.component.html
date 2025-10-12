@@ -3,10 +3,10 @@
   <div class="header">
     <div class="header-content">
       <div class="title-section">
-        <h1>{{ translationService.getReactive('tools.websocket.title') }}</h1>
+        <h1>WebSocket Test Tool</h1>
         <mat-chip [class]="'status-chip status-' + getStatusColor(websocketService.connectionState() === ConnectionState.Connected ? ResponseStatus.Success : ResponseStatus.Error)">
           <mat-icon>{{ websocketService.connectionState() === ConnectionState.Connected ? 'cloud' : 'cloud_off' }}</mat-icon>
-          {{ translationService.getReactive('tools.websocket.connection.' + websocketService.connectionState()) }}
+          {{ websocketService.connectionState() }}
         </mat-chip>
       </div>
       
@@ -42,17 +42,17 @@
     <!-- Left Panel - Command Center -->
     <mat-card class="panel command-panel">
       <mat-card-header>
-        <mat-card-title>{{ translationService.getReactive('tools.websocket.commands.title') }}</mat-card-title>
+        <mat-card-title>Commands</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <form [formGroup]="commandForm" (ngSubmit)="sendCommand()">
           <!-- Command Selector -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ translationService.getReactive('tools.websocket.commands.select') }}</mat-label>
+            <mat-label>Select Command</mat-label>
             <mat-select formControlName="command">
               @for (cmd of availableCommands; track cmd) {
                 <mat-option [value]="cmd">
-                  {{ translationService.getReactive('tools.websocket.commands.' + cmd) || cmd }}
+                  {{ cmd }}
                 </mat-option>
               }
             </mat-select>
@@ -61,21 +61,21 @@
           <!-- Dynamic Fields -->
           @if (shouldShowField('charge_point_id')) {
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ translationService.getReactive('tools.websocket.fields.chargePointId') }}</mat-label>
+              <mat-label>Charge Point ID</mat-label>
               <input matInput formControlName="charge_point_id" placeholder="e.g., CP001">
             </mat-form-field>
           }
 
           @if (shouldShowField('connector_id')) {
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ translationService.getReactive('tools.websocket.fields.connectorId') }}</mat-label>
+              <mat-label>Connector ID</mat-label>
               <input matInput type="number" formControlName="connector_id" placeholder="e.g., 1">
             </mat-form-field>
           }
 
           @if (shouldShowField('transaction_id')) {
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ translationService.getReactive('tools.websocket.fields.transactionId') }}</mat-label>
+              <mat-label>Transaction ID</mat-label>
               <input matInput type="number" formControlName="transaction_id" placeholder="e.g., 123">
             </mat-form-field>
           }
@@ -88,7 +88,7 @@
             class="full-width"
             [disabled]="!websocketService.isConnected() || commandForm.invalid">
             <mat-icon>send</mat-icon>
-            {{ translationService.getReactive('tools.websocket.commands.send') }}
+            Send Command
           </button>
         </form>
 
@@ -96,7 +96,7 @@
 
         <!-- Quick Actions -->
         <div class="quick-actions">
-          <h3>{{ translationService.getReactive('tools.websocket.commands.quickActions') }}</h3>
+          <h3>Quick Actions</h3>
           
           <button 
             mat-stroked-button 
@@ -131,7 +131,7 @@
     <!-- Center Panel - Message Log -->
     <mat-card class="panel message-log-panel">
       <mat-card-header>
-        <mat-card-title>{{ translationService.getReactive('tools.websocket.messages.title') }}</mat-card-title>
+        <mat-card-title>Message Log</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <!-- Filters -->
@@ -155,7 +155,7 @@
           </mat-form-field>
 
           <mat-checkbox [checked]="autoScroll()" (change)="autoScroll.set($event.checked)">
-            {{ translationService.getReactive('tools.websocket.messages.autoScroll') }}
+            Auto Scroll
           </mat-checkbox>
         </div>
 
@@ -164,7 +164,7 @@
           @if (filteredMessages().length === 0) {
             <div class="no-messages">
               <mat-icon>inbox</mat-icon>
-              <p>{{ translationService.getReactive('tools.websocket.messages.noMessages') }}</p>
+              <p>No messages received yet</p>
             </div>
           } @else {
             @for (msgWrapper of filteredMessages(); track $index) {
@@ -212,16 +212,16 @@
         <!-- Footer Controls -->
         <div class="log-footer">
           <span class="message-count">
-            {{ translationService.getReactive('tools.websocket.messages.count').replace('{{count}}', filteredMessages().length.toString()) }}
+            {{ filteredMessages().length }} message(s)
           </span>
           <div class="footer-actions">
             <button mat-button (click)="clearLog()">
               <mat-icon>delete</mat-icon>
-              {{ translationService.getReactive('tools.websocket.messages.clear') }}
+              Clear Log
             </button>
             <button mat-button (click)="exportLog()">
               <mat-icon>download</mat-icon>
-              {{ translationService.getReactive('tools.websocket.messages.export') }}
+              Export Log
             </button>
           </div>
         </div>
@@ -231,7 +231,7 @@
     <!-- Right Panel - Message Inspector -->
     <mat-card class="panel inspector-panel">
       <mat-card-header>
-        <mat-card-title>{{ translationService.getReactive('tools.websocket.inspector.title') }}</mat-card-title>
+        <mat-card-title>Message Inspector</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         @if (selectedMessage()) {
@@ -335,7 +335,7 @@
         } @else {
           <div class="no-selection">
             <mat-icon>touch_app</mat-icon>
-            <p>{{ translationService.getReactive('tools.websocket.inspector.noSelection') }}</p>
+            <p>Select a message to inspect</p>
           </div>
         }
       </mat-card-content>
@@ -345,14 +345,14 @@
   <!-- Statistics Section -->
   <mat-card class="statistics-card">
     <mat-card-header>
-      <mat-card-title>{{ translationService.getReactive('tools.websocket.statistics.title') }}</mat-card-title>
+      <mat-card-title>Statistics</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="statistics-grid">
         <div class="stat-item">
           <mat-icon>schedule</mat-icon>
           <div class="stat-content">
-            <span class="stat-label">{{ translationService.getReactive('tools.websocket.statistics.uptime') }}</span>
+            <span class="stat-label">Connection Uptime</span>
             <span class="stat-value">{{ connectionStats().uptime }}</span>
           </div>
         </div>
@@ -360,7 +360,7 @@
         <div class="stat-item">
           <mat-icon>message</mat-icon>
           <div class="stat-content">
-            <span class="stat-label">{{ translationService.getReactive('tools.websocket.statistics.totalMessages') }}</span>
+            <span class="stat-label">Total Messages</span>
             <span class="stat-value">{{ connectionStats().messageCount }}</span>
           </div>
         </div>
@@ -368,7 +368,7 @@
         <div class="stat-item">
           <mat-icon>sync</mat-icon>
           <div class="stat-content">
-            <span class="stat-label">{{ translationService.getReactive('tools.websocket.statistics.reconnections') }}</span>
+            <span class="stat-label">Reconnections</span>
             <span class="stat-value">{{ connectionStats().reconnectCount }}</span>
           </div>
         </div>
@@ -376,7 +376,7 @@
         <div class="stat-item stat-breakdown">
           <mat-icon>analytics</mat-icon>
           <div class="stat-content">
-            <span class="stat-label">{{ translationService.getReactive('tools.websocket.statistics.byStatus') }}</span>
+            <span class="stat-label">Messages by Status</span>
             <div class="breakdown">
               @for (status of statusValues; track status) {
                 @if (messagesByStatus()[status] > 0) {

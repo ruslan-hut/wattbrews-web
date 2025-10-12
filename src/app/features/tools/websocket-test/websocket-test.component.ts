@@ -15,7 +15,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WebsocketService } from '../../../core/services/websocket.service';
-import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 import { WsCommand, WsResponse, ResponseStatus, ResponseStage, ConnectionState } from '../../../core/models/websocket.model';
 import { APP_CONSTANTS } from '../../../core/constants/app.constants';
 
@@ -51,7 +50,6 @@ export class WebsocketTestComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly websocketService = inject(WebsocketService);
-  protected readonly translationService = inject(SimpleTranslationService);
 
   // Expose enums to template
   protected readonly WsCommand = WsCommand;
