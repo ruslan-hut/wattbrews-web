@@ -4,6 +4,23 @@
 
 The WattBrews application uses a custom `SimpleTranslationService` for internationalization (i18n) support. This service provides reactive translations with async loading mechanisms to ensure translations are properly loaded before being displayed.
 
+### Recent Improvements (Race Condition Fix)
+
+The translation service has been enhanced with comprehensive safety features to prevent race conditions and ensure translations are always available:
+
+**New Features:**
+- ✅ `areTranslationsLoaded()` method for explicit verification
+- ✅ Built-in verification in `initializeTranslationsAsync()` 
+- ✅ Defensive checks in `get()` and `getReactive()` methods
+- ✅ Fallback to translation keys when translations aren't loaded
+- ✅ Console warnings for debugging translation loading issues
+
+**What This Fixes:**
+- Prevents showing raw translation keys (like `transactionStart.title`) when component loads
+- Eliminates race condition between translation loading and component rendering
+- Provides clear error messages when translations fail to load
+- Allows components to gracefully handle missing translations
+
 ## ⚠️ Important: Async Initialization Required
 
 **All components using translations MUST implement async initialization** to prevent showing raw translation keys to users. This is a critical requirement for proper user experience.
@@ -25,10 +42,17 @@ export class YourComponent implements OnInit {
     try {
       this.translationsLoading.set(true);
       await this.translationService.initializeTranslationsAsync();
+      
+      // Verify translations are actually loaded
+      if (!this.translationService.areTranslationsLoaded()) {
+        throw new Error('Translations not available after initialization');
+      }
+      
       this.translationsLoading.set(false);
     } catch (error) {
       console.error('Failed to initialize translations:', error);
       this.translationsLoading.set(false);
+      // Component should still render with translation keys as fallback
     }
   }
 }
@@ -140,16 +164,26 @@ Components must handle translation loading states in templates:
 - **Purpose**: Get translation with reactive change detection
 - **Usage**: Use in component templates for reactive updates
 - **Returns**: Translated string or key if translation not found
+- **Safety**: Includes defensive check to verify translations are loaded before access
 
 #### `get(key: string, params?: any): string`
 - **Purpose**: Get translation without reactive updates
 - **Usage**: Use in component logic when reactivity not needed
 - **Returns**: Translated string or key if translation not found
+- **Safety**: Includes defensive check to verify translations are loaded before access
 
 #### `initializeTranslationsAsync(): Promise<void>`
 - **Purpose**: Initialize translations asynchronously at component level
 - **Usage**: Call in component `ngOnInit()` before using translations
 - **Returns**: Promise that resolves when translations are loaded
+- **Error Handling**: Automatically falls back to default language (Spanish) if preferred language fails
+- **Verification**: Includes built-in verification that translations are properly loaded
+
+#### `areTranslationsLoaded(language?: string): boolean`
+- **Purpose**: Check if translations are loaded and available
+- **Usage**: Verify translations after async initialization or before accessing translations
+- **Parameters**: Optional language code (defaults to current language)
+- **Returns**: `true` if translations exist and contain data, `false` otherwise
 
 ## Integration Guide
 
@@ -172,10 +206,17 @@ export class YourComponent implements OnInit {
     try {
       this.translationsLoading.set(true);
       await this.translationService.initializeTranslationsAsync();
+      
+      // Verify translations are actually loaded
+      if (!this.translationService.areTranslationsLoaded()) {
+        throw new Error('Translations not available after initialization');
+      }
+      
       this.translationsLoading.set(false);
     } catch (error) {
       console.error('Failed to initialize translations:', error);
       this.translationsLoading.set(false);
+      // Component should still render with translation keys as fallback
     }
   }
 }
@@ -228,6 +269,12 @@ export class YourComponent implements OnInit {
     try {
       this.translationsLoading.set(true);
       await this.translationService.initializeTranslationsAsync();
+      
+      // Verify translations are actually loaded
+      if (!this.translationService.areTranslationsLoaded()) {
+        throw new Error('Translations not available after initialization');
+      }
+      
       this.translationsLoading.set(false);
     } catch (error) {
       console.error('Failed to initialize translations:', error);
@@ -236,11 +283,12 @@ export class YourComponent implements OnInit {
   }
   
   getErrorMessage(): string {
+    // Safe to call - get() method includes defensive checks
     return this.translationService.get('errors.validation.required');
   }
   
-  onLanguageChange(newLang: string): void {
-    this.translationService.setLanguage(newLang);
+  async onLanguageChange(newLang: string): Promise<void> {
+    await this.translationService.setLanguage(newLang);
   }
 }
 ```
@@ -376,37 +424,50 @@ Ensure both language files are updated with the same keys:
 
 ## Error Handling
 
-### Missing Translation Detection
-The service automatically logs missing translations to the browser console and localStorage:
+### Defensive Loading Checks
+The translation service now includes comprehensive safety checks to prevent race conditions and ensure translations are available before use:
 
+#### Built-in Verification in `initializeTranslationsAsync()`
 ```typescript
-private logMissingTranslation(key: string): void {
-  const missingKey = {
-    key,
-    language: this.currentLang,
-    timestamp: new Date().toISOString(),
-    url: window.location.href
-  };
+async initializeTranslationsAsync(): Promise<void> {
+  // ... loading logic ...
   
-  // Store in localStorage for collection
-  const existingMissing = JSON.parse(localStorage.getItem('missingTranslations') || '[]');
-  if (!existingMissing.some((item: any) => item.key === key && item.language === this.currentLang)) {
-    existingMissing.push(missingKey);
-    localStorage.setItem('missingTranslations', JSON.stringify(existingMissing));
-    console.warn(`🌐 Missing translation: "${key}" in ${this.currentLang}`, missingKey);
+  // Verify translations are loaded
+  if (!this.areTranslationsLoaded(languageToUse)) {
+    throw new Error(`Translations not properly loaded for ${languageToUse}`);
   }
 }
 ```
 
-### Debugging Missing Translations
-```typescript
-// Get all missing translations
-const missing = this.translationService.getMissingTranslations();
-console.log('Missing translations:', missing);
+#### Defensive Checks in `get()` and `getReactive()`
+Both translation methods now check if translations are loaded before accessing them:
 
-// Clear missing translations log
-this.translationService.clearMissingTranslations();
+```typescript
+getReactive(key: string, params?: any): string {
+  // Check if translations are loaded
+  if (!this.areTranslationsLoaded(currentLang)) {
+    console.warn(`Translations not loaded for ${currentLang}, returning key: ${key}`);
+    return key;
+  }
+  // ... rest of translation logic ...
+}
 ```
+
+This prevents showing undefined values when translations haven't finished loading, instead returning the translation key as a fallback.
+
+### Missing Translation Detection
+The service automatically logs missing translations to the browser console:
+
+```typescript
+private logMissingTranslation(key: string): void {
+  console.warn(`🌐 Missing translation: "${key}" in ${this.currentLang}`);
+}
+```
+
+When a translation key is not found, the service:
+1. Logs a warning to the console with the missing key and current language
+2. Returns the key itself as a fallback value
+3. Allows the application to continue functioning
 
 ## Performance Considerations
 
@@ -487,8 +548,12 @@ it('should update translations when language changes', async () => {
 ### Common Issues
 
 #### 1. Keys Showing Instead of Translations
-- **Cause**: Component not properly initializing translations or missing loading state handling
-- **Solution**: Ensure component implements `OnInit`, calls `initializeTranslations()`, and wraps content with `*ngIf="!translationsLoading()"`
+- **Cause**: Component not properly initializing translations, missing loading state handling, or race condition during translation loading
+- **Solution**: 
+  - Ensure component implements `OnInit`, calls `initializeTranslations()`, and wraps content with `*ngIf="!translationsLoading()"`
+  - Add verification check after `initializeTranslationsAsync()`: `if (!this.translationService.areTranslationsLoaded()) { throw new Error(...) }`
+  - The service now includes built-in defensive checks that return the key as fallback if translations aren't loaded
+  - Check browser console for warnings about translations not being loaded
 
 #### 2. Translations Not Updating on Language Change
 - **Cause**: Using `get()` instead of `getReactive()`
@@ -510,11 +575,17 @@ console.log('Current language:', this.translationService.currentLanguage());
 // Check available languages
 console.log('Available languages:', this.translationService.availableLanguages());
 
-// Check missing translations
-console.log('Missing translations:', this.translationService.getMissingTranslations());
+// Verify translations are loaded
+console.log('Translations loaded:', this.translationService.areTranslationsLoaded());
+
+// Check if specific language is loaded
+console.log('English loaded:', this.translationService.areTranslationsLoaded('en'));
 
 // Scan for used translation keys
 console.log('Used keys:', this.translationService.scanForTranslationKeys());
+
+// Check for missing translations
+console.log('Missing translations:', this.translationService.checkForMissingTranslations());
 ```
 
 ## Future Enhancements
@@ -539,12 +610,14 @@ When upgrading the translation service:
 ## Quick Reference
 
 ### Service Methods
-- `get(key, params?)` - Get translation without reactivity
-- `getReactive(key, params?)` - Get translation with reactivity
-- `initializeTranslationsAsync()` - Initialize translations asynchronously at component level
+- `get(key, params?)` - Get translation without reactivity (includes defensive checks)
+- `getReactive(key, params?)` - Get translation with reactivity (includes defensive checks)
+- `initializeTranslationsAsync()` - Initialize translations asynchronously with verification
+- `areTranslationsLoaded(lang?)` - Check if translations are loaded for a language
 - `setLanguage(lang)` - Change current language
 - `currentLanguage()` - Get current language signal
-- `getMissingTranslations()` - Get missing translation log
+- `scanForTranslationKeys()` - Scan for all translation keys used in application
+- `checkForMissingTranslations()` - Check for missing translations
 
 ### Template Usage
 ```html
@@ -582,18 +655,29 @@ export class YourComponent implements OnInit {
     try {
       this.translationsLoading.set(true);
       await this.translationService.initializeTranslationsAsync();
+      
+      // Verify translations are actually loaded
+      if (!this.translationService.areTranslationsLoaded()) {
+        throw new Error('Translations not available after initialization');
+      }
+      
       this.translationsLoading.set(false);
     } catch (error) {
       console.error('Failed to initialize translations:', error);
       this.translationsLoading.set(false);
+      // Component should still render with translation keys as fallback
     }
   }
 
-  // Get translation in logic
-  const text = this.translationService.get('key');
+  // Get translation in logic (safe - includes defensive checks)
+  getTranslation(): string {
+    return this.translationService.get('key');
+  }
 
   // Language switching
-  await this.translationService.setLanguage('es');
+  async switchLanguage(): Promise<void> {
+    await this.translationService.setLanguage('es');
+  }
 }
 ```
 

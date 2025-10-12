@@ -64,6 +64,12 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
     try {
       this.translationsLoading.set(true);
       await this.translationService.initializeTranslationsAsync();
+      
+      // Verify translations are actually loaded
+      if (!this.translationService.areTranslationsLoaded()) {
+        throw new Error('Translations not available after initialization');
+      }
+      
       this.translationsLoading.set(false);
       // Start transaction only after translations are loaded
       this.startTransaction();
