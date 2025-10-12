@@ -271,5 +271,3 @@ After authentication, each inbound `UserRequest` is handed to `core.WsRequest`. 
   - `entity/user_request.go` — client request schema and command names.
   - `entity/ws_response.go` — server response schema.
   - `entity/types.go` — status and stage enums used in responses.
-
-If you’d like, I can provide minimal client code (browser or Node/Go) that connects and exercises these commands.
