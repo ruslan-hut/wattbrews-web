@@ -89,6 +89,7 @@
     },
     "tooltips": {
       "viewDetails": "Ver detalles de la estación",
+      "clickToViewDetails": "Haga clic para ver detalles de la estación",
       "startCharging": "Iniciar carga en esta estación",
       "noAvailableConnectors": "No hay conectores disponibles",
       "stationOffline": "Estación offline",
@@ -211,9 +212,10 @@
       "averagePower": "Potencia Promedio"
     },
     "timing": {
-      "title": "Tiempo de la Transacción",
+      "title": "Tiempo y Ubicación de la Transacción",
       "started": "Inicio",
-      "ended": "Fin"
+      "ended": "Fin",
+      "location": "Ubicación"
     },
     "chart": {
       "title": "Gráfico de Energía Consumida"
@@ -240,8 +242,7 @@
       "connection": "Conexión",
       "availability": "Disponibilidad",
       "info": "Información",
-      "statusTime": "Tiempo de Estado",
-      "eventTime": "Tiempo de Evento",
+      "statusUpdated": "Estado actualizado:",
       "coordinates": "Coordenadas",
       "connector": "Conector",
       "type": "Tipo",
@@ -357,6 +358,7 @@
     }
   },
   "common": {
+    "close": "Cerrar",
     "buttons": {
       "save": "Guardar",
       "retry": "Reintentar",
@@ -389,5 +391,80 @@
       "11": "Noviembre",
       "12": "Diciembre"
     }
+  },
+  "tools": {
+    "websocket": {
+      "title": "Prueba y Monitor WebSocket",
+      "connection": {
+        "connected": "Conectado",
+        "disconnected": "Desconectado",
+        "connecting": "Conectando...",
+        "reconnecting": "Reconectando...",
+        "error": "Error de Conexión",
+        "duration": "Conectado durante {{duration}}",
+        "lastPing": "Último ping: {{time}}"
+      },
+      "commands": {
+        "title": "Enviar Comando",
+        "select": "Seleccionar Comando",
+        "StartTransaction": "Iniciar Transacción",
+        "StopTransaction": "Detener Transacción",
+        "CheckStatus": "Verificar Estado",
+        "ListenTransaction": "Escuchar Transacción",
+        "StopListenTransaction": "Dejar de Escuchar Transacción",
+        "ListenChargePoints": "Escuchar Puntos de Carga",
+        "ListenLog": "Escuchar Registro",
+        "PingConnection": "Ping de Conexión",
+        "send": "Enviar Comando",
+        "quickActions": "Acciones Rápidas"
+      },
+      "fields": {
+        "chargePointId": "ID de Punto de Carga",
+        "connectorId": "ID de Conector",
+        "transactionId": "ID de Transacción"
+      },
+      "messages": {
+        "title": "Registro de Mensajes",
+        "count": "{{count}} mensajes",
+        "noMessages": "Aún no hay mensajes",
+        "clear": "Limpiar Registro",
+        "export": "Exportar Registro",
+        "autoScroll": "Desplazamiento automático",
+        "filter": "Filtrar"
+      },
+      "inspector": {
+        "title": "Inspector de Mensajes",
+        "noSelection": "Seleccione un mensaje para inspeccionar",
+        "copy": "Copiar JSON",
+        "copied": "Copiado al portapapeles"
+      },
+      "statistics": {
+        "title": "Estadísticas",
+        "uptime": "Tiempo activo",
+        "totalMessages": "Total de Mensajes",
+        "byStatus": "Por Estado",
+        "byStage": "Por Etapa",
+        "reconnections": "Reconexiones"
+      }
+    }
+  },
+  "connection": {
+    "warning": "Conexión en tiempo real perdida. Reconectando...",
+    "reconnecting": "Intentando reconectar..."
+  },
+  "transactionStart": {
+    "initializing": "Inicializando Transacción",
+    "startingTransaction": "Iniciando Transacción",
+    "transactionStarted": "Transacción Iniciada",
+    "failed": "Transacción Fallida",
+    "connector": "Conector",
+    "waiting": "Esperando a que inicie la transacción...",
+    "preparing": "Preparando para iniciar la transacción...",
+    "success": "¡Transacción iniciada con éxito!",
+    "errorSendingCommand": "Error al enviar comando de inicio",
+    "errorOccurred": "No se pudo iniciar la transacción. Por favor, inténtelo de nuevo o contacte al soporte si el problema persiste.",
+    "sendingCommand": "Enviando comando de inicio...",
+    "waitingForResponse": "Esperando respuesta de la estación de carga...",
+    "redirecting": "Redirigiendo a sesión activa..."
   }
 }

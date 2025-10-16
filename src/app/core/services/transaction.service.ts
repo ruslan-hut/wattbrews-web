@@ -5,18 +5,35 @@ import { ApiService } from './api.service';
 import { Transaction } from '../models/transaction.model';
 import { TransactionDetail } from '../models/transaction-detail.model';
 import { ChargePoint } from '../models/chargepoint.model';
+// TODO: Uncomment when implementing real-time transaction monitoring
+// import { WebsocketService } from './websocket.service';
+// import { WsCommand, WsResponse, ResponseStatus } from '../models/websocket.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionService {
   private readonly apiService = inject(ApiService);
+  // TODO: Uncomment when implementing real-time transaction monitoring
+  // private readonly websocketService = inject(WebsocketService);
   
   // Signals for state management
   private readonly _transactions = signal<Transaction[]>([]);
   private readonly _recentChargePoints = signal<ChargePoint[]>([]);
   private readonly _loading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
+  
+  // Real-time transaction metrics
+  // TODO: Uncomment when implementing active session component
+  // private readonly _activeTransactionMetrics = signal<{
+  //   power: number;
+  //   powerRate: number;
+  //   soc: number;
+  //   price: number;
+  //   duration: number;
+  //   status: string;
+  // } | null>(null);
+  // readonly activeTransactionMetrics = this._activeTransactionMetrics.asReadonly();
   
   // Public readonly signals
   readonly transactions = this._transactions.asReadonly();
@@ -133,5 +150,85 @@ export class TransactionService {
         throw error;
       })
     );
+  }
+
+  // ============================================================================
+  // Real-Time Transaction Monitoring Methods (Future Implementation)
+  // ============================================================================
+  
+  /**
+   * Start listening to real-time updates for a transaction
+   * TODO: Implement when active session component is created
+   * 
+   * @param transactionId - The transaction ID to monitor
+   * 
+   * Usage example:
+   * ```typescript
+   * ngOnInit() {
+   *   const transactionId = this.route.snapshot.params['id'];
+   *   this.transactionService.listenToTransaction(transactionId);
+   * }
+   * ```
+   */
+  listenToTransaction(transactionId: number): void {
+    // TODO: Implement WebSocket subscription for transaction updates
+    // this.websocketService.sendCommand(WsCommand.ListenTransaction, { transaction_id: transactionId });
+    
+    // TODO: Subscribe to value updates
+    // this.websocketService.subscribeToStatus(ResponseStatus.Value, (message) => {
+    //   if (message.id === transactionId) {
+    //     this.updateTransactionMetrics(message);
+    //   }
+    // });
+    
+    console.log(`[TransactionService] TODO: Implement listenToTransaction for transaction ${transactionId}`);
+  }
+
+  /**
+   * Stop listening to transaction updates
+   * TODO: Implement when active session component is created
+   * 
+   * @param transactionId - The transaction ID to stop monitoring
+   * 
+   * Usage example:
+   * ```typescript
+   * ngOnDestroy() {
+   *   this.transactionService.stopListeningToTransaction(this.transactionId);
+   * }
+   * ```
+   */
+  stopListeningToTransaction(transactionId: number): void {
+    // TODO: Implement WebSocket unsubscribe
+    // this.websocketService.sendCommand(WsCommand.StopListenTransaction, { transaction_id: transactionId });
+    
+    console.log(`[TransactionService] TODO: Implement stopListeningToTransaction for transaction ${transactionId}`);
+  }
+
+  /**
+   * Update transaction metrics from WebSocket message
+   * TODO: Implement when active session component is created
+   * 
+   * Updates the following real-time metrics:
+   * - power (in kW)
+   * - power_rate (in kW)
+   * - soc (state of charge %)
+   * - price (in currency)
+   * - minute (duration in minutes)
+   * - connector_status
+   * 
+   * @param message - WebSocket message containing transaction metrics
+   */
+  private updateTransactionMetrics(message: any): void {
+    // TODO: Implement metrics update
+    // this._activeTransactionMetrics.set({
+    //   power: message.power || 0,
+    //   powerRate: message.power_rate || 0,
+    //   soc: message.soc || 0,
+    //   price: message.price || 0,
+    //   duration: message.minute || 0,
+    //   status: message.connector_status || 'Unknown'
+    // });
+    
+    console.log('[TransactionService] TODO: Implement updateTransactionMetrics', message);
   }
 }

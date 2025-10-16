@@ -71,6 +71,11 @@ export class SimpleTranslationService {
       this.currentLang = languageToUse;
       this._currentLanguage.set(languageToUse);
       this.languageSubject.next(languageToUse);
+      
+      // Verify translations are loaded
+      if (!this.areTranslationsLoaded(languageToUse)) {
+        throw new Error(`Translations not properly loaded for ${languageToUse}`);
+      }
     } catch (error) {
       console.error('Failed to load initial translations:', error);
       // Fallback to default language
@@ -79,11 +84,24 @@ export class SimpleTranslationService {
         this.currentLang = 'es';
         this._currentLanguage.set('es');
         this.languageSubject.next('es');
+        
+        // Verify fallback translations are loaded
+        if (!this.areTranslationsLoaded('es')) {
+          throw new Error('Fallback translations not properly loaded');
+        }
       } catch (fallbackError) {
         console.error('Failed to load fallback translations:', fallbackError);
         throw fallbackError;
       }
     }
+  }
+  
+  /**
+   * Check if translations are loaded for a specific language
+   */
+  areTranslationsLoaded(language?: string): boolean {
+    const lang = language || this.currentLang;
+    return !!this.translations[lang] && Object.keys(this.translations[lang]).length > 0;
   }
   
   
@@ -141,6 +159,12 @@ export class SimpleTranslationService {
    * Get translation for key
    */
   get(key: string, params?: any): string {
+    // Check if translations are loaded
+    if (!this.areTranslationsLoaded(this.currentLang)) {
+      console.warn(`Translations not loaded for ${this.currentLang}, returning key: ${key}`);
+      return key;
+    }
+    
     const translation = this.getNestedTranslation(this.translations[this.currentLang], key);
     if (!translation) {
       // Debug logging for missing translations
@@ -164,6 +188,12 @@ export class SimpleTranslationService {
   getReactive(key: string, params?: any): string {
     // Access the current language signal to make this reactive
     const currentLang = this._currentLanguage();
+    
+    // Check if translations are loaded
+    if (!this.areTranslationsLoaded(currentLang)) {
+      console.warn(`Translations not loaded for ${currentLang}, returning key: ${key}`);
+      return key;
+    }
     
     // Handle nested keys like 'app.title' -> translations.app.title
     const translation = this.getNestedTranslation(this.translations[currentLang], key);

@@ -85,27 +85,42 @@
               <mat-icon>flash_on</mat-icon>
               <div class="item-content">
                 <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.averagePower') }}</span>
-                <span class="item-value">{{ calculateAveragePower() | number:'1.0-1' }} W</span>
+                <span class="item-value">{{ calculateAveragePower() }}</span>
               </div>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
 
-      <!-- Timing -->
+      <!-- Timing & Location -->
       <mat-card class="status-card">
         <mat-card-header>
           <mat-card-title>{{ translationService.getReactive('transactionDetails.timing.title') }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="status-grid">
-            <div class="status-item">
-              <span class="status-label">{{ translationService.getReactive('transactionDetails.timing.started') }}</span>
-              <span class="status-value">{{ formatDateTime(transactionDetail()?.time_started || '') }}</span>
+          <div class="status-map-container">
+            <div class="status-grid">
+              <div class="status-item">
+                <span class="status-label">{{ translationService.getReactive('transactionDetails.timing.started') }}</span>
+                <span class="status-value">{{ formatDateTime(transactionDetail()?.time_started || '') }}</span>
+              </div>
+              <div class="status-item" *ngIf="!transactionDetail()?.is_charging">
+                <span class="status-label">{{ translationService.getReactive('transactionDetails.timing.ended') }}</span>
+                <span class="status-value">{{ formatEndTime(transactionDetail()?.time_started || '', transactionDetail()?.duration || 0) }}</span>
+              </div>
+              <div class="status-item">
+                <span class="status-label">{{ translationService.getReactive('transactionDetails.timing.location') }}</span>
+                <span class="status-value">{{ transactionDetail()?.charge_point_address }}</span>
+              </div>
             </div>
-            <div class="status-item" *ngIf="!transactionDetail()?.is_charging">
-              <span class="status-label">{{ translationService.getReactive('transactionDetails.timing.ended') }}</span>
-              <span class="status-value">{{ formatEndTime(transactionDetail()?.time_started || '', transactionDetail()?.duration || 0) }}</span>
+            <div class="map-container" *ngIf="hasLocation()">
+              <app-small-map 
+                [latitude]="getLatitude()" 
+                [longitude]="getLongitude()"
+                [title]="transactionDetail()?.charge_point_title || ''"
+                [zoom]="15"
+                height="200px">
+              </app-small-map>
             </div>
           </div>
         </mat-card-content>

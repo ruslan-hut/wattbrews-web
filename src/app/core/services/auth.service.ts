@@ -1,10 +1,11 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed, inject, Injector, runInInjectionContext } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, sendPasswordResetEmail, updateProfile, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, ActionCodeSettings } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, from, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, from, throwError, firstValueFrom } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { User as AppUser, UserProfile } from '../models/user.model';
+import { UserInfoService } from './user-info.service';
 import { environment } from '../../../environments/environment';
 
 export interface LoginCredentials {
@@ -27,6 +28,8 @@ export class AuthService {
   private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
   private readonly router = inject(Router);
+  private readonly userInfoService = inject(UserInfoService);
+  private readonly injector = inject(Injector);
 
   // Signals for reactive state management
   private readonly _user = signal<AppUser | null>(null);
@@ -51,7 +54,7 @@ export class AuthService {
     // Listen to Firebase auth state changes
     onAuthStateChanged(this.auth, async (firebaseUser) => {
       if (firebaseUser) {
-        await this.loadUserProfile(firebaseUser.uid);
+        await runInInjectionContext(this.injector, () => this.loadUserProfile(firebaseUser.uid));
       } else {
         this._user.set(null);
         this._userProfile.set(null);
@@ -152,7 +155,9 @@ export class AuthService {
         paymentMethods: []
       };
 
-      await setDoc(doc(this.firestore, 'users', userCredential.user.uid), userProfile);
+      await runInInjectionContext(this.injector, () =>
+        setDoc(doc(this.firestore, 'users', userCredential.user.uid), userProfile)
+      );
 
       await this.loadUserProfile(userCredential.user.uid);
       this.router.navigate(['/dashboard']);
@@ -175,6 +180,7 @@ export class AuthService {
       this._userProfile.set(null);
       this._userName.set(null);
       this.userSubject.next(null);
+      this.userInfoService.clearData(); // Clear user info data
       this.router.navigate(['/auth/login']);
     } catch (error: any) {
       this._error.set(this.getErrorMessage(error));
@@ -309,7 +315,9 @@ export class AuthService {
    */
   async ensureUserProfile(firebaseUser: User): Promise<void> {
     try {
-      const userDoc = await getDoc(doc(this.firestore, 'users', firebaseUser.uid));
+      const userDoc = await runInInjectionContext(this.injector, () => 
+        getDoc(doc(this.firestore, 'users', firebaseUser.uid))
+      );
       
       if (!userDoc.exists()) {
         // Create user profile for Google sign-in users
@@ -332,7 +340,9 @@ export class AuthService {
           paymentMethods: []
         };
 
-        await setDoc(doc(this.firestore, 'users', firebaseUser.uid), userProfile);
+        await runInInjectionContext(this.injector, () =>
+          setDoc(doc(this.firestore, 'users', firebaseUser.uid), userProfile)
+        );
       }
     } catch (error) {
       throw error;
@@ -352,7 +362,9 @@ export class AuthService {
    */
   hasAnyRole(roles: string[]): boolean {
     const user = this._user();
-    if (!user?.roles) return false;
+    if (!user?.roles) {
+      return false;
+    }
     return roles.some(role => user.roles.includes(role));
   }
 
@@ -361,7 +373,9 @@ export class AuthService {
    */
   private async loadUserProfile(uid: string): Promise<void> {
     try {
-      const userDoc = await getDoc(doc(this.firestore, 'users', uid));
+      const userDoc = await runInInjectionContext(this.injector, () =>
+        getDoc(doc(this.firestore, 'users', uid))
+      );
       
       if (userDoc.exists()) {
         const userData = userDoc.data() as UserProfile;
@@ -369,17 +383,27 @@ export class AuthService {
         const firebaseUser = this.auth.currentUser;
         
         if (firebaseUser) {
+          // Load actual role from backend API
+          let roles = ['user']; // Default role
+          try {
+            await firstValueFrom(this.userInfoService.loadCurrentUserInfo());
+            const userRole = this.userInfoService.getUserRole();
+            roles = [userRole]; // Use role from backend API
+          } catch (error) {
+            // Silently fall back to default role if API call fails
+          }
+
           const appUser: AppUser = {
             uid: firebaseUser.uid,
             email: firebaseUser.email!,
             displayName: firebaseUser.displayName || `${userData.firstName} ${userData.lastName}`,
             photoURL: firebaseUser.photoURL || undefined,
-            roles: ['user'], // Default role, can be extended with custom claims
+            roles: roles,
             createdAt: new Date(firebaseUser.metadata.creationTime!),
             lastLoginAt: new Date(),
             isActive: true
           };
-
+          
           this._user.set(appUser);
           this.userSubject.next(appUser);
           

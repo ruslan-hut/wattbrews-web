@@ -1,0 +1,226 @@
+<div class="charge-initiation-container">
+  <!-- Header -->
+  <div class="page-header">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-content">
+      <h1 class="page-title">{{ translationService.getReactive('chargeInitiation.title') }}</h1>
+      @if (stationDetail()) {
+        <p class="page-subtitle">{{ stationDetail()!.title }}</p>
+      }
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-container">
+      <app-loading-spinner></app-loading-spinner>
+      <p>{{ translationService.getReactive('chargeInitiation.loadingStationDetails') }}</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error() && !loading()) {
+    <div class="error-container">
+      <app-error-message [message]="error()!"></app-error-message>
+      <button mat-raised-button color="primary" (click)="loadStationDetail()">
+        <mat-icon>refresh</mat-icon>
+        {{ translationService.getReactive('common.buttons.tryAgain') }}
+      </button>
+    </div>
+  }
+
+  <!-- Charge Initiation Form -->
+  @if (stationDetail() && !loading() && !error()) {
+    <div class="charge-form">
+      <!-- Station Info -->
+      <mat-card class="station-info-card">
+        <mat-card-header>
+          <div mat-card-avatar class="station-status-icon">
+            <mat-icon [class]="getStatusIconClass()">{{ getStatusIcon() }}</mat-icon>
+          </div>
+          <mat-card-title>{{ stationDetail()!.title }}</mat-card-title>
+          <mat-card-subtitle>{{ stationDetail()!.address }}</mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+
+      <!-- Connector Selection -->
+      <mat-card class="connector-selection-card">
+        <mat-card-header>
+          <mat-card-title>{{ translationService.getReactive('chargeInitiation.selectConnector') }}</mat-card-title>
+          <mat-card-subtitle>{{ translationService.getReactive('chargeInitiation.selectConnectorSubtitle') }}</mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <div class="connectors-grid">
+            @for (connector of allConnectors(); track connector.connector_id) {
+              <div 
+                class="connector-option"
+                [class.selected]="selectedConnector()?.connector_id === connector.connector_id"
+                [class.clickable]="connector.status === 'Available'"
+                [class.not-clickable]="connector.status !== 'Available'"
+                (click)="selectConnector(connector)">
+                
+                <div class="connector-header">
+                  <h4>{{ translationService.getReactive('chargeInitiation.connector') }} {{ getConnectorDisplayName(connector) }}</h4>
+                  <mat-chip [class]="getConnectorStatusClass(connector.status)">
+                    {{ connector.status }}
+                  </mat-chip>
+                </div>
+                
+                <div class="connector-details">
+                  <div class="connector-info">
+                    <span class="connector-label">{{ translationService.getReactive('chargeInitiation.type') }}</span>
+                    <span class="connector-value">{{ connector.type }}</span>
+                  </div>
+                  
+                  <div class="connector-info">
+                    <span class="connector-label">{{ translationService.getReactive('chargeInitiation.power') }}</span>
+                    <span class="connector-value">{{ connector.power }} {{ translationService.getReactive('common.units.kW') }}</span>
+                  </div>
+                </div>
+                
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Start Charge Button -->
+      <div class="start-charge-section">
+        @if (selectedConnector()) {
+          <div class="selected-connector-info">
+            <mat-icon>power</mat-icon>
+            <span>{{ translationService.getReactive('chargeInitiation.selectedConnector') }} {{ getConnectorDisplayName(selectedConnector()!) }}</span>
+          </div>
+        }
+        
+        <button 
+          mat-button 
+          color="primary" 
+          class="start-charge-button"
+          [disabled]="!canStartCharge()"
+          (click)="startCharge()">
+          <mat-icon>play_arrow</mat-icon>
+          {{ translationService.getReactive('chargeInitiation.startCharge') }}
+        </button>
+        
+        @if (!canStartCharge()) {
+          <div class="start-charge-info">
+            <p>{{ translationService.getReactive('chargeInitiation.selectConnectorToStart') }}</p>
+          </div>
+        }
+      </div>
+
+      <!-- Payment Method Selection -->
+      <mat-card class="payment-method-card">
+        <mat-card-header>
+          <mat-card-title>{{ translationService.getReactive('chargeInitiation.paymentMethod') }}</mat-card-title>
+          <mat-card-subtitle>{{ translationService.getReactive('chargeInitiation.paymentMethodSubtitle') }}</mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          @if (userInfoService.loading()) {
+            <div class="payment-methods-loading">
+              <mat-spinner diameter="30"></mat-spinner>
+              <span>{{ translationService.getReactive('chargeInitiation.loadingPaymentMethods') }}</span>
+            </div>
+          }
+          
+          @if (userInfoService.error() && !userInfoService.loading()) {
+            <div class="payment-methods-error">
+              <mat-icon>error</mat-icon>
+              <span>{{ translationService.getReactive('chargeInitiation.failedToLoadPaymentMethods') }} {{ userInfoService.error() }}</span>
+              <button mat-button color="primary" (click)="loadUserInfo()">
+                <mat-icon>refresh</mat-icon>
+                {{ translationService.getReactive('common.buttons.tryAgain') }}
+              </button>
+            </div>
+          }
+          
+          @if (!userInfoService.loading() && !userInfoService.error() && userInfoService.getPaymentMethods().length > 0) {
+            <div class="payment-methods">
+              @for (method of userInfoService.getPaymentMethods(); track method.identifier) {
+                <div 
+                  class="payment-method-option"
+                  [class.selected]="selectedPaymentMethod()?.identifier === method.identifier"
+                  (click)="selectPaymentMethod(method)">
+                  
+                  <div class="payment-method-header">
+                    <mat-icon class="payment-icon">credit_card</mat-icon>
+                    <div class="payment-method-info">
+                      <h4>{{ getCardBrandName(method.card_brand) }} ****{{ method.identifier.slice(-4) }}</h4>
+                      <p>Expires {{ formatExpiryDate(method.expiry_date) }}</p>
+                    </div>
+                    @if (selectedPaymentMethod()?.identifier === method.identifier) {
+                      <mat-icon class="check-icon">check_circle</mat-icon>
+                    }
+                  </div>
+                  
+                  <div class="payment-method-details">
+                    <span class="payment-method-label">Country:</span>
+                    <span class="payment-method-value">{{ getCountryName(method.card_country) }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            @if (!userInfoService.loading()) {
+              <div class="no-payment-methods">
+                <mat-icon>credit_card_off</mat-icon>
+                <p>{{ translationService.getReactive('chargeInitiation.noPaymentMethods') }}</p>
+                <button mat-raised-button color="primary" (click)="goToProfile()">
+                  <mat-icon>add</mat-icon>
+                  {{ translationService.getReactive('chargeInitiation.addPaymentMethod') }}
+                </button>
+              </div>
+            }
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Tariff Information -->
+      <mat-card class="tariff-card">
+        <mat-card-header>
+          <mat-card-title>{{ translationService.getReactive('chargeInitiation.tariffInformation') }}</mat-card-title>
+          <mat-card-subtitle>{{ getTariffDescription() }}</mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          @if (userInfoService.loading()) {
+            <div class="tariff-loading">
+              <mat-spinner diameter="30"></mat-spinner>
+              <span>{{ translationService.getReactive('chargeInitiation.loadingTariffInformation') }}</span>
+            </div>
+          }
+          
+          @if (userInfoService.error() && !userInfoService.loading()) {
+            <div class="tariff-error">
+              <mat-icon>error</mat-icon>
+              <span>{{ translationService.getReactive('chargeInitiation.failedToLoadTariffInformation') }} {{ userInfoService.error() }}</span>
+              <button mat-button color="primary" (click)="loadUserInfo()">
+                <mat-icon>refresh</mat-icon>
+                {{ translationService.getReactive('common.buttons.tryAgain') }}
+              </button>
+            </div>
+          }
+          
+          @if (!userInfoService.loading() && !userInfoService.error() && userInfoService.getPaymentPlans().length > 0) {
+            <div class="tariff-info">
+              <div class="tariff-item">
+                <span class="tariff-label">{{ translationService.getReactive('chargeInitiation.pricePerKwh') }}</span>
+                <span class="tariff-value">€{{ getTariffPrice() }}/{{ translationService.getReactive('common.units.kWh') }}</span>
+              </div>
+              
+              <div class="tariff-item">
+                <span class="tariff-label">{{ translationService.getReactive('chargeInitiation.pricePerHour') }}</span>
+                <span class="tariff-value">€{{ getTariffHourlyPrice() }}/hour</span>
+              </div>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

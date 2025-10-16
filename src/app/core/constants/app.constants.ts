@@ -32,6 +32,12 @@ export const APP_CONSTANTS = {
     DURATION: 5000, // 5 seconds
     MAX_VISIBLE: 5,
   },
+  WEBSOCKET: {
+    PING_INTERVAL: 30000, // 30 seconds
+    RECONNECT_INITIAL_DELAY: 1000, // 1 second
+    RECONNECT_MAX_DELAY: 30000, // 30 seconds
+    MESSAGE_HISTORY_LIMIT: 100, // For test page
+  },
   VALIDATION: {
     PASSWORD_MIN_LENGTH: 8,
     PHONE_REGEX: /^\+?[1-9]\d{1,14}$/,

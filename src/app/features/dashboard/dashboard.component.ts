@@ -13,8 +13,10 @@ import { ChargePointService } from '../../core/services/chargepoint.service';
 import { AuthService } from '../../core/services/auth.service';
 import { TransactionService } from '../../core/services/transaction.service';
 import { UserInfoService } from '../../core/services/user-info.service';
+import { WebsocketService } from '../../core/services/websocket.service';
 import { ChargePoint, ChargePointConnector } from '../../core/models/chargepoint.model';
 import { Transaction } from '../../core/models/transaction.model';
+import { WsCommand, WsResponse, ResponseStage } from '../../core/models/websocket.model';
 import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 
@@ -54,6 +56,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   protected readonly authService = inject(AuthService);
   protected readonly transactionService = inject(TransactionService);
   protected readonly translationService = inject(SimpleTranslationService);
+  protected readonly websocketService = inject(WebsocketService);
   private readonly userInfoService = inject(UserInfoService);
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
@@ -61,8 +64,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Translation loading state
   protected readonly translationsLoading = signal(true);
   
+  // Real-time updates
+  protected readonly realtimeActive = signal(false);
+  
   // Subscription management
   private authSubscription?: Subscription;
+  private websocketSubscription?: Subscription;
   
   protected readonly totalSessions = signal(24);
   protected readonly totalEnergy = signal(156.8);
@@ -80,8 +87,54 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.loadRecentChargePoints();
         this.loadTransactions();
         this.loadUserInfo();
+        this.initializeWebSocketSubscriptions();
       }
     });
+  }
+  
+  /**
+   * Initialize WebSocket subscriptions for real-time updates
+   * Note: WebSocket is already connected globally
+   */
+  private initializeWebSocketSubscriptions(): void {
+    // Subscribe to charge-point events
+    this.websocketService.sendCommand(WsCommand.ListenChargePoints).catch(error => {
+      console.error('[Dashboard] Failed to subscribe to charge points:', error);
+    });
+    
+    // Listen for charge-point events
+    this.websocketSubscription = this.websocketService.subscribeToStage(
+      ResponseStage.ChargePointEvent,
+      (message) => {
+        this.handleChargePointEvent(message);
+      }
+    );
+  }
+  
+  /**
+   * Handle charge point event from WebSocket
+   */
+  private handleChargePointEvent(message: WsResponse): void {
+    // Parse charge point ID from message.data
+    const chargePointId = message.data;
+    
+    if (!chargePointId) {
+      return;
+    }
+    
+    // Refresh charge points data
+    this.chargePointService.refreshChargePoints().subscribe({
+      next: () => {
+        // Data refreshed successfully
+      },
+      error: (error) => {
+        console.error('[Dashboard] Failed to refresh charge points:', error);
+      }
+    });
+    
+    // Set real-time indicator
+    this.realtimeActive.set(true);
+    setTimeout(() => this.realtimeActive.set(false), 2000); // Flash indicator for 2 seconds
   }
 
   private async initializeTranslations(): Promise<void> {
@@ -98,6 +151,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
+    }
+    
+    if (this.websocketSubscription) {
+      this.websocketSubscription.unsubscribe();
     }
   }
   
@@ -301,6 +358,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   protected viewStationDetails(stationId: string): void {
     this.router.navigate(['/stations', stationId]);
+  }
+
+  protected onCardClick(stationId: string): void {
+    if (this.hasViewDetailsAccess()) {
+      this.viewStationDetails(stationId);
+    }
   }
 
   private loadUserInfo(): void {

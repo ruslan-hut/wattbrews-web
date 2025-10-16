@@ -1,0 +1,285 @@
+<div class="profile-container">
+  <!-- Translation Loading State -->
+  @if (translationsLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading translations...</p>
+    </div>
+  }
+
+  <!-- Profile Content (only show when translations are loaded) -->
+  @if (!translationsLoading()) {
+    <div>
+      <h1 class="profile-title">{{ translationService.getReactive('profile.title') }}</h1>
+      
+      <!-- Authentication Loading State -->
+      @if (isAuthLoading()) {
+        <div class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>{{ translationService.getReactive('profile.checkingAuth') }}</p>
+        </div>
+      }
+      
+      <!-- Authentication Required Message -->
+      @if (!isAuthLoading() && !isAuthenticated()) {
+        <div class="auth-required-message">
+          <mat-icon class="auth-icon">lock</mat-icon>
+          <h3>{{ translationService.getReactive('profile.authRequired') }}</h3>
+          <p>{{ translationService.getReactive('profile.authRequiredMessage') }}</p>
+          <button mat-raised-button color="primary" (click)="navigateToLogin()">
+            <mat-icon>login</mat-icon>
+            {{ translationService.getReactive('common.buttons.signIn') }}
+          </button>
+        </div>
+      }
+      
+      <!-- User Info Loading State -->
+      @if (isAuthenticated() && userInfoService.loading()) {
+        <div class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>{{ translationService.getReactive('profile.loadingUserInfo') }}</p>
+        </div>
+      }
+      
+      <!-- Error State -->
+      @if (!isAuthLoading() && isAuthenticated() && userInfoService.error()) {
+        <div class="error-container">
+          <mat-icon class="error-icon">error</mat-icon>
+          <p>{{ userInfoService.error() }}</p>
+          <button mat-button color="primary" (click)="refreshUserInfo()">
+            {{ translationService.getReactive('common.buttons.tryAgain') }}
+          </button>
+        </div>
+      }
+      
+      <!-- Profile Content -->
+      @if (!isAuthLoading() && isAuthenticated() && !userInfoService.loading() && !userInfoService.error() && userInfoService.userInfo()) {
+        <div class="profile-content">
+          <!-- User Basic Info -->
+          <mat-card class="profile-card">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>person</mat-icon>
+                {{ translationService.getReactive('profile.basicInformation') }}
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="user-info-grid">
+                <div class="info-item">
+                  <label>{{ translationService.getReactive('profile.labels.username') }}</label>
+                  <span>{{ userInfoService.userInfo()?.username }}</span>
+                </div>
+                <div class="info-item">
+                  <label>{{ translationService.getReactive('profile.labels.name') }}</label>
+                  <span>{{ userInfoService.userInfo()?.name }}</span>
+                </div>
+                <div class="info-item">
+                  <label>{{ translationService.getReactive('profile.labels.email') }}</label>
+                  <span>{{ userInfoService.userInfo()?.email || 'Not provided' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>{{ translationService.getReactive('profile.labels.role') }}</label>
+                  <mat-chip [class.admin]="userInfoService.isAdmin()" [class.user]="!userInfoService.isAdmin()">
+                    {{ userInfoService.isAdmin() ? translationService.getReactive('profile.roles.admin') : translationService.getReactive('profile.roles.user') }}
+                  </mat-chip>
+                </div>
+                <div class="info-item">
+                  <label>{{ translationService.getReactive('profile.labels.accessLevel') }}</label>
+                  <span>{{ userInfoService.getAccessLevel() }}</span>
+                </div>
+                <div class="info-item">
+                  <label>{{ translationService.getReactive('profile.labels.registrationDate') }}</label>
+                  <span>{{ formatDate(userInfoService.getRegistrationDate()) }}</span>
+                </div>
+                <div class="info-item">
+                  <label>{{ translationService.getReactive('profile.labels.lastSeen') }}</label>
+                  <span>{{ formatDate(userInfoService.getLastSeenDate()) }}</span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Tabs for detailed information -->
+          <mat-tab-group class="profile-tabs">
+            <!-- Payment Plans Tab -->
+            <mat-tab [label]="translationService.getReactive('profile.paymentPlansTab')">
+              <div class="tab-content">
+                <mat-card class="section-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>payment</mat-icon>
+                      {{ translationService.getReactive('profile.paymentPlans.title') }}
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    @if (userInfoService.getPaymentPlans().length > 0) {
+                      <div class="payment-plans">
+                        @for (plan of userInfoService.getPaymentPlans(); track plan.plan_id) {
+                          <div class="plan-item">
+                            <div class="plan-header">
+                              <h3>{{ plan.description }}</h3>
+                              <div class="plan-badges">
+                                @if (plan.is_default) {
+                                  <mat-chip color="primary">{{ translationService.getReactive('profile.paymentPlans.default') }}</mat-chip>
+                                }
+                                @if (plan.is_active) {
+                                  <mat-chip color="accent">{{ translationService.getReactive('profile.paymentPlans.active') }}</mat-chip>
+                                }
+                              </div>
+                            </div>
+                            <div class="plan-details">
+                              <div class="price-item">
+                                <mat-icon>flash_on</mat-icon>
+                                <span>{{ plan.price_per_kwh }} €/kWh</span>
+                              </div>
+                              <div class="price-item">
+                                <mat-icon>schedule</mat-icon>
+                                <span>{{ plan.price_per_hour }} €/hour</span>
+                              </div>
+                              @if (plan.start_time) {
+                                <div class="price-item">
+                                  <mat-icon>schedule</mat-icon>
+                                  <span>{{ translationService.getReactive('profile.paymentPlans.start') }} {{ formatTime(plan.start_time) }}</span>
+                                </div>
+                              }
+                              @if (plan.end_time) {
+                                <div class="price-item">
+                                  <mat-icon>schedule</mat-icon>
+                                  <span>{{ translationService.getReactive('profile.paymentPlans.end') }} {{ formatTime(plan.end_time) }}</span>
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    } @else {
+                      <div class="empty-state">
+                        <mat-icon>payment</mat-icon>
+                        <p>{{ translationService.getReactive('profile.paymentPlans.noPlans') }}</p>
+                      </div>
+                    }
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </mat-tab>
+
+            <!-- User Tags Tab -->
+            <mat-tab [label]="translationService.getReactive('profile.userTagsTab')">
+              <div class="tab-content">
+                <mat-card class="section-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>credit_card</mat-icon>
+                      {{ translationService.getReactive('profile.userTags.title') }}
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    @if (userInfoService.getUserTags().length > 0) {
+                      <div class="user-tags">
+                        @for (tag of userInfoService.getUserTags(); track tag.id_tag) {
+                          <div class="tag-item">
+                            <div class="tag-header">
+                              <h3>{{ tag.id_tag.substring(0, 4) }}****</h3>
+                              <div class="tag-badges">
+                                @if (tag.is_enabled) {
+                                  <mat-chip color="accent">{{ translationService.getReactive('profile.userTags.enabled') }}</mat-chip>
+                                }
+                                @if (tag.local) {
+                                  <mat-chip color="primary">{{ translationService.getReactive('profile.userTags.local') }}</mat-chip>
+                                }
+                              </div>
+                            </div>
+                            <div class="tag-details">
+                              <div class="tag-info">
+                                <span class="label">{{ translationService.getReactive('profile.labels.note') }}</span>
+                                <span>{{ tag.note || translationService.getReactive('profile.userTags.noNote') }}</span>
+                              </div>
+                              <div class="tag-info">
+                                <span class="label">{{ translationService.getReactive('profile.labels.lastSeen') }}</span>
+                                <span>{{ formatDate(getDateFromString(tag.last_seen)) }}</span>
+                              </div>
+                              <div class="tag-info">
+                                <span class="label">{{ translationService.getReactive('profile.labels.registered') }}</span>
+                                <span>{{ formatDate(getDateFromString(tag.date_registered)) }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    } @else {
+                      <div class="empty-state">
+                        <mat-icon>credit_card</mat-icon>
+                        <p>{{ translationService.getReactive('profile.userTags.noTags') }}</p>
+                      </div>
+                    }
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </mat-tab>
+
+            <!-- Payment Methods Tab -->
+            <mat-tab [label]="translationService.getReactive('profile.paymentMethodsTab')">
+              <div class="tab-content">
+                <mat-card class="section-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>account_balance_wallet</mat-icon>
+                      {{ translationService.getReactive('profile.paymentMethods.title') }}
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    @if (userInfoService.getPaymentMethods().length > 0) {
+                      <div class="payment-methods">
+                        @for (method of userInfoService.getPaymentMethods(); track method.identifier) {
+                          <div class="method-item">
+                            <div class="method-header">
+                              <div class="method-info">
+                                <h3>{{ method.description }}</h3>
+                                <p>{{ userInfoService.getCardBrandName(method.card_brand) }} •••• {{ method.identifier.slice(-4) }}</p>
+                              </div>
+                              <div class="method-badges">
+                                @if (method.is_default) {
+                                  <mat-chip color="primary">{{ translationService.getReactive('profile.paymentMethods.default') }}</mat-chip>
+                                }
+                                @if (method.fail_count > 0) {
+                                  <mat-chip color="warn">
+                                    <mat-icon>warning</mat-icon>
+                                    {{ method.fail_count }} {{ translationService.getReactive('profile.paymentMethods.failures') }}
+                                  </mat-chip>
+                                }
+                              </div>
+                            </div>
+                            <div class="method-details">
+                              <div class="method-info-item">
+                                <span class="label">{{ translationService.getReactive('profile.labels.country') }}</span>
+                                <span>{{ userInfoService.getCountryName(method.card_country) }}</span>
+                              </div>
+                              <div class="method-info-item">
+                                <span class="label">{{ translationService.getReactive('profile.labels.expires') }}</span>
+                                <span>{{ userInfoService.formatExpiryDate(method.expiry_date) }}</span>
+                              </div>
+                              <div class="method-info-item">
+                                <span class="label">{{ translationService.getReactive('profile.labels.merchantId') }}</span>
+                                <span>{{ maskMerchantId(method.merchant_cof_txnid) }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    } @else {
+                      <div class="empty-state">
+                        <mat-icon>account_balance_wallet</mat-icon>
+                        <p>{{ translationService.getReactive('profile.paymentMethods.noMethods') }}</p>
+                      </div>
+                    }
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      }
+    </div>
+  }
+</div>
+

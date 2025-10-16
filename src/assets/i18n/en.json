@@ -86,6 +86,7 @@
     },
     "tooltips": {
       "viewDetails": "View station details",
+      "clickToViewDetails": "Click to view station details",
       "startCharging": "Start charging at this station",
       "noAvailableConnectors": "No connectors available",
       "stationOffline": "Station offline",
@@ -208,9 +209,10 @@
       "averagePower": "Average Power"
     },
     "timing": {
-      "title": "Transaction Timing",
+      "title": "Transaction Timing & Location",
       "started": "Started",
-      "ended": "Ended"
+      "ended": "Ended",
+      "location": "Location"
     },
     "chart": {
       "title": "Energy Consumption Chart"
@@ -237,8 +239,7 @@
       "connection": "Connection",
       "availability": "Availability",
       "info": "Info",
-      "statusTime": "Status Time",
-      "eventTime": "Event Time",
+      "statusUpdated": "Status updated:",
       "coordinates": "Coordinates",
       "connector": "Connector",
       "type": "Type",
@@ -354,6 +355,7 @@
     }
   },
   "common": {
+    "close": "Close",
     "buttons": {
       "save": "Save",
       "retry": "Retry",
@@ -386,5 +388,80 @@
       "11": "November",
       "12": "December"
     }
+  },
+  "tools": {
+    "websocket": {
+      "title": "WebSocket Test & Monitor",
+      "connection": {
+        "connected": "Connected",
+        "disconnected": "Disconnected",
+        "connecting": "Connecting...",
+        "reconnecting": "Reconnecting...",
+        "error": "Connection Error",
+        "duration": "Connected for {{duration}}",
+        "lastPing": "Last ping: {{time}}"
+      },
+      "commands": {
+        "title": "Send Command",
+        "select": "Select Command",
+        "StartTransaction": "Start Transaction",
+        "StopTransaction": "Stop Transaction",
+        "CheckStatus": "Check Status",
+        "ListenTransaction": "Listen Transaction",
+        "StopListenTransaction": "Stop Listen Transaction",
+        "ListenChargePoints": "Listen Charge Points",
+        "ListenLog": "Listen Log",
+        "PingConnection": "Ping Connection",
+        "send": "Send Command",
+        "quickActions": "Quick Actions"
+      },
+      "fields": {
+        "chargePointId": "Charge Point ID",
+        "connectorId": "Connector ID",
+        "transactionId": "Transaction ID"
+      },
+      "messages": {
+        "title": "Message Log",
+        "count": "{{count}} messages",
+        "noMessages": "No messages yet",
+        "clear": "Clear Log",
+        "export": "Export Log",
+        "autoScroll": "Auto-scroll",
+        "filter": "Filter"
+      },
+      "inspector": {
+        "title": "Message Inspector",
+        "noSelection": "Select a message to inspect",
+        "copy": "Copy JSON",
+        "copied": "Copied to clipboard"
+      },
+      "statistics": {
+        "title": "Statistics",
+        "uptime": "Uptime",
+        "totalMessages": "Total Messages",
+        "byStatus": "By Status",
+        "byStage": "By Stage",
+        "reconnections": "Reconnections"
+      }
+    }
+  },
+  "connection": {
+    "warning": "Real-time connection lost. Reconnecting...",
+    "reconnecting": "Attempting to reconnect..."
+  },
+  "transactionStart": {
+    "initializing": "Initializing Transaction",
+    "startingTransaction": "Starting Transaction",
+    "transactionStarted": "Transaction Started",
+    "failed": "Transaction Failed",
+    "connector": "Connector",
+    "waiting": "Waiting for transaction to start...",
+    "preparing": "Preparing to start transaction...",
+    "success": "Transaction started successfully!",
+    "errorSendingCommand": "Failed to send start command",
+    "errorOccurred": "Unable to start transaction. Please try again or contact support if the problem persists.",
+    "sendingCommand": "Sending start command...",
+    "waitingForResponse": "Waiting for response from charging station...",
+    "redirecting": "Redirecting to active session..."
   }
 }

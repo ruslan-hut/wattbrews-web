@@ -1,32 +1,48 @@
 <div class="station-detail-container">
   <!-- Header -->
-  <div class="page-header" *ngIf="!translationsLoading()">
-    <button mat-icon-button (click)="goBack()" class="back-button">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <div class="header-content">
-      <h1 class='page-title'>{{ translationService.getReactive('stationDetail.title') }}</h1>
-      <p class="page-subtitle" *ngIf="stationDetail()">{{ stationDetail()!.title }}</p>
+  @if (!translationsLoading()) {
+    <div class="page-header">
+      <button mat-icon-button (click)="goBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-content">
+        <h1 class='page-title'>
+          {{ translationService.getReactive('stationDetail.title') }}
+          <span class="realtime-indicator" *ngIf="realtimeActive()"></span>
+        </h1>
+        @if (stationDetail()) {
+          <p class="page-subtitle">{{ stationDetail()!.title }}</p>
+        }
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Loading State -->
-  <div class="loading-container" *ngIf="loading() || translationsLoading()">
-    <app-loading-spinner></app-loading-spinner>
-    <p *ngIf="!translationsLoading()">{{ translationService.getReactive('stationDetail.loading') }}</p>
-  </div>
+  @if (loading() || translationsLoading() || initializing()) {
+    <div class="loading-container">
+      <app-loading-spinner></app-loading-spinner>
+      @if (translationsLoading()) {
+        <p>Loading...</p>
+      } @else {
+        <p>{{ translationService.getReactive('stationDetail.loadingStation') }}</p>
+      }
+    </div>
+  }
 
   <!-- Error State -->
-  <div class="error-container" *ngIf="error() && !loading() && !translationsLoading()">
-    <app-error-message [message]="error()!"></app-error-message>
-    <button mat-raised-button color="primary" (click)="loadStationDetail()">
-      <mat-icon>refresh</mat-icon>
-      {{ translationService.getReactive('stationDetail.tryAgain') }}
-    </button>
-  </div>
+  @if (error() && !loading() && !translationsLoading() && !initializing()) {
+    <div class="error-container">
+      <app-error-message [message]="error()!"></app-error-message>
+      <button mat-raised-button color="primary" (click)="loadStationDetail()">
+        <mat-icon>refresh</mat-icon>
+        {{ translationService.getReactive('common.buttons.retry') }}
+      </button>
+    </div>
+  }
 
   <!-- Station Details -->
-  <div class="station-details" *ngIf="stationDetail() && !loading() && !error() && !translationsLoading()">
+  @if (stationDetail() && !loading() && !error() && !translationsLoading() && !initializing()) {
+    <div class="station-details">
     <!-- Basic Information -->
     <mat-card class="info-card">
       <mat-card-header>
@@ -90,82 +106,69 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- Status Information -->
+    <!-- Status Information with Map -->
     <mat-card class="status-card">
       <mat-card-header>
         <mat-card-title>{{ translationService.getReactive('stationDetail.statusInformation') }}</mat-card-title>
       </mat-card-header>
       
       <mat-card-content>
-        <div class="status-grid">
-          <div class="status-item">
-            <mat-chip [class]="getStatusChipClass(stationDetail()!.status)">
-              {{ stationDetail()!.status }}
-            </mat-chip>
-            <span class="status-label">{{ translationService.getReactive('stationDetail.labels.currentStatus') }}</span>
-          </div>
-          
-          <div class="status-item">
-            <mat-chip [class]="getErrorChipClass(stationDetail()!.error_code)">
-              {{ stationDetail()!.error_code }}
-            </mat-chip>
-            <span class="status-label">{{ translationService.getReactive('stationDetail.labels.errorCode') }}</span>
-          </div>
-          
-          <div class="status-item">
-            <mat-chip [class]="stationDetail()!.is_online ? 'online' : 'offline'">
-              {{ stationDetail()!.is_online ? translationService.getReactive('stationDetail.status.online') : translationService.getReactive('stationDetail.status.offline') }}
-            </mat-chip>
-            <span class="status-label">{{ translationService.getReactive('stationDetail.labels.connection') }}</span>
-          </div>
-          
-          <div class="status-item">
-            <mat-chip [class]="stationDetail()!.is_enabled ? 'enabled' : 'disabled'">
-              {{ stationDetail()!.is_enabled ? translationService.getReactive('stationDetail.status.enabled') : translationService.getReactive('stationDetail.status.disabled') }}
-            </mat-chip>
-            <span class="status-label">{{ translationService.getReactive('stationDetail.labels.availability') }}</span>
-          </div>
-        </div>
-        
-        <div class="status-info" *ngIf="stationDetail()!.info">
-          <p><strong>{{ translationService.getReactive('stationDetail.labels.info') }}</strong> {{ stationDetail()!.info }}</p>
-        </div>
-        
-        <div class="status-times">
-          <p><strong>{{ translationService.getReactive('stationDetail.labels.statusTime') }}</strong> {{ formatDateTime(stationDetail()!.status_time) }}</p>
-          <p><strong>{{ translationService.getReactive('stationDetail.labels.eventTime') }}</strong> {{ formatDateTime(stationDetail()!.event_time) }}</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <!-- Location Information -->
-    <mat-card class="location-card" *ngIf="stationDetail()!.location && stationDetail()!.location.latitude && stationDetail()!.location.longitude">
-      <mat-card-header>
-        <mat-card-title>{{ translationService.getReactive('stationDetail.location') }}</mat-card-title>
-      </mat-card-header>
-      
-      <mat-card-content>
-        <div class="location-info">
-          <div class="location-item">
-            <mat-icon class="location-icon">place</mat-icon>
-            <div class="location-details">
-              <span class="location-label">{{ translationService.getReactive('stationDetail.labels.coordinates') }}</span>
-              <span class="location-value">
-                {{ stationDetail()!.location.latitude }}, {{ stationDetail()!.location.longitude }}
-              </span>
+        <div class="status-map-container">
+          <!-- Status Grid -->
+          <div class="status-content">
+            <div class="status-grid">
+              <div class="status-item">
+                <mat-chip [class]="getStatusChipClass(stationDetail()!.status)">
+                  {{ stationDetail()!.status }}
+                </mat-chip>
+                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.currentStatus') }}</span>
+              </div>
+              
+              <div class="status-item">
+                <mat-chip [class]="getErrorChipClass(stationDetail()!.error_code)">
+                  {{ stationDetail()!.error_code }}
+                </mat-chip>
+                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.errorCode') }}</span>
+              </div>
+              
+              <div class="status-item">
+                <mat-chip [class]="stationDetail()!.is_online ? 'online' : 'offline'">
+                  {{ stationDetail()!.is_online ? translationService.getReactive('stationDetail.status.online') : translationService.getReactive('stationDetail.status.offline') }}
+                </mat-chip>
+                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.connection') }}</span>
+              </div>
+              
+              <div class="status-item">
+                <mat-chip [class]="stationDetail()!.is_enabled ? 'enabled' : 'disabled'">
+                  {{ stationDetail()!.is_enabled ? translationService.getReactive('stationDetail.status.enabled') : translationService.getReactive('stationDetail.status.disabled') }}
+                </mat-chip>
+                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.availability') }}</span>
+              </div>
+            </div>
+            
+            @if (stationDetail()!.info) {
+              <div class="status-info">
+                <p><strong>{{ translationService.getReactive('stationDetail.labels.info') }}</strong> {{ stationDetail()!.info }}</p>
+              </div>
+            }
+            
+            <div class="status-updated">
+              <p><strong>{{ translationService.getReactive('stationDetail.labels.statusUpdated') }}</strong> {{ getTimeAgo(stationDetail()!.event_time) }}</p>
             </div>
           </div>
           
-          <!-- Small Map View -->
-          <div class="map-section">
-            <app-small-map
-              [latitude]="stationDetail()!.location.latitude"
-              [longitude]="stationDetail()!.location.longitude"
-              [title]="stationDetail()!.title"
-              [height]="'200px'"
-              [zoom]="15">
-            </app-small-map>
-          </div>
+          <!-- Map Section -->
+          @if (stationDetail()!.location && stationDetail()!.location.latitude && stationDetail()!.location.longitude) {
+            <div class="map-container">
+              <app-small-map
+                [latitude]="stationDetail()!.location.latitude"
+                [longitude]="stationDetail()!.location.longitude"
+                [title]="stationDetail()!.title"
+                [height]="'100%'"
+                [zoom]="15">
+              </app-small-map>
+            </div>
+          }
         </div>
       </mat-card-content>
     </mat-card>
@@ -178,31 +181,33 @@
       
       <mat-card-content>
         <div class="connectors-grid">
-          <div 
-            *ngFor="let connector of stationDetail()!.connectors | sortByConnectorId" 
-            class="connector-item"
-            [class.available]="connector.status === 'Available'"
-            [class.occupied]="connector.status === 'Occupied'"
-            [class.out-of-order]="connector.status === 'OutOfOrder'">
-            
-            <div class="connector-header">
-              <h4>{{ translationService.getReactive('stationDetail.labels.connector') }} {{ (connector.connector_id_name || connector.connector_id) }}</h4>
-              <div class="connector-status-actions">
-                <button 
-                  *ngIf="connector.current_transaction_id > 0"
-                  mat-button 
-                  class="transaction-id-button"
-                  (click)="openTransactionDetails(connector.current_transaction_id, $event)"
-                  [matTooltip]="translationService.getReactive('stationDetail.tooltips.viewTransaction')"
-                >
-                  <mat-icon>receipt</mat-icon>
-                  #{{ connector.current_transaction_id }}
-                </button>
-                <mat-chip [class]="getConnectorStatusClass(connector.status)">
-                  {{ connector.status }}
-                </mat-chip>
+          @for (connector of stationDetail()!.connectors | sortByConnectorId; track connector.connector_id) {
+            <div 
+              class="connector-item"
+              [class.available]="connector.status === 'Available'"
+              [class.occupied]="connector.status === 'Occupied'"
+              [class.out-of-order]="connector.status === 'OutOfOrder'"
+              [class.updated]="isConnectorUpdated(connector.connector_id)">
+              
+              <div class="connector-header">
+                <h4>{{ translationService.getReactive('stationDetail.labels.connector') }} {{ (connector.connector_id_name || connector.connector_id) }}</h4>
+                <div class="connector-status-actions">
+                  @if (connector.current_transaction_id > 0) {
+                    <button 
+                      mat-button 
+                      class="transaction-id-button"
+                      (click)="openTransactionDetails(connector.current_transaction_id, $event)"
+                      [matTooltip]="translationService.getReactive('stationDetail.tooltips.viewTransaction')"
+                    >
+                      <mat-icon>receipt</mat-icon>
+                      #{{ connector.current_transaction_id }}
+                    </button>
+                  }
+                  <mat-chip [class]="getConnectorStatusClass(connector.status)">
+                    {{ connector.status }}
+                  </mat-chip>
+                </div>
               </div>
-            </div>
             
             <div class="connector-details">
               <div class="connector-info">
@@ -225,31 +230,37 @@
                 <span class="connector-value">{{ connector.error_code }}</span>
               </div>
             </div>
-            
-            <div class="connector-status-info" *ngIf="connector.info">
-              <p><strong>{{ translationService.getReactive('stationDetail.labels.info') }}</strong> {{ connector.info }}</p>
+              
+              @if (connector.info) {
+                <div class="connector-status-info">
+                  <p><strong>{{ translationService.getReactive('stationDetail.labels.info') }}</strong> {{ connector.info }}</p>
+                </div>
+              }
+              
+              <div class="connector-time">
+                <p><strong>{{ translationService.getReactive('stationDetail.labels.statusTimeWithColon') }}</strong> {{ formatDateTime(connector.status_time) }}</p>
+              </div>
             </div>
-            
-            <div class="connector-time">
-              <p><strong>{{ translationService.getReactive('stationDetail.labels.statusTimeWithColon') }}</strong> {{ formatDateTime(connector.status_time) }}</p>
-            </div>
-          </div>
+          }
         </div>
         
         <!-- Start Charge Button -->
-        <div class="start-charge-section" *ngIf="hasAvailableConnectors()">
-          <button 
-            mat-button 
-            color="primary" 
-            class="start-charge-button"
-            (click)="startCharge()">
-            <mat-icon>play_arrow</mat-icon>
-            {{ translationService.getReactive('stationDetail.actions.startCharge') }}
-          </button>
-          <p class="start-charge-info">{{ translationService.getReactive('stationDetail.actions.startChargeInfo') }}</p>
-        </div>
+        @if (hasAvailableConnectors()) {
+          <div class="start-charge-section">
+            <button 
+              mat-button 
+              color="primary" 
+              class="start-charge-button"
+              (click)="startCharge()">
+              <mat-icon>play_arrow</mat-icon>
+              {{ translationService.getReactive('stationDetail.actions.startCharge') }}
+            </button>
+            <p class="start-charge-info">{{ translationService.getReactive('stationDetail.actions.startChargeInfo') }}</p>
+          </div>
+        }
       </mat-card-content>
     </mat-card>
-  </div>
+    </div>
+  }
 </div>
 

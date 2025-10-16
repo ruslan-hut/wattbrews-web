@@ -1,0 +1,397 @@
+<div class="websocket-test-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1>WebSocket Test Tool</h1>
+        <mat-chip [class]="'status-chip status-' + getStatusColor(websocketService.connectionState() === ConnectionState.Connected ? ResponseStatus.Success : ResponseStatus.Error)">
+          <mat-icon>{{ websocketService.connectionState() === ConnectionState.Connected ? 'cloud' : 'cloud_off' }}</mat-icon>
+          {{ websocketService.connectionState() }}
+        </mat-chip>
+      </div>
+      
+      <div class="header-actions">
+        @if (websocketService.connectionState() === ConnectionState.Connected) {
+          <button mat-raised-button color="warn" (click)="disconnect()">
+            <mat-icon>power_settings_new</mat-icon>
+            Disconnect
+          </button>
+        } @else {
+          <button mat-raised-button color="primary" (click)="connect()">
+            <mat-icon>power_settings_new</mat-icon>
+            Connect
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="connection-info">
+      <span><mat-icon>schedule</mat-icon> {{ connectionStats().uptime }}</span>
+      <span><mat-icon>message</mat-icon> {{ connectionStats().messageCount }} messages</span>
+      <span><mat-icon>sync</mat-icon> {{ connectionStats().reconnectCount }} reconnections</span>
+      @if (websocketService.lastPingTime()) {
+        <span><mat-icon>wifi</mat-icon> Last ping: {{ formatTimestamp(websocketService.lastPingTime()!) }}</span>
+      }
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Main Content - 3 Column Layout -->
+  <div class="main-content">
+    <!-- Left Panel - Command Center -->
+    <mat-card class="panel command-panel">
+      <mat-card-header>
+        <mat-card-title>Commands</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="commandForm" (ngSubmit)="sendCommand()">
+          <!-- Command Selector -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Select Command</mat-label>
+            <mat-select formControlName="command">
+              @for (cmd of availableCommands; track cmd) {
+                <mat-option [value]="cmd">
+                  {{ cmd }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Dynamic Fields -->
+          @if (shouldShowField('charge_point_id')) {
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Charge Point ID</mat-label>
+              <input matInput formControlName="charge_point_id" placeholder="e.g., CP001">
+            </mat-form-field>
+          }
+
+          @if (shouldShowField('connector_id')) {
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Connector ID</mat-label>
+              <input matInput type="number" formControlName="connector_id" placeholder="e.g., 1">
+            </mat-form-field>
+          }
+
+          @if (shouldShowField('transaction_id')) {
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Transaction ID</mat-label>
+              <input matInput type="number" formControlName="transaction_id" placeholder="e.g., 123">
+            </mat-form-field>
+          }
+
+          <!-- Send Button -->
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit" 
+            class="full-width"
+            [disabled]="!websocketService.isConnected() || commandForm.invalid">
+            <mat-icon>send</mat-icon>
+            Send Command
+          </button>
+        </form>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <h3>Quick Actions</h3>
+          
+          <button 
+            mat-stroked-button 
+            class="full-width quick-action-btn"
+            [disabled]="!websocketService.isConnected()"
+            (click)="quickPing()">
+            <mat-icon>wifi</mat-icon>
+            Send Ping
+          </button>
+
+          <button 
+            mat-stroked-button 
+            class="full-width quick-action-btn"
+            [disabled]="!websocketService.isConnected()"
+            (click)="quickListenChargePoints()">
+            <mat-icon>ev_station</mat-icon>
+            Listen Charge Points
+          </button>
+
+          <button 
+            mat-stroked-button 
+            class="full-width quick-action-btn"
+            [disabled]="!websocketService.isConnected()"
+            (click)="quickListenLog()">
+            <mat-icon>description</mat-icon>
+            Listen Logs
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Center Panel - Message Log -->
+    <mat-card class="panel message-log-panel">
+      <mat-card-header>
+        <mat-card-title>Message Log</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Filters -->
+        <div class="filters">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Status Filter</mat-label>
+            <mat-select [value]="filterStatus()" (selectionChange)="filterStatus.set($event.value)">
+              @for (status of availableStatuses; track status) {
+                <mat-option [value]="status">{{ status }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Stage Filter</mat-label>
+            <mat-select [value]="filterStage()" (selectionChange)="filterStage.set($event.value)">
+              @for (stage of availableStages; track stage) {
+                <mat-option [value]="stage">{{ stage }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-checkbox [checked]="autoScroll()" (change)="autoScroll.set($event.checked)">
+            Auto Scroll
+          </mat-checkbox>
+        </div>
+
+        <!-- Message List -->
+        <div class="message-log-container">
+          @if (filteredMessages().length === 0) {
+            <div class="no-messages">
+              <mat-icon>inbox</mat-icon>
+              <p>No messages received yet</p>
+            </div>
+          } @else {
+            @for (msgWrapper of filteredMessages(); track $index) {
+              <div 
+                class="message-card"
+                [class.selected]="selectedMessage() === msgWrapper"
+                (click)="selectMessage(msgWrapper)">
+                <div class="message-header">
+                  <span class="timestamp">{{ formatTimestamp(msgWrapper.timestamp) }}</span>
+                  <mat-chip [class]="'status-chip status-' + getStatusColor(msgWrapper.message.status)">
+                    {{ msgWrapper.message.status }}
+                  </mat-chip>
+                  <mat-chip class="stage-chip">
+                    <mat-icon>{{ getStageIcon(msgWrapper.message.stage) }}</mat-icon>
+                    {{ msgWrapper.message.stage }}
+                  </mat-chip>
+                </div>
+                
+                @if (msgWrapper.message.info) {
+                  <div class="message-info">{{ msgWrapper.message.info }}</div>
+                }
+                
+                <div class="message-fields">
+                  @if (msgWrapper.message.id !== undefined) {
+                    <span class="field"><strong>ID:</strong> {{ msgWrapper.message.id }}</span>
+                  }
+                  @if (msgWrapper.message.progress !== undefined) {
+                    <span class="field"><strong>Progress:</strong> {{ msgWrapper.message.progress }}%</span>
+                  }
+                  @if (msgWrapper.message.power !== undefined) {
+                    <span class="field"><strong>Power:</strong> {{ msgWrapper.message.power }} kW</span>
+                  }
+                  @if (msgWrapper.message.soc !== undefined) {
+                    <span class="field"><strong>SoC:</strong> {{ msgWrapper.message.soc }}%</span>
+                  }
+                  @if (msgWrapper.message.connector_status) {
+                    <span class="field"><strong>Status:</strong> {{ msgWrapper.message.connector_status }}</span>
+                  }
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <!-- Footer Controls -->
+        <div class="log-footer">
+          <span class="message-count">
+            {{ filteredMessages().length }} message(s)
+          </span>
+          <div class="footer-actions">
+            <button mat-button (click)="clearLog()">
+              <mat-icon>delete</mat-icon>
+              Clear Log
+            </button>
+            <button mat-button (click)="exportLog()">
+              <mat-icon>download</mat-icon>
+              Export Log
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Right Panel - Message Inspector -->
+    <mat-card class="panel inspector-panel">
+      <mat-card-header>
+        <mat-card-title>Message Inspector</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (selectedMessage()) {
+          <div class="inspector-content">
+            <!-- Parsed Fields -->
+            <div class="parsed-fields">
+              <h3>Parsed Fields</h3>
+              <div class="field-list">
+                <div class="field-item">
+                  <span class="field-label">Received At:</span>
+                  <span class="field-value">{{ formatTimestamp(selectedMessage()!.timestamp) }}</span>
+                </div>
+                @if (selectedMessage()!.message.status) {
+                  <div class="field-item">
+                    <span class="field-label">Status:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.status }}</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.stage) {
+                  <div class="field-item">
+                    <span class="field-label">Stage:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.stage }}</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.info) {
+                  <div class="field-item">
+                    <span class="field-label">Info:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.info }}</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.id !== undefined) {
+                  <div class="field-item">
+                    <span class="field-label">Transaction ID:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.id }}</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.progress !== undefined) {
+                  <div class="field-item">
+                    <span class="field-label">Progress:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.progress }}%</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.power !== undefined) {
+                  <div class="field-item">
+                    <span class="field-label">Power:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.power }} kW</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.power_rate !== undefined) {
+                  <div class="field-item">
+                    <span class="field-label">Power Rate:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.power_rate }} kW</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.soc !== undefined) {
+                  <div class="field-item">
+                    <span class="field-label">State of Charge:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.soc }}%</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.price !== undefined) {
+                  <div class="field-item">
+                    <span class="field-label">Price:</span>
+                    <span class="field-value">€{{ selectedMessage()!.message.price }}</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.minute !== undefined) {
+                  <div class="field-item">
+                    <span class="field-label">Duration:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.minute }} min</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.connector_id !== undefined) {
+                  <div class="field-item">
+                    <span class="field-label">Connector ID:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.connector_id }}</span>
+                  </div>
+                }
+                @if (selectedMessage()!.message.connector_status) {
+                  <div class="field-item">
+                    <span class="field-label">Connector Status:</span>
+                    <span class="field-value">{{ selectedMessage()!.message.connector_status }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <mat-divider class="section-divider"></mat-divider>
+
+            <!-- JSON Display -->
+            <div class="json-display">
+              <div class="json-header">
+                <h3>Raw JSON</h3>
+                <button mat-icon-button (click)="copyMessage(selectedMessage()!)" matTooltip="Copy JSON">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+              </div>
+              <pre class="json-content">{{ formatJSON(selectedMessage()) }}</pre>
+            </div>
+          </div>
+        } @else {
+          <div class="no-selection">
+            <mat-icon>touch_app</mat-icon>
+            <p>Select a message to inspect</p>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Statistics Section -->
+  <mat-card class="statistics-card">
+    <mat-card-header>
+      <mat-card-title>Statistics</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="statistics-grid">
+        <div class="stat-item">
+          <mat-icon>schedule</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Connection Uptime</span>
+            <span class="stat-value">{{ connectionStats().uptime }}</span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <mat-icon>message</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Total Messages</span>
+            <span class="stat-value">{{ connectionStats().messageCount }}</span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <mat-icon>sync</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Reconnections</span>
+            <span class="stat-value">{{ connectionStats().reconnectCount }}</span>
+          </div>
+        </div>
+
+        <div class="stat-item stat-breakdown">
+          <mat-icon>analytics</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Messages by Status</span>
+            <div class="breakdown">
+              @for (status of statusValues; track status) {
+                @if (messagesByStatus()[status] > 0) {
+                  <span class="breakdown-item">
+                    <mat-chip [class]="'status-chip status-' + getStatusColor(status)" size="small">
+                      {{ status }}: {{ messagesByStatus()[status] }}
+                    </mat-chip>
+                  </span>
+                }
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

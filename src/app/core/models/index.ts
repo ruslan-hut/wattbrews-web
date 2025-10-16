@@ -18,3 +18,6 @@ export * from './api.model';
 // Transaction models
 export * from './transaction.model';
 export * from './transaction-detail.model';
+
+// WebSocket models
+export * from './websocket.model';

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, Pipe, PipeTransform, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,7 +14,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChargePointService } from '../../../core/services/chargepoint.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserInfoService } from '../../../core/services/user-info.service';
+import { WebsocketService } from '../../../core/services/websocket.service';
 import { ChargePoint, ChargePointConnector } from '../../../core/models/chargepoint.model';
+import { WsCommand } from '../../../core/models/websocket.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
@@ -58,6 +60,7 @@ export class StationsListComponent implements OnInit, OnDestroy {
   private readonly chargePointService = inject(ChargePointService);
   private readonly authService = inject(AuthService);
   private readonly userInfoService = inject(UserInfoService);
+  private readonly websocketService = inject(WebsocketService);
   protected readonly translationService = inject(SimpleTranslationService);
   private readonly router = inject(Router);
 
@@ -74,8 +77,35 @@ export class StationsListComponent implements OnInit, OnDestroy {
   // Translation loading state
   protected readonly translationsLoading = signal(true);
   
+  // Real-time update indicator
+  protected readonly realtimeActive = signal(false);
+  protected readonly updatedStationId = signal<string | null>(null);
+  
   // Subscription management
   private authSubscription?: Subscription;
+  private wsSubscriptionActive = false;
+
+  constructor() {
+    // Set up effect to react to charge point updates
+    effect(() => {
+      const update = this.websocketService.chargePointUpdate();
+      
+      if (update && update.chargePointId) {
+        // Reload stations list to get fresh data
+        this.loadStations();
+        
+        // Highlight the updated station temporarily
+        this.updatedStationId.set(update.chargePointId);
+        this.realtimeActive.set(true);
+        
+        // Clear highlight after 3 seconds
+        setTimeout(() => {
+          this.updatedStationId.set(null);
+          this.realtimeActive.set(false);
+        }, 3000);
+      }
+    });
+  }
 
   // Computed filtered stations
   readonly filteredStations = computed(() => {
@@ -120,6 +150,10 @@ export class StationsListComponent implements OnInit, OnDestroy {
     this.authSubscription = this.authService.user$.subscribe(user => {
       if (user) {
         this.loadStations();
+        
+        // Initialize WebSocket subscription for real-time updates
+        this.initializeWebSocketSubscriptions();
+        
         // Load user info to get access level for View Details functionality
         this.userInfoService.loadCurrentUserInfo().subscribe({
           next: (userInfo) => {
@@ -132,8 +166,26 @@ export class StationsListComponent implements OnInit, OnDestroy {
       } else {
         // Optionally clear stations when user logs out
         // this.chargePointService.clearChargePoints();
+        this.wsSubscriptionActive = false;
       }
     });
+  }
+
+  /**
+   * Initialize WebSocket subscriptions for real-time charge point updates
+   */
+  private initializeWebSocketSubscriptions(): void {
+    // Only subscribe once
+    if (this.wsSubscriptionActive) {
+      return;
+    }
+    
+    // Subscribe to charge point events
+    this.websocketService.sendCommand(WsCommand.ListenChargePoints).catch(error => {
+      console.error('[StationsList] Failed to subscribe to charge points:', error);
+    });
+    
+    this.wsSubscriptionActive = true;
   }
 
   ngOnDestroy() {
@@ -246,4 +298,12 @@ export class StationsListComponent implements OnInit, OnDestroy {
   startCharge(stationId: string): void {
     this.router.navigate(['/stations', stationId, 'charge']);
   }
+
+  /**
+   * Check if a station was recently updated via WebSocket
+   */
+  isStationUpdated(stationId: string): boolean {
+    return this.updatedStationId() === stationId;
+  }
 }
+

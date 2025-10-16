@@ -12,6 +12,7 @@ import { TransactionService } from '../../../core/services/transaction.service';
 import { TransactionDetail } from '../../../core/models/transaction-detail.model';
 import { EnergyChartComponent } from '../energy-chart/energy-chart.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
+import { SmallMapComponent } from '../small-map/small-map.component';
 
 @Component({
   selector: 'app-transaction-preview',
@@ -26,154 +27,11 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
     MatChipsModule,
     MatDividerModule,
     MatTabsModule,
-    EnergyChartComponent
+    EnergyChartComponent,
+    SmallMapComponent
   ],
   templateUrl: './transaction-preview.component.html',
-  styles: [`
-    .transaction-preview-container {
-      max-width: 800px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    
-    ::ng-deep .mat-dialog-content {
-      padding: 24px !important;
-    }
-    
-    .preview-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    
-    .preview-header h2 {
-      margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .close-button {
-      color: #5a6c7d;
-    }
-    
-    .loading-container,
-    .error-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      padding: 40px;
-      text-align: center;
-    }
-    
-    .error-icon {
-      color: #f44336;
-      font-size: 3rem;
-    }
-    
-    .transaction-content {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-    
-    .overview-card,
-    .status-card,
-    .chart-card {
-      margin-bottom: 0;
-      margin-top: 8px;
-      background: white;
-      border: 1px solid #e9ecef;
-    }
-    
-    .overview-card {
-      margin-top: 0;
-    }
-    
-    .overview-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-    }
-    
-    .overview-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background-color: white;
-      border: 1px solid #e9ecef;
-      border-radius: 8px;
-    }
-    
-    .overview-item mat-icon {
-      color: #6c757d;
-      font-size: 1.5rem;
-    }
-    
-    .item-content {
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .item-label {
-      font-size: 0.8rem;
-      color: #5a6c7d;
-      margin-bottom: 2px;
-    }
-    
-    .item-value {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #2c3e50;
-    }
-    
-    .status-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .status-label {
-      font-weight: 500;
-      color: #5a6c7d;
-      min-width: 80px;
-    }
-    
-    .status-value {
-      color: #2c3e50;
-    }
-    
-    .mat-chip.completed {
-      background-color: #e8f5e8;
-      color: #4caf50;
-    }
-    
-    .mat-chip.charging {
-      background-color: #fff3e0;
-      color: #ff9800;
-    }
-    
-    
-    @media (max-width: 768px) {
-      .transaction-preview-container {
-        max-width: 100%;
-        margin: 0;
-      }
-      
-      .overview-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  `]
+  styleUrl: './transaction-preview.component.scss'
 })
 export class TransactionPreviewComponent implements OnInit {
   private readonly transactionService = inject(TransactionService);
@@ -264,10 +122,10 @@ export class TransactionPreviewComponent implements OnInit {
     return !!(detail?.meter_values && detail.meter_values.length > 0);
   }
 
-  protected calculateAveragePower(): number {
+  protected calculateAveragePower(): string {
     const detail = this.transactionDetail();
     if (!detail || !detail.consumed || !detail.duration || detail.duration === 0) {
-      return 0;
+      return '0 W';
     }
     
     // Convert consumed energy from Wh to W and duration from seconds to hours
@@ -275,6 +133,27 @@ export class TransactionPreviewComponent implements OnInit {
     const energyWh = detail.consumed;
     const durationHours = detail.duration / 3600; // Convert seconds to hours
     
-    return energyWh / durationHours;
+    const powerInWatts = energyWh / durationHours;
+    
+    // Return in kW if >= 1000 W, otherwise in W
+    if (powerInWatts >= 1000) {
+      const powerInKw = powerInWatts / 1000;
+      return `${powerInKw.toFixed(1)} kW`;
+    } else {
+      return `${powerInWatts.toFixed(0)} W`;
+    }
+  }
+
+  protected hasLocation(): boolean {
+    const detail = this.transactionDetail();
+    return !!(detail?.charge_point_location?.latitude && detail?.charge_point_location?.longitude);
+  }
+
+  protected getLatitude(): number {
+    return this.transactionDetail()?.charge_point_location?.latitude || 0;
+  }
+
+  protected getLongitude(): number {
+    return this.transactionDetail()?.charge_point_location?.longitude || 0;
   }
 }

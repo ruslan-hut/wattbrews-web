@@ -345,3 +345,8 @@ When creating new components, ensure:
 ---
 
 **Remember**: The goal is to create a consistent, professional, and energy-themed user interface that reflects the WattBrews brand identity while maintaining excellent usability and accessibility.
+
+---
+
+**Version**: 1.0  
+**Last Updated**: October 2025

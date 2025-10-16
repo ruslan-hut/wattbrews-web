@@ -1,0 +1,12 @@
+<div class="small-map-container">
+  <div #mapContainer class="map-container"></div>
+  @if (!isMapReady) {
+    <div class="map-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <span>Loading map...</span>
+      </div>
+    </div>
+  }
+</div>
+

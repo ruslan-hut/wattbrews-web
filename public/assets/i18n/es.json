@@ -211,9 +211,10 @@
       "averagePower": "Potencia Promedio"
     },
     "timing": {
-      "title": "Tiempo de la Transacción",
+      "title": "Tiempo y Ubicación de la Transacción",
       "started": "Inicio",
-      "ended": "Fin"
+      "ended": "Fin",
+      "location": "Ubicación"
     },
     "chart": {
       "title": "Gráfico de Energía Consumida"
@@ -240,8 +241,7 @@
       "connection": "Conexión",
       "availability": "Disponibilidad",
       "info": "Información",
-      "statusTime": "Tiempo de Estado",
-      "eventTime": "Tiempo de Evento",
+      "statusUpdated": "Estado actualizado:",
       "coordinates": "Coordenadas",
       "connector": "Conector",
       "type": "Tipo",
@@ -357,6 +357,7 @@
     }
   },
   "common": {
+    "close": "Cerrar",
     "buttons": {
       "save": "Guardar",
       "retry": "Reintentar",
@@ -389,5 +390,20 @@
       "11": "Noviembre",
       "12": "Diciembre"
     }
+  },
+  "transactionStart": {
+    "connector": "Conector",
+    "initializing": "Inicializando",
+    "startingTransaction": "Iniciando Transacción",
+    "transactionStarted": "Transacción Iniciada",
+    "failed": "Transacción Fallida",
+    "sendingCommand": "Enviando comando...",
+    "waitingForResponse": "Esperando respuesta...",
+    "waiting": "Esperando...",
+    "preparing": "Preparando transacción...",
+    "success": "¡Transacción iniciada exitosamente!",
+    "redirecting": "Redirigiendo a sesiones activas...",
+    "errorSendingCommand": "Error al enviar comando",
+    "errorOccurred": "Ocurrió un error al iniciar la transacción"
   }
 }
