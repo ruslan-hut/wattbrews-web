@@ -1,0 +1,19 @@
+export const environment = {
+    production: false,
+    apiBaseUrl: 'https://wattbrews.me/api/v1',
+    wsBaseUrl: 'wss://wattbrews.me/ws',
+    apiTimeout: 30000, // 30 seconds
+    apiRetryAttempts: 3,
+    firebase: {
+      apiKey: "PLACEHOLDER_WILL_BE_REPLACED_BY_BUILD_SCRIPT",
+      authDomain: "evcharge-68bc8.firebaseapp.com",
+      projectId: "evcharge-68bc8",
+      storageBucket: "evcharge-68bc8.firebasestorage.app",
+      messagingSenderId: "547191660448",
+      appId: "1:547191660448:web:fb16383e8249ddfc360ec5",
+      measurementId: "G-Z2M3DF6LCY"
+    },
+    recaptchaSiteKey: "your-recaptcha-site-key-here",
+    defaultLang: 'es',
+    supportedLangs: ['es', 'en'],
+  };
