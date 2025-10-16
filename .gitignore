@@ -45,3 +45,9 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+# Generated environment files (contain sensitive API keys)
+# Templates are committed, but actual files are generated from .env
+src/environments/environment.ts
+src/environments/environment.development.ts
+src/environments/environment.devolpment.ts
