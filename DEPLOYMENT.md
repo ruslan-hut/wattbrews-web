@@ -2,11 +2,47 @@
 
 This document explains how to configure the GitHub Actions workflow for deploying the WattBrews web application to your production server.
 
+## Quick Start
+
+To quickly see all the values you need to add to GitHub:
+
+```bash
+npm run show:secrets
+```
+
+This command will read your local `.env` file and display all the values that need to be configured in GitHub.
+
+## Quick Reference: Required Configuration
+
+Before deploying, you need to configure the following in your GitHub repository:
+
+**Secrets** (Settings → Secrets and variables → Actions → Secrets):
+- `SSH_PRIVATE_KEY` - SSH key for server access
+- `SSH_USER` - Server username
+- `SSH_HOST` - Server IP or domain
+- `FIREBASE_API_KEY` ⚠️ Required
+- `FIREBASE_AUTH_DOMAIN`
+- `FIREBASE_PROJECT_ID`
+- `FIREBASE_STORAGE_BUCKET`
+- `FIREBASE_MESSAGING_SENDER_ID`
+- `FIREBASE_APP_ID`
+- `FIREBASE_MEASUREMENT_ID`
+- `RECAPTCHA_SITE_KEY` ⚠️ Required for production
+
+**Variables** (Settings → Secrets and variables → Actions → Variables):
+- `DEPLOY_PATH` - e.g., `/var/www/html/app.wattbrews.me`
+- `API_BASE_URL` - e.g., `https://wattbrews.me/api/v1`
+- `WS_BASE_URL` - e.g., `wss://wattbrews.me/ws`
+
+---
+
 ## Required GitHub Secrets
 
 You need to add the following secrets to your GitHub repository:
 
-### 1. SSH_PRIVATE_KEY
+### Server Deployment Secrets
+
+#### 1. SSH_PRIVATE_KEY
 - **Description**: Private SSH key for server authentication
 - **How to generate**:
   ```bash
@@ -18,14 +54,66 @@ You need to add the following secrets to your GitHub repository:
   ```
 - **How to add**: Go to your GitHub repo → Settings → Secrets and variables → Actions → New repository secret
 
-### 2. SSH_USER
+#### 2. SSH_USER
 - **Description**: Username for SSH connection to your server
 - **Example**: `deploy`, `ubuntu`, `root`, or your server username
 - **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
 
-### 3. SSH_HOST
+#### 3. SSH_HOST
 - **Description**: Server IP address or domain name
 - **Example**: `123.456.789.0` or `server.wattbrews.me`
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+
+### Firebase Configuration Secrets
+
+#### 4. FIREBASE_API_KEY
+- **Description**: Firebase API key for authentication
+- **Required**: Yes (build will fail without it)
+- **How to get**: Firebase Console → Project Settings → General → Your apps → Web app
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+
+#### 5. FIREBASE_AUTH_DOMAIN
+- **Description**: Firebase authentication domain
+- **Example**: `evcharge-68bc8.firebaseapp.com`
+- **How to get**: Firebase Console → Project Settings → General
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+
+#### 6. FIREBASE_PROJECT_ID
+- **Description**: Firebase project identifier
+- **Example**: `evcharge-68bc8`
+- **How to get**: Firebase Console → Project Settings → General
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+
+#### 7. FIREBASE_STORAGE_BUCKET
+- **Description**: Firebase storage bucket URL
+- **Example**: `evcharge-68bc8.firebasestorage.app`
+- **How to get**: Firebase Console → Project Settings → General
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+
+#### 8. FIREBASE_MESSAGING_SENDER_ID
+- **Description**: Firebase Cloud Messaging sender ID
+- **Example**: `547191660448`
+- **How to get**: Firebase Console → Project Settings → Cloud Messaging
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+
+#### 9. FIREBASE_APP_ID
+- **Description**: Firebase app identifier
+- **Example**: `1:547191660448:web:fb16383e8249ddfc360ec5`
+- **How to get**: Firebase Console → Project Settings → General → Your apps
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+
+#### 10. FIREBASE_MEASUREMENT_ID
+- **Description**: Google Analytics measurement ID
+- **Example**: `G-Z2M3DF6LCY`
+- **How to get**: Firebase Console → Project Settings → General → Your apps
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+
+### Security Secrets
+
+#### 11. RECAPTCHA_SITE_KEY
+- **Description**: Google reCAPTCHA site key for Firebase App Check
+- **Required**: Yes for production (optional for development)
+- **How to get**: Google Cloud Console → Security → reCAPTCHA Enterprise
 - **How to add**: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
 
 ## Required GitHub Variables
@@ -35,6 +123,16 @@ You need to add the following variables to your GitHub repository:
 ### 1. DEPLOY_PATH
 - **Description**: Destination folder on the server
 - **Value**: `/var/www/html/app.wattbrews.me`
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → Variables tab → New repository variable
+
+### 2. API_BASE_URL
+- **Description**: Base URL for backend API endpoints
+- **Value**: `https://wattbrews.me/api/v1`
+- **How to add**: GitHub repo → Settings → Secrets and variables → Actions → Variables tab → New repository variable
+
+### 3. WS_BASE_URL
+- **Description**: Base URL for WebSocket connections
+- **Value**: `wss://wattbrews.me/ws`
 - **How to add**: GitHub repo → Settings → Secrets and variables → Actions → Variables tab → New repository variable
 
 ## Server Setup
@@ -96,22 +194,40 @@ The deployment workflow will run:
 
 ### Common Issues
 
-1. **SSH Connection Failed**
+1. **Build Failed: FIREBASE_API_KEY environment variable is required**
+   - Cause: Missing or incorrect Firebase configuration secrets
+   - Solution: 
+     - Add all Firebase secrets to GitHub (see "Firebase Configuration Secrets" above)
+     - Ensure `FIREBASE_API_KEY` is set correctly
+     - Double-check that all Firebase values match your Firebase Console
+
+2. **Build Failed: Missing environment variables**
+   - Cause: One or more required secrets/variables are not set
+   - Solution:
+     - Review the "Quick Reference" section above
+     - Verify all secrets are added under Settings → Secrets and variables → Actions → Secrets
+     - Verify all variables are added under Settings → Secrets and variables → Actions → Variables
+     - Check GitHub Actions logs to see which specific variable is missing
+
+3. **SSH Connection Failed**
    - Verify SSH_PRIVATE_KEY is correctly added
    - Check SSH_USER and SSH_HOST values
    - Ensure the public key is added to server's authorized_keys
 
-2. **Permission Denied**
+4. **Permission Denied**
    - Check if the SSH user has write access to DEPLOY_PATH
    - Verify directory permissions on the server
 
-3. **Build Failed**
-   - Check if all dependencies are properly installed
-   - Verify Node.js version compatibility
-
-4. **Files Not Deployed**
+5. **Files Not Deployed**
    - Check if rsync is installed on the server
    - Verify the DEPLOY_PATH variable is correct
+
+6. **App loads but shows Firebase errors**
+   - Cause: Environment variables were set incorrectly during build
+   - Solution:
+     - Verify all Firebase secrets match your Firebase Console exactly
+     - Check for extra spaces or quotes in the secret values
+     - Re-run the deployment after correcting the values
 
 ### Debugging
 

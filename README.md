@@ -221,34 +221,36 @@ See [Deployment Guide](./DEPLOYMENT.md) for detailed deployment instructions inc
 
 ## 🔧 Environment Configuration
 
-Create environment files based on `env.example`:
+The application uses environment variables for configuration. Follow these steps:
 
-**Development**: `src/environments/environment.development.ts`
-```typescript
-export const environment = {
-  production: false,
-  apiBaseUrl: 'http://localhost:8000',
-  wsBaseUrl: 'ws://localhost:8000/ws',
-  firebase: {
-    apiKey: "your-api-key",
-    authDomain: "your-auth-domain",
-    projectId: "your-project-id",
-    // ... other Firebase config
-  }
-};
-```
+1. **Create your `.env` file**:
+   ```bash
+   cp env.example .env
+   ```
 
-**Production**: `src/environments/environment.ts`
-```typescript
-export const environment = {
-  production: true,
-  apiBaseUrl: 'https://api.yourapp.com',
-  wsBaseUrl: 'wss://api.yourapp.com/ws',
-  firebase: {
-    // Production Firebase config
-  }
-};
-```
+2. **Edit `.env` and add your Firebase configuration**:
+   - Get your Firebase config from [Firebase Console](https://console.firebase.google.com/)
+   - Required: `FIREBASE_API_KEY`
+   - Recommended for production: `RECAPTCHA_SITE_KEY`
+
+3. **Generate environment files**:
+   ```bash
+   npm run config:dev
+   ```
+
+4. **Verify your setup**:
+   ```bash
+   npm run verify:env
+   ```
+
+5. **For deployment, display GitHub Secrets**:
+   ```bash
+   npm run show:secrets
+   ```
+
+The environment files (`environment.ts` and `environment.development.ts`) are automatically generated from your `.env` file and should **never** be committed to version control.
+
+See [SETUP_LOCAL_DEV.md](./SETUP_LOCAL_DEV.md) for detailed setup instructions.
 
 ## 📦 Key Dependencies
 
