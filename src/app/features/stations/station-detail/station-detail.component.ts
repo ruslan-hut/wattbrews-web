@@ -174,9 +174,6 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       this.chargePointService.getStationDetail(id).subscribe({
         next: (station) => {
           this._stationDetail.set(station);
-          
-          // Initialize WebSocket subscriptions after station detail is loaded
-          this.initializeWebSocketSubscriptions();
         },
         error: (error) => {
           // Error loading station detail - handled by service
@@ -186,52 +183,15 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   }
   
   /**
-   * Initialize WebSocket subscriptions for real-time updates
-   * Note: WebSocket is already connected globally
+   * Initialize WebSocket listening for charge-point events.
+   * We rely on the reactive chargePointUpdate signal (effect in constructor)
+   * and avoid direct stage subscriptions to prevent duplicate refreshes.
    */
   private initializeWebSocketSubscriptions(): void {
-    // Only subscribe if not already subscribed
-    if (this.websocketSubscription) {
-      return;
-    }
-    
-    // Subscribe to charge-point events
+    // Send listen command; global WebSocket pipeline will emit into chargePointUpdate signal
     this.websocketService.sendCommand(WsCommand.ListenChargePoints).catch(error => {
       console.error('[StationDetail] Failed to subscribe to charge points:', error);
     });
-    
-    // Listen for charge-point events
-    this.websocketSubscription = this.websocketService.subscribeToStage(
-      ResponseStage.ChargePointEvent,
-      (message) => {
-        this.handleChargePointEvent(message);
-      }
-    );
-  }
-  
-  /**
-   * Handle charge point event from WebSocket
-   */
-  private handleChargePointEvent(message: WsResponse): void {
-    const chargePointId = message.data;
-    const station = this.stationDetail();
-    
-    // Only handle events for this station
-    if (!chargePointId || !station || chargePointId !== station.charge_point_id) {
-      return;
-    }
-    
-    // Refresh station detail
-    this.loadStationDetail();
-    
-    // Highlight updated connector if connector_id is present
-    if (message.connector_id) {
-      this.highlightConnector(message.connector_id);
-    }
-    
-    // Set real-time indicator
-    this.realtimeActive.set(true);
-    setTimeout(() => this.realtimeActive.set(false), 2000);
   }
   
   /**

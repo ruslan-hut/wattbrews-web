@@ -414,6 +414,26 @@ export class StationDetailComponent implements OnInit, OnDestroy {
 }
 ```
 
+Note:
+- If you adopt a reactive pattern using the global `chargePointUpdate` signal (see example below), do not also keep the `subscribeToStage(ResponseStage.ChargePointEvent, ...)` subscription in the same component. Using both will cause duplicate refreshes and may lead to visible loading loops.
+
+Alternative (signal-based) pattern to avoid duplicate refreshes:
+
+```typescript
+// Inside component constructor or ngOnInit
+effect(() => {
+  const update = this.websocketService.chargePointUpdate();
+  const current = this.stationDetail();
+  if (update && current && update.chargePointId === current.charge_point_id) {
+    this.loadStationDetail();
+    // Optionally highlight connector: update.connectorId
+  }
+});
+
+// Ensure you only send the listen command once to enable updates
+await this.websocketService.sendCommand(WsCommand.ListenChargePoints);
+```
+
 **Template Addition**:
 ```html
 <!-- Connector card with highlight -->
