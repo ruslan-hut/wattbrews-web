@@ -16,6 +16,7 @@ import { UserInfoService } from '../../core/services/user-info.service';
 import { WebsocketService } from '../../core/services/websocket.service';
 import { ChargePoint, ChargePointConnector } from '../../core/models/chargepoint.model';
 import { Transaction } from '../../core/models/transaction.model';
+import { TransactionDetail } from '../../core/models/transaction-detail.model';
 import { WsCommand, WsResponse, ResponseStage } from '../../core/models/websocket.model';
 import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
@@ -87,6 +88,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.loadChargePoints();
         this.loadRecentChargePoints();
         this.loadTransactions();
+        this.loadActiveTransactions();
         this.loadUserInfo();
         this.initializeWebSocketSubscriptions();
       }
@@ -166,6 +168,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   protected recentTransactions(): Transaction[] {
     return this.transactionService.getRecentTransactions();
   }
+
+  protected activeTransactions(): TransactionDetail[] {
+    return this.transactionService.activeTransactions();
+  }
+
+  protected hasActiveTransactions(): boolean {
+    const active = this.activeTransactions();
+    return active && active.length > 0;
+  }
   
   protected getAvailableConnectors(chargePoint: ChargePoint): number {
     return chargePoint.connectors.filter(conn => ConnectorUtils.isAvailable(conn.status)).length;
@@ -224,6 +235,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   protected refreshTransactions(): void {
     this.transactionService.clearError();
     this.loadTransactions();
+    this.loadActiveTransactions();
+  }
+
+  protected navigateToActiveTransactions(): void {
+    this.router.navigate(['/sessions/active']);
   }
 
   protected openTransactionPreview(transaction: Transaction): void {
@@ -299,10 +315,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  private loadActiveTransactions(): void {
+    this.transactionService.loadActiveTransactions().subscribe({
+      next: (activeTransactions) => {
+        // Active transactions loaded successfully
+      },
+      error: (error) => {
+        // Error loading active transactions - handled by service
+        // Don't show error if there are simply no active transactions
+      }
+    });
+  }
   
   protected formatEnergy(meterStart: number, meterStop: number): string {
     const energy = (meterStop - meterStart) / 1000; // Convert from Wh to kWh
     return energy.toFixed(2);
+  }
+
+  protected formatActiveTransactionEnergy(consumed: number): string {
+    // Convert from Wh to kWh
+    const energyInKwh = consumed / 1000;
+    return energyInKwh.toFixed(2);
+  }
+
+  protected formatActiveTransactionDuration(duration: number): string {
+    // duration is in seconds
+    const hours = Math.floor(duration / 3600);
+    const minutes = Math.floor((duration % 3600) / 60);
+    
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else {
+      return `${minutes}m`;
+    }
+  }
+
+  protected formatActiveTransactionPowerRate(powerRate: number): string {
+    // Convert from Watts to kW
+    const powerInKw = powerRate / 1000;
+    return powerInKw.toFixed(1);
   }
   
   protected formatDuration(timeStart: string, timeStop: string): string {

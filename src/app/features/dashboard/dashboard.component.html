@@ -87,10 +87,16 @@
       </mat-card-content>
     </mat-card>
     
-    <!-- Recent Transactions -->
+    <!-- Active Transactions or Recent Transactions -->
     <mat-card class="dashboard-card transactions-card">
       <mat-card-header>
-        <mat-card-title>{{ translationService.getReactive('dashboard.recentTransactions') }}</mat-card-title>
+        <mat-card-title>
+          @if (hasActiveTransactions()) {
+            {{ translationService.getReactive('dashboard.activeTransactions') }}
+          } @else {
+            {{ translationService.getReactive('dashboard.recentTransactions') }}
+          }
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="loading-container" *ngIf="transactionService.loading()">
@@ -106,7 +112,50 @@
           </button>
         </div>
         
-        <div class="transactions-list" *ngIf="!transactionService.loading() && !transactionService.error()">
+        <!-- Active Transactions List -->
+        <div class="transactions-list" *ngIf="!transactionService.loading() && !transactionService.error() && hasActiveTransactions()">
+          <div class="transaction-item active-transaction-item clickable" [class.charging]="transaction.is_charging" *ngFor="let transaction of activeTransactions()" (click)="navigateToActiveTransactions()">
+            <div class="transaction-left-section">
+              <h4 class="transaction-title">
+                {{ transaction.charge_point_title || transaction.charge_point_id }} - Connector {{ transaction.connector_id }}
+              </h4>
+              <p class="transaction-address" *ngIf="transaction.charge_point_address">
+                {{ transaction.charge_point_address }}
+              </p>
+              <div class="transaction-metrics">
+                <p class="transaction-metric">
+                  <mat-icon class="metric-icon">schedule</mat-icon>
+                  {{ translationService.getReactive('dashboard.duration') }}: {{ formatActiveTransactionDuration(transaction.duration) }}
+                </p>
+                <p class="transaction-metric" *ngIf="transaction.power_rate > 0">
+                  <mat-icon class="metric-icon">bolt</mat-icon>
+                  {{ formatActiveTransactionPowerRate(transaction.power_rate) }} kW
+                </p>
+              </div>
+              <p class="transaction-time">
+                {{ formatTransactionDateTime(transaction.time_started) }}
+              </p>
+            </div>
+            <div class="transaction-right-section">
+              <div class="transaction-energy-value">
+                {{ formatActiveTransactionEnergy(transaction.consumed) }}
+              </div>
+              <div class="transaction-energy-unit">{{ translationService.getReactive('common.units.kWh') }}</div>
+              <div class="transaction-status" [class.charging]="transaction.is_charging">
+                @if (transaction.is_charging) {
+                  <mat-icon class="status-icon">battery_charging_full</mat-icon>
+                  {{ translationService.getReactive('dashboard.charging') }}
+                } @else {
+                  <mat-icon class="status-icon">pause_circle</mat-icon>
+                  {{ translationService.getReactive('dashboard.paused') }}
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Recent Transactions List (when no active transactions) -->
+        <div class="transactions-list" *ngIf="!transactionService.loading() && !transactionService.error() && !hasActiveTransactions()">
           <div class="transaction-item" *ngFor="let transaction of recentTransactions()" (click)="openTransactionPreview(transaction)">
             <div class="transaction-left-section">
               <h4 class="transaction-title">
@@ -136,8 +185,17 @@
           </div>
         </div>
         
-        <button mat-button color="primary" routerLink="/sessions/history" class="view-all-button" *ngIf="!transactionService.loading() && !transactionService.error()">
-          {{ translationService.getReactive('dashboard.viewAllTransactions') }}
+        <button 
+          mat-button 
+          color="primary" 
+          [routerLink]="hasActiveTransactions() ? '/sessions/active' : '/sessions/history'" 
+          class="view-all-button" 
+          *ngIf="!transactionService.loading() && !transactionService.error()">
+          @if (hasActiveTransactions()) {
+            {{ translationService.getReactive('dashboard.viewAllActiveTransactions') }}
+          } @else {
+            {{ translationService.getReactive('dashboard.viewAllTransactions') }}
+          }
         </button>
       </mat-card-content>
     </mat-card>
