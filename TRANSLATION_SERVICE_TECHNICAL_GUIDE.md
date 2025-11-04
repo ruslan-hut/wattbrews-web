@@ -20,10 +20,31 @@ The translation service has been enhanced with comprehensive safety features to 
 - Eliminates race condition between translation loading and component rendering
 - Provides clear error messages when translations fail to load
 - Allows components to gracefully handle missing translations
+- Makes it safe to use translation keys throughout the application, even in loading states
 
 ## ⚠️ Important: Async Initialization Required
 
 **All components using translations MUST implement async initialization** to prevent showing raw translation keys to users. This is a critical requirement for proper user experience.
+
+## 🚫 No Hardcoded Text - Always Use Translation Keys
+
+**Never use hardcoded text in templates or components.** Always use translation keys, even in loading states. The translation service includes defensive checks that make it safe to use translation keys throughout your application:
+
+1. **Defensive Checks**: Both `get()` and `getReactive()` methods check if translations are loaded before accessing them
+2. **Graceful Fallback**: If translations aren't loaded yet, the service returns the key itself as a fallback
+3. **No Undefined Values**: The service prevents undefined values from being displayed
+4. **Consistent Internationalization**: Using translation keys everywhere ensures all text can be translated
+
+**Example**: Even in loading states, use translation keys:
+```html
+<!-- ✅ Correct: Use translation key -->
+<p>{{ translationService.getReactive('common.loading') }}</p>
+
+<!-- ❌ Wrong: Hardcoded text -->
+<p>Loading translations...</p>
+```
+
+The service's defensive checks ensure that if `common.loading` isn't loaded yet, it will return `'common.loading'` as a fallback, preventing undefined values.
 
 ### Required Implementation Pattern
 
@@ -62,7 +83,7 @@ export class YourComponent implements OnInit {
 <!-- Translation Loading State -->
 <div class="loading-container" *ngIf="translationsLoading()">
   <mat-spinner diameter="40"></mat-spinner>
-  <p>Loading translations...</p>
+  <p>{{ translationService.getReactive('common.loading') }}</p>
 </div>
 
 <!-- Content (only show when translations are loaded) -->
@@ -70,6 +91,8 @@ export class YourComponent implements OnInit {
   <!-- All translation content goes here -->
 </div>
 ```
+
+**Note**: It's safe to use translation keys in loading states because the service includes defensive checks that return the key as a fallback if translations aren't loaded yet. This ensures consistent internationalization throughout the application.
 
 ## Architecture
 
@@ -148,7 +171,7 @@ Components must handle translation loading states in templates:
 <!-- Translation Loading State -->
 <div class="loading-container" *ngIf="translationsLoading()">
   <mat-spinner diameter="40"></mat-spinner>
-  <p>Loading translations...</p>
+  <p>{{ translationService.getReactive('common.loading') }}</p>
 </div>
 
 <!-- Content (only show when translations are loaded) -->
@@ -157,6 +180,8 @@ Components must handle translation loading states in templates:
   <!-- Rest of content -->
 </div>
 ```
+
+**Important**: Always use translation keys instead of hardcoded text, even in loading states. The service's defensive checks ensure that if translations aren't loaded yet, the key will be returned as a fallback, preventing undefined values. This maintains consistent internationalization throughout the application.
 
 ### 4. Reactive Translation Methods
 
@@ -229,7 +254,7 @@ export class YourComponent implements OnInit {
 <!-- Translation Loading State -->
 <div class="loading-container" *ngIf="translationsLoading()">
   <mat-spinner diameter="40"></mat-spinner>
-  <p>Loading translations...</p>
+  <p>{{ translationService.getReactive('common.loading') }}</p>
 </div>
 
 <!-- Content (only show when translations are loaded) -->
@@ -329,13 +354,16 @@ Use dot notation for nested keys: `category.section.item`
     }
   },
   "common": {
+    "loading": "Loading...",
+    "retry": "Retry",
     "buttons": {
       "save": "Save",
       "cancel": "Cancel"
     }
   }
-}
 ```
+
+**Note**: The `common.loading` key should be included in all translation files as it's commonly used in loading states throughout the application.
 
 ## Adding New Translations
 
@@ -411,7 +439,7 @@ Ensure both language files are updated with the same keys:
 <!-- Translation Loading State -->
 <div class="loading-container" *ngIf="translationsLoading()">
   <mat-spinner diameter="40"></mat-spinner>
-  <p>Loading translations...</p>
+  <p>{{ translationService.getReactive('common.loading') }}</p>
 </div>
 
 <!-- Content (only show when translations are loaded) -->
@@ -454,6 +482,8 @@ getReactive(key: string, params?: any): string {
 ```
 
 This prevents showing undefined values when translations haven't finished loading, instead returning the translation key as a fallback.
+
+**Important**: Because of these defensive checks, it's safe to use translation keys throughout your templates, including in loading states. The service will gracefully handle cases where translations aren't loaded yet by returning the key itself, ensuring your application never displays undefined values and maintains consistent internationalization.
 
 ### Missing Translation Detection
 The service automatically logs missing translations to the browser console:
@@ -532,6 +562,7 @@ it('should update translations when language changes', async () => {
 - Use `getReactive()` in templates for reactive updates
 - Use `get()` in component logic when reactivity not needed
 - Always wrap template content with `*ngIf="!translationsLoading()"` to prevent showing raw keys
+- **Never use hardcoded text** - always use translation keys, even in loading states (the service's defensive checks make this safe)
 
 ### 3. Translation Management
 - Keep translation files in sync between languages
@@ -539,9 +570,10 @@ it('should update translations when language changes', async () => {
 - Test all language combinations
 
 ### 4. Error Handling
-- Always provide fallback text for critical translations
+- Always use translation keys instead of hardcoded text
 - Monitor missing translation logs in development
 - Implement graceful degradation for missing translations
+- The service automatically handles missing translations by returning the key as a fallback
 
 ## Troubleshooting
 
@@ -624,7 +656,7 @@ When upgrading the translation service:
 <!-- Translation Loading State -->
 <div class="loading-container" *ngIf="translationsLoading()">
   <mat-spinner diameter="40"></mat-spinner>
-  <p>Loading translations...</p>
+  <p>{{ translationService.getReactive('common.loading') }}</p>
 </div>
 
 <!-- Content (only show when translations are loaded) -->
@@ -639,6 +671,8 @@ When upgrading the translation service:
   <span *ngIf="condition">{{ translationService.getReactive('key') }}</span>
 </div>
 ```
+
+**Note**: Always use translation keys instead of hardcoded text. The service's defensive checks ensure safe usage even in loading states.
 
 ### Component Integration
 ```typescript

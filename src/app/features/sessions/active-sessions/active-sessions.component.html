@@ -102,7 +102,7 @@
                   <mat-icon>schedule</mat-icon>
                   <div class="item-content">
                     <span class="item-label">{{ translationService.getReactive('sessions.active.duration') }}</span>
-                    <span class="item-value">{{ formatDuration(transaction.duration || 0) }}</span>
+                    <span class="item-value">{{ formatDuration(calculateDurationFromStart(transaction.time_started)) }}</span>
                   </div>
                 </div>
                 <div class="overview-item">
@@ -123,7 +123,7 @@
                   <mat-icon>flash_on</mat-icon>
                   <div class="item-content">
                     <span class="item-label">{{ translationService.getReactive('sessions.active.averagePower') }}</span>
-                    <span class="item-value">{{ calculateAveragePower(transaction.consumed || 0, transaction.duration || 0) }}</span>
+                    <span class="item-value">{{ calculateAveragePower(transaction.consumed || 0, calculateDurationFromStart(transaction.time_started)) }}</span>
                   </div>
                 </div>
                 <div class="overview-item">
@@ -155,9 +155,6 @@
             <!-- Power Chart Section -->
             <div class="chart-section" *ngIf="hasMeterValues(transaction)">
               <mat-divider></mat-divider>
-              <div class="chart-header">
-                <h3>{{ translationService.getReactive('sessions.active.powerChart') }}</h3>
-              </div>
               <div class="chart-container">
                 <app-energy-chart [meterValues]="transaction.meter_values || []"></app-energy-chart>
               </div>

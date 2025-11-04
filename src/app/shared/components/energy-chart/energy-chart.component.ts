@@ -12,6 +12,9 @@ import { MatIconModule } from '@angular/material/icon';
 export class EnergyChartComponent implements OnInit, OnChanges {
   @Input() meterValues: any[] = [];
 
+  // Maximum number of data points to display
+  private readonly MAX_DATA_POINTS = 60;
+
   // Chart dimensions
   chartWidth = 720;
   chartHeight = 300;
@@ -65,10 +68,10 @@ export class EnergyChartComponent implements OnInit, OnChanges {
       return;
     }
 
-    // Sort data by time
-    const sortedData = [...this.meterValues].sort((a, b) => 
-      new Date(a.time).getTime() - new Date(b.time).getTime()
-    );
+    // Sort data by time and keep only the last 60 values
+    const sortedData = [...this.meterValues]
+      .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+      .slice(-this.MAX_DATA_POINTS); // Keep only the last 60 values
 
     // Calculate ranges for both energy and power
     const energyValues = sortedData.map(d => d.consumed_energy || 0);

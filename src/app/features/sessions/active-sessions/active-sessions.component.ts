@@ -55,12 +55,14 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
   
   // Real-time updates
   protected readonly realtimeActive = signal(false);
+  protected readonly currentTime = signal(Date.now()); // For real-time duration updates
   
   // Subscription management
   private authSubscription?: Subscription;
   private apiSubscription?: Subscription;
   private wsSubscription?: Subscription;
   private authCheckTimeout?: any;
+  private durationUpdateInterval?: any;
 
   ngOnInit(): void {
     // Initialize translations first, regardless of auth state
@@ -79,6 +81,9 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
         
         // Initialize WebSocket subscriptions for real-time updates
         this.initializeWebSocketSubscriptions();
+        
+        // Start duration update timer for real-time duration display
+        this.startDurationUpdateTimer();
       } else {
         // Give Firebase auth time to restore session on page reload
         this.authCheckTimeout = setTimeout(() => {
@@ -198,7 +203,16 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
       const lastMeterValue = existingMeterValues[existingMeterValues.length - 1];
       if (!lastMeterValue || 
           new Date(newMeterValue.time).getTime() > new Date(lastMeterValue.time).getTime()) {
-        transaction.meter_values = [...existingMeterValues, newMeterValue];
+        let updatedMeterValues = [...existingMeterValues, newMeterValue];
+        
+        // Keep only the last 60 meter values if the number exceeds 60
+        const MAX_METER_VALUES = 60;
+        if (updatedMeterValues.length > MAX_METER_VALUES) {
+          // Remove the oldest values to keep only the most recent 60
+          updatedMeterValues = updatedMeterValues.slice(-MAX_METER_VALUES);
+        }
+        
+        transaction.meter_values = updatedMeterValues;
       }
     }
     
@@ -267,6 +281,9 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
     if (this.authCheckTimeout) {
       clearTimeout(this.authCheckTimeout);
     }
+    if (this.durationUpdateInterval) {
+      clearInterval(this.durationUpdateInterval);
+    }
     
     // Stop listening to all transactions
     const transactions = this.activeTransactions();
@@ -278,6 +295,28 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
         console.error(`[ActiveSessions] Failed to stop listening to transaction ${transaction.transaction_id}:`, error);
       });
     });
+  }
+
+  private startDurationUpdateTimer(): void {
+    // Update current time every minute to refresh duration display
+    this.durationUpdateInterval = setInterval(() => {
+      this.currentTime.set(Date.now());
+    }, 60000); // Update every minute
+  }
+
+  protected calculateDurationFromStart(timeStarted: string): number {
+    if (!timeStarted) {
+      return 0;
+    }
+    
+    // Use currentTime signal to trigger change detection
+    this.currentTime(); // This ensures the method is reactive to signal changes
+    
+    const startTime = new Date(timeStarted);
+    const now = new Date();
+    const durationMs = now.getTime() - startTime.getTime();
+    
+    return Math.floor(durationMs / 1000); // Return duration in seconds
   }
 
   protected formatDuration(seconds: number): string {
@@ -296,7 +335,27 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
   }
 
   protected formatDateTime(dateString: string): string {
-    return new Date(dateString).toLocaleString();
+    if (!dateString) {
+      return '';
+    }
+    
+    const date = new Date(dateString);
+    const now = new Date();
+    
+    // Check if the date is today
+    const isToday = date.getDate() === now.getDate() &&
+                   date.getMonth() === now.getMonth() &&
+                   date.getFullYear() === now.getFullYear();
+    
+    if (isToday) {
+      // Show only time in HH:mm format
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    } else {
+      // Show full date and time
+      return date.toLocaleString();
+    }
   }
 
   protected calculateAveragePower(consumed: number, durationSeconds: number): string {

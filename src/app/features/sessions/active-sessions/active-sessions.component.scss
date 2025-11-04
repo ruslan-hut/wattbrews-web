@@ -163,9 +163,19 @@
 
 .transactions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: 1fr;
   gap: var(--energy-space-xl);
   margin-top: var(--energy-space-lg);
+  
+  // Desktop layout - show multiple columns
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  // Large desktop layout - show 3 columns if space allows
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .transaction-card {
@@ -252,8 +262,18 @@ mat-card-content {
 
 .overview-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--energy-space-md);
+  
+  // Desktop layout - show 2 columns
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  // Large desktop layout - show 4 columns for better use of space
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .overview-item {
