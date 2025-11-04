@@ -39,10 +39,8 @@ export class EnergyChartComponent implements OnInit, OnChanges {
   hoverPoint = signal({ x: 0, y: 0 });
 
   // Data ranges
-  energyMinY = signal(0);
-  energyMaxY = signal(0);
-  powerMinY = signal(0);
-  powerMaxY = signal(0);
+  minY = signal(0);
+  maxY = signal(0);
   minX = signal(0);
   maxX = signal(0);
   
@@ -82,10 +80,17 @@ export class EnergyChartComponent implements OnInit, OnChanges {
     const powerMin = Math.min(...powerValues);
     const powerMax = Math.max(...powerValues);
     
-    this.energyMinY.set(energyMin);
-    this.energyMaxY.set(energyMax);
-    this.powerMinY.set(powerMin);
-    this.powerMaxY.set(powerMax);
+    // Calculate unified vertical scale: use maximum from both datasets + 10% margin
+    const unifiedMax = Math.max(energyMax, powerMax);
+    const unifiedMaxWithMargin = unifiedMax * 1.1;
+    const unifiedMin = Math.min(energyMin, powerMin);
+    
+    // Ensure we have a valid range (avoid division by zero)
+    const finalMinY = unifiedMin >= 0 ? 0 : unifiedMin;
+    const finalMaxY = unifiedMaxWithMargin > finalMinY ? unifiedMaxWithMargin : finalMinY + 1;
+    
+    this.minY.set(finalMinY);
+    this.maxY.set(finalMaxY);
     this.minX.set(0);
     this.maxX.set(sortedData.length - 1);
 
@@ -96,7 +101,7 @@ export class EnergyChartComponent implements OnInit, OnChanges {
     const energyPoints = sortedData.map((item, index) => {
       const x = this.padding.left + (index / (sortedData.length - 1)) * chartAreaWidth;
       const y = this.padding.top + chartAreaHeight - 
-        ((item.consumed_energy - energyMin) / (energyMax - energyMin)) * chartAreaHeight;
+        ((item.consumed_energy - finalMinY) / (finalMaxY - finalMinY)) * chartAreaHeight;
       
       return {
         x,
@@ -111,7 +116,7 @@ export class EnergyChartComponent implements OnInit, OnChanges {
     const powerPoints = sortedData.map((item, index) => {
       const x = this.padding.left + (index / (sortedData.length - 1)) * chartAreaWidth;
       const y = this.padding.top + chartAreaHeight - 
-        ((item.power_rate - powerMin) / (powerMax - powerMin)) * chartAreaHeight;
+        ((item.power_rate - finalMinY) / (finalMaxY - finalMinY)) * chartAreaHeight;
       
       return {
         x,
@@ -186,10 +191,10 @@ export class EnergyChartComponent implements OnInit, OnChanges {
     const chartAreaHeight = this.chartHeight - this.padding.top - this.padding.bottom;
     const chartAreaWidth = this.chartWidth - this.padding.left - this.padding.right;
     
-    // Y-axis labels (energy values)
+    // Y-axis labels (using unified scale)
     const yLabels = [];
     for (let i = 0; i <= 4; i++) {
-      const value = this.energyMinY() + (this.energyMaxY() - this.energyMinY()) * (4 - i) / 4;
+      const value = this.minY() + (this.maxY() - this.minY()) * (4 - i) / 4;
       const y = this.padding.top + i * (chartAreaHeight / 4);
       yLabels.push({
         value: Math.round(value).toLocaleString(),
