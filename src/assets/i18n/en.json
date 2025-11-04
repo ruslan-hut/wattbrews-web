@@ -288,6 +288,23 @@
     "selectPaymentMethodToStart": "Please select a payment method to start charging"
   },
   "sessions":{
+    "active": {
+      "title": "Active Sessions",
+      "subtitle": "View and monitor your currently active charging sessions",
+      "loading": "Loading active sessions...",
+      "noActive": "No Active Sessions",
+      "noActiveDescription": "You don't have any active charging sessions at the moment.",
+      "transactionId": "Transaction",
+      "station": "Station",
+      "connector": "Connector",
+      "duration": "Duration",
+      "energyConsumed": "Energy Consumed",
+      "cost": "Cost",
+      "averagePower": "Average Power",
+      "currentPower": "Current Power",
+      "started": "Started",
+      "powerChart": "Power Chart"
+    },
     "history": {
       "title": "Sessions History",
       "subtitle": "View and manage the history of your charging sessions",
@@ -356,6 +373,8 @@
   },
   "common": {
     "close": "Close",
+    "loading": "Loading...",
+    "retry": "Retry",
     "buttons": {
       "save": "Save",
       "retry": "Retry",

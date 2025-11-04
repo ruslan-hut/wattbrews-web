@@ -290,6 +290,23 @@
     "selectPaymentMethodToStart": "Por favor selecciona un método de pago para iniciar la carga"
   },
   "sessions":{
+    "active": {
+      "title": "Sesiones Activas",
+      "subtitle": "Ver y monitorear tus sesiones de carga actualmente activas",
+      "loading": "Cargando sesiones activas...",
+      "noActive": "No Hay Sesiones Activas",
+      "noActiveDescription": "No tienes ninguna sesión de carga activa en este momento.",
+      "transactionId": "Transacción",
+      "station": "Estación",
+      "connector": "Conector",
+      "duration": "Duración",
+      "energyConsumed": "Energía Consumida",
+      "cost": "Costo",
+      "averagePower": "Potencia Promedio",
+      "currentPower": "Potencia Actual",
+      "started": "Iniciada",
+      "powerChart": "Gráfico de Potencia"
+    },
     "history": {
       "title": "Historial de Sesiones",
       "subtitle": "Ver y gestionar el historial de tus sesiones de carga",
@@ -358,6 +375,8 @@
   },
   "common": {
     "close": "Cerrar",
+    "loading": "Cargando...",
+    "retry": "Reintentar",
     "buttons": {
       "save": "Guardar",
       "retry": "Reintentar",

@@ -19,6 +19,7 @@ export class TransactionService {
   
   // Signals for state management
   private readonly _transactions = signal<Transaction[]>([]);
+  private readonly _activeTransactions = signal<TransactionDetail[]>([]);
   private readonly _recentChargePoints = signal<ChargePoint[]>([]);
   private readonly _loading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
@@ -37,6 +38,7 @@ export class TransactionService {
   
   // Public readonly signals
   readonly transactions = this._transactions.asReadonly();
+  readonly activeTransactions = this._activeTransactions.asReadonly();
   readonly recentChargePoints = this._recentChargePoints.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
@@ -147,6 +149,26 @@ export class TransactionService {
         // Transaction detail loaded successfully
       }),
       catchError(error => {
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Load active transactions from the API
+   */
+  loadActiveTransactions(): Observable<TransactionDetail[]> {
+    this._loading.set(true);
+    this._error.set(null);
+    
+    return this.apiService.getArray<TransactionDetail>('/transactions/active').pipe(
+      tap(activeTransactions => {
+        this._activeTransactions.set(activeTransactions);
+        this._loading.set(false);
+      }),
+      catchError(error => {
+        this._error.set(error.message || 'Failed to load active transactions');
+        this._loading.set(false);
         throw error;
       })
     );
