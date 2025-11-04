@@ -11,6 +11,87 @@
   text-align: center;
 }
 
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--energy-space-md);
+}
+
+.realtime-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--energy-space-xs);
+  padding: var(--energy-space-xs) var(--energy-space-sm);
+  background-color: var(--energy-success, #10b981);
+  color: white;
+  border-radius: var(--energy-radius-lg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.realtime-indicator mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.auth-check-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-2xl);
+  text-align: center;
+}
+
+.auth-required-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-2xl);
+  text-align: center;
+  background: white;
+  border-radius: var(--energy-radius-xl);
+  box-shadow: var(--energy-shadow-md);
+  border: 1px solid var(--energy-gray-200, #e2e8f0);
+  margin-bottom: var(--energy-space-xl);
+}
+
+.auth-icon {
+  font-size: 3rem;
+  color: var(--energy-gray-400, #94a3b8);
+  width: 3rem;
+  height: 3rem;
+}
+
+.auth-required-message h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--energy-gray-900, #0f172a);
+  font-weight: 600;
+}
+
+.auth-required-message p {
+  margin: 0;
+  color: var(--energy-gray-600, #475569);
+  font-size: 1rem;
+  line-height: 1.5;
+  max-width: 500px;
+}
+
 .page-title {
   font-size: 2.5rem;
   font-weight: 600;
@@ -253,6 +334,20 @@ mat-card-content {
 @media (max-width: 768px) {
   .active-sessions-container {
     padding: var(--energy-space-md);
+  }
+
+  .page-header {
+    text-align: left;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--energy-space-sm);
+  }
+
+  .realtime-indicator {
+    align-self: flex-end;
   }
 
   .page-title {

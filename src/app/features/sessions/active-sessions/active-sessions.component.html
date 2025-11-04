@@ -9,18 +9,43 @@
   <div *ngIf="!translationsLoading()">
     <!-- Page Header -->
     <div class="page-header">
-      <h1 class="page-title">{{ translationService.getReactive('sessions.active.title') }}</h1>
-      <p class="page-subtitle">{{ translationService.getReactive('sessions.active.subtitle') }}</p>
+      <div class="header-content">
+        <div>
+          <h1 class="page-title">{{ translationService.getReactive('sessions.active.title') }}</h1>
+          <p class="page-subtitle">{{ translationService.getReactive('sessions.active.subtitle') }}</p>
+        </div>
+        <!-- Real-time Indicator -->
+        <div class="realtime-indicator" *ngIf="realtimeActive()">
+          <mat-icon>wifi</mat-icon>
+          <span>{{ translationService.getReactive('sessions.active.realtime') }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authentication Check -->
+    <div class="auth-check-container" *ngIf="authLoading()">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>{{ translationService.getReactive('sessions.active.checkingAuth') }}</p>
+    </div>
+
+    <!-- Auth Required Message -->
+    <div class="auth-required-message" *ngIf="!authLoading() && !isAuthenticated()">
+      <mat-icon class="auth-icon">lock</mat-icon>
+      <h3>{{ translationService.getReactive('sessions.active.authRequired') }}</h3>
+      <p>{{ translationService.getReactive('sessions.active.authRequiredMessage') }}</p>
+      <button mat-raised-button color="primary" (click)="navigateToLogin()">
+        {{ translationService.getReactive('sessions.active.signIn') }}
+      </button>
     </div>
 
     <!-- Loading State -->
-    <div class="loading-container" *ngIf="loading()">
+    <div class="loading-container" *ngIf="!authLoading() && isAuthenticated() && loading()">
       <mat-spinner diameter="40"></mat-spinner>
       <p>{{ translationService.getReactive('sessions.active.loading') }}</p>
     </div>
 
     <!-- Error State -->
-    <div class="error-container" *ngIf="error()">
+    <div class="error-container" *ngIf="!authLoading() && isAuthenticated() && error()">
       <mat-icon class="error-icon">error</mat-icon>
       <p>{{ error() }}</p>
       <button mat-raised-button color="primary" (click)="refreshTransactions()">
@@ -29,7 +54,7 @@
     </div>
 
     <!-- Active Transactions List -->
-    <div class="transactions-section" *ngIf="!loading() && !error()">
+    <div class="transactions-section" *ngIf="!authLoading() && isAuthenticated() && !loading() && !error()">
       <!-- No Active Transactions -->
       <div class="no-transactions" *ngIf="activeTransactions().length === 0">
         <mat-icon class="no-data-icon">battery_alert</mat-icon>
