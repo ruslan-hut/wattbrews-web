@@ -223,7 +223,9 @@ mat-card-header {
   font-weight: 500;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--energy-space-xs);
+  position: relative;
 
   &.charging {
     background-color: #e8f5e8;
@@ -243,6 +245,32 @@ mat-card-header {
   &.unknown {
     background-color: var(--energy-gray-200, #e2e8f0);
     color: var(--energy-gray-600, #475569);
+  }
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--energy-warning, #f59e0b);
+  display: inline-block;
+  margin-left: var(--energy-space-xs);
+  flex-shrink: 0;
+
+  &.live {
+    background-color: var(--energy-success, #10b981);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.9);
   }
 }
 
@@ -348,6 +376,20 @@ mat-card-content {
   padding: var(--energy-space-md);
   background-color: var(--energy-gray-50, #f8fafc);
   border-radius: var(--energy-radius-lg);
+}
+
+.action-section {
+  margin-top: var(--energy-space-lg);
+}
+
+.action-content {
+  display: flex;
+  justify-content: center;
+  padding: var(--energy-space-md) 0;
+}
+
+.stop-transaction-button {
+  min-width: 200px;
 }
 
 // Responsive Design

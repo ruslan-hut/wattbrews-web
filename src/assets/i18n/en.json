@@ -308,7 +308,8 @@
       "averagePower": "Average Power",
       "currentPower": "Current Power",
       "started": "Started",
-      "powerChart": "Power Chart"
+      "powerChart": "Power Chart",
+      "stopTransaction": "Stop Transaction"
     },
     "history": {
       "title": "Sessions History",
@@ -487,5 +488,20 @@
     "sendingCommand": "Sending start command...",
     "waitingForResponse": "Waiting for response from charging station...",
     "redirecting": "Redirecting to active session..."
+  },
+  "transactionStop": {
+    "initializing": "Initializing Stop Transaction",
+    "stoppingTransaction": "Stopping Transaction",
+    "transactionStopped": "Transaction Stopped",
+    "failed": "Transaction Stop Failed",
+    "transaction": "Transaction",
+    "waiting": "Waiting for transaction to stop...",
+    "preparing": "Preparing to stop transaction...",
+    "success": "Transaction stopped successfully!",
+    "errorSendingCommand": "Failed to send stop command",
+    "errorOccurred": "Unable to stop transaction. Please try again or contact support if the problem persists.",
+    "sendingCommand": "Sending stop command...",
+    "waitingForResponse": "Waiting for response from charging station...",
+    "completed": "Transaction stop completed successfully!"
   }
 }

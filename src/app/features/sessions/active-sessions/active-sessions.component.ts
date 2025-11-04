@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TransactionService } from '../../../core/services/transaction.service';
@@ -16,6 +17,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { WsCommand, WsResponse, ResponseStatus } from '../../../core/models/websocket.model';
 import { EnergyChartComponent } from '../../../shared/components/energy-chart/energy-chart.component';
+import { TransactionStopDialogComponent } from '../../../shared/components/transaction-stop-dialog/transaction-stop-dialog.component';
 
 @Component({
   selector: 'app-active-sessions',
@@ -29,6 +31,7 @@ import { EnergyChartComponent } from '../../../shared/components/energy-chart/en
     MatChipsModule,
     MatDividerModule,
     MatTooltipModule,
+    MatDialogModule,
     EnergyChartComponent
   ],
   templateUrl: './active-sessions.component.html',
@@ -40,6 +43,7 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
   protected readonly authService = inject(AuthService);
   protected readonly websocketService = inject(WebsocketService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
   
   // Translation loading state
   protected readonly translationsLoading = signal(true);
@@ -414,5 +418,36 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
       default:
         return 'help';
     }
+  }
+
+  protected isCharging(transaction: TransactionDetail): boolean {
+    return transaction.is_charging || transaction.status?.toLowerCase() === 'charging';
+  }
+
+  protected stopTransaction(transaction: TransactionDetail): void {
+    if (!transaction.can_stop) {
+      return;
+    }
+
+    // Open transaction stop dialog
+    const dialogRef = this.dialog.open(TransactionStopDialogComponent, {
+      data: {
+        transactionId: transaction.transaction_id,
+        stationTitle: transaction.charge_point_title
+      },
+      disableClose: true, // Prevent closing by clicking outside
+      width: '500px',
+      maxWidth: '95vw'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.success) {
+        console.log('Transaction stopped successfully');
+        // Refresh transactions to update the list
+        this.refreshTransactions();
+      } else {
+        console.log('Transaction stop cancelled or failed');
+      }
+    });
   }
 }

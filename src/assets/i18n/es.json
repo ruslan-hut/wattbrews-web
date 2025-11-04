@@ -311,7 +311,8 @@
       "averagePower": "Potencia Promedio",
       "currentPower": "Potencia Actual",
       "started": "Iniciada",
-      "powerChart": "Gráfico de Potencia"
+      "powerChart": "Gráfico de Potencia",
+      "stopTransaction": "Detener Transacción"
     },
     "history": {
       "title": "Historial de Sesiones",
@@ -490,5 +491,20 @@
     "sendingCommand": "Enviando comando de inicio...",
     "waitingForResponse": "Esperando respuesta de la estación de carga...",
     "redirecting": "Redirigiendo a sesión activa..."
+  },
+  "transactionStop": {
+    "initializing": "Inicializando Detener Transacción",
+    "stoppingTransaction": "Deteniendo Transacción",
+    "transactionStopped": "Transacción Detenida",
+    "failed": "Error al Detener Transacción",
+    "transaction": "Transacción",
+    "waiting": "Esperando a que se detenga la transacción...",
+    "preparing": "Preparando para detener la transacción...",
+    "success": "¡Transacción detenida con éxito!",
+    "errorSendingCommand": "Error al enviar comando de detención",
+    "errorOccurred": "No se pudo detener la transacción. Por favor, inténtelo de nuevo o contacte al soporte si el problema persiste.",
+    "sendingCommand": "Enviando comando de detención...",
+    "waitingForResponse": "Esperando respuesta de la estación de carga...",
+    "completed": "¡Transacción detenida con éxito!"
   }
 }

@@ -14,11 +14,6 @@
           <h1 class="page-title">{{ translationService.getReactive('sessions.active.title') }}</h1>
           <p class="page-subtitle">{{ translationService.getReactive('sessions.active.subtitle') }}</p>
         </div>
-        <!-- Real-time Indicator -->
-        <div class="realtime-indicator" *ngIf="realtimeActive()">
-          <mat-icon>wifi</mat-icon>
-          <span>{{ translationService.getReactive('sessions.active.realtime') }}</span>
-        </div>
       </div>
     </div>
 
@@ -73,8 +68,12 @@
                 <span class="transaction-id">{{ translationService.getReactive('sessions.active.transactionId') }} #{{ transaction.transaction_id }}</span>
               </div>
               <mat-chip [class]="'status-chip ' + getStatusClass(transaction.status)">
-                <mat-icon>{{ getStatusIcon(transaction.status) }}</mat-icon>
                 {{ transaction.status }}
+                <span 
+                  class="live-dot" 
+                  [class.live]="isCharging(transaction) && realtimeActive()"
+                  *ngIf="isCharging(transaction)">
+                </span>
               </mat-chip>
             </div>
             <mat-card-subtitle>{{ transaction.charge_point_title }}</mat-card-subtitle>
@@ -157,6 +156,21 @@
               <mat-divider></mat-divider>
               <div class="chart-container">
                 <app-energy-chart [meterValues]="transaction.meter_values || []"></app-energy-chart>
+              </div>
+            </div>
+
+            <!-- Stop Transaction Button -->
+            <div class="action-section" *ngIf="transaction.can_stop">
+              <mat-divider></mat-divider>
+              <div class="action-content">
+                <button 
+                  mat-raised-button 
+                  color="warn" 
+                  (click)="stopTransaction(transaction)"
+                  class="stop-transaction-button">
+                  <mat-icon>stop_circle</mat-icon>
+                  {{ translationService.getReactive('sessions.active.stopTransaction') }}
+                </button>
               </div>
             </div>
           </mat-card-content>
