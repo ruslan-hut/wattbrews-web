@@ -139,18 +139,55 @@ export class SimpleTranslationService {
    * Load translations for a language
    */
   private async loadTranslations(language: string): Promise<void> {
+    const translationUrl = `/assets/i18n/${language}.json`;
+    
     try {
       const response = await firstValueFrom(
-        this.http.get(`/assets/i18n/${language}.json`).pipe(
+        this.http.get(translationUrl, {
+          // Add headers to bypass aggressive caching in production
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          },
+          // Add response type to ensure proper JSON parsing
+          responseType: 'json' as const
+        }).pipe(
           catchError(error => {
             console.error(`Error loading translations for ${language}:`, error);
+            console.error(`Failed URL: ${translationUrl}`);
+            console.error(`Error details:`, {
+              status: error?.status,
+              statusText: error?.statusText,
+              message: error?.message,
+              url: error?.url || translationUrl,
+              error: error?.error
+            });
+            
+            // If service worker is blocking, log additional info
+            if (error?.status === 0 || error?.status === 504) {
+              console.warn(`Possible service worker blocking translation file for ${language}. URL: ${translationUrl}`);
+            }
+            
             throw error; // Re-throw to trigger fallback
           })
         )
       );
+      
+      if (!response || typeof response !== 'object') {
+        throw new Error(`Invalid translation response for ${language}: expected object, got ${typeof response}`);
+      }
+      
       this.translations[language] = response;
+      
+      // Verify the response has actual translation data
+      if (!this.areTranslationsLoaded(language)) {
+        throw new Error(`Translation data is empty for ${language}`);
+      }
+      
+      console.log(`✅ Translations loaded successfully for ${language}`);
     } catch (error) {
-      console.error(`Error loading translations for ${language}:`, error);
+      console.error(`❌ Error loading translations for ${language}:`, error);
+      console.error(`Translation URL attempted: ${translationUrl}`);
       throw error; // Re-throw to trigger fallback
     }
   }

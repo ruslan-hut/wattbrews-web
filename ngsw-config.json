@@ -23,7 +23,23 @@
       "resources": {
         "files": [
           "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
+        ],
+        "urls": [
+          "/assets/i18n/**/*.json"
         ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "i18n-api",
+      "urls": [
+        "/assets/i18n/**/*.json"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxAge": "1d",
+        "timeout": "5s"
       }
     }
   ]
