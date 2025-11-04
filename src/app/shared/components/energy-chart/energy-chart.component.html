@@ -1,4 +1,4 @@
-<div class="chart-container">
+<div class="chart-container" #chartContainer>
   <!-- No data message -->
   <div class="no-data-message" *ngIf="!meterValues || meterValues.length === 0">
     <mat-icon>show_chart</mat-icon>
@@ -8,8 +8,10 @@
   <!-- SVG Chart -->
   <svg *ngIf="meterValues && meterValues.length > 0"
        class="chart-svg"
-       [attr.width]="chartWidth"
-       [attr.height]="chartHeight"
+       [attr.width]="chartWidth()"
+       [attr.height]="chartHeight()"
+       [attr.viewBox]="'0 0 ' + chartWidth() + ' ' + chartHeight()"
+       preserveAspectRatio="xMidYMid meet"
        (mousemove)="onMouseMove($event)"
        (mouseleave)="onMouseLeave()">
     
@@ -20,14 +22,14 @@
             [attr.x1]="x"
             [attr.y1]="padding.top"
             [attr.x2]="x"
-            [attr.y2]="chartHeight - padding.bottom"
+            [attr.y2]="chartHeight() - padding.bottom"
             class="grid-line" />
       
       <!-- Horizontal grid lines -->
       <line *ngFor="let y of gridLines().horizontal; let i = index"
             [attr.x1]="padding.left"
             [attr.y1]="y"
-            [attr.x2]="chartWidth - padding.right"
+            [attr.x2]="chartWidth() - padding.right"
             [attr.y2]="y"
             class="grid-line" />
     </g>
@@ -36,16 +38,16 @@
     <g class="axes">
       <!-- X axis -->
       <line [attr.x1]="padding.left"
-            [attr.y1]="chartHeight - padding.bottom"
-            [attr.x2]="chartWidth - padding.right"
-            [attr.y2]="chartHeight - padding.bottom"
+            [attr.y1]="chartHeight() - padding.bottom"
+            [attr.x2]="chartWidth() - padding.right"
+            [attr.y2]="chartHeight() - padding.bottom"
             class="axis" />
       
       <!-- Y axis -->
       <line [attr.x1]="padding.left"
             [attr.y1]="padding.top"
             [attr.x2]="padding.left"
-            [attr.y2]="chartHeight - padding.bottom"
+            [attr.y2]="chartHeight() - padding.bottom"
             class="axis" />
     </g>
     
@@ -63,7 +65,7 @@
     <g class="x-axis-labels">
       <text *ngFor="let label of xAxisLabels(); let i = index"
             [attr.x]="label.x"
-            [attr.y]="chartHeight - padding.bottom + 20"
+            [attr.y]="chartHeight() - padding.bottom + 20"
             class="x-axis-label">
         {{ label.value }}
       </text>
@@ -100,7 +102,7 @@
           [attr.x1]="hoverLine().x"
           [attr.y1]="padding.top"
           [attr.x2]="hoverLine().x"
-          [attr.y2]="chartHeight - padding.bottom"
+          [attr.y2]="chartHeight() - padding.bottom"
           class="hover-line" />
     
     <!-- Hover point -->

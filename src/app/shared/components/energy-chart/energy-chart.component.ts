@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, signal, computed } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, AfterViewInit, OnDestroy, signal, computed, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -9,16 +9,20 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './energy-chart.component.html',
   styleUrl: './energy-chart.component.scss'
 })
-export class EnergyChartComponent implements OnInit, OnChanges {
+export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input() meterValues: any[] = [];
 
   // Maximum number of data points to display
   private readonly MAX_DATA_POINTS = 60;
 
-  // Chart dimensions
-  chartWidth = 720;
-  chartHeight = 300;
+  // Chart dimensions - will be calculated dynamically
+  chartWidth = signal(720);
+  chartHeight = signal(300);
   padding = { top: 20, right: 60, bottom: 40, left: 60 };
+  
+  // Container reference for responsive sizing
+  @ViewChild('chartContainer', { static: false }) chartContainer?: ElementRef<HTMLElement>;
+  private resizeListener?: () => void;
 
   // Data processing
   processedData = signal<any[]>([]);
@@ -49,7 +53,81 @@ export class EnergyChartComponent implements OnInit, OnChanges {
   xAxisLabels = signal<any[]>([]);
 
   ngOnInit() {
+    this.calculateChartDimensions();
     this.processData();
+  }
+  
+  ngAfterViewInit() {
+    // Calculate dimensions after view init to ensure container is available
+    setTimeout(() => {
+      this.calculateChartDimensions();
+      this.processData();
+    }, 0);
+    
+    // Recalculate on window resize
+    if (typeof window !== 'undefined') {
+      this.resizeListener = () => this.onResize();
+      window.addEventListener('resize', this.resizeListener);
+    }
+  }
+  
+  ngOnDestroy() {
+    if (typeof window !== 'undefined' && this.resizeListener) {
+      window.removeEventListener('resize', this.resizeListener);
+    }
+  }
+  
+  private onResize() {
+    this.calculateChartDimensions();
+    this.processData();
+  }
+  
+  private calculateChartDimensions() {
+    // Try to get container from ViewChild first, then fallback to querySelector
+    let container: HTMLElement | null = null;
+    
+    if (this.chartContainer?.nativeElement) {
+      container = this.chartContainer.nativeElement;
+    } else if (typeof document !== 'undefined') {
+      container = document.querySelector('.chart-container') as HTMLElement;
+    }
+    
+    if (!container) return;
+    
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    
+    // Calculate responsive dimensions
+    // Use container width minus padding, with minimum constraints
+    const minWidth = 280;
+    const minHeight = 180;
+    const maxWidth = 720;
+    const maxHeight = 400;
+    
+    // Calculate width based on container, respecting min/max
+    let calculatedWidth = Math.max(0, containerWidth - 32); // Account for container padding
+    calculatedWidth = Math.max(minWidth, Math.min(maxWidth, calculatedWidth));
+    
+    // Calculate height based on container or aspect ratio
+    let calculatedHeight = Math.max(0, containerHeight - 32); // Account for container padding
+    if (calculatedHeight < minHeight || calculatedHeight === 0) {
+      // Use aspect ratio if container height is too small
+      calculatedHeight = calculatedWidth * 0.4; // 2.5:1 aspect ratio
+    }
+    calculatedHeight = Math.max(minHeight, Math.min(maxHeight, calculatedHeight));
+    
+    // Adjust padding for smaller screens
+    if (calculatedWidth < 500) {
+      // Reduce padding on mobile
+      this.padding = { top: 15, right: 40, bottom: 35, left: 40 };
+    } else if (calculatedWidth < 600) {
+      this.padding = { top: 18, right: 50, bottom: 38, left: 50 };
+    } else {
+      this.padding = { top: 20, right: 60, bottom: 40, left: 60 };
+    }
+    
+    this.chartWidth.set(calculatedWidth);
+    this.chartHeight.set(calculatedHeight);
   }
 
   ngOnChanges() {
@@ -95,8 +173,8 @@ export class EnergyChartComponent implements OnInit, OnChanges {
     this.maxX.set(sortedData.length - 1);
 
     // Process data points for both energy and power
-    const chartAreaWidth = this.chartWidth - this.padding.left - this.padding.right;
-    const chartAreaHeight = this.chartHeight - this.padding.top - this.padding.bottom;
+    const chartAreaWidth = this.chartWidth() - this.padding.left - this.padding.right;
+    const chartAreaHeight = this.chartHeight() - this.padding.top - this.padding.bottom;
 
     const energyPoints = sortedData.map((item, index) => {
       const x = this.padding.left + (index / (sortedData.length - 1)) * chartAreaWidth;
@@ -166,8 +244,8 @@ export class EnergyChartComponent implements OnInit, OnChanges {
   }
 
   private generateGridLines() {
-    const chartAreaWidth = this.chartWidth - this.padding.left - this.padding.right;
-    const chartAreaHeight = this.chartHeight - this.padding.top - this.padding.bottom;
+    const chartAreaWidth = this.chartWidth() - this.padding.left - this.padding.right;
+    const chartAreaHeight = this.chartHeight() - this.padding.top - this.padding.bottom;
 
     // Vertical grid lines (6 lines)
     const verticalLines = [];
@@ -188,32 +266,35 @@ export class EnergyChartComponent implements OnInit, OnChanges {
   }
 
   private generateAxisLabels() {
-    const chartAreaHeight = this.chartHeight - this.padding.top - this.padding.bottom;
-    const chartAreaWidth = this.chartWidth - this.padding.left - this.padding.right;
+    const chartAreaHeight = this.chartHeight() - this.padding.top - this.padding.bottom;
+    const chartAreaWidth = this.chartWidth() - this.padding.left - this.padding.right;
     
-    // Y-axis labels (using unified scale)
+    // Y-axis labels (using unified scale) - convert to kW and show as integers
     const yLabels = [];
     for (let i = 0; i <= 4; i++) {
       const value = this.minY() + (this.maxY() - this.minY()) * (4 - i) / 4;
       const y = this.padding.top + i * (chartAreaHeight / 4);
+      // Convert to kW (divide by 1000) and round to integer
+      const valueInKw = value / 1000;
       yLabels.push({
-        value: Math.round(value).toLocaleString(),
+        value: Math.round(valueInKw).toString(),
         y: y
       });
     }
     this.yAxisLabels.set(yLabels);
     
-    // X-axis labels (time values)
+    // X-axis labels (time values) - 24-hour format
     const xLabels = [];
     const timeStep = Math.max(1, Math.floor(this.processedData().length / 6));
     for (let i = 0; i < this.processedData().length; i += timeStep) {
       const point = this.processedData()[i];
       if (point) {
         const x = this.padding.left + (i / (this.processedData().length - 1)) * chartAreaWidth;
-        const time = new Date(point.time).toLocaleTimeString([], { 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        });
+        const date = new Date(point.time);
+        // Format as 24-hour: HH:mm
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const time = `${hours}:${minutes}`;
         xLabels.push({
           value: time,
           x: x
@@ -246,10 +327,11 @@ export class EnergyChartComponent implements OnInit, OnChanges {
       this.showTooltip.set(true);
       this.tooltipX.set(event.clientX);
       this.tooltipY.set(event.clientY);
-      this.tooltipTime.set(new Date(closestPoint.time).toLocaleTimeString([], { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      }));
+      // Format tooltip time in 24-hour format
+      const tooltipDate = new Date(closestPoint.time);
+      const tooltipHours = tooltipDate.getHours().toString().padStart(2, '0');
+      const tooltipMinutes = tooltipDate.getMinutes().toString().padStart(2, '0');
+      this.tooltipTime.set(`${tooltipHours}:${tooltipMinutes}`);
       this.tooltipValue.set(closestPoint.value.toLocaleString());
       this.tooltipPower.set(closestPoint.power);
 

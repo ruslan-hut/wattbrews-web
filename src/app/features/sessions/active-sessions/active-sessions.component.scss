@@ -382,6 +382,10 @@ mat-card-content {
   padding: var(--energy-space-md);
   background-color: var(--energy-gray-50, #f8fafc);
   border-radius: var(--energy-radius-lg);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .action-section {
@@ -444,6 +448,17 @@ mat-card-content {
 
   .status-chip {
     align-self: flex-start;
+  }
+  
+  .chart-container {
+    padding: var(--energy-space-sm);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  .chart-section {
+    overflow: hidden;
+    width: 100%;
   }
 }
 
