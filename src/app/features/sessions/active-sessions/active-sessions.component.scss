@@ -199,13 +199,17 @@ mat-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   margin-bottom: var(--energy-space-sm);
+  box-sizing: border-box;
 }
 
 .transaction-title {
   display: flex;
   align-items: center;
   gap: var(--energy-space-sm);
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .transaction-title mat-icon {
@@ -226,6 +230,8 @@ mat-card-header {
   justify-content: center;
   gap: var(--energy-space-xs);
   position: relative;
+  flex: 0 0 auto;
+  margin-left: var(--energy-space-md);
 
   &.charging {
     background-color: #e8f5e8;
