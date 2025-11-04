@@ -1,12 +1,15 @@
 <div class="active-sessions-container">
   <!-- Translation Loading State -->
-  <div class="loading-container" *ngIf="translationsLoading()">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>{{ translationService.getReactive('common.loading') }}</p>
-  </div>
+  @if (translationsLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>{{ translationService.getReactive('common.loading') }}</p>
+    </div>
+  }
 
   <!-- Content (only show when translations are loaded) -->
-  <div *ngIf="!translationsLoading()">
+  @if (!translationsLoading()) {
+    <div>
     <!-- Page Header -->
     <div class="page-header">
       <div class="header-content">
@@ -18,163 +21,187 @@
     </div>
 
     <!-- Authentication Check -->
-    <div class="auth-check-container" *ngIf="authLoading()">
-      <mat-spinner diameter="40"></mat-spinner>
-      <p>{{ translationService.getReactive('sessions.active.checkingAuth') }}</p>
-    </div>
+    @if (authLoading()) {
+      <div class="auth-check-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>{{ translationService.getReactive('sessions.active.checkingAuth') }}</p>
+      </div>
+    }
 
     <!-- Auth Required Message -->
-    <div class="auth-required-message" *ngIf="!authLoading() && !isAuthenticated()">
-      <mat-icon class="auth-icon">lock</mat-icon>
-      <h3>{{ translationService.getReactive('sessions.active.authRequired') }}</h3>
-      <p>{{ translationService.getReactive('sessions.active.authRequiredMessage') }}</p>
-      <button mat-raised-button color="primary" (click)="navigateToLogin()">
-        {{ translationService.getReactive('sessions.active.signIn') }}
-      </button>
-    </div>
+    @if (!authLoading() && !isAuthenticated()) {
+      <div class="auth-required-message">
+        <mat-icon class="auth-icon">lock</mat-icon>
+        <h3>{{ translationService.getReactive('sessions.active.authRequired') }}</h3>
+        <p>{{ translationService.getReactive('sessions.active.authRequiredMessage') }}</p>
+        <button mat-raised-button color="primary" (click)="navigateToLogin()">
+          {{ translationService.getReactive('sessions.active.signIn') }}
+        </button>
+      </div>
+    }
 
     <!-- Loading State -->
-    <div class="loading-container" *ngIf="!authLoading() && isAuthenticated() && loading()">
-      <mat-spinner diameter="40"></mat-spinner>
-      <p>{{ translationService.getReactive('sessions.active.loading') }}</p>
-    </div>
+    @if (!authLoading() && isAuthenticated() && loading()) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>{{ translationService.getReactive('sessions.active.loading') }}</p>
+      </div>
+    }
 
     <!-- Error State -->
-    <div class="error-container" *ngIf="!authLoading() && isAuthenticated() && error()">
-      <mat-icon class="error-icon">error</mat-icon>
-      <p>{{ error() }}</p>
-      <button mat-raised-button color="primary" (click)="refreshTransactions()">
-        {{ translationService.getReactive('common.retry') }}
-      </button>
-    </div>
+    @if (!authLoading() && isAuthenticated() && error()) {
+      <div class="error-container">
+        <mat-icon class="error-icon">error</mat-icon>
+        <p>{{ error() }}</p>
+        <button mat-raised-button color="primary" (click)="refreshTransactions()">
+          {{ translationService.getReactive('common.retry') }}
+        </button>
+      </div>
+    }
 
     <!-- Active Transactions List -->
-    <div class="transactions-section" *ngIf="!authLoading() && isAuthenticated() && !loading() && !error()">
-      <!-- No Active Transactions -->
-      <div class="no-transactions" *ngIf="activeTransactions().length === 0">
-        <mat-icon class="no-data-icon">battery_alert</mat-icon>
-        <h3>{{ translationService.getReactive('sessions.active.noActive') }}</h3>
-        <p>{{ translationService.getReactive('sessions.active.noActiveDescription') }}</p>
-      </div>
+    @if (!authLoading() && isAuthenticated() && !loading() && !error()) {
+      <div class="transactions-section">
+        <!-- No Active Transactions -->
+        @if (activeTransactions().length === 0) {
+          <div class="no-transactions">
+            <mat-icon class="no-data-icon">battery_alert</mat-icon>
+            <h3>{{ translationService.getReactive('sessions.active.noActive') }}</h3>
+            <p>{{ translationService.getReactive('sessions.active.noActiveDescription') }}</p>
+          </div>
+        }
 
-      <!-- Transaction Cards -->
-      <div class="transactions-grid" *ngIf="activeTransactions().length > 0">
-        <mat-card class="transaction-card" *ngFor="let transaction of activeTransactions()">
-          <!-- Transaction Header -->
-          <mat-card-header>
-            <div class="card-header-content">
-              <div class="transaction-title">
-                <mat-icon>receipt</mat-icon>
-                <span class="transaction-id">{{ translationService.getReactive('sessions.active.transactionId') }} #{{ transaction.transaction_id }}</span>
-              </div>
-              <mat-chip [class]="'status-chip ' + getStatusClass(transaction.status)">
-                {{ transaction.status }}
-                <span 
-                  class="live-dot" 
-                  [class.live]="isCharging(transaction) && realtimeActive()"
-                  *ngIf="isCharging(transaction)">
-                </span>
-              </mat-chip>
-            </div>
-          </mat-card-header>
+        <!-- Transaction Cards -->
+        @if (activeTransactions().length > 0) {
+          <div class="transactions-grid">
+            @for (transaction of activeTransactions(); track transaction.transaction_id) {
+              <mat-card class="transaction-card">
+                <!-- Transaction Header -->
+                <mat-card-header>
+                  <div class="card-header-content">
+                    <div class="transaction-title">
+                      <mat-icon>receipt</mat-icon>
+                      <span class="transaction-id">{{ translationService.getReactive('sessions.active.transactionId') }} #{{ transaction.transaction_id }}</span>
+                    </div>
+                    <mat-chip [class]="'status-chip ' + getStatusClass(transaction.status)">
+                      {{ transaction.status }}
+                      @if (isCharging(transaction)) {
+                        <span 
+                          class="live-dot" 
+                          [class.live]="isCharging(transaction) && realtimeActive()">
+                        </span>
+                      }
+                    </mat-chip>
+                  </div>
+                </mat-card-header>
 
-          <mat-card-content>
-            <!-- Overview Section -->
-            <div class="overview-section">
-              <div class="overview-grid">
-                <div class="overview-item">
-                  <mat-icon>ev_station</mat-icon>
-                  <div class="item-content">
-                    <span class="item-label">{{ translationService.getReactive('sessions.active.station') }}</span>
-                    <span class="item-value">{{ transaction.charge_point_id }}</span>
+                <mat-card-content>
+                  <!-- Overview Section -->
+                  <div class="overview-section">
+                    <div class="overview-grid">
+                      <div class="overview-item">
+                        <mat-icon>ev_station</mat-icon>
+                        <div class="item-content">
+                          <span class="item-label">{{ translationService.getReactive('sessions.active.station') }}</span>
+                          <span class="item-value">{{ transaction.charge_point_id }}</span>
+                        </div>
+                      </div>
+                      <div class="overview-item">
+                        <mat-icon>power</mat-icon>
+                        <div class="item-content">
+                          <span class="item-label">{{ translationService.getReactive('sessions.active.connector') }}</span>
+                          <span class="item-value">{{ transaction.connector.connector_id_name }} ({{ transaction.connector.type }})</span>
+                        </div>
+                      </div>
+                      <div class="overview-item">
+                        <mat-icon>schedule</mat-icon>
+                        <div class="item-content">
+                          <span class="item-label">{{ translationService.getReactive('sessions.active.duration') }}</span>
+                          <span class="item-value">{{ formatDuration(calculateDurationFromStart(transaction.time_started)) }}</span>
+                        </div>
+                      </div>
+                      <div class="overview-item">
+                        <mat-icon>battery_charging_full</mat-icon>
+                        <div class="item-content">
+                          <span class="item-label">{{ translationService.getReactive('sessions.active.energyConsumed') }}</span>
+                          <span class="item-value">{{ formatEnergy(transaction.consumed || 0) }} kWh</span>
+                        </div>
+                      </div>
+                      <div class="overview-item">
+                        <mat-icon>euro_symbol</mat-icon>
+                        <div class="item-content">
+                          <span class="item-label">{{ translationService.getReactive('sessions.active.cost') }}</span>
+                          <span class="item-value">€{{ ((transaction.price || 0) / 100).toFixed(2) }}</span>
+                        </div>
+                      </div>
+                      <div class="overview-item">
+                        <mat-icon>flash_on</mat-icon>
+                        <div class="item-content">
+                          <span class="item-label">{{ translationService.getReactive('sessions.active.averagePower') }}</span>
+                          <span class="item-value">{{ calculateAveragePower(transaction.consumed || 0, calculateDurationFromStart(transaction.time_started)) }}</span>
+                        </div>
+                      </div>
+                      <div class="overview-item">
+                        <mat-icon>bolt</mat-icon>
+                        <div class="item-content">
+                          <span class="item-label">{{ translationService.getReactive('sessions.active.currentPower') }}</span>
+                          <span class="item-value">{{ ((transaction.power_rate || 0) / 1000).toFixed(1) }} kW</span>
+                        </div>
+                      </div>
+                      <div class="overview-item">
+                        <mat-icon>access_time</mat-icon>
+                        <div class="item-content">
+                          <span class="item-label">{{ translationService.getReactive('sessions.active.started') }}</span>
+                          <span class="item-value">{{ formatDateTime(transaction.time_started) }}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="overview-item">
-                  <mat-icon>power</mat-icon>
-                  <div class="item-content">
-                    <span class="item-label">{{ translationService.getReactive('sessions.active.connector') }}</span>
-                    <span class="item-value">{{ transaction.connector.connector_id_name }} ({{ transaction.connector.type }})</span>
-                  </div>
-                </div>
-                <div class="overview-item">
-                  <mat-icon>schedule</mat-icon>
-                  <div class="item-content">
-                    <span class="item-label">{{ translationService.getReactive('sessions.active.duration') }}</span>
-                    <span class="item-value">{{ formatDuration(calculateDurationFromStart(transaction.time_started)) }}</span>
-                  </div>
-                </div>
-                <div class="overview-item">
-                  <mat-icon>battery_charging_full</mat-icon>
-                  <div class="item-content">
-                    <span class="item-label">{{ translationService.getReactive('sessions.active.energyConsumed') }}</span>
-                    <span class="item-value">{{ formatEnergy(transaction.consumed || 0) }} kWh</span>
-                  </div>
-                </div>
-                <div class="overview-item">
-                  <mat-icon>euro_symbol</mat-icon>
-                  <div class="item-content">
-                    <span class="item-label">{{ translationService.getReactive('sessions.active.cost') }}</span>
-                    <span class="item-value">€{{ ((transaction.price || 0) / 100).toFixed(2) }}</span>
-                  </div>
-                </div>
-                <div class="overview-item">
-                  <mat-icon>flash_on</mat-icon>
-                  <div class="item-content">
-                    <span class="item-label">{{ translationService.getReactive('sessions.active.averagePower') }}</span>
-                    <span class="item-value">{{ calculateAveragePower(transaction.consumed || 0, calculateDurationFromStart(transaction.time_started)) }}</span>
-                  </div>
-                </div>
-                <div class="overview-item">
-                  <mat-icon>bolt</mat-icon>
-                  <div class="item-content">
-                    <span class="item-label">{{ translationService.getReactive('sessions.active.currentPower') }}</span>
-                    <span class="item-value">{{ ((transaction.power_rate || 0) / 1000).toFixed(1) }} kW</span>
-                  </div>
-                </div>
-                <div class="overview-item">
-                  <mat-icon>access_time</mat-icon>
-                  <div class="item-content">
-                    <span class="item-label">{{ translationService.getReactive('sessions.active.started') }}</span>
-                    <span class="item-value">{{ formatDateTime(transaction.time_started) }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <!-- Location Section -->
-            <div class="location-section" *ngIf="transaction.charge_point_address">
-              <mat-divider></mat-divider>
-              <div class="location-content">
-                <mat-icon>location_on</mat-icon>
-                <span>{{ transaction.charge_point_address }}</span>
-              </div>
-            </div>
+                  <!-- Location Section -->
+                  @if (transaction.charge_point_address) {
+                    <div class="location-section">
+                      <mat-divider></mat-divider>
+                      <div class="location-content">
+                        <mat-icon>location_on</mat-icon>
+                        <span>{{ transaction.charge_point_address }}</span>
+                      </div>
+                    </div>
+                  }
 
-            <!-- Power Chart Section -->
-            <div class="chart-section" *ngIf="hasMeterValues(transaction)">
-              <mat-divider></mat-divider>
-              <div class="chart-container">
-                <app-energy-chart [meterValues]="transaction.meter_values || []"></app-energy-chart>
-              </div>
-            </div>
+                  <!-- Power Chart Section -->
+                  @if (hasMeterValues(transaction)) {
+                    <div class="chart-section">
+                      <mat-divider></mat-divider>
+                      <div class="chart-container">
+                        <app-energy-chart [meterValues]="transaction.meter_values || []"></app-energy-chart>
+                      </div>
+                    </div>
+                  }
 
-            <!-- Stop Transaction Button -->
-            <div class="action-section" *ngIf="transaction.can_stop">
-              <mat-divider></mat-divider>
-              <div class="action-content">
-                <button 
-                  mat-raised-button 
-                  color="warn" 
-                  (click)="stopTransaction(transaction)"
-                  class="stop-transaction-button">
-                  <mat-icon>stop_circle</mat-icon>
-                  {{ translationService.getReactive('sessions.active.stopTransaction') }}
-                </button>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
+                  <!-- Stop Transaction Button -->
+                  @if (transaction.can_stop) {
+                    <div class="action-section">
+                      <mat-divider></mat-divider>
+                      <div class="action-content">
+                        <button 
+                          mat-raised-button 
+                          color="warn" 
+                          (click)="stopTransaction(transaction)"
+                          class="stop-transaction-button">
+                          <mat-icon>stop_circle</mat-icon>
+                          {{ translationService.getReactive('sessions.active.stopTransaction') }}
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+            }
+        </div>
+      }
     </div>
-  </div>
+    }
+    </div>
+  }
 </div>
