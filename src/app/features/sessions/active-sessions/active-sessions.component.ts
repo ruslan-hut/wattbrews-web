@@ -16,7 +16,6 @@ import { AuthService } from '../../../core/services/auth.service';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { WsCommand, WsResponse, ResponseStatus } from '../../../core/models/websocket.model';
 import { EnergyChartComponent } from '../../../shared/components/energy-chart/energy-chart.component';
-import { SmallMapComponent } from '../../../shared/components/small-map/small-map.component';
 
 @Component({
   selector: 'app-active-sessions',
@@ -30,8 +29,7 @@ import { SmallMapComponent } from '../../../shared/components/small-map/small-ma
     MatChipsModule,
     MatDividerModule,
     MatTooltipModule,
-    EnergyChartComponent,
-    SmallMapComponent
+    EnergyChartComponent
   ],
   templateUrl: './active-sessions.component.html',
   styleUrl: './active-sessions.component.scss'
@@ -61,7 +59,7 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
   // Subscription management
   private authSubscription?: Subscription;
   private apiSubscription?: Subscription;
-  private wsUnsubscribe?: () => void;
+  private wsSubscription?: Subscription;
   private authCheckTimeout?: any;
 
   ngOnInit(): void {
@@ -113,7 +111,7 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
    */
   private initializeWebSocketSubscriptions(): void {
     // Subscribe to transaction value updates for real-time metrics
-    this.wsUnsubscribe = this.websocketService.subscribeToStatus(
+    this.wsSubscription = this.websocketService.subscribeToStatus(
       ResponseStatus.Value,
       (message) => {
         this.handleTransactionValueUpdate(message);
@@ -170,27 +168,28 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
     }
     
     // Update consumed energy if provided
-    if (message.meter_value?.value !== undefined) {
+    if (message.meter_value && message.meter_value['value'] !== undefined) {
       // Calculate consumed from meter value
       const meterStart = transaction.meter_start || 0;
-      transaction.consumed = message.meter_value.value - meterStart;
+      transaction.consumed = message.meter_value['value'] - meterStart;
     }
     
     // Update meter values if provided
     if (message.meter_value) {
       const existingMeterValues = transaction.meter_values || [];
+      const meterValue = message.meter_value['value'] || 0;
       const newMeterValue = {
         transaction_id: transactionId,
-        value: message.meter_value.value || 0,
+        value: meterValue,
         power_rate: message.power_rate || 0,
         battery_level: message.soc || 0,
-        consumed_energy: message.meter_value.value ? message.meter_value.value - (transaction.meter_start || 0) : 0,
+        consumed_energy: meterValue ? meterValue - (transaction.meter_start || 0) : 0,
         price: message.price || 0,
         time: new Date().toISOString(),
         timestamp: Date.now(),
         minute: message.minute || 0,
-        unit: message.meter_value.unit || 'Wh',
-        measurand: message.meter_value.measurand || 'Energy.Active.Import.Register',
+        unit: message.meter_value['unit'] || 'Wh',
+        measurand: message.meter_value['measurand'] || 'Energy.Active.Import.Register',
         connector_id: message.connector_id || transaction.connector_id,
         connector_status: message.connector_status || transaction.status
       };
@@ -262,8 +261,8 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
     if (this.apiSubscription) {
       this.apiSubscription.unsubscribe();
     }
-    if (this.wsUnsubscribe) {
-      this.wsUnsubscribe();
+    if (this.wsSubscription) {
+      this.wsSubscription.unsubscribe();
     }
     if (this.authCheckTimeout) {
       clearTimeout(this.authCheckTimeout);
