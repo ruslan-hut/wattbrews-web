@@ -58,8 +58,8 @@
               <div 
                 class="connector-option"
                 [class.selected]="selectedConnector()?.connector_id === connector.connector_id"
-                [class.clickable]="connector.status === 'Available'"
-                [class.not-clickable]="connector.status !== 'Available'"
+                [class.clickable]="isAvailable(connector.status)"
+                [class.not-clickable]="!isAvailable(connector.status)"
                 (click)="selectConnector(connector)">
                 
                 <div class="connector-header">

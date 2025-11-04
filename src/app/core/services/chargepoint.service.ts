@@ -5,6 +5,7 @@ import { ApiService } from './api.service';
 import { ChargePoint, ChargePointFilters, ChargePointListResponse } from '../models/chargepoint.model';
 import { StationDetail } from '../models/station-detail.model';
 import { API_ENDPOINTS } from '../constants/app.constants';
+import { ConnectorUtils } from '../../shared/utils/connector.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class ChargePointService {
   );
 
   readonly availableChargePoints = computed(() => 
-    this._chargePoints().filter(cp => cp.status === 'Available')
+    this._chargePoints().filter(cp => ConnectorUtils.isAvailable(cp.status))
   );
 
   readonly enabledChargePoints = computed(() => 
@@ -43,7 +44,7 @@ export class ChargePointService {
 
   readonly availableConnectors = computed(() => 
     this._chargePoints().reduce((total, cp) => 
-      total + cp.connectors.filter(conn => conn.status === 'Available').length, 0
+      total + cp.connectors.filter(conn => ConnectorUtils.isAvailable(conn.status)).length, 0
     )
   );
 

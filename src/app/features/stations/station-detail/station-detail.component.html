@@ -184,7 +184,7 @@
           @for (connector of stationDetail()!.connectors | sortByConnectorId; track connector.connector_id) {
             <div 
               class="connector-item"
-              [class.available]="connector.status === 'Available'"
+              [class.available]="isAvailable(connector.status)"
               [class.occupied]="connector.status === 'Occupied'"
               [class.out-of-order]="connector.status === 'OutOfOrder'"
               [class.updated]="isConnectorUpdated(connector.connector_id)">

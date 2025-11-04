@@ -25,6 +25,7 @@ import { UserPaymentMethod, PaymentPlan } from '../../../core/models/user-info.m
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { TransactionStartDialogComponent } from '../../../shared/components/transaction-start-dialog/transaction-start-dialog.component';
+import { ConnectorUtils } from '../../../shared/utils/connector.utils';
 
 @Component({
   selector: 'app-charge-initiation',
@@ -88,13 +89,14 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
   );
   
   readonly availableConnectors = computed(() => 
-    this._stationDetail()?.connectors.filter(c => c.status === 'Available') || []
+    this._stationDetail()?.connectors.filter(c => ConnectorUtils.isAvailable(c.status)) || []
   );
   
   readonly canStartCharge = computed(() => 
     this.selectedConnector() !== null && 
     this.selectedPaymentMethod() !== null &&
-    this.selectedConnector()?.status === 'Available'
+    this.selectedConnector() !== null &&
+    ConnectorUtils.isAvailable(this.selectedConnector()!.status)
   );
 
   ngOnInit() {
@@ -202,7 +204,7 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
 
   selectConnector(connector: StationDetail['connectors'][0]) {
     // Only allow selection of available connectors
-    if (connector.status === 'Available') {
+    if (ConnectorUtils.isAvailable(connector.status)) {
       this._selectedConnector.set(connector);
     }
   }
@@ -274,7 +276,7 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
     const station = this.stationDetail();
     if (!station) return 'help';
     if (!station.is_online) return 'wifi_off';
-    const availableConnectors = station.connectors.filter(c => c.status === 'Available').length;
+    const availableConnectors = station.connectors.filter(c => ConnectorUtils.isAvailable(c.status)).length;
     return availableConnectors > 0 ? 'check_circle' : 'warning';
   }
 
@@ -282,7 +284,7 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
     const station = this.stationDetail();
     if (!station) return '';
     if (!station.is_online) return 'status-offline';
-    const availableConnectors = station.connectors.filter(c => c.status === 'Available').length;
+    const availableConnectors = station.connectors.filter(c => ConnectorUtils.isAvailable(c.status)).length;
     return availableConnectors > 0 ? 'status-available' : 'status-unavailable-yellow';
   }
 
@@ -302,6 +304,10 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
 
   getConnectorDisplayName(connector: StationDetail['connectors'][0]): string {
     return connector.connector_id_name || connector.connector_id.toString();
+  }
+
+  isAvailable(status: string): boolean {
+    return ConnectorUtils.isAvailable(status);
   }
 
   startCharge() {

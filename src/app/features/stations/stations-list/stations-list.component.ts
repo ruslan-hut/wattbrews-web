@@ -20,6 +20,7 @@ import { WsCommand } from '../../../core/models/websocket.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
+import { ConnectorUtils } from '../../../shared/utils/connector.utils';
 
 @Pipe({
   name: 'sortByConnectorId',
@@ -229,7 +230,7 @@ export class StationsListComponent implements OnInit, OnDestroy {
   }
 
   getAvailableConnectors(station: ChargePoint): number {
-    return station.connectors.filter(connector => connector.status === 'Available').length;
+    return station.connectors.filter(connector => ConnectorUtils.isAvailable(connector.status)).length;
   }
 
   getConnectorStatusClass(status: string): string {

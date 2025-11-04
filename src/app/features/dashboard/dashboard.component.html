@@ -42,7 +42,7 @@
             *ngFor="let cp of recentChargePoints()"
             [class.clickable]="hasViewDetailsAccess()"
             (click)="onCardClick(cp.charge_point_id)">
-            <div class="charge-point-status-indicator" [class.available]="cp.status === 'Available'" [class.busy]="cp.status !== 'Available'"></div>
+            <div class="charge-point-status-indicator" [class.available]="isAvailable(cp.status)" [class.busy]="!isAvailable(cp.status)"></div>
             <div class="charge-point-info">
               <h4 class="charge-point-title">{{ cp.title }}</h4>
               <p class="charge-point-address">{{ cp.address }}</p>

@@ -21,6 +21,7 @@ import { SmallMapComponent } from '../../../shared/components/small-map/small-ma
 import { TransactionPreviewComponent } from '../../../shared/components/transaction-preview/transaction-preview.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 import { DateUtils } from '../../../shared/utils/date.utils';
+import { ConnectorUtils } from '../../../shared/utils/connector.utils';
 
 @Pipe({
   name: 'sortByConnectorId',
@@ -229,7 +230,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     const station = this.stationDetail();
     if (!station) return 'help';
     if (!station.is_online) return 'wifi_off';
-    const availableConnectors = station.connectors.filter(c => c.status === 'Available').length;
+    const availableConnectors = station.connectors.filter(c => ConnectorUtils.isAvailable(c.status)).length;
     return availableConnectors > 0 ? 'check_circle' : 'warning';
   }
 
@@ -237,7 +238,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     const station = this.stationDetail();
     if (!station) return '';
     if (!station.is_online) return 'status-offline';
-    const availableConnectors = station.connectors.filter(c => c.status === 'Available').length;
+    const availableConnectors = station.connectors.filter(c => ConnectorUtils.isAvailable(c.status)).length;
     return availableConnectors > 0 ? 'status-available' : 'status-unavailable-yellow';
   }
 
@@ -285,7 +286,11 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   hasAvailableConnectors(): boolean {
     const station = this.stationDetail();
     if (!station) return false;
-    return station.connectors.some(connector => connector.status === 'Available');
+    return station.connectors.some(connector => ConnectorUtils.isAvailable(connector.status));
+  }
+
+  isAvailable(status: string): boolean {
+    return ConnectorUtils.isAvailable(status);
   }
 
   startCharge(): void {

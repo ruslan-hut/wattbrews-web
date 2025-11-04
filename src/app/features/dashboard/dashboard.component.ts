@@ -19,6 +19,7 @@ import { Transaction } from '../../core/models/transaction.model';
 import { WsCommand, WsResponse, ResponseStage } from '../../core/models/websocket.model';
 import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
+import { ConnectorUtils } from '../../shared/utils/connector.utils';
 
 @Pipe({
   name: 'sortByConnectorId',
@@ -167,7 +168,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   
   protected getAvailableConnectors(chargePoint: ChargePoint): number {
-    return chargePoint.connectors.filter(conn => conn.status === 'Available').length;
+    return chargePoint.connectors.filter(conn => ConnectorUtils.isAvailable(conn.status)).length;
+  }
+
+  protected isAvailable(status: string): boolean {
+    return ConnectorUtils.isAvailable(status);
   }
 
   protected getConnectorStatusClass(status: string): string {
@@ -232,7 +237,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   protected startChargingSession(chargePoint: ChargePoint): void {
-    if (chargePoint.is_enabled && chargePoint.status === 'Available') {
+    if (chargePoint.is_enabled && ConnectorUtils.isAvailable(chargePoint.status)) {
       // Navigate to station detail or start charging flow
       // TODO: Implement charging session start logic
     }
