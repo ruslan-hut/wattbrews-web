@@ -1,134 +1,166 @@
 <div class="stations-list-container">
   <!-- Translation Loading State -->
-  <div class="loading-container" *ngIf="translationsLoading()">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>Loading translations...</p>
-  </div>
+  @if (translationsLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading translations...</p>
+    </div>
+  }
 
   <!-- Content (only show when translations are loaded) -->
-  <div *ngIf="!translationsLoading()">
-    <div class="page-header">
-      <h1 class="page-title">{{ translationService.getReactive('stations.title') }}</h1>
-      <p class="page-subtitle">{{ translationService.getReactive('stations.subtitle') }}</p>
+  @if (!translationsLoading()) {
+    <div>
+      <div class="page-header">
+        <h1 class="page-title">
+          {{ translationService.getReactive('stations.title') }}
+          <span
+            class="realtime-indicator"
+            [class.active]="realtimeActive()"
+            aria-hidden="true"
+          ></span>
+        </h1>
+        <p class="page-subtitle">{{ translationService.getReactive('stations.subtitle') }}</p>
+      </div>
+
+      <!-- Authentication Required Message -->
+      @if (!isAuthenticated()) {
+        <div class="auth-required-message">
+          <mat-icon class="auth-icon">lock</mat-icon>
+          <h3>{{ translationService.getReactive('profile.authRequired') }}</h3>
+          <p>{{ translationService.getReactive('profile.authRequiredMessage') }}</p>
+          <button mat-raised-button color="primary" (click)="navigateToLogin()">
+            <mat-icon>login</mat-icon>
+            {{ translationService.getReactive('common.buttons.signIn') }}
+          </button>
+        </div>
+      }
+
+      <!-- Search Section -->
+      @if (isAuthenticated()) {
+        <div class="search-section">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>{{ translationService.getReactive('stations.searchLabel') }}</mat-label>
+            <input
+              matInput
+              [(ngModel)]="searchQuery"
+              (input)="onSearchChange()"
+              [placeholder]="translationService.getReactive('stations.searchPlaceholder')"
+              autocomplete="off">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+      }
+
+      <!-- Loading State -->
+      @if (isAuthenticated() && loading()) {
+        <div class="loading-container">
+          <app-loading-spinner></app-loading-spinner>
+          <p>{{ translationService.getReactive('stations.loadingStations') }}</p>
+        </div>
+      }
+
+      <!-- Error State -->
+      @if (isAuthenticated() && error() && !loading()) {
+        <div class="error-container">
+          <app-error-message [message]="error()!"></app-error-message>
+          <button mat-raised-button color="primary" (click)="loadStations()">
+            <mat-icon>refresh</mat-icon>
+            {{ translationService.getReactive('common.buttons.tryAgain') }}
+          </button>
+        </div>
+      }
+
+      <!-- Stations List -->
+      @if (isAuthenticated() && !loading() && !error()) {
+        <div class="stations-grid">
+          @for (station of filteredStations(); track station.charge_point_id) {
+            <mat-card
+              class="station-card"
+              [class.offline]="!station.is_online"
+              [class.disabled]="!station.is_enabled"
+              [class.updated]="isStationUpdated(station.charge_point_id)">
+
+              <mat-card-header>
+                <div mat-card-avatar class="station-status-icon">
+                  <mat-icon [class]="getStatusIconClass(station)">{{ getStatusIcon(station) }}</mat-icon>
+                </div>
+                <mat-card-title class="station-title">{{ station.title }}</mat-card-title>
+                <mat-card-subtitle class="station-address">{{ station.address }}</mat-card-subtitle>
+              </mat-card-header>
+
+              <mat-card-content>
+                <div class="station-info">
+                  <div class="info-row">
+                    <mat-icon class="info-icon">location_on</mat-icon>
+                    <span class="info-text">{{ station.vendor }} {{ station.model }}</span>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon class="info-icon">electrical_services</mat-icon>
+                    <span class="info-text">
+                      {{ getAvailableConnectors(station) }}
+                      {{ translationService.getReactive('stations.ofConnectorsAvailable').replace('{{total}}', station.connectors.length.toString()) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="connectors-section">
+                  <h4>{{ translationService.getReactive('stations.connectors') }}</h4>
+                  <div class="connectors-list">
+                    @for (connector of station.connectors | sortByConnectorId; track connector.connector_id) {
+                      <mat-chip
+                        [class]="getConnectorStatusClass(connector.status)"
+                        class="connector-chip">
+                        <mat-icon class="chip-icon">{{ getConnectorTypeIcon(connector.type) }}</mat-icon>
+                        {{ (connector.connector_id_name || connector.connector_id) }} - {{ connector.type }} - {{ connector.power }}{{ translationService.getReactive('common.units.kW') }}
+                      </mat-chip>
+                    }
+                  </div>
+                </div>
+              </mat-card-content>
+
+              <mat-card-actions class="station-card-actions">
+                <button
+                  mat-button
+                  color="accent"
+                  [disabled]="!canStartCharge(station)"
+                  [matTooltip]="getStartChargeTooltip(station)"
+                  (click)="startCharge(station.charge_point_id)">
+                  <mat-icon>play_arrow</mat-icon>
+                  {{ translationService.getReactive('stations.startCharge') }}
+                </button>
+                <button
+                  mat-button
+                  color="primary"
+                  [disabled]="!hasViewDetailsAccess()"
+                  [matTooltip]="getViewDetailsTooltip(station)"
+                  (click)="viewStationDetails(station.charge_point_id)">
+                  <mat-icon>visibility</mat-icon>
+                  {{ translationService.getReactive('stations.viewDetails') }}
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          }
+        </div>
+      }
+
+      <!-- Empty State -->
+      @if (isAuthenticated() && !loading() && !error() && filteredStations().length === 0) {
+        <div class="empty-state">
+          <mat-icon class="empty-icon">ev_station</mat-icon>
+          <h3>{{ translationService.getReactive('stations.noStationsFound') }}</h3>
+          @if (searchQuery) {
+            <p>{{ translationService.getReactive('stations.tryAdjustingSearch') }}</p>
+          } @else {
+            <p>{{ translationService.getReactive('stations.noStationsAvailable') }}</p>
+          }
+          @if (searchQuery) {
+            <button mat-raised-button color="primary" (click)="clearSearch()">
+              {{ translationService.getReactive('common.buttons.clearSearch') }}
+            </button>
+          }
+        </div>
+      }
     </div>
-
-  <!-- Authentication Required Message -->
-  <div class="auth-required-message" *ngIf="!isAuthenticated()">
-    <mat-icon class="auth-icon">lock</mat-icon>
-    <h3>{{ translationService.getReactive('profile.authRequired') }}</h3>
-    <p>{{ translationService.getReactive('profile.authRequiredMessage') }}</p>
-    <button mat-raised-button color="primary" (click)="navigateToLogin()">
-      <mat-icon>login</mat-icon>
-      {{ translationService.getReactive('common.buttons.signIn') }}
-    </button>
-  </div>
-
-  <!-- Search Section -->
-  <div class="search-section" *ngIf="isAuthenticated()">
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>{{ translationService.getReactive('stations.searchLabel') }}</mat-label>
-      <input 
-        matInput 
-        [(ngModel)]="searchQuery" 
-        (input)="onSearchChange()"
-        [placeholder]="translationService.getReactive('stations.searchPlaceholder')"
-        autocomplete="off">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-  </div>
-
-  <!-- Loading State -->
-  <div class="loading-container" *ngIf="isAuthenticated() && loading()">
-    <app-loading-spinner></app-loading-spinner>
-    <p>{{ translationService.getReactive('stations.loadingStations') }}</p>
-  </div>
-
-  <!-- Error State -->
-  <div class="error-container" *ngIf="isAuthenticated() && error() && !loading()">
-    <app-error-message [message]="error()!"></app-error-message>
-    <button mat-raised-button color="primary" (click)="loadStations()">
-      <mat-icon>refresh</mat-icon>
-      {{ translationService.getReactive('common.buttons.tryAgain') }}
-    </button>
-  </div>
-
-  <!-- Stations List -->
-  <div class="stations-grid" *ngIf="isAuthenticated() && !loading() && !error()">
-    <mat-card 
-      *ngFor="let station of filteredStations(); trackBy: trackByStationId" 
-      class="station-card"
-      [class.offline]="!station.is_online"
-      [class.disabled]="!station.is_enabled">
-      
-      <mat-card-header>
-        <div mat-card-avatar class="station-status-icon">
-          <mat-icon [class]="getStatusIconClass(station)">{{ getStatusIcon(station) }}</mat-icon>
-        </div>
-        <mat-card-title class="station-title">{{ station.title }}</mat-card-title>
-        <mat-card-subtitle class="station-address">{{ station.address }}</mat-card-subtitle>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div class="station-info">
-          <div class="info-row">
-            <mat-icon class="info-icon">location_on</mat-icon>
-            <span class="info-text">{{ station.vendor }} {{ station.model }}</span>
-          </div>
-          
-          
-          <div class="info-row">
-            <mat-icon class="info-icon">electrical_services</mat-icon>
-            <span class="info-text">{{ getAvailableConnectors(station) }} {{ translationService.getReactive('stations.ofConnectorsAvailable').replace('{{total}}', station.connectors.length.toString()) }}</span>
-          </div>
-        </div>
-
-        <div class="connectors-section">
-          <h4>{{ translationService.getReactive('stations.connectors') }}</h4>
-          <div class="connectors-list">
-            <mat-chip 
-              *ngFor="let connector of station.connectors | sortByConnectorId" 
-              [class]="getConnectorStatusClass(connector.status)"
-              class="connector-chip">
-              <mat-icon class="chip-icon">{{ getConnectorTypeIcon(connector.type) }}</mat-icon>
-              {{ (connector.connector_id_name || connector.connector_id) }} - {{ connector.type }} - {{ connector.power }}{{ translationService.getReactive('common.units.kW') }}
-            </mat-chip>
-          </div>
-        </div>
-      </mat-card-content>
-
-      <mat-card-actions class="station-card-actions">
-        <button 
-          mat-button 
-          color="accent" 
-          [disabled]="!canStartCharge(station)"
-          [matTooltip]="getStartChargeTooltip(station)"
-          (click)="startCharge(station.charge_point_id)">
-          <mat-icon>play_arrow</mat-icon>
-          {{ translationService.getReactive('stations.startCharge') }}
-        </button>
-        <button 
-          mat-button 
-          color="primary" 
-          [disabled]="!hasViewDetailsAccess()"
-          [matTooltip]="getViewDetailsTooltip(station)"
-          (click)="viewStationDetails(station.charge_point_id)">
-          <mat-icon>visibility</mat-icon>
-          {{ translationService.getReactive('stations.viewDetails') }}
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-
-  <!-- Empty State -->
-  <div class="empty-state" *ngIf="isAuthenticated() && !loading() && !error() && filteredStations().length === 0">
-    <mat-icon class="empty-icon">ev_station</mat-icon>
-    <h3>{{ translationService.getReactive('stations.noStationsFound') }}</h3>
-    <p *ngIf="searchQuery">{{ translationService.getReactive('stations.tryAdjustingSearch') }}</p>
-    <p *ngIf="!searchQuery">{{ translationService.getReactive('stations.noStationsAvailable') }}</p>
-    <button mat-raised-button color="primary" (click)="clearSearch()" *ngIf="searchQuery">
-      {{ translationService.getReactive('common.buttons.clearSearch') }}
-    </button>
-  </div>
-  </div>
+  }
 </div>
 
