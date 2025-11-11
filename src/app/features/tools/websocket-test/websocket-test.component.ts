@@ -319,7 +319,7 @@ export class WebsocketTestComponent implements OnInit {
       case WsCommand.StartTransaction:
         return ['charge_point_id', 'connector_id'];
       case WsCommand.StopTransaction:
-        return ['transaction_id'];
+        return ['charge_point_id', 'connector_id', 'transaction_id'];
       case WsCommand.ListenTransaction:
       case WsCommand.StopListenTransaction:
         return ['transaction_id'];

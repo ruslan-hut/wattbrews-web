@@ -433,7 +433,9 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(TransactionStopDialogComponent, {
       data: {
         transactionId: transaction.transaction_id,
-        stationTitle: transaction.charge_point_title
+        stationTitle: transaction.charge_point_title,
+        chargePointId: transaction.charge_point_id,
+        connectorId: transaction.connector_id
       },
       disableClose: true, // Prevent closing by clicking outside
       width: '500px',

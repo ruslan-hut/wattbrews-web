@@ -12,6 +12,8 @@ import { WsCommand, WsResponse, ResponseStatus, ResponseStage } from '../../../c
 export interface TransactionStopDialogData {
   transactionId: number;
   stationTitle: string;
+  chargePointId: string;
+  connectorId: number;
 }
 
 interface TransactionStopState {
@@ -92,8 +94,16 @@ export class TransactionStopDialogComponent implements OnInit, OnDestroy {
       this.subscribeToMessages();
 
       // Send StopTransaction command
+      const payload = this.data();
+
+      if (!payload.chargePointId || payload.connectorId === undefined || payload.connectorId === null) {
+        throw new Error('Missing charge point data for StopTransaction command');
+      }
+
       await this.wsService.sendCommand(WsCommand.StopTransaction, {
-        transaction_id: this.data().transactionId
+        charge_point_id: payload.chargePointId,
+        connector_id: payload.connectorId,
+        transaction_id: payload.transactionId
       });
 
       // Update state to waiting
