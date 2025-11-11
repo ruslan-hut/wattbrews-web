@@ -258,14 +258,15 @@ mat-card-header {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: var(--energy-warning, #f59e0b);
+  background-color: inherit;
   display: inline-block;
   margin-left: var(--energy-space-xs);
   flex-shrink: 0;
 
-  &.live {
+  &.active {
     background-color: var(--energy-success, #10b981);
     animation: pulse-dot 2s ease-in-out infinite;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
   }
 }
 

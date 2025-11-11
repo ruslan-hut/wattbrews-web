@@ -86,10 +86,11 @@
                     <mat-chip [class]="'status-chip ' + getStatusClass(transaction.status)">
                       {{ transaction.status }}
                       @if (isCharging(transaction)) {
-                        <span 
-                          class="live-dot" 
-                          [class.live]="isCharging(transaction) && realtimeActive()">
-                        </span>
+                        <span
+                          class="live-dot"
+                          [class.active]="realtimeActive()"
+                          aria-hidden="true"
+                        ></span>
                       }
                     </mat-chip>
                   </div>

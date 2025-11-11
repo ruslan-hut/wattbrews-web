@@ -157,9 +157,16 @@ export class TransactionService {
   /**
    * Load active transactions from the API
    */
-  loadActiveTransactions(): Observable<TransactionDetail[]> {
-    this._loading.set(true);
-    this._error.set(null);
+  loadActiveTransactions(options?: { showLoading?: boolean; suppressError?: boolean }): Observable<TransactionDetail[]> {
+    const showLoading = options?.showLoading ?? true;
+    const suppressError = options?.suppressError ?? false;
+    
+    if (showLoading) {
+      this._loading.set(true);
+    }
+    if (!suppressError) {
+      this._error.set(null);
+    }
     
     return this.apiService.getArray<TransactionDetail>('/transactions/active').pipe(
       tap(activeTransactions => {
@@ -167,7 +174,9 @@ export class TransactionService {
         this._loading.set(false);
       }),
       catchError(error => {
-        this._error.set(error.message || 'Failed to load active transactions');
+        if (!suppressError) {
+          this._error.set(error.message || 'Failed to load active transactions');
+        }
         this._loading.set(false);
         throw error;
       })

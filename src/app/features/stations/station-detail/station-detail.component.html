@@ -8,7 +8,11 @@
       <div class="header-content">
         <h1 class='page-title'>
           {{ translationService.getReactive('stationDetail.title') }}
-          <span class="realtime-indicator" *ngIf="realtimeActive()"></span>
+          <span
+            class="realtime-indicator"
+            [class.active]="realtimeActive()"
+            aria-hidden="true"
+          ></span>
         </h1>
         @if (stationDetail()) {
           <p class="page-subtitle">{{ stationDetail()!.title }}</p>

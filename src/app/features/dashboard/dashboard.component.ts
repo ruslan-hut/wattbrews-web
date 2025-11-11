@@ -17,7 +17,7 @@ import { WebsocketService } from '../../core/services/websocket.service';
 import { ChargePoint, ChargePointConnector } from '../../core/models/chargepoint.model';
 import { Transaction } from '../../core/models/transaction.model';
 import { TransactionDetail } from '../../core/models/transaction-detail.model';
-import { WsCommand, WsResponse, ResponseStage } from '../../core/models/websocket.model';
+import { WsCommand, WsResponse, ResponseStage, ResponseStatus } from '../../core/models/websocket.model';
 import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 import { ConnectorUtils } from '../../shared/utils/connector.utils';
@@ -71,7 +71,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   
   // Subscription management
   private authSubscription?: Subscription;
-  private websocketSubscription?: Subscription;
+  private readonly websocketSubscriptions = new Subscription();
+  private readonly listeningTransactionIds = new Set<number>();
+  private websocketInitialized = false;
   
   protected readonly totalSessions = signal(24);
   protected readonly totalEnergy = signal(156.8);
@@ -100,18 +102,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Note: WebSocket is already connected globally
    */
   private initializeWebSocketSubscriptions(): void {
+    if (this.websocketInitialized) {
+      return;
+    }
+    
+    this.websocketInitialized = true;
+    
     // Subscribe to charge-point events
     this.websocketService.sendCommand(WsCommand.ListenChargePoints).catch(error => {
       console.error('[Dashboard] Failed to subscribe to charge points:', error);
     });
     
     // Listen for charge-point events
-    this.websocketSubscription = this.websocketService.subscribeToStage(
+    const chargePointSubscription = this.websocketService.subscribeToStage(
       ResponseStage.ChargePointEvent,
       (message) => {
         this.handleChargePointEvent(message);
       }
     );
+    
+    const transactionValueSubscription = this.websocketService.subscribeToStatus(
+      ResponseStatus.Value,
+      (message) => {
+        this.handleTransactionValueUpdate(message);
+      }
+    );
+    
+    this.websocketSubscriptions.add(chargePointSubscription);
+    this.websocketSubscriptions.add(transactionValueSubscription);
   }
   
   /**
@@ -156,9 +174,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.authSubscription.unsubscribe();
     }
     
-    if (this.websocketSubscription) {
-      this.websocketSubscription.unsubscribe();
-    }
+    this.stopListeningToAllTransactions();
+    this.websocketSubscriptions.unsubscribe();
   }
   
   protected recentChargePoints(): ChargePoint[] {
@@ -319,7 +336,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private loadActiveTransactions(): void {
     this.transactionService.loadActiveTransactions().subscribe({
       next: (activeTransactions) => {
-        // Active transactions loaded successfully
+        this.handleActiveTransactionsUpdate(activeTransactions);
       },
       error: (error) => {
         // Error loading active transactions - handled by service
@@ -432,5 +449,66 @@ export class DashboardComponent implements OnInit, OnDestroy {
         // Failed to load user info - handled by service
       }
     });
+  }
+
+  private handleTransactionValueUpdate(message: WsResponse): void {
+    if (!message.id || !this.listeningTransactionIds.has(message.id)) {
+      return;
+    }
+    
+    this.realtimeActive.set(true);
+    setTimeout(() => this.realtimeActive.set(false), 2000);
+    
+    this.transactionService.loadActiveTransactions({ showLoading: false, suppressError: true }).subscribe({
+      next: (activeTransactions) => {
+        this.handleActiveTransactionsUpdate(activeTransactions);
+      },
+      error: (error) => {
+        console.error('[Dashboard] Failed to refresh active transactions after update:', error);
+      }
+    });
+  }
+
+  private handleActiveTransactionsUpdate(activeTransactions: TransactionDetail[]): void {
+    const nextIds = new Set<number>(activeTransactions.map(transaction => transaction.transaction_id));
+    const previousIds = new Set<number>(this.listeningTransactionIds);
+    
+    activeTransactions.forEach(transaction => {
+      if (!previousIds.has(transaction.transaction_id)) {
+        this.websocketService.sendCommand(
+          WsCommand.ListenTransaction,
+          { transaction_id: transaction.transaction_id }
+        ).catch(error => {
+          console.error(`[Dashboard] Failed to listen to transaction ${transaction.transaction_id}:`, error);
+        });
+      }
+    });
+    
+    previousIds.forEach(transactionId => {
+      if (!nextIds.has(transactionId)) {
+        this.websocketService.sendCommand(
+          WsCommand.StopListenTransaction,
+          { transaction_id: transactionId }
+        ).catch(error => {
+          console.error(`[Dashboard] Failed to stop listening to transaction ${transactionId}:`, error);
+        });
+      }
+    });
+    
+    this.listeningTransactionIds.clear();
+    nextIds.forEach(transactionId => this.listeningTransactionIds.add(transactionId));
+  }
+
+  private stopListeningToAllTransactions(): void {
+    this.listeningTransactionIds.forEach(transactionId => {
+      this.websocketService.sendCommand(
+        WsCommand.StopListenTransaction,
+        { transaction_id: transactionId }
+      ).catch(error => {
+        console.error(`[Dashboard] Failed to stop listening to transaction ${transactionId} on destroy:`, error);
+      });
+    });
+    
+    this.listeningTransactionIds.clear();
   }
 }
