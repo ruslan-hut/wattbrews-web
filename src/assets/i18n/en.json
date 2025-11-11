@@ -303,6 +303,7 @@
       "realtime": "Live",
       "noActive": "No Active Sessions",
       "noActiveDescription": "You don't have any active charging sessions at the moment.",
+      "goToDashboard": "Go to Dashboard",
       "transactionId": "Transaction",
       "station": "Station",
       "connector": "Connector",

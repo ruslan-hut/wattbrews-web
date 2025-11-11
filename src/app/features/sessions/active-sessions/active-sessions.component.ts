@@ -271,6 +271,10 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
     this.router.navigate(['/auth/login']);
   }
 
+  protected navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
   ngOnDestroy(): void {
     // Clean up subscriptions and timeout
     if (this.authSubscription) {

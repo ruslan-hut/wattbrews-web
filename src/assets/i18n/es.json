@@ -306,6 +306,7 @@
       "realtime": "En Vivo",
       "noActive": "No Hay Sesiones Activas",
       "noActiveDescription": "No tienes ninguna sesión de carga activa en este momento.",
+      "goToDashboard": "Ir al Panel",
       "transactionId": "Transacción",
       "station": "Estación",
       "connector": "Conector",

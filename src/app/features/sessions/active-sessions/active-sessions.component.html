@@ -68,6 +68,14 @@
             <mat-icon class="no-data-icon">battery_alert</mat-icon>
             <h3>{{ translationService.getReactive('sessions.active.noActive') }}</h3>
             <p>{{ translationService.getReactive('sessions.active.noActiveDescription') }}</p>
+            <button
+              mat-raised-button
+              color="primary"
+              class="go-dashboard-button"
+              (click)="navigateToDashboard()">
+              <mat-icon>dashboard</mat-icon>
+              {{ translationService.getReactive('sessions.active.goToDashboard') }}
+            </button>
           </div>
         }
 
