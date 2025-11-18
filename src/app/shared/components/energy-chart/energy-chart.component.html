@@ -130,25 +130,25 @@
     <div class="chart-legend">
     <div class="legend-item">
       <div class="legend-color energy"></div>
-      <span class="legend-text">Consumed Energy (Wh)</span>
+      <span class="legend-text">Consumed Energy (kWh)</span>
     </div>
     <div class="legend-item">
       <div class="legend-color power"></div>
-      <span class="legend-text">Power Level (W)</span>
+      <span class="legend-text">Power Level (kW)</span>
     </div>
     </div>
   }
   
   <!-- Tooltip -->
-  <div class="chart-tooltip" 
-       [style.left.px]="tooltipX()" 
+  <div class="chart-tooltip"
+       [style.left.px]="tooltipX()"
        [style.top.px]="tooltipY()"
        [style.display]="showTooltip() ? 'block' : 'none'">
     <div class="tooltip-content">
       <div class="tooltip-time">{{ tooltipTime() }}</div>
-      <div class="tooltip-value">{{ tooltipValue() }} Wh</div>
+      <div class="tooltip-value">{{ tooltipEnergyKwh() }} kWh</div>
       @if (tooltipPower() > 0) {
-        <div class="tooltip-power">{{ tooltipPower() }} W</div>
+        <div class="tooltip-power">{{ tooltipPowerKw() }} kW</div>
       }
     </div>
   </div>

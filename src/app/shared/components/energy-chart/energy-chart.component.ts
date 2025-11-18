@@ -41,6 +41,8 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
   tooltipTime = signal('');
   tooltipValue = signal('');
   tooltipPower = signal(0);
+  tooltipEnergyKwh = signal('');
+  tooltipPowerKw = signal('');
   hoverLine = signal({ x: 0, y: 0 });
   hoverPoint = signal({ x: 0, y: 0 });
 
@@ -350,6 +352,12 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
       this.tooltipTime.set(`${tooltipHours}:${tooltipMinutes}`);
       this.tooltipValue.set(closestPoint.value.toLocaleString());
       this.tooltipPower.set(closestPoint.power);
+
+      // Convert to kWh and kW
+      const energyKwh = closestPoint.value / 1000;
+      const powerKw = closestPoint.power / 1000;
+      this.tooltipEnergyKwh.set(energyKwh.toFixed(1));
+      this.tooltipPowerKw.set(powerKw.toFixed(1));
 
       this.hoverLine.set({ x: closestPoint.x, y: closestPoint.y });
       this.hoverPoint.set({ x: closestPoint.x, y: closestPoint.y });
