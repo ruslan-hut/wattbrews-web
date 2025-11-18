@@ -338,27 +338,29 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
       }
     });
 
-    if (closestPoint !== null && minDistance < 50) {
+    if (closestPoint && minDistance < 50) {
+      // TypeScript now knows closestPoint is ChartDataPoint (not null)
+      const point = closestPoint;
       this.showTooltip.set(true);
       this.tooltipX.set(event.clientX);
       this.tooltipY.set(event.clientY);
       // Format tooltip time in 24-hour format
-      const tooltipDate = new Date(closestPoint.time);
+      const tooltipDate = new Date(point.time);
       const tooltipHours = tooltipDate.getHours().toString().padStart(2, '0');
       const tooltipMinutes = tooltipDate.getMinutes().toString().padStart(2, '0');
       this.tooltipTime.set(`${tooltipHours}:${tooltipMinutes}`);
-      this.tooltipValue.set(closestPoint.value.toLocaleString());
-      this.tooltipPower.set(closestPoint.power);
+      this.tooltipValue.set(point.value.toLocaleString());
+      this.tooltipPower.set(point.power);
 
-      this.hoverLine.set({ x: closestPoint.x, y: closestPoint.y });
-      this.hoverPoint.set({ x: closestPoint.x, y: closestPoint.y });
+      this.hoverLine.set({ x: point.x, y: point.y });
+      this.hoverPoint.set({ x: point.x, y: point.y });
 
       // Update both energy and power data points to show hover state
-      const closestX = closestPoint.x;
+      const closestX = point.x;
       this.energyDataPoints.set(
         this.energyDataPoints().map(p => ({
           ...p,
-          hovered: p === closestPoint
+          hovered: p === point
         }))
       );
       
