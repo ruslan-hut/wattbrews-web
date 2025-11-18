@@ -1,12 +1,15 @@
 <div class="chart-container" #chartContainer>
   <!-- No data message -->
-  <div class="no-data-message" *ngIf="!meterValues || meterValues.length === 0">
-    <mat-icon>show_chart</mat-icon>
-    <p>No energy consumption data available</p>
-  </div>
+  @if (!meterValues() || meterValues().length === 0) {
+    <div class="no-data-message">
+      <mat-icon>show_chart</mat-icon>
+      <p>No energy consumption data available</p>
+    </div>
+  }
   
   <!-- SVG Chart -->
-  <svg *ngIf="meterValues && meterValues.length > 0"
+  @if (meterValues() && meterValues().length > 0) {
+    <svg
        class="chart-svg"
        [attr.width]="chartWidth()"
        [attr.height]="chartHeight()"
@@ -18,20 +21,22 @@
     <!-- Grid lines -->
     <g class="grid">
       <!-- Vertical grid lines -->
-      <line *ngFor="let x of gridLines().vertical; let i = index"
-            [attr.x1]="x"
-            [attr.y1]="padding.top"
-            [attr.x2]="x"
-            [attr.y2]="chartHeight() - padding.bottom"
-            class="grid-line" />
+      @for (x of gridLines().vertical; track i; let i = $index) {
+        <line [attr.x1]="x"
+              [attr.y1]="padding.top"
+              [attr.x2]="x"
+              [attr.y2]="chartHeight() - padding.bottom"
+              class="grid-line" />
+      }
       
       <!-- Horizontal grid lines -->
-      <line *ngFor="let y of gridLines().horizontal; let i = index"
-            [attr.x1]="padding.left"
-            [attr.y1]="y"
-            [attr.x2]="chartWidth() - padding.right"
-            [attr.y2]="y"
-            class="grid-line" />
+      @for (y of gridLines().horizontal; track i; let i = $index) {
+        <line [attr.x1]="padding.left"
+              [attr.y1]="y"
+              [attr.x2]="chartWidth() - padding.right"
+              [attr.y2]="y"
+              class="grid-line" />
+      }
     </g>
     
     <!-- Axes -->
@@ -53,22 +58,24 @@
     
     <!-- Y-axis labels -->
     <g class="y-axis-labels">
-      <text *ngFor="let label of yAxisLabels(); let i = index"
-            [attr.x]="padding.left - 10"
-            [attr.y]="label.y + 4"
-            class="y-axis-label">
-        {{ label.value }}
-      </text>
+      @for (label of yAxisLabels(); track i; let i = $index) {
+        <text [attr.x]="padding.left - 10"
+              [attr.y]="(label.y ?? 0) + 4"
+              class="y-axis-label">
+          {{ label.value }}
+        </text>
+      }
     </g>
     
     <!-- X-axis labels -->
     <g class="x-axis-labels">
-      <text *ngFor="let label of xAxisLabels(); let i = index"
-            [attr.x]="label.x"
-            [attr.y]="chartHeight() - padding.bottom + 20"
-            class="x-axis-label">
-        {{ label.value }}
-      </text>
+      @for (label of xAxisLabels(); track i; let i = $index) {
+        <text [attr.x]="label.x ?? 0"
+              [attr.y]="chartHeight() - padding.bottom + 20"
+              class="x-axis-label">
+          {{ label.value }}
+        </text>
+      }
     </g>
     
     <!-- Energy data line -->
@@ -82,39 +89,45 @@
           fill="none" />
     
     <!-- Energy data points -->
-    <circle *ngFor="let point of energyDataPoints(); let i = index"
-            [attr.cx]="point.x"
-            [attr.cy]="point.y"
-            [attr.r]="point.hovered ? 6 : 4"
-            class="energy-point"
-            [class.hovered]="point.hovered" />
+    @for (point of energyDataPoints(); track i; let i = $index) {
+      <circle [attr.cx]="point.x"
+              [attr.cy]="point.y"
+              [attr.r]="point.hovered ? 6 : 4"
+              class="energy-point"
+              [class.hovered]="point.hovered" />
+    }
     
     <!-- Power data points -->
-    <circle *ngFor="let point of powerDataPoints(); let i = index"
-            [attr.cx]="point.x"
-            [attr.cy]="point.y"
-            [attr.r]="point.hovered ? 6 : 4"
-            class="power-point"
-            [class.hovered]="point.hovered" />
+    @for (point of powerDataPoints(); track i; let i = $index) {
+      <circle [attr.cx]="point.x"
+              [attr.cy]="point.y"
+              [attr.r]="point.hovered ? 6 : 4"
+              class="power-point"
+              [class.hovered]="point.hovered" />
+    }
     
     <!-- Hover line -->
-    <line *ngIf="hoverLine().x > 0"
-          [attr.x1]="hoverLine().x"
-          [attr.y1]="padding.top"
-          [attr.x2]="hoverLine().x"
-          [attr.y2]="chartHeight() - padding.bottom"
-          class="hover-line" />
+    @if (hoverLine().x > 0) {
+      <line [attr.x1]="hoverLine().x"
+            [attr.y1]="padding.top"
+            [attr.x2]="hoverLine().x"
+            [attr.y2]="chartHeight() - padding.bottom"
+            class="hover-line" />
+    }
     
     <!-- Hover point -->
-    <circle *ngIf="hoverPoint().x > 0"
-            [attr.cx]="hoverPoint().x"
-            [attr.cy]="hoverPoint().y"
-            r="6"
-            class="hover-point" />
-  </svg>
+    @if (hoverPoint().x > 0) {
+      <circle [attr.cx]="hoverPoint().x"
+              [attr.cy]="hoverPoint().y"
+              r="6"
+              class="hover-point" />
+    }
+    </svg>
+  }
   
   <!-- Legend -->
-  <div class="chart-legend" *ngIf="meterValues && meterValues.length > 0">
+  @if (meterValues() && meterValues().length > 0) {
+    <div class="chart-legend">
     <div class="legend-item">
       <div class="legend-color energy"></div>
       <span class="legend-text">Consumed Energy (Wh)</span>
@@ -123,7 +136,8 @@
       <div class="legend-color power"></div>
       <span class="legend-text">Power Level (W)</span>
     </div>
-  </div>
+    </div>
+  }
   
   <!-- Tooltip -->
   <div class="chart-tooltip" 
@@ -133,7 +147,9 @@
     <div class="tooltip-content">
       <div class="tooltip-time">{{ tooltipTime() }}</div>
       <div class="tooltip-value">{{ tooltipValue() }} Wh</div>
-      <div class="tooltip-power" *ngIf="tooltipPower() > 0">{{ tooltipPower() }} W</div>
+      @if (tooltipPower() > 0) {
+        <div class="tooltip-power">{{ tooltipPower() }} W</div>
+      }
     </div>
   </div>
 </div>

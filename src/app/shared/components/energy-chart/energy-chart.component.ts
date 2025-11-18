@@ -191,30 +191,32 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
 
     const energyPoints = sortedData.map((item, index) => {
       const x = this.padding.left + (index / (sortedData.length - 1)) * chartAreaWidth;
+      const consumedEnergy = item.consumed_energy ?? 0;
       const y = this.padding.top + chartAreaHeight - 
-        ((item.consumed_energy - finalMinY) / (finalMaxY - finalMinY)) * chartAreaHeight;
+        ((consumedEnergy - finalMinY) / (finalMaxY - finalMinY)) * chartAreaHeight;
       
       return {
         x,
         y,
-        value: item.consumed_energy || 0,
+        value: consumedEnergy,
         time: item.time,
-        power: item.power_rate || 0,
+        power: item.power_rate ?? 0,
         hovered: false
       };
     });
 
     const powerPoints = sortedData.map((item, index) => {
       const x = this.padding.left + (index / (sortedData.length - 1)) * chartAreaWidth;
+      const powerRate = item.power_rate ?? 0;
       const y = this.padding.top + chartAreaHeight - 
-        ((item.power_rate - finalMinY) / (finalMaxY - finalMinY)) * chartAreaHeight;
+        ((powerRate - finalMinY) / (finalMaxY - finalMinY)) * chartAreaHeight;
       
       return {
         x,
         y,
-        value: item.power_rate || 0,
+        value: powerRate,
         time: item.time,
-        power: item.power_rate || 0,
+        power: powerRate,
         hovered: false
       };
     });
@@ -336,7 +338,7 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
       }
     });
 
-    if (closestPoint && minDistance < 50) {
+    if (closestPoint !== null && minDistance < 50) {
       this.showTooltip.set(true);
       this.tooltipX.set(event.clientX);
       this.tooltipY.set(event.clientY);
@@ -352,6 +354,7 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
       this.hoverPoint.set({ x: closestPoint.x, y: closestPoint.y });
 
       // Update both energy and power data points to show hover state
+      const closestX = closestPoint.x;
       this.energyDataPoints.set(
         this.energyDataPoints().map(p => ({
           ...p,
@@ -362,7 +365,7 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
       this.powerDataPoints.set(
         this.powerDataPoints().map(p => ({
           ...p,
-          hovered: p.x === closestPoint.x // Match by x position
+          hovered: p.x === closestX // Match by x position
         }))
       );
     } else {
