@@ -1,9 +1,12 @@
 {
-  "name": "wattbrews-web",
-  "short_name": "wattbrews-web",
+  "name": "WattBrews",
+  "short_name": "WattBrews",
+  "description": "WattBrews - Electric vehicle charging station finder and management",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
+  "theme_color": "#00bcd4",
+  "background_color": "#f8fafc",
   "icons": [
     {
       "src": "icons/icon-192.png",
