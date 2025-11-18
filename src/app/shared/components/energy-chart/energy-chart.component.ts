@@ -320,7 +320,8 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
   }
 
   onMouseMove(event: MouseEvent) {
-    if (this.energyDataPoints().length === 0) return;
+    const dataPoints = this.energyDataPoints();
+    if (dataPoints.length === 0) return;
 
     const rect = (event.target as SVGElement).getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
@@ -330,37 +331,35 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
     let closestPoint: ChartDataPoint | null = null;
     let minDistance = Infinity;
 
-    this.energyDataPoints().forEach(point => {
+    for (const point of dataPoints) {
       const distance = Math.abs(point.x - mouseX);
       if (distance < minDistance) {
         minDistance = distance;
         closestPoint = point;
       }
-    });
+    }
 
-    if (closestPoint && minDistance < 50) {
-      // TypeScript now knows closestPoint is ChartDataPoint (not null)
-      const point = closestPoint;
+    if (closestPoint !== null && minDistance < 50) {
       this.showTooltip.set(true);
       this.tooltipX.set(event.clientX);
       this.tooltipY.set(event.clientY);
       // Format tooltip time in 24-hour format
-      const tooltipDate = new Date(point.time);
+      const tooltipDate = new Date(closestPoint.time);
       const tooltipHours = tooltipDate.getHours().toString().padStart(2, '0');
       const tooltipMinutes = tooltipDate.getMinutes().toString().padStart(2, '0');
       this.tooltipTime.set(`${tooltipHours}:${tooltipMinutes}`);
-      this.tooltipValue.set(point.value.toLocaleString());
-      this.tooltipPower.set(point.power);
+      this.tooltipValue.set(closestPoint.value.toLocaleString());
+      this.tooltipPower.set(closestPoint.power);
 
-      this.hoverLine.set({ x: point.x, y: point.y });
-      this.hoverPoint.set({ x: point.x, y: point.y });
+      this.hoverLine.set({ x: closestPoint.x, y: closestPoint.y });
+      this.hoverPoint.set({ x: closestPoint.x, y: closestPoint.y });
 
       // Update both energy and power data points to show hover state
-      const closestX = point.x;
+      const closestX = closestPoint.x;
       this.energyDataPoints.set(
-        this.energyDataPoints().map(p => ({
+        dataPoints.map(p => ({
           ...p,
-          hovered: p === point
+          hovered: p === closestPoint
         }))
       );
       
