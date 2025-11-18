@@ -1,16 +1,18 @@
-import { Component, Input, OnInit, OnChanges, AfterViewInit, OnDestroy, signal, computed, ViewChild, ElementRef } from '@angular/core';
+import { Component, input, OnInit, OnChanges, AfterViewInit, OnDestroy, signal, computed, ViewChild, ElementRef, ChangeDetectionStrategy, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MeterValue, ChartDataPoint, AxisLabel, GridLines } from '../../models/chart.model';
 
 @Component({
   selector: 'app-energy-chart',
   standalone: true,
   imports: [CommonModule, MatIconModule],
   templateUrl: './energy-chart.component.html',
-  styleUrl: './energy-chart.component.scss'
+  styleUrl: './energy-chart.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-  @Input() meterValues: any[] = [];
+  meterValues = input<MeterValue[]>([]);
 
   // Maximum number of data points to display
   private readonly MAX_DATA_POINTS = 60;
@@ -25,12 +27,12 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
   private resizeListener?: () => void;
 
   // Data processing
-  processedData = signal<any[]>([]);
-  energyDataPoints = signal<any[]>([]);
-  powerDataPoints = signal<any[]>([]);
+  processedData = signal<ChartDataPoint[]>([]);
+  energyDataPoints = signal<ChartDataPoint[]>([]);
+  powerDataPoints = signal<ChartDataPoint[]>([]);
   energyDataPath = signal<string>('');
   powerDataPath = signal<string>('');
-  gridLines = signal<any>({ vertical: [], horizontal: [] });
+  gridLines = signal<GridLines>({ vertical: [], horizontal: [] });
 
   // Hover state
   showTooltip = signal(false);
@@ -49,8 +51,18 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
   maxX = signal(0);
   
   // Axis labels
-  yAxisLabels = signal<any[]>([]);
-  xAxisLabels = signal<any[]>([]);
+  yAxisLabels = signal<AxisLabel[]>([]);
+  xAxisLabels = signal<AxisLabel[]>([]);
+
+  constructor() {
+    // Watch for changes to meterValues input
+    effect(() => {
+      const values = this.meterValues();
+      if (values) {
+        this.processData();
+      }
+    });
+  }
 
   ngOnInit() {
     this.calculateChartDimensions();
@@ -131,11 +143,12 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
   }
 
   ngOnChanges() {
-    this.processData();
+    // No longer needed with signal inputs and effect
   }
 
   private processData() {
-    if (!this.meterValues || this.meterValues.length === 0) {
+    const values = this.meterValues();
+    if (!values || values.length === 0) {
       this.processedData.set([]);
       this.energyDataPoints.set([]);
       this.powerDataPoints.set([]);
@@ -145,7 +158,7 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
     }
 
     // Sort data by time and keep only the last 60 values
-    const sortedData = [...this.meterValues]
+    const sortedData = [...values]
       .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
       .slice(-this.MAX_DATA_POINTS); // Keep only the last 60 values
 
@@ -215,7 +228,7 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
     this.generateAxisLabels();
   }
 
-  private generateEnergyDataPath(points: any[]) {
+  private generateEnergyDataPath(points: ChartDataPoint[]) {
     if (points.length === 0) {
       this.energyDataPath.set('');
       return;
@@ -229,7 +242,7 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
     this.energyDataPath.set(path);
   }
 
-  private generatePowerDataPath(points: any[]) {
+  private generatePowerDataPath(points: ChartDataPoint[]) {
     if (points.length === 0) {
       this.powerDataPath.set('');
       return;
@@ -312,7 +325,7 @@ export class EnergyChartComponent implements OnInit, OnChanges, AfterViewInit, O
     const mouseY = event.clientY - rect.top;
 
     // Find closest data point from energy data
-    let closestPoint: any = null;
+    let closestPoint: ChartDataPoint | null = null;
     let minDistance = Infinity;
 
     this.energyDataPoints().forEach(point => {

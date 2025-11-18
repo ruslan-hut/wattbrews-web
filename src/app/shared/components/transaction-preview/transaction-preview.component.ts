@@ -1,4 +1,4 @@
-import { Component, inject, signal, Input, OnInit } from '@angular/core';
+import { Component, inject, signal, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
@@ -17,6 +17,7 @@ import { SmallMapComponent } from '../small-map/small-map.component';
 @Component({
   selector: 'app-transaction-preview',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     MatDialogModule,

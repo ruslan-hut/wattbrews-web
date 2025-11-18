@@ -17,6 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { WsCommand, WsResponse, ResponseStatus, ResponseStage, ConnectionState } from '../../../core/models/websocket.model';
 import { APP_CONSTANTS } from '../../../core/constants/app.constants';
+import { WebSocketCommandParams } from '../../../shared/models/websocket-params.model';
 
 // Message wrapper with timestamp
 interface MessageWithTimestamp {
@@ -183,7 +184,7 @@ export class WebsocketTestComponent implements OnInit {
     const formValue = this.commandForm.value;
     const command = formValue.command as WsCommand;
     
-    const params: any = {};
+    const params: WebSocketCommandParams = {};
     
     if (formValue.charge_point_id) {
       params.charge_point_id = formValue.charge_point_id;
@@ -291,10 +292,10 @@ export class WebsocketTestComponent implements OnInit {
       minute: '2-digit', 
       second: '2-digit',
       fractionalSecondDigits: 3
-    } as any);
+    });
   }
 
-  protected formatJSON(obj: any): string {
+  protected formatJSON(obj: unknown): string {
     return JSON.stringify(obj, null, 2);
   }
 

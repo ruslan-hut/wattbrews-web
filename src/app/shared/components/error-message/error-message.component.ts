@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,13 +8,14 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [CommonModule, MatIconModule, MatButtonModule],
   templateUrl: './error-message.component.html',
-  styleUrl: './error-message.component.scss'
+  styleUrl: './error-message.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErrorMessageComponent {
-  @Input() icon: string = 'error';
-  @Input() title: string = 'Something went wrong';
-  @Input() message: string = 'An unexpected error occurred. Please try again.';
-  @Input() showRetry: boolean = true;
-  @Input() retryText: string = 'Try Again';
-  @Output() onRetry = new EventEmitter<void>();
+  icon = input<string>('error');
+  title = input<string>('Something went wrong');
+  message = input<string>('An unexpected error occurred. Please try again.');
+  showRetry = input<boolean>(true);
+  retryText = input<string>('Try Again');
+  onRetry = output<void>();
 }

@@ -52,7 +52,7 @@ export class TransactionStopDialogComponent implements OnInit, OnDestroy {
   });
 
   private wsSubscription?: Subscription;
-  private autoCloseTimeout?: any;
+  private autoCloseTimeout?: ReturnType<typeof setTimeout>;
 
   ngOnInit(): void {
     this.initializeTranslations();
@@ -113,13 +113,16 @@ export class TransactionStopDialogComponent implements OnInit, OnDestroy {
         info: this.translationService.getReactive('transactionStop.waiting')
       }));
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to stop transaction:', error);
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : this.translationService.getReactive('transactionStop.errorSendingCommand');
       this.state.set({
         status: 'error',
         progress: 0,
         info: '',
-        errorMessage: error.message || this.translationService.getReactive('transactionStop.errorSendingCommand')
+        errorMessage
       });
     }
   }

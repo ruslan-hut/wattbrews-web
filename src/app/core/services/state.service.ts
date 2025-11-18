@@ -1,5 +1,4 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { ChargingStation, StationStatus, ConnectorStatus } from '../models/station.model';
 import { ChargingSession, SessionStatus } from '../models/session.model';
 import { User } from '../models/user.model';
@@ -186,10 +185,6 @@ export class StateService {
       total + (session.cost / 100), 0
     )
   );
-  
-  // BehaviorSubject for compatibility with existing code
-  private stateSubject = new BehaviorSubject<AppState>(initialState);
-  public state$ = this.stateSubject.asObservable();
 
   // User actions
   setUser(user: User | null): void {
@@ -337,13 +332,11 @@ export class StateService {
     const currentState = this._state();
     const newState = { ...currentState, ...updates };
     this._state.set(newState);
-    this.stateSubject.next(newState);
   }
 
   // Reset state
   resetState(): void {
     this._state.set(initialState);
-    this.stateSubject.next(initialState);
   }
 
   // Get current state snapshot

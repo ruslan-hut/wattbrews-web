@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, throwError, timer } from 'rxjs';
+import { catchError, map, retryWhen, mergeMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiResponse, ApiError, PaginationInfo, FilterOptions } from '../models/api.model';
 
@@ -11,16 +11,32 @@ import { ApiResponse, ApiError, PaginationInfo, FilterOptions } from '../models/
 export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiBaseUrl;
+  
+  // Retry configuration
+  private readonly MAX_RETRIES = 3;
+  private readonly RETRY_DELAY_MS = 1000; // 1 second
 
   /**
-   * Generic GET request
+   * Generic GET request with retry logic
    */
-  get<T>(endpoint: string, params?: Record<string, any>): Observable<T> {
+  get<T>(endpoint: string, params?: Record<string, any>, retryCount: number = this.MAX_RETRIES): Observable<T> {
     const httpParams = this.buildHttpParams(params);
     const fullUrl = `${this.baseUrl}${endpoint}`;
     
     return this.http.get<ApiResponse<T>>(fullUrl, { params: httpParams })
       .pipe(
+        retryWhen(errors =>
+          errors.pipe(
+            mergeMap((error, index) => {
+              const retryAttempt = index + 1;
+              // Only retry on network errors or 5xx server errors
+              if (retryAttempt <= retryCount && this.shouldRetry(error)) {
+                return timer(this.RETRY_DELAY_MS * retryAttempt);
+              }
+              return throwError(() => error);
+            })
+          )
+        ),
         map(response => {
           return this.handleResponse(response);
         }),
@@ -28,6 +44,18 @@ export class ApiService {
           return this.handleError(error);
         })
       );
+  }
+
+  /**
+   * Determine if an error should be retried
+   */
+  private shouldRetry(error: HttpErrorResponse | Error): boolean {
+    if (error instanceof HttpErrorResponse) {
+      // Retry on network errors (status 0) or 5xx server errors
+      return error.status === 0 || (error.status >= 500 && error.status < 600);
+    }
+    // Retry on generic errors (likely network issues)
+    return true;
   }
 
   /**
@@ -148,24 +176,64 @@ export class ApiService {
   }
 
   /**
-   * Handle HTTP errors
+   * Handle HTTP errors with improved error messages
    */
-  private handleError(error: HttpErrorResponse): Observable<never> {
+  private handleError(error: HttpErrorResponse | Error): Observable<never> {
     let errorMessage = 'An error occurred';
     
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Server-side error
-      if (error.error && error.error.message) {
-        errorMessage = error.error.message;
+    if (error instanceof HttpErrorResponse) {
+      if (error.error instanceof ErrorEvent) {
+        // Client-side error
+        errorMessage = `Network error: ${error.error.message}`;
       } else {
-        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+        // Server-side error
+        if (error.error && typeof error.error === 'object') {
+          if (error.error.message) {
+            errorMessage = error.error.message;
+          } else if (error.error.error) {
+            errorMessage = error.error.error;
+          } else {
+            errorMessage = this.getErrorMessageForStatus(error.status);
+          }
+        } else {
+          errorMessage = this.getErrorMessageForStatus(error.status);
+        }
       }
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
     }
     
     return throwError(() => new Error(errorMessage));
+  }
+
+  /**
+   * Get user-friendly error message based on HTTP status code
+   */
+  private getErrorMessageForStatus(status: number): string {
+    switch (status) {
+      case 400:
+        return 'Invalid request. Please check your input and try again.';
+      case 401:
+        return 'Authentication required. Please log in and try again.';
+      case 403:
+        return 'You do not have permission to perform this action.';
+      case 404:
+        return 'The requested resource was not found.';
+      case 408:
+        return 'Request timeout. Please try again.';
+      case 429:
+        return 'Too many requests. Please wait a moment and try again.';
+      case 500:
+        return 'Server error. Please try again later.';
+      case 502:
+        return 'Bad gateway. The server is temporarily unavailable.';
+      case 503:
+        return 'Service unavailable. Please try again later.';
+      case 504:
+        return 'Gateway timeout. Please try again.';
+      default:
+        return `Error ${status}: An unexpected error occurred.`;
+    }
   }
 
   /**
