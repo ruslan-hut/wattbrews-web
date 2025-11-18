@@ -85,25 +85,38 @@ export class StationsListComponent implements OnInit, OnDestroy {
   // Subscription management
   private authSubscription?: Subscription;
   private wsSubscriptionActive = false;
+  private isProcessingUpdate = false;
 
   constructor() {
     // Set up effect to react to charge point updates
     effect(() => {
       const update = this.websocketService.chargePointUpdate();
       
-      if (update && update.chargePointId) {
-        // Reload stations list to get fresh data
-        this.loadStations();
+      // Only process if we have an update and we're not already processing one
+      if (update && update.chargePointId && !this.isProcessingUpdate) {
+        this.isProcessingUpdate = true;
+        
+        // Clear the update signal immediately to prevent re-triggering
+        this.websocketService.clearChargePointUpdate();
+        
+        // Only reload if not already loading to prevent infinite loops
+        if (!this.loading()) {
+          this.loadStations();
+        }
         
         // Highlight the updated station temporarily
         this.updatedStationId.set(update.chargePointId);
         this.realtimeActive.set(true);
         
-        // Clear highlight after 3 seconds
+        // Clear highlight after 3 seconds and allow processing again
         setTimeout(() => {
           this.updatedStationId.set(null);
           this.realtimeActive.set(false);
+          this.isProcessingUpdate = false;
         }, 3000);
+      } else if (!update) {
+        // If no update, allow processing again
+        this.isProcessingUpdate = false;
       }
     });
   }

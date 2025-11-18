@@ -148,8 +148,10 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
     
     if (transactionIndex === -1) {
       // Transaction not in current list, might be a new active transaction
-      // Refresh the list to get the latest state
-      this.refreshTransactions();
+      // Only refresh if not already loading to prevent unnecessary API calls
+      if (!this.loading()) {
+        this.refreshTransactions();
+      }
       return;
     }
     

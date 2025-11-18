@@ -143,15 +143,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
       return;
     }
     
-    // Refresh charge points data
-    this.chargePointService.refreshChargePoints().subscribe({
-      next: () => {
-        // Data refreshed successfully
-      },
-      error: (error) => {
-        console.error('[Dashboard] Failed to refresh charge points:', error);
-      }
-    });
+    // Only refresh if not already loading to prevent unnecessary API calls
+    if (!this.chargePointService.loading()) {
+      // Refresh charge points data
+      this.chargePointService.refreshChargePoints().subscribe({
+        next: () => {
+          // Data refreshed successfully
+        },
+        error: (error) => {
+          console.error('[Dashboard] Failed to refresh charge points:', error);
+        }
+      });
+    }
     
     // Set real-time indicator
     this.realtimeActive.set(true);
@@ -453,6 +456,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private handleTransactionValueUpdate(message: WsResponse): void {
     if (!message.id || !this.listeningTransactionIds.has(message.id)) {
+      return;
+    }
+    
+    // Only refresh if not already loading to prevent unnecessary API calls
+    if (this.transactionService.loading()) {
       return;
     }
     

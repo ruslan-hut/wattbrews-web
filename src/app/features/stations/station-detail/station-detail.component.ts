@@ -85,6 +85,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   private authSubscription?: Subscription;
   private websocketSubscription?: Subscription;
   private authCheckTimeout?: any;
+  private isProcessingUpdate = false;
 
   constructor() {
     // Set up effect to react to charge point updates for this specific station
@@ -92,18 +93,32 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       const update = this.websocketService.chargePointUpdate();
       const currentStation = this.stationDetail();
       
-      if (update && currentStation && update.chargePointId === currentStation.charge_point_id) {
-        // Refresh station detail
-        this.loadStationDetail();
+      // Only process if we have an update, a current station, and we're not already processing
+      if (update && currentStation && update.chargePointId === currentStation.charge_point_id && !this.isProcessingUpdate) {
+        this.isProcessingUpdate = true;
+        
+        // Clear the update signal immediately to prevent re-triggering
+        this.websocketService.clearChargePointUpdate();
+        
+        // Only reload if not already loading to prevent infinite loops
+        if (!this.loading()) {
+          this.loadStationDetail();
+        }
         
         // Highlight updated connector if connector_id is present
         if (update.connectorId) {
           this.highlightConnector(update.connectorId);
         }
         
-        // Set real-time indicator
+        // Set real-time indicator and allow processing again after timeout
         this.realtimeActive.set(true);
-        setTimeout(() => this.realtimeActive.set(false), 2000);
+        setTimeout(() => {
+          this.realtimeActive.set(false);
+          this.isProcessingUpdate = false;
+        }, 2000);
+      } else if (!update) {
+        // If no update, allow processing again
+        this.isProcessingUpdate = false;
       }
     });
   }
