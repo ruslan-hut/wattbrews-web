@@ -149,7 +149,7 @@ In your CI/CD platform (GitHub Actions, GitLab CI, etc.):
 
 ## More Information
 
-- Full security guide: `/SECURITY_SETUP.md`
-- Quick reference: `/QUICK_REFERENCE.md`
-- Implementation details: `/IMPLEMENTATION_SUMMARY.md`
+- Quick reference: `/docs/QUICK_REFERENCE.md`
+- Local setup guide: `/docs/SETUP_LOCAL_DEV.md`
+- Deployment guide: `/docs/DEPLOYMENT.md`
 

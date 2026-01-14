@@ -135,14 +135,14 @@ WS_BASE_URL=                   # WebSocket URL
 
 ## 📚 More Documentation
 
-- **Full Security Guide**: [SECURITY_SETUP.md](SECURITY_SETUP.md)
-- **Deployment Guide**: [DEPLOYMENT.md](DEPLOYMENT.md)
-- **Main README**: [README.md](README.md)
+- **Deployment Guide**: [DEPLOYMENT.md](./DEPLOYMENT.md)
+- **Main README**: [README.md](../README.md)
+- **Local Setup Guide**: [SETUP_LOCAL_DEV.md](./SETUP_LOCAL_DEV.md)
 
 ## 🆘 Need Help?
 
-1. Check [SECURITY_SETUP.md](SECURITY_SETUP.md) for detailed setup
-2. Review [Common Issues](#common-issues) above
+1. Review [Common Issues](#common-issues) above
+2. Check [SETUP_LOCAL_DEV.md](./SETUP_LOCAL_DEV.md) for detailed setup
 3. Ask your team lead
 4. Check Firebase documentation
 
@@ -151,5 +151,5 @@ WS_BASE_URL=                   # WebSocket URL
 If you suspect a security breach:
 1. Immediately notify the team lead
 2. Do NOT commit or push any changes
-3. Follow [SECURITY_SETUP.md](SECURITY_SETUP.md) incident response
+3. Rotate any exposed credentials immediately
 

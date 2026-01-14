@@ -64,27 +64,13 @@ npm run build
 
 ## 📚 Documentation
 
-### Core Documentation
+All documentation is located in the [`docs/`](./docs/) folder. See the [Documentation Index](./docs/README.md) for a complete list.
 
-- **[Implementation Summary](./IMPLEMENTATION_SUMMARY.md)** - Overview of key features and implementation details
-- **[Deployment Guide](./DEPLOYMENT.md)** - Complete deployment configuration and setup instructions
-
-### Design System
-
-- **[Design Policy](./DESIGN_POLICY.md)** - Design system guidelines, color palette, typography, and component patterns
-- **[Design Examples](./DESIGN_EXAMPLES.md)** - Practical examples of implementing the Energy theme in components
-
-### WebSocket Integration
-
-- **[WebSocket Technical Guide](./WEBSOCKET_TECHNICAL_GUIDE.md)** - Complete guide for integrating WebSocket in components
-- **[WebSocket Description](./WEBSOCKET_DESCRIPTION.md)** - Backend WebSocket API specification
-- **[Charge Point Updates](./CHARGE_POINT_UPDATES.md)** - Detailed documentation for real-time charge point updates
-- **[Charge Point Updates Quick Reference](./CHARGE_POINT_UPDATES_QUICK_REFERENCE.md)** - Quick reference for developers
-
-### Feature Implementation
-
-- **[Transaction Start Implementation](./TRANSACTION_START_IMPLEMENTATION.md)** - Transaction start flow implementation guide
-- **[Translation Service Technical Guide](./TRANSLATION_SERVICE_TECHNICAL_GUIDE.md)** - Internationalization implementation guide
+**Quick Links:**
+- [Local Development Setup](./docs/SETUP_LOCAL_DEV.md)
+- [Deployment Guide](./docs/DEPLOYMENT.md)
+- [Design System](./docs/DESIGN_POLICY.md)
+- [WebSocket Integration](./docs/WEBSOCKET_TECHNICAL_GUIDE.md)
 
 ## 🏃 Development
 
@@ -178,7 +164,7 @@ The application follows an **Energy/Electric theme** with Material Design 3 prin
 - **Secondary Color**: Amber (#ffc107) - Energy yellow theme
 - **Tertiary Color**: Blue (#2196f3) - Technology blue theme
 
-See [Design Policy](./DESIGN_POLICY.md) for complete design system documentation.
+See [Design Policy](./docs/DESIGN_POLICY.md) for complete design system documentation.
 
 ## 🌐 Internationalization
 
@@ -187,7 +173,7 @@ The application supports multiple languages with reactive translation updates:
 - **English** (en)
 - **Spanish** (es)
 
-Translation files are located in `public/assets/i18n/`. See [Translation Service Technical Guide](./TRANSLATION_SERVICE_TECHNICAL_GUIDE.md) for implementation details.
+Translation files are located in `public/assets/i18n/`. See [Translation Service Technical Guide](./docs/TRANSLATION_SERVICE_TECHNICAL_GUIDE.md) for implementation details.
 
 ## 🔒 Authentication
 
@@ -207,7 +193,7 @@ WebSocket connection provides real-time updates for:
 - Connector availability
 - System events and logs
 
-See [WebSocket Technical Guide](./WEBSOCKET_TECHNICAL_GUIDE.md) for integration details.
+See [WebSocket Technical Guide](./docs/WEBSOCKET_TECHNICAL_GUIDE.md) for integration details.
 
 ## 🚀 Deployment
 
@@ -217,7 +203,7 @@ The application can be deployed to any static hosting service:
 2. Deploy the contents of `dist/wattbrews-web/browser/` to your server
 3. Configure your web server (see `nginx.conf` for Nginx example)
 
-See [Deployment Guide](./DEPLOYMENT.md) for detailed deployment instructions including GitHub Actions setup.
+See [Deployment Guide](./docs/DEPLOYMENT.md) for detailed deployment instructions including GitHub Actions setup.
 
 ## 🔧 Environment Configuration
 
@@ -250,7 +236,7 @@ The application uses environment variables for configuration. Follow these steps
 
 The environment files (`environment.ts` and `environment.development.ts`) are automatically generated from your `.env` file and should **never** be committed to version control.
 
-See [SETUP_LOCAL_DEV.md](./SETUP_LOCAL_DEV.md) for detailed setup instructions.
+See [SETUP_LOCAL_DEV.md](./docs/SETUP_LOCAL_DEV.md) for detailed setup instructions.
 
 ## 📦 Key Dependencies
 

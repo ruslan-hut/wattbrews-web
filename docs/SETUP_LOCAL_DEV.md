@@ -205,8 +205,8 @@ steps:
 
 ## 📚 Additional Resources
 
-- [Firebase Setup Guide](./src/environments/README.md)
-- [Security Best Practices](./SECURITY_SETUP.md) *(if exists)*
+- [Firebase Setup Guide](../src/environments/README.md)
+- [Deployment Guide](./DEPLOYMENT.md)
 - [Quick Reference](./QUICK_REFERENCE.md)
 
 ---

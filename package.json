@@ -42,8 +42,10 @@
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
     "@types/leaflet": "^1.9.20",
+    "echarts": "^6.0.0",
     "firebase": "^11.10.0",
     "leaflet": "^1.9.4",
+    "ngx-echarts": "^20.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

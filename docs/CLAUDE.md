@@ -243,11 +243,9 @@ See `SETUP_LOCAL_DEV.md` for detailed setup instructions.
 
 ## Key Documentation Files
 
-- `IMPLEMENTATION_SUMMARY.md` - Feature overview
 - `DEPLOYMENT.md` - Deployment and CI/CD setup
 - `WEBSOCKET_TECHNICAL_GUIDE.md` - WebSocket integration guide
 - `WEBSOCKET_DESCRIPTION.md` - Backend WebSocket API spec
-- `CHARGE_POINT_UPDATES.md` - Real-time charge point updates
 - `TRANSLATION_SERVICE_TECHNICAL_GUIDE.md` - i18n implementation
 - `DESIGN_POLICY.md` - Design system guidelines
 - `DESIGN_EXAMPLES.md` - Practical design examples
