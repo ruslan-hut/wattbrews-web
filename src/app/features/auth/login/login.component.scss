@@ -1,13 +1,13 @@
 // Note: Card title/subtitle styles are in global styles.scss (.mat-mdc-card-title, .mat-mdc-card-subtitle)
 
 .login-explanation .explanation-text {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   font-size: var(--font-size-sm);
   line-height: 1.5;
 }
 
 .login-form {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   display: flex;
   flex-direction: column;
   gap: var(--energy-space-lg);
@@ -27,7 +27,7 @@
 }
 
 .sign-in-button {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   width: 100%;
   height: 48px;
   font-size: var(--font-size-base);
@@ -85,7 +85,7 @@
 }
 
 .email-link-explanation .explanation-text {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   margin: 0;
   color: var(--energy-primary-dark);
   font-size: var(--font-size-sm);
@@ -108,14 +108,14 @@
 }
 
 .success-message {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   margin: 0 0 var(--energy-space-sm) 0;
   color: var(--energy-success-dark);
   font-weight: 500;
 }
 
 .success-submessage {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   margin: 0;
   color: var(--energy-text-secondary);
   font-size: var(--font-size-sm);

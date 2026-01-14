@@ -7,7 +7,7 @@
 }
 
 .profile-title {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-display), sans-serif;
   font-size: var(--font-size-3xl);
   font-weight: 600;
   letter-spacing: -0.03em;
@@ -36,7 +36,7 @@
 }
 
 .auth-required-message h3 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-display), sans-serif;
   margin: 0;
   font-size: var(--font-size-xl);
   font-weight: 600;
@@ -44,7 +44,7 @@
 }
 
 .auth-required-message p {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   margin: 0;
   color: var(--energy-text-secondary);
   font-size: var(--font-size-base);
@@ -87,14 +87,14 @@
   box-shadow: var(--energy-shadow-sm);
 
   .mat-mdc-card-title {
-    font-family: var(--font-family-display);
+    font-family: var(--font-family-display), sans-serif;
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--energy-text-primary);
   }
 
   .mat-mdc-card-subtitle {
-    font-family: var(--font-family-body);
+    font-family: var(--font-family-body), sans-serif;
     color: var(--energy-text-secondary);
   }
 }
@@ -112,14 +112,14 @@
 }
 
 .info-item label {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   font-weight: 500;
   color: var(--energy-text-muted);
   font-size: var(--font-size-sm);
 }
 
 .info-item span {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   font-size: var(--font-size-lg);
   color: var(--energy-text-primary);
 }
@@ -181,7 +181,7 @@
 }
 
 .plan-header h3 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-display), sans-serif;
   margin: 0;
   font-size: var(--font-size-lg);
   font-weight: 600;
@@ -201,7 +201,7 @@
 }
 
 .price-item {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   display: flex;
   align-items: center;
   gap: var(--energy-space-sm);
@@ -241,7 +241,7 @@
 }
 
 .tag-header h3 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-display), sans-serif;
   margin: 0;
   font-size: var(--font-size-lg);
   font-weight: 600;
@@ -266,7 +266,7 @@
 }
 
 .tag-info .label {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   font-weight: 500;
   color: var(--energy-text-muted);
   min-width: 80px;
@@ -302,7 +302,7 @@
 }
 
 .method-info h3 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-display), sans-serif;
   margin: 0 0 var(--energy-space-xs) 0;
   font-size: var(--font-size-lg);
   font-weight: 600;
@@ -311,7 +311,7 @@
 }
 
 .method-info p {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   margin: 0;
   color: var(--energy-text-secondary);
   font-size: var(--font-size-sm);
@@ -335,14 +335,14 @@
 }
 
 .method-info-item .label {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   font-weight: 500;
   color: var(--energy-text-muted);
   min-width: 80px;
 }
 
 .empty-state {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;

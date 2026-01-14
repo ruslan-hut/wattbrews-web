@@ -92,7 +92,7 @@
 }
 
 .page-title {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-display), sans-serif;
   font-size: var(--font-size-3xl);
   font-weight: 600;
   letter-spacing: -0.03em;
@@ -223,7 +223,7 @@ mat-card-header {
 }
 
 .transaction-id {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-display), sans-serif;
   font-size: var(--font-size-lg);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -231,7 +231,7 @@ mat-card-header {
 }
 
 .status-chip {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   font-size: var(--font-size-xs);
   font-weight: 500;
   display: flex;
@@ -293,7 +293,7 @@ mat-card-header {
 }
 
 mat-card-subtitle {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   color: var(--energy-text-secondary);
   font-size: var(--font-size-sm);
   margin-top: var(--energy-space-xs);
@@ -341,7 +341,7 @@ mat-card-content {
 }
 
 .item-label {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   font-size: var(--font-size-xs);
   color: var(--energy-text-muted);
   font-weight: 500;
@@ -350,7 +350,7 @@ mat-card-content {
 }
 
 .item-value {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   font-size: var(--font-size-sm);
   color: var(--energy-text-primary);
   font-weight: 500;
@@ -361,7 +361,7 @@ mat-card-content {
 }
 
 .location-content {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-body), sans-serif;
   display: flex;
   align-items: center;
   gap: var(--energy-space-sm);
@@ -386,7 +386,7 @@ mat-card-content {
 }
 
 .chart-header h3 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-display), sans-serif;
   font-size: var(--font-size-lg);
   font-weight: 600;
   letter-spacing: -0.02em;
