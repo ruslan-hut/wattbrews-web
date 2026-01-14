@@ -6,10 +6,11 @@
 h2[mat-dialog-title] {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--energy-space-md);
   margin: 0;
-  padding: 1.5rem;
-  border-bottom: 1px solid #e0e0e0;
+  padding: var(--energy-space-xl);
+  border-bottom: 1px solid var(--energy-border);
+  color: var(--energy-text-primary);
 }
 
 h2[mat-dialog-title] mat-icon {
@@ -20,112 +21,112 @@ h2[mat-dialog-title] mat-icon {
 
 h2[mat-dialog-title] mat-icon.initializing,
 h2[mat-dialog-title] mat-icon.waiting {
-  color: #1976d2;
+  color: var(--energy-primary);
 }
 
 h2[mat-dialog-title] mat-icon.success {
-  color: #28a745;
+  color: var(--energy-success);
 }
 
 h2[mat-dialog-title] mat-icon.error {
-  color: #dc3545;
+  color: var(--energy-error);
 }
 
 mat-dialog-content {
-  padding: 2rem 1.5rem;
+  padding: var(--energy-space-2xl) var(--energy-space-xl);
 }
 
 .dialog-content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--energy-space-xl);
 }
 
 .station-info {
   text-align: center;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 8px;
+  padding: var(--energy-space-md);
+  background-color: var(--energy-surface-variant);
+  border-radius: var(--energy-radius-lg);
 }
 
 .station-title {
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
   font-weight: 600;
-  color: #2c3e50;
-  margin: 0 0 0.5rem 0;
+  color: var(--energy-text-primary);
+  margin: 0 0 var(--energy-space-sm) 0;
 }
 
 .connector-info {
-  font-size: 0.9rem;
-  color: #6c757d;
+  font-size: var(--font-size-sm);
+  color: var(--energy-text-secondary);
   margin: 0;
 }
 
 .progress-section {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--energy-space-sm);
 }
 
 .progress-text {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: var(--font-size-lg);
   font-weight: 600;
-  color: #1976d2;
+  color: var(--energy-primary);
   margin: 0;
 }
 
 .status-message {
   text-align: center;
-  padding: 1rem;
-  border-radius: 8px;
+  padding: var(--energy-space-md);
+  border-radius: var(--energy-radius-lg);
 }
 
 .status-message.initializing,
 .status-message.waiting {
-  background-color: #e3f2fd;
-  color: #1976d2;
+  background-color: var(--energy-primary-50);
+  color: var(--energy-primary-dark);
 }
 
 .status-message.success {
-  background-color: #d1fae5;
-  color: #10b981;
+  background-color: var(--energy-success-light);
+  color: var(--energy-success-dark);
 }
 
 .status-message.error {
-  background-color: #fee;
-  color: #dc3545;
+  background-color: var(--energy-error-light);
+  color: var(--energy-error-dark);
 }
 
 .status-message p {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
 }
 
 .error-details {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1rem;
-  background-color: #fff3cd;
-  border: 1px solid #ffc107;
-  border-radius: 8px;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-md);
+  background-color: var(--energy-warning-light);
+  border: 1px solid var(--energy-warning);
+  border-radius: var(--energy-radius-lg);
 }
 
 .error-details mat-icon {
-  color: #ff9800;
+  color: var(--energy-warning);
   flex-shrink: 0;
 }
 
 .error-details p {
   margin: 0;
-  font-size: 0.9rem;
-  color: #856404;
+  font-size: var(--font-size-sm);
+  color: var(--energy-warning-dark);
 }
 
 mat-dialog-actions {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  padding: var(--energy-space-md) var(--energy-space-xl);
+  border-top: 1px solid var(--energy-border);
 }
 
 mat-dialog-actions button {
@@ -137,4 +138,3 @@ mat-dialog-actions button {
     min-width: 300px;
   }
 }
-

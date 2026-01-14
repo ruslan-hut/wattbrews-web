@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem 2rem;
+  padding: var(--energy-space-2xl) var(--energy-space-xl);
   text-align: center;
   min-height: 200px;
 }
@@ -12,25 +12,25 @@
   font-size: 4rem;
   height: 4rem;
   width: 4rem;
-  color: #f44336;
-  margin-bottom: 1rem;
+  color: var(--energy-error);
+  margin-bottom: var(--energy-space-md);
 }
 
 .error-title {
-  margin: 0 0 1rem 0;
-  color: #333;
-  font-size: 1.5rem;
+  margin: 0 0 var(--energy-space-md) 0;
+  color: var(--energy-text-primary);
+  font-size: var(--font-size-xl);
   font-weight: 500;
 }
 
 .error-message {
-  margin: 0 0 2rem 0;
-  color: #666;
-  font-size: 1rem;
+  margin: 0 0 var(--energy-space-2xl) 0;
+  color: var(--energy-text-secondary);
+  font-size: var(--font-size-base);
   line-height: 1.5;
   max-width: 400px;
 }
 
 .retry-button {
-  margin-top: 1rem;
+  margin-top: var(--energy-space-md);
 }

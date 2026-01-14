@@ -54,9 +54,12 @@
       <span>{{ translationService.getReactive('app.title') }}</span>
       <span class="spacer"></span>
       
+      <!-- Theme Toggle -->
+      <app-theme-toggle></app-theme-toggle>
+
       <!-- Language Switcher -->
       <app-language-switcher></app-language-switcher>
-      
+
       <!-- Authenticated user menu -->
       <div class="user-info" *ngIf="userName()">
         <span class="user-name">{{ userName() }}</span>

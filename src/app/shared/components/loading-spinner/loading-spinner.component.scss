@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: var(--energy-space-xl);
 }
 
 .loading-container.overlay {
@@ -12,12 +12,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: var(--energy-glass-bg);
+  backdrop-filter: var(--energy-blur-sm);
+  -webkit-backdrop-filter: var(--energy-blur-sm);
   z-index: 9999;
 }
 
 .loading-message {
-  margin-top: 1rem;
-  color: #666;
-  font-size: 0.9rem;
+  margin-top: var(--energy-space-md);
+  color: var(--energy-text-secondary);
+  font-size: var(--font-size-sm);
 }

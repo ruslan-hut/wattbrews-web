@@ -4,37 +4,37 @@
 }
 
 .language-switcher {
-  color: var(--energy-gray-700, #334155) !important;
-  border-radius: var(--energy-radius-lg, 12px);
-  transition: all 0.2s ease;
-  background-color: transparent !important;
-  border: none !important;
-  margin: 0 var(--energy-space-sm, 8px);
-  box-shadow: none !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-width: 40px !important;
-  height: 40px !important;
-  font-weight: 500 !important;
-  
+  color: var(--energy-text-secondary);
+  border-radius: var(--energy-radius-lg);
+  transition: all var(--transition-base);
+  background-color: transparent;
+  border: none;
+  margin: 0 var(--energy-space-sm);
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  font-weight: 500;
+
   &:hover {
-    background-color: transparent !important;
-    color: var(--energy-cyan, #00bcd4) !important;
-    border: none !important;
+    background-color: transparent;
+    color: var(--energy-primary);
+    border: none;
     transform: none;
-    box-shadow: none !important;
+    box-shadow: none;
   }
-  
+
   &:active {
     transform: none;
-    box-shadow: none !important;
+    box-shadow: none;
   }
-  
+
   .language-code {
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     font-weight: 600;
-    color: inherit !important;
+    color: inherit;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     line-height: 1;
@@ -53,16 +53,16 @@
   top: 100%;
   right: 0;
   min-width: 140px;
-  border-radius: var(--energy-radius-lg, 12px);
-  box-shadow: var(--energy-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.1));
-  border: 1px solid var(--energy-gray-200, #e2e8f0);
-  background: white;
-  z-index: 1000 !important;
+  border-radius: var(--energy-radius-lg);
+  box-shadow: var(--energy-shadow-md);
+  border: 1px solid var(--energy-border);
+  background: var(--energy-surface);
+  z-index: 1000;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: all 0.2s ease;
-  
+  transition: all var(--transition-base);
+
   &.show {
     opacity: 1;
     visibility: visible;
@@ -71,53 +71,53 @@
 }
 
 .menu-item {
-  display: flex !important;
-  align-items: center !important;
-  gap: var(--energy-space-sm, 8px) !important;
-  padding: var(--energy-space-md, 16px) !important;
-  font-weight: 500 !important;
-  transition: all 0.2s ease !important;
-  cursor: pointer !important;
-  pointer-events: auto !important;
-  position: relative !important;
-  z-index: 1001 !important;
-  width: 100% !important;
-  text-align: left !important;
-  border: none !important;
-  background: transparent !important;
-  color: var(--energy-gray-700, #334155) !important;
-  
+  display: flex;
+  align-items: center;
+  gap: var(--energy-space-sm);
+  padding: var(--energy-space-md);
+  font-weight: 500;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1001;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: var(--energy-text-secondary);
+
   &:first-child {
-    border-top-left-radius: var(--energy-radius-lg, 12px);
-    border-top-right-radius: var(--energy-radius-lg, 12px);
+    border-top-left-radius: var(--energy-radius-lg);
+    border-top-right-radius: var(--energy-radius-lg);
   }
-  
+
   &:last-child {
-    border-bottom-left-radius: var(--energy-radius-lg, 12px);
-    border-bottom-right-radius: var(--energy-radius-lg, 12px);
+    border-bottom-left-radius: var(--energy-radius-lg);
+    border-bottom-right-radius: var(--energy-radius-lg);
   }
-  
+
   &:hover {
-    background-color: var(--energy-gray-100, #f1f5f9) !important;
-    color: var(--energy-cyan, #00bcd4) !important;
-    font-weight: 500 !important;
+    background-color: var(--energy-surface-variant);
+    color: var(--energy-primary);
+    font-weight: 500;
   }
-  
+
   &.active {
-    background-color: var(--energy-gray-100, #f1f5f9) !important;
-    color: var(--energy-cyan, #00bcd4) !important;
-    font-weight: 600 !important;
-    
+    background-color: var(--energy-surface-variant);
+    color: var(--energy-primary);
+    font-weight: 600;
+
     mat-icon {
-      color: var(--energy-cyan, #00bcd4) !important;
+      color: var(--energy-primary);
     }
   }
-  
+
   mat-icon {
-    font-size: 1rem !important;
-    width: 1rem !important;
-    height: 1rem !important;
-    margin-right: 0 !important;
-    color: var(--energy-cyan, #00bcd4) !important;
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0;
+    color: var(--energy-primary);
   }
 }

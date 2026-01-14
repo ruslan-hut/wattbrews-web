@@ -48,12 +48,14 @@ import { OfflineService } from '../../../core/services/offline.service';
       align-items: center;
       min-height: 100vh;
       padding: 1rem;
-      background: var(--energy-gray-50, #f8fafc);
+      background: var(--energy-background);
     }
 
     .offline-card {
       max-width: 500px;
       width: 100%;
+      background: var(--energy-surface);
+      border-radius: var(--energy-radius-xl);
     }
 
     .offline-content {
@@ -65,17 +67,17 @@ import { OfflineService } from '../../../core/services/offline.service';
       font-size: 64px;
       width: 64px;
       height: 64px;
-      color: var(--energy-gray-500, #64748b);
+      color: var(--energy-text-muted);
       margin-bottom: 1rem;
     }
 
     h2 {
       margin: 1rem 0;
-      color: var(--energy-gray-900, #0f172a);
+      color: var(--energy-text-primary);
     }
 
     p {
-      color: var(--energy-gray-600, #475569);
+      color: var(--energy-text-secondary);
       margin-bottom: 2rem;
       line-height: 1.6;
     }
@@ -95,13 +97,13 @@ import { OfflineService } from '../../../core/services/offline.service';
       gap: 0.5rem;
       margin-top: 1.5rem;
       padding: 0.75rem;
-      border-radius: 4px;
-      background: var(--energy-gray-100, #f1f5f9);
-      color: var(--energy-gray-700, #334155);
+      border-radius: var(--energy-radius-md);
+      background: var(--energy-surface-variant);
+      color: var(--energy-text-secondary);
     }
 
     .connection-status.online {
-      background: var(--energy-success, #10b981);
+      background: var(--energy-success);
       color: white;
     }
 

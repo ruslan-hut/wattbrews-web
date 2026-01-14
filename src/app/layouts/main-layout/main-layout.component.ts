@@ -12,8 +12,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { WebsocketService } from '../../core/services/websocket.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
 import { ConnectionStatusComponent } from '../../shared/components/connection-status/connection-status.component';
+import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 
 @Component({
@@ -32,7 +34,8 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
     MatMenuModule,
     MatProgressSpinnerModule,
     LanguageSwitcherComponent,
-    ConnectionStatusComponent
+    ConnectionStatusComponent,
+    ThemeToggleComponent
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss'
@@ -42,6 +45,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   private readonly websocketService = inject(WebsocketService);
   private readonly router = inject(Router);
   readonly translationService = inject(SimpleTranslationService);
+  readonly themeService = inject(ThemeService);
   
   // Translation loading state
   protected readonly translationsLoading = signal(true);

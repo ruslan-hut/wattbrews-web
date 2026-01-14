@@ -105,12 +105,6 @@
             <mat-tab [label]="translationService.getReactive('profile.paymentPlansTab')">
               <div class="tab-content">
                 <mat-card class="section-card">
-                  <mat-card-header>
-                    <mat-card-title>
-                      <mat-icon>payment</mat-icon>
-                      {{ translationService.getReactive('profile.paymentPlans.title') }}
-                    </mat-card-title>
-                  </mat-card-header>
                   <mat-card-content>
                     @if (userInfoService.getPaymentPlans().length > 0) {
                       <div class="payment-plans">
@@ -167,12 +161,6 @@
             <mat-tab [label]="translationService.getReactive('profile.userTagsTab')">
               <div class="tab-content">
                 <mat-card class="section-card">
-                  <mat-card-header>
-                    <mat-card-title>
-                      <mat-icon>credit_card</mat-icon>
-                      {{ translationService.getReactive('profile.userTags.title') }}
-                    </mat-card-title>
-                  </mat-card-header>
                   <mat-card-content>
                     @if (userInfoService.getUserTags().length > 0) {
                       <div class="user-tags">
@@ -221,12 +209,6 @@
             <mat-tab [label]="translationService.getReactive('profile.paymentMethodsTab')">
               <div class="tab-content">
                 <mat-card class="section-card">
-                  <mat-card-header>
-                    <mat-card-title>
-                      <mat-icon>account_balance_wallet</mat-icon>
-                      {{ translationService.getReactive('profile.paymentMethods.title') }}
-                    </mat-card-title>
-                  </mat-card-header>
                   <mat-card-content>
                     @if (userInfoService.getPaymentMethods().length > 0) {
                       <div class="payment-methods">

@@ -2,7 +2,7 @@
   padding: 20px;
   max-width: 800px;
   margin: 0 auto;
-  background-color: #f8f9fa;
+  background-color: var(--energy-background);
   min-height: 100vh;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .back-button {
-  color: #666;
+  color: var(--energy-text-muted);
 }
 
 .header-content {
@@ -22,15 +22,17 @@
 }
 
 .page-title {
-  font-size: 2rem;
-  font-weight: 300;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: 600;
+  letter-spacing: -0.03em;
   margin: 0;
-  color: #2c3e50;
+  color: var(--energy-text-primary);
 }
 
 .page-subtitle {
   font-size: 1.1rem;
-  color: #5a6c7d;
+  color: var(--energy-text-secondary);
   margin: 4px 0 0 0;
 }
 
@@ -50,15 +52,15 @@
 }
 
 mat-card {
-  background-color: white !important;
-  border-radius: 12px;
+  background-color: var(--energy-surface) !important;
+  border-radius: var(--energy-radius-lg);
   overflow: hidden;
 }
 
 .station-info-card, .connector-selection-card, .payment-method-card, .tariff-card {
-  border-radius: 12px;
+  border-radius: var(--energy-radius-lg);
   overflow: hidden;
-  background-color: white !important;
+  background-color: var(--energy-surface) !important;
 }
 
 .station-status-icon {
@@ -73,10 +75,10 @@ mat-card {
 }
 
 .connector-option {
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
+  border: 1px solid var(--energy-border);
+  border-radius: var(--energy-radius-lg);
   padding: 1rem;
-  background-color: white;
+  background-color: var(--energy-surface);
   transition: all 0.3s ease;
   position: relative;
 }
@@ -91,12 +93,12 @@ mat-card {
 }
 
 .connector-option.clickable:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--energy-shadow-md);
 }
 
 .connector-option.selected {
-  background-color: #e8f5e8;
-  border-color: #28a745;
+  background-color: var(--energy-success-light);
+  border-color: var(--energy-success);
 }
 
 .connector-header {
@@ -108,7 +110,7 @@ mat-card {
 
 .connector-header h4 {
   margin: 0;
-  color: #2c3e50;
+  color: var(--energy-text-primary);
 }
 
 .connector-details {
@@ -125,13 +127,13 @@ mat-card {
 
 .connector-label {
   font-size: 0.8rem;
-  color: #6c757d;
+  color: var(--energy-text-muted);
   font-weight: 500;
 }
 
 .connector-value {
   font-size: 0.9rem;
-  color: #2c3e50;
+  color: var(--energy-text-primary);
   font-weight: 400;
 }
 
@@ -143,7 +145,7 @@ mat-card {
   gap: 1rem;
   padding: 2rem;
   justify-content: center;
-  color: #6c757d;
+  color: var(--energy-text-muted);
 }
 
 .payment-methods-loading span {
@@ -157,12 +159,12 @@ mat-card {
   gap: 1rem;
   padding: 2rem;
   text-align: center;
-  color: #dc3545;
+  color: var(--energy-error);
 }
 
 .payment-methods-error mat-icon {
   font-size: 2rem;
-  color: #dc3545;
+  color: var(--energy-error);
 }
 
 .payment-methods-error span {
@@ -176,16 +178,16 @@ mat-card {
 }
 
 .payment-method-option {
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
+  border: 1px solid var(--energy-border);
+  border-radius: var(--energy-radius-lg);
   padding: 1rem;
-  background-color: white;
+  background-color: var(--energy-surface);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .payment-method-option:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--energy-shadow-md);
 }
 
 .payment-method-header {
@@ -196,7 +198,7 @@ mat-card {
 }
 
 .payment-icon {
-  color: #6c757d;
+  color: var(--energy-text-muted);
   font-size: 1.5rem;
 }
 
@@ -206,17 +208,17 @@ mat-card {
 
 .payment-method-info h4 {
   margin: 0;
-  color: #2c3e50;
+  color: var(--energy-text-primary);
 }
 
 .payment-method-info p {
   margin: 0;
-  color: #6c757d;
+  color: var(--energy-text-muted);
   font-size: 0.9rem;
 }
 
 .check-icon {
-  color: #28a745;
+  color: var(--energy-success);
   font-size: 1.5rem;
 }
 
@@ -227,13 +229,13 @@ mat-card {
 
 .payment-method-label {
   font-size: 0.8rem;
-  color: #6c757d;
+  color: var(--energy-text-muted);
   font-weight: 500;
 }
 
 .payment-method-value {
   font-size: 0.9rem;
-  color: #2c3e50;
+  color: var(--energy-text-primary);
   font-weight: 400;
 }
 
@@ -248,7 +250,7 @@ mat-card {
 
 .no-payment-methods mat-icon {
   font-size: 3rem;
-  color: #6c757d;
+  color: var(--energy-text-muted);
 }
 
 .tariff-loading {
@@ -257,7 +259,7 @@ mat-card {
   gap: 1rem;
   padding: 2rem;
   justify-content: center;
-  color: #6c757d;
+  color: var(--energy-text-muted);
 }
 
 .tariff-loading span {
@@ -271,12 +273,12 @@ mat-card {
   gap: 1rem;
   padding: 2rem;
   text-align: center;
-  color: #dc3545;
+  color: var(--energy-error);
 }
 
 .tariff-error mat-icon {
   font-size: 2rem;
-  color: #dc3545;
+  color: var(--energy-error);
 }
 
 .tariff-error span {
@@ -299,13 +301,13 @@ mat-card {
 
 .tariff-label {
   font-size: 1rem;
-  color: #6c757d;
+  color: var(--energy-text-muted);
   font-weight: 500;
 }
 
 .tariff-value {
   font-size: 1.1rem;
-  color: #2c3e50;
+  color: var(--energy-text-primary);
   font-weight: 600;
 }
 
@@ -315,8 +317,8 @@ mat-card {
   align-items: center;
   gap: 1rem;
   padding: 2rem;
-  background-color: white;
-  border-radius: 12px;
+  background-color: var(--energy-surface);
+  border-radius: var(--energy-radius-lg);
 }
 
 .selected-connector-info {
@@ -326,14 +328,14 @@ mat-card {
   padding: 0.75rem 1.5rem;
   background-color: transparent;
   border: none;
-  border-radius: 8px;
-  color: #2c3e50;
+  border-radius: var(--energy-radius-md);
+  color: var(--energy-text-primary);
   font-weight: 500;
   font-size: 0.9rem;
 }
 
 .selected-connector-info mat-icon {
-  color: #2c3e50;
+  color: var(--energy-text-primary);
   font-size: 1.2rem;
 }
 
@@ -341,62 +343,61 @@ mat-card {
   font-size: 1.2rem;
   padding: 1rem 2rem;
   min-width: 200px;
-  border: 2px solid #1976d2 !important;
+  border: 2px solid var(--energy-primary) !important;
   background-color: transparent !important;
-  color: #1976d2 !important;
+  color: var(--energy-primary) !important;
 }
 
 .start-charge-button:hover:not(:disabled) {
-  background-color: #1976d2 !important;
-  color: white !important;
+  background-color: var(--energy-primary) !important;
+  color: var(--energy-surface) !important;
 }
 
 .start-charge-button:disabled {
-  border-color: #ccc !important;
-  color: #ccc !important;
+  border-color: var(--energy-text-disabled) !important;
+  color: var(--energy-text-disabled) !important;
 }
 
 .start-charge-info {
   text-align: center;
-  color: #6c757d;
+  color: var(--energy-text-muted);
 }
 
 .start-charge-info p {
   margin: 0;
 }
 
-.available { 
-  background-color: #d1fae5;
-  color: #10b981;
+.available {
+  background-color: var(--energy-success-light);
+  color: var(--energy-success-dark);
 }
-.occupied { 
-  background-color: #f3f4f6;
-  color: #6b7280;
+.occupied {
+  background-color: var(--energy-warning-light);
+  color: var(--energy-warning-dark);
 }
-.out-of-order { 
-  background-color: #f3f4f6;
-  color: #6b7280;
+.out-of-order {
+  background-color: var(--energy-error-light);
+  color: var(--energy-error-dark);
 }
 .reserved {
-  background-color: #f3f4f6;
-  color: #6b7280;
+  background-color: var(--energy-info-light);
+  color: var(--energy-info-dark);
 }
 .faulted {
-  background-color: #f3f4f6;
-  color: #6b7280;
+  background-color: var(--energy-error-light);
+  color: var(--energy-error-dark);
 }
 .unknown {
-  background-color: #f3f4f6;
-  color: #6b7280;
+  background-color: var(--energy-surface-variant);
+  color: var(--energy-text-secondary);
 }
 
 @media (max-width: 768px) {
   .connectors-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .connector-details {
     grid-template-columns: 1fr 1fr;
   }
 }
-

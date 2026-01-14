@@ -1,15 +1,28 @@
-// Minimal component-specific styles - most styling handled by global energy theme
+::ng-deep .login-card {
+  mat-card-title, .mat-mdc-card-title {
+    font-family: var(--font-family-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  mat-card-subtitle, .mat-mdc-card-subtitle {
+    font-family: var(--font-family-body);
+  }
+}
+
+.login-explanation .explanation-text {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
 .login-form {
+  font-family: var(--font-family-body);
   display: flex;
   flex-direction: column;
   gap: var(--energy-space-lg);
   margin-top: var(--energy-space-lg);
-  padding: var(--energy-space-xl);
-  background: var(--energy-gray-100);
-  border-radius: var(--energy-radius-xl);
-  border: 1px solid var(--energy-gray-200);
   width: 100%;
-  max-width: 400px;
 }
 
 .full-width {
@@ -24,16 +37,17 @@
 }
 
 .sign-in-button {
+  font-family: var(--font-family-body);
   width: 100%;
   height: 48px;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   font-weight: 500;
   border-radius: var(--energy-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--energy-space-sm);
-  transition: all 0.2s ease;
+  transition: all var(--transition-base);
 }
 
 .google-button {
@@ -49,15 +63,15 @@
 }
 
 .email-link-button {
-  background: var(--energy-blue);
+  background: var(--energy-primary);
   color: white;
   border: none;
 }
 
 .email-link-button:hover:not(:disabled) {
-  background: var(--energy-blue-dark);
+  background: var(--energy-primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
 .button-icon {
@@ -75,46 +89,48 @@
 .email-link-explanation {
   margin-bottom: var(--energy-space-lg);
   padding: var(--energy-space-md);
-  background: var(--energy-blue-50);
+  background: var(--energy-primary-50);
   border-radius: var(--energy-radius-lg);
-  border-left: 4px solid var(--energy-blue);
+  border-left: 4px solid var(--energy-primary);
 }
 
 .email-link-explanation .explanation-text {
+  font-family: var(--font-family-body);
   margin: 0;
-  color: var(--energy-blue-dark);
-  font-size: 0.9rem;
+  color: var(--energy-primary-dark);
+  font-size: var(--font-size-sm);
   line-height: 1.4;
 }
 
 .email-link-success {
   margin-top: var(--energy-space-lg);
   padding: var(--energy-space-lg);
-  background: var(--energy-green-50);
+  background: var(--energy-success-light);
   border-radius: var(--energy-radius-lg);
-  border: 1px solid var(--energy-green-200);
+  border: 1px solid var(--energy-success);
   text-align: center;
 }
 
 .success-icon {
-  color: var(--energy-green);
+  color: var(--energy-success);
   font-size: 2rem;
   margin-bottom: var(--energy-space-sm);
 }
 
 .success-message {
+  font-family: var(--font-family-body);
   margin: 0 0 var(--energy-space-sm) 0;
-  color: var(--energy-green-dark);
+  color: var(--energy-success-dark);
   font-weight: 500;
 }
 
 .success-submessage {
+  font-family: var(--font-family-body);
   margin: 0;
-  color: var(--energy-gray-600);
-  font-size: 0.9rem;
+  color: var(--energy-text-secondary);
+  font-size: var(--font-size-sm);
 }
 
-// Responsive adjustments
 @media (max-width: 480px) {
   .login-form {
     padding: var(--energy-space-lg);
@@ -127,6 +143,6 @@
 
   .sign-in-button {
     height: 44px;
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
   }
 }

@@ -1,0 +1,28 @@
+<button mat-icon-button
+        [matMenuTriggerFor]="themeMenu"
+        [matTooltip]="'Theme: ' + getThemeLabel()"
+        class="theme-toggle-button"
+        aria-label="Toggle theme">
+  <mat-icon>{{ getThemeIcon() }}</mat-icon>
+</button>
+
+<mat-menu #themeMenu="matMenu" class="theme-menu">
+  <button mat-menu-item
+          (click)="setTheme('light')"
+          [class.active]="themeService.themeMode() === 'light'">
+    <mat-icon>light_mode</mat-icon>
+    <span>Light</span>
+  </button>
+  <button mat-menu-item
+          (click)="setTheme('dark')"
+          [class.active]="themeService.themeMode() === 'dark'">
+    <mat-icon>dark_mode</mat-icon>
+    <span>Dark</span>
+  </button>
+  <button mat-menu-item
+          (click)="setTheme('system')"
+          [class.active]="themeService.themeMode() === 'system'">
+    <mat-icon>settings_brightness</mat-icon>
+    <span>System</span>
+  </button>
+</mat-menu>

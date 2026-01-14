@@ -80,13 +80,15 @@ import { NotificationService } from '../../../core/services/notification.service
       align-items: center;
       min-height: 100vh;
       padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--energy-gradient-hero);
     }
 
     .forgot-password-card {
       width: 100%;
       max-width: 400px;
       padding: 0;
+      background-color: var(--energy-surface);
+      border-radius: var(--energy-radius-xl);
     }
 
     .forgot-password-title {
@@ -95,11 +97,11 @@ import { NotificationService } from '../../../core/services/notification.service
       gap: 8px;
       font-size: 1.5rem;
       font-weight: 500;
-      color: #333;
+      color: var(--energy-text-primary);
     }
 
     .forgot-password-icon {
-      color: #ff9800;
+      color: var(--energy-secondary);
       font-size: 2rem;
     }
 
@@ -128,29 +130,29 @@ import { NotificationService } from '../../../core/services/notification.service
     .success-message {
       text-align: center;
       padding: 20px;
-      background: #f3f8ff;
-      border-radius: 8px;
+      background: var(--energy-primary-50);
+      border-radius: var(--energy-radius-lg);
       margin-top: 20px;
     }
 
     .success-icon {
-      color: #4caf50;
+      color: var(--energy-success);
       font-size: 3rem;
       margin-bottom: 16px;
     }
 
     .success-message p {
       margin: 8px 0;
-      color: #333;
+      color: var(--energy-text-primary);
     }
 
     .resend-text {
       font-size: 0.9rem;
-      color: #666;
+      color: var(--energy-text-secondary);
     }
 
     .resend-link {
-      color: #2196f3;
+      color: var(--energy-primary);
       text-decoration: none;
       font-weight: 500;
     }
@@ -165,8 +167,12 @@ import { NotificationService } from '../../../core/services/notification.service
       margin: 0;
     }
 
+    .forgot-password-actions p {
+      color: var(--energy-text-secondary);
+    }
+
     .login-link {
-      color: #2196f3;
+      color: var(--energy-primary);
       text-decoration: none;
       font-weight: 500;
     }
@@ -179,7 +185,7 @@ import { NotificationService } from '../../../core/services/notification.service
       .forgot-password-container {
         padding: 10px;
       }
-      
+
       .forgot-password-card {
         margin: 0;
       }

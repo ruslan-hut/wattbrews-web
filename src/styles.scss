@@ -9,373 +9,944 @@
 // Leaflet CSS imports - Required for proper map rendering
 @import 'leaflet/dist/leaflet.css';
 
-// Energy/Electric themed color palette - using Material 3 design tokens
+// =============================================================================
+// MATERIAL DESIGN 3 THEME CONFIGURATION
+// =============================================================================
 
 html {
   @include mat.theme((
     color: (
-      primary: mat.$cyan-palette,
-      secondary: mat.$yellow-palette,
-      tertiary: mat.$blue-palette,
+      primary: mat.$violet-palette,
+      secondary: mat.$cyan-palette,
+      tertiary: mat.$azure-palette,
     ),
     typography: (
-      font-family: 'Inter, Roboto, "Helvetica Neue", sans-serif'
+      font-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
     ),
     density: -1,
   ));
 }
 
-// Energy theme custom properties
+// =============================================================================
+// DESIGN SYSTEM: CSS CUSTOM PROPERTIES
+// =============================================================================
+
 :root {
-  // Energy brand colors
-  --energy-cyan: #00bcd4;
-  --energy-cyan-light: #4dd0e1;
-  --energy-cyan-dark: #0097a7;
-  --energy-amber: #ffc107;
-  --energy-amber-light: #ffecb3;
-  --energy-amber-dark: #ff8f00;
-  --energy-blue: #2196f3;
-  --energy-blue-light: #64b5f6;
-  --energy-blue-dark: #1976d2;
-  
-  // Neutral colors for energy theme
-  --energy-gray-50: #f8fafc;
-  --energy-gray-100: #f1f5f9;
-  --energy-gray-200: #e2e8f0;
-  --energy-gray-300: #cbd5e1;
-  --energy-gray-400: #94a3b8;
-  --energy-gray-500: #64748b;
-  --energy-gray-600: #475569;
-  --energy-gray-700: #334155;
-  --energy-gray-800: #1e293b;
-  --energy-gray-900: #0f172a;
-  
-  // Status colors
+  // =========================================================================
+  // TYPOGRAPHY: Font Families
+  // =========================================================================
+  --font-family-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  // =========================================================================
+  // PRIMARY: Purple Tech
+  // =========================================================================
+  --energy-primary: #8b5cf6;
+  --energy-primary-light: #a78bfa;
+  --energy-primary-lighter: #c4b5fd;
+  --energy-primary-dark: #7c3aed;
+  --energy-primary-darker: #6d28d9;
+  --energy-primary-50: #f5f3ff;
+  --energy-primary-100: #ede9fe;
+  --energy-primary-900: #4c1d95;
+
+  // =========================================================================
+  // SECONDARY: Teal Accent
+  // =========================================================================
+  --energy-secondary: #14b8a6;
+  --energy-secondary-light: #2dd4bf;
+  --energy-secondary-lighter: #5eead4;
+  --energy-secondary-dark: #0d9488;
+  --energy-secondary-darker: #0f766e;
+  --energy-secondary-50: #f0fdfa;
+  --energy-secondary-100: #ccfbf1;
+  --energy-secondary-900: #134e4a;
+
+  // =========================================================================
+  // TERTIARY: Indigo
+  // =========================================================================
+  --energy-tertiary: #6366f1;
+  --energy-tertiary-light: #818cf8;
+  --energy-tertiary-dark: #4f46e5;
+  --energy-tertiary-50: #eef2ff;
+
+  // =========================================================================
+  // NEUTRAL GRAY SCALE
+  // =========================================================================
+  --energy-gray-50: #fafafa;
+  --energy-gray-100: #f4f4f5;
+  --energy-gray-200: #e4e4e7;
+  --energy-gray-300: #d4d4d8;
+  --energy-gray-400: #a1a1aa;
+  --energy-gray-500: #71717a;
+  --energy-gray-600: #52525b;
+  --energy-gray-700: #3f3f46;
+  --energy-gray-800: #27272a;
+  --energy-gray-900: #18181b;
+  --energy-gray-950: #09090b;
+
+  // =========================================================================
+  // STATUS COLORS
+  // =========================================================================
   --energy-success: #10b981;
+  --energy-success-light: #d1fae5;
+  --energy-success-dark: #059669;
   --energy-warning: #f59e0b;
+  --energy-warning-light: #fef3c7;
+  --energy-warning-dark: #d97706;
   --energy-error: #ef4444;
+  --energy-error-light: #fee2e2;
+  --energy-error-dark: #dc2626;
   --energy-info: #3b82f6;
-  
-  // Spacing scale
+  --energy-info-light: #dbeafe;
+  --energy-info-dark: #2563eb;
+
+  // =========================================================================
+  // SEMANTIC THEME COLORS (Light Mode Default)
+  // =========================================================================
+  --energy-surface: #ffffff;
+  --energy-surface-variant: var(--energy-gray-50);
+  --energy-surface-elevated: #ffffff;
+  --energy-surface-container: var(--energy-gray-100);
+
+  --energy-background: var(--energy-gray-50);
+  --energy-background-subtle: var(--energy-gray-100);
+
+  --energy-text-primary: var(--energy-gray-900);
+  --energy-text-secondary: var(--energy-gray-600);
+  --energy-text-muted: var(--energy-gray-500);
+  --energy-text-disabled: var(--energy-gray-400);
+
+  --energy-border: var(--energy-gray-200);
+  --energy-border-subtle: var(--energy-gray-100);
+  --energy-border-strong: var(--energy-gray-300);
+
+  // =========================================================================
+  // SPACING SCALE
+  // =========================================================================
   --energy-space-xs: 0.25rem;
   --energy-space-sm: 0.5rem;
   --energy-space-md: 1rem;
   --energy-space-lg: 1.5rem;
   --energy-space-xl: 2rem;
   --energy-space-2xl: 3rem;
-  
-  // Border radius scale
-  --energy-radius-sm: 0.375rem;
-  --energy-radius-md: 0.5rem;
-  --energy-radius-lg: 0.75rem;
-  --energy-radius-xl: 1rem;
+  --energy-space-3xl: 4rem;
+
+  // =========================================================================
+  // BORDER RADIUS SCALE (Soft & Rounded)
+  // =========================================================================
+  --energy-radius-xs: 0.375rem;
+  --energy-radius-sm: 0.5rem;
+  --energy-radius-md: 0.75rem;
+  --energy-radius-lg: 1rem;
+  --energy-radius-xl: 1.25rem;
   --energy-radius-2xl: 1.5rem;
-  
-  // Shadows
-  --energy-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --energy-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --energy-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --energy-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --energy-radius-3xl: 2rem;
+  --energy-radius-full: 9999px;
+
+  // =========================================================================
+  // SHADOW SCALE
+  // =========================================================================
+  --energy-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --energy-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --energy-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --energy-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
+  --energy-shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
+
+  // Glassmorphism shadows
+  --energy-shadow-glass: 0 8px 32px rgba(139, 92, 246, 0.1);
+  --energy-shadow-glass-lg: 0 16px 48px rgba(139, 92, 246, 0.15);
+
+  // Elevated shadow
+  --energy-shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.08),
+                            0 2px 4px rgba(0, 0, 0, 0.04),
+                            0 0 0 1px rgba(0, 0, 0, 0.02);
+
+  // Glow effects
+  --energy-glow-primary: 0 0 20px rgba(139, 92, 246, 0.3);
+  --energy-glow-secondary: 0 0 20px rgba(20, 184, 166, 0.3);
+
+  // =========================================================================
+  // GLASSMORPHISM UTILITIES
+  // =========================================================================
+  --energy-blur-sm: blur(4px);
+  --energy-blur-md: blur(8px);
+  --energy-blur-lg: blur(16px);
+  --energy-blur-xl: blur(24px);
+
+  --energy-glass-bg: rgba(255, 255, 255, 0.7);
+  --energy-glass-bg-light: rgba(255, 255, 255, 0.85);
+  --energy-glass-bg-heavy: rgba(255, 255, 255, 0.95);
+  --energy-glass-border: rgba(255, 255, 255, 0.3);
+
+  // =========================================================================
+  // GRADIENTS
+  // =========================================================================
+  --energy-gradient-primary: linear-gradient(135deg, var(--energy-primary) 0%, var(--energy-primary-dark) 100%);
+  --energy-gradient-secondary: linear-gradient(135deg, var(--energy-secondary) 0%, var(--energy-secondary-dark) 100%);
+  --energy-gradient-surface: linear-gradient(135deg, var(--energy-gray-50) 0%, var(--energy-gray-100) 100%);
+  --energy-gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 100%);
+  --energy-gradient-hero: linear-gradient(135deg, var(--energy-primary) 0%, var(--energy-tertiary) 100%);
+  --energy-gradient-hero-soft: linear-gradient(135deg, var(--energy-primary-50) 0%, var(--energy-tertiary-50) 100%);
+
+  // =========================================================================
+  // TYPOGRAPHY (Fluid)
+  // =========================================================================
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1rem + 0.5vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --font-size-2xl: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+  --font-size-3xl: clamp(2rem, 1.5rem + 2.5vw, 3rem);
+
+  // =========================================================================
+  // CONTAINER WIDTHS
+  // =========================================================================
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1400px;
+
+  // =========================================================================
+  // TRANSITIONS
+  // =========================================================================
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+
+// =============================================================================
+// DARK THEME OVERRIDES
+// =============================================================================
+
+[data-theme="dark"] {
+  // Surface colors
+  --energy-surface: var(--energy-gray-900);
+  --energy-surface-variant: var(--energy-gray-800);
+  --energy-surface-elevated: var(--energy-gray-800);
+  --energy-surface-container: #1f1f23;
+
+  // Background
+  --energy-background: var(--energy-gray-950);
+  --energy-background-subtle: var(--energy-gray-900);
+
+  // Text colors
+  --energy-text-primary: var(--energy-gray-50);
+  --energy-text-secondary: var(--energy-gray-300);
+  --energy-text-muted: var(--energy-gray-500);
+  --energy-text-disabled: var(--energy-gray-600);
+
+  // Border colors
+  --energy-border: var(--energy-gray-700);
+  --energy-border-subtle: var(--energy-gray-800);
+  --energy-border-strong: var(--energy-gray-600);
+
+  // Primary (slightly brighter for dark mode visibility)
+  --energy-primary: #a78bfa;
+  --energy-primary-light: #c4b5fd;
+  --energy-primary-dark: #8b5cf6;
+  --energy-primary-50: rgba(139, 92, 246, 0.1);
+
+  // Secondary (slightly brighter)
+  --energy-secondary: #2dd4bf;
+  --energy-secondary-light: #5eead4;
+  --energy-secondary-dark: #14b8a6;
+  --energy-secondary-50: rgba(20, 184, 166, 0.1);
+
+  // Glassmorphism dark mode
+  --energy-glass-bg: rgba(24, 24, 27, 0.8);
+  --energy-glass-bg-light: rgba(39, 39, 42, 0.85);
+  --energy-glass-bg-heavy: rgba(39, 39, 42, 0.95);
+  --energy-glass-border: rgba(255, 255, 255, 0.1);
+
+  // Shadows (darker, more subtle)
+  --energy-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --energy-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.25);
+  --energy-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+  --energy-shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --energy-shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.3),
+                            0 2px 4px rgba(0, 0, 0, 0.2),
+                            0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  // Gradients
+  --energy-gradient-surface: linear-gradient(135deg, var(--energy-gray-900) 0%, var(--energy-gray-800) 100%);
+  --energy-gradient-glass: linear-gradient(135deg, rgba(39, 39, 42, 0.9) 0%, rgba(24, 24, 27, 0.7) 100%);
+  --energy-gradient-hero-soft: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+
+  // Status colors with dark mode adjustments (backgrounds - higher opacity for visibility)
+  --energy-success-light: rgba(16, 185, 129, 0.25);
+  --energy-warning-light: rgba(245, 158, 11, 0.25);
+  --energy-error-light: rgba(239, 68, 68, 0.25);
+  --energy-info-light: rgba(59, 130, 246, 0.25);
+
+  // Status text colors (brighter for dark mode contrast)
+  --energy-success-dark: #34d399;
+  --energy-warning-dark: #fbbf24;
+  --energy-error-dark: #f87171;
+  --energy-info-dark: #60a5fa;
+
+  // Glow effects (more prominent in dark mode)
+  --energy-glow-primary: 0 0 30px rgba(167, 139, 250, 0.4);
+  --energy-glow-secondary: 0 0 30px rgba(45, 212, 191, 0.4);
+}
+
+// =============================================================================
+// BASE STYLES
+// =============================================================================
+
+html, body {
+  height: 100%;
 }
 
 body {
-  // Default the application to a light color theme
-  color-scheme: light;
-
-  // Set energy-themed background and text colors
-  background-color: var(--energy-gray-50);
-  color: var(--energy-gray-800);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin
   margin: 0;
-  
-  // Smooth transitions for theme changes
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: var(--font-family-body);
+  background-color: var(--energy-background);
+  color: var(--energy-text-primary);
+  font: var(--mat-sys-body-medium);
+  transition: background-color var(--transition-slow), color var(--transition-slow);
 }
-/* Global Energy Theme Component Styles */
 
-// Material Design component overrides
+// =============================================================================
+// TYPOGRAPHY: Heading Styles (Space Grotesk)
+// =============================================================================
+
+h1, h2, h3, h4, h5, h6,
+.heading-display {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--energy-text-primary);
+}
+
+h1, .heading-1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+h2, .heading-2 {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+h3, .heading-3 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h4, .heading-4 {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+h5, .heading-5 {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+h6, .heading-6 {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+// Display text utility (larger, bolder headings)
+.text-display {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+// Body text utilities
+.text-body {
+  font-family: var(--font-family-body);
+}
+
+.text-body-large {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-lg);
+  line-height: 1.6;
+}
+
+.text-body-small {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+// Page title utilities (for component page headers)
+.page-title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--energy-text-primary);
+}
+
+.page-subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-lg);
+  color: var(--energy-text-secondary);
+}
+
+// =============================================================================
+// MATERIAL DESIGN COMPONENT OVERRIDES
+// =============================================================================
+
+// Card overrides
 .mat-mdc-card {
-  border-radius: var(--energy-radius-xl) !important;
-  box-shadow: var(--energy-shadow-md) !important;
-  border: 1px solid var(--energy-gray-200) !important;
-  background-color: white !important;
-  
+  border-radius: var(--energy-radius-xl);
+  box-shadow: var(--energy-shadow-elevated);
+  border: 1px solid var(--energy-border-subtle);
+  background-color: var(--energy-surface);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+
+  &:hover {
+    box-shadow: var(--energy-shadow-lg);
+  }
+
   &.energy-card-elevated {
-    box-shadow: var(--energy-shadow-lg) !important;
+    box-shadow: var(--energy-shadow-lg);
   }
-  
+
   &.energy-card-outlined {
-    border: 2px solid var(--energy-cyan) !important;
-    box-shadow: none !important;
+    border: 2px solid var(--energy-primary);
+    box-shadow: none;
   }
+
+  &.energy-card-glass {
+    background: var(--energy-glass-bg);
+    backdrop-filter: var(--energy-blur-lg);
+    -webkit-backdrop-filter: var(--energy-blur-lg);
+    border: 1px solid var(--energy-glass-border);
+    box-shadow: var(--energy-shadow-glass);
+  }
+}
+
+// Card title typography (Space Grotesk for headings)
+.mat-mdc-card-title {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.mat-mdc-card-subtitle {
+  font-family: var(--font-family-body);
+}
+
+// Button overrides
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button, .mat-mdc-flat-button, .mat-mdc-icon-button, .mat-button, button[mat-button], button[mat-raised-button], button[mat-flat-button] {
+  font-family: var(--font-family-body);
 }
 
 .mat-mdc-button {
-  border-radius: var(--energy-radius-lg) !important;
-  font-weight: 500 !important;
-  text-transform: none !important;
-  transition: all 0.2s ease !important;
-  
+  border-radius: var(--energy-radius-lg);
+  font-weight: 500;
+  text-transform: none;
+  transition: all var(--transition-base);
+
   &.mat-mdc-raised-button {
-    box-shadow: var(--energy-shadow-sm) !important;
-    
+    box-shadow: var(--energy-shadow-sm);
+
     &:hover {
-      box-shadow: var(--energy-shadow-md) !important;
-      transform: translateY(-1px) !important;
+      box-shadow: var(--energy-shadow-md);
+      transform: translateY(-1px);
     }
   }
-  
+
   &.energy-button-primary {
-    background-color: var(--energy-cyan) !important;
-    color: white !important;
-    
+    background-color: var(--energy-primary);
+    color: white;
+
     &:hover {
-      background-color: var(--energy-cyan-dark) !important;
+      background-color: var(--energy-primary-dark);
     }
   }
-  
+
   &.energy-button-secondary {
-    background-color: var(--energy-amber) !important;
-    color: var(--energy-gray-800) !important;
-    
+    background-color: var(--energy-secondary);
+    color: white;
+
     &:hover {
-      background-color: var(--energy-amber-dark) !important;
-      color: white !important;
+      background-color: var(--energy-secondary-dark);
+    }
+  }
+
+  &.energy-button-glass {
+    background: var(--energy-glass-bg);
+    backdrop-filter: var(--energy-blur-md);
+    -webkit-backdrop-filter: var(--energy-blur-md);
+    border: 1px solid var(--energy-glass-border);
+    color: var(--energy-text-primary);
+
+    &:hover {
+      background: var(--energy-glass-bg-light);
     }
   }
 }
 
+// Form field override
 .mat-mdc-form-field {
+  font-family: var(--font-family-body);
+
   .mat-mdc-text-field-wrapper {
-    border-radius: var(--energy-radius-lg) !important;
+    border-radius: var(--energy-radius-lg);
+  }
+
+  .mat-mdc-floating-label,
+  .mdc-floating-label,
+  .mat-mdc-form-field-hint,
+  .mat-mdc-form-field-error,
+  input,
+  textarea {
+    font-family: var(--font-family-body);
   }
 }
 
+// Chip overrides - ensure consistent border-radius on all elements
 .mat-mdc-chip {
+  font-family: var(--font-family-body);
+  font-weight: 500;
+  --mdc-chip-container-shape-radius: var(--energy-radius-xl);
   border-radius: var(--energy-radius-xl) !important;
-  font-weight: 500 !important;
-  
+
+  // Force all internal elements to use the same border-radius
+  &,
+  &::before,
+  &::after,
+  .mdc-evolution-chip__cell,
+  .mdc-evolution-chip__cell--primary,
+  .mdc-evolution-chip__action,
+  .mdc-evolution-chip__action--primary,
+  .mdc-evolution-chip__action--presentational,
+  .mat-mdc-chip-action,
+  .mat-mdc-chip-graphic,
+  .mdc-evolution-chip__graphic,
+  .mdc-evolution-chip__icon--primary,
+  .mat-mdc-chip-focus-overlay,
+  .mat-mdc-chip-ripple,
+  .mdc-evolution-chip__ripple {
+    border-radius: var(--energy-radius-xl) !important;
+  }
+
+  // Remove any borders that might cause misalignment
+  &::before {
+    border: none !important;
+  }
+
+  &.energy-chip-primary {
+    background-color: var(--energy-primary-50);
+    color: var(--energy-primary-dark);
+  }
+
+  &.energy-chip-secondary {
+    background-color: var(--energy-secondary-50);
+    color: var(--energy-secondary-dark);
+  }
+
   &.energy-chip-success {
-    background-color: var(--energy-success) !important;
-    color: white !important;
+    background-color: var(--energy-success-light);
+    color: var(--energy-success-dark);
   }
-  
+
   &.energy-chip-warning {
-    background-color: var(--energy-warning) !important;
-    color: white !important;
+    background-color: var(--energy-warning-light);
+    color: var(--energy-warning-dark);
   }
-  
+
   &.energy-chip-error {
-    background-color: var(--energy-error) !important;
-    color: white !important;
+    background-color: var(--energy-error-light);
+    color: var(--energy-error-dark);
   }
-  
+
   &.energy-chip-info {
-    background-color: var(--energy-info) !important;
-    color: white !important;
+    background-color: var(--energy-info-light);
+    color: var(--energy-info-dark);
   }
 }
 
-.mat-mdc-toolbar {
-  background-color: var(--energy-cyan) !important;
-  color: white !important;
-  box-shadow: var(--energy-shadow-md) !important;
-  
-  // Ensure language switcher follows energy theme
+// Toolbar override
+.mat-mdc-toolbar, .mat-toolbar {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  background: var(--energy-gradient-hero);
+  color: white;
+  box-shadow: var(--energy-shadow-md);
+
+  [data-theme="dark"] & {
+    background: var(--energy-surface-elevated);
+    border-bottom: 1px solid var(--energy-border);
+    color: var(--energy-text-primary);
+  }
+
+  // Language switcher styling
   app-language-switcher {
     .language-switcher {
-      color: var(--energy-amber) !important;
-      background-color: rgba(255, 255, 255, 0.15) !important;
-      border: 1px solid var(--energy-amber) !important;
-      box-shadow: var(--energy-shadow-sm) !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      
+      color: var(--energy-secondary-light);
+      background-color: rgba(255, 255, 255, 0.15);
+      border: 1px solid var(--energy-secondary-light);
+      box-shadow: var(--energy-shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--energy-radius-md);
+      transition: all var(--transition-base);
+
       &:hover {
-        background-color: var(--energy-amber) !important;
-        color: var(--energy-gray-800) !important;
-        border-color: var(--energy-amber-dark) !important;
+        background-color: var(--energy-secondary);
+        color: white;
+        border-color: var(--energy-secondary);
       }
-      
+
       .language-code {
-        color: inherit !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
-        height: 100% !important;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    [data-theme="dark"] & .language-switcher {
+      color: var(--energy-secondary);
+      background-color: rgba(45, 212, 191, 0.1);
+      border-color: var(--energy-secondary);
+
+      &:hover {
+        background-color: var(--energy-secondary);
+        color: var(--energy-gray-900);
       }
     }
   }
 }
 
+// Sidenav override
 .mat-mdc-sidenav {
-  background-color: white !important;
-  border-right: 1px solid var(--energy-gray-200) !important;
+  background-color: var(--energy-surface);
+  border-right: 1px solid var(--energy-border);
 }
 
-// Energy theme utility classes
-.energy-text-primary { color: var(--energy-cyan) !important; }
-.energy-text-secondary { color: var(--energy-amber) !important; }
-.energy-text-tertiary { color: var(--energy-blue) !important; }
-.energy-text-success { color: var(--energy-success) !important; }
-.energy-text-warning { color: var(--energy-warning) !important; }
-.energy-text-error { color: var(--energy-error) !important; }
-.energy-text-muted { color: var(--energy-gray-500) !important; }
+// Dialog overrides
+.mat-mdc-dialog-container {
+  .mdc-dialog__surface {
+    background-color: var(--energy-surface);
+    border-radius: var(--energy-radius-2xl);
+  }
+}
 
-.energy-bg-primary { background-color: var(--energy-cyan) !important; }
-.energy-bg-secondary { background-color: var(--energy-amber) !important; }
-.energy-bg-tertiary { background-color: var(--energy-blue) !important; }
-.energy-bg-success { background-color: var(--energy-success) !important; }
-.energy-bg-warning { background-color: var(--energy-warning) !important; }
-.energy-bg-error { background-color: var(--energy-error) !important; }
-.energy-bg-light { background-color: var(--energy-gray-100) !important; }
+// Dialog title typography
+[mat-dialog-title], .mat-mdc-dialog-title {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
 
-.energy-border-primary { border-color: var(--energy-cyan) !important; }
-.energy-border-secondary { border-color: var(--energy-amber) !important; }
-.energy-border-light { border-color: var(--energy-gray-200) !important; }
+// Table overrides
+.mat-mdc-table {
+  font-family: var(--font-family-body);
+
+  .mat-mdc-header-cell {
+    font-family: var(--font-family-body);
+    font-weight: 600;
+  }
+
+  .mat-mdc-cell {
+    font-family: var(--font-family-body);
+  }
+}
+
+// Paginator overrides
+.mat-mdc-paginator {
+  font-family: var(--font-family-body);
+
+  .mat-mdc-paginator-container {
+    font-family: var(--font-family-body);
+  }
+
+  .mat-mdc-paginator-page-size-label,
+  .mat-mdc-paginator-range-label {
+    font-family: var(--font-family-body);
+  }
+
+  .mat-mdc-select-value {
+    font-family: var(--font-family-body);
+  }
+}
+
+// Select overrides
+.mat-mdc-select {
+  font-family: var(--font-family-body);
+
+  .mat-mdc-select-value,
+  .mat-mdc-select-placeholder {
+    font-family: var(--font-family-body);
+  }
+}
+
+.mat-mdc-option {
+  font-family: var(--font-family-body);
+}
+
+// Menu overrides
+.mat-mdc-menu-panel {
+  font-family: var(--font-family-body);
+  background-color: var(--energy-surface);
+  border-radius: var(--energy-radius-lg);
+  border: 1px solid var(--energy-border-subtle);
+  box-shadow: var(--energy-shadow-lg);
+
+  .mat-mdc-menu-item {
+    font-family: var(--font-family-body);
+    font-weight: 500;
+  }
+}
+
+// =============================================================================
+// UTILITY CLASSES
+// =============================================================================
+
+// Text utilities
+.energy-text-primary { color: var(--energy-primary); }
+.energy-text-secondary { color: var(--energy-secondary); }
+.energy-text-tertiary { color: var(--energy-tertiary); }
+.energy-text-success { color: var(--energy-success); }
+.energy-text-warning { color: var(--energy-warning); }
+.energy-text-error { color: var(--energy-error); }
+.energy-text-info { color: var(--energy-info); }
+.energy-text-muted { color: var(--energy-text-muted); }
+.energy-text-body { color: var(--energy-text-primary); }
+.energy-text-subtitle { color: var(--energy-text-secondary); }
+
+// Background utilities
+.energy-bg-primary { background-color: var(--energy-primary); color: white; }
+.energy-bg-secondary { background-color: var(--energy-secondary); color: white; }
+.energy-bg-tertiary { background-color: var(--energy-tertiary); color: white; }
+.energy-bg-success { background-color: var(--energy-success); color: white; }
+.energy-bg-warning { background-color: var(--energy-warning); color: white; }
+.energy-bg-error { background-color: var(--energy-error); color: white; }
+.energy-bg-surface { background-color: var(--energy-surface); }
+.energy-bg-background { background-color: var(--energy-background); }
+.energy-bg-elevated { background-color: var(--energy-surface-elevated); }
+
+// Border utilities
+.energy-border-primary { border-color: var(--energy-primary); }
+.energy-border-secondary { border-color: var(--energy-secondary); }
+.energy-border-light { border-color: var(--energy-border); }
+.energy-border-subtle { border-color: var(--energy-border-subtle); }
 
 // Spacing utilities
-.energy-p-xs { padding: var(--energy-space-xs) !important; }
-.energy-p-sm { padding: var(--energy-space-sm) !important; }
-.energy-p-md { padding: var(--energy-space-md) !important; }
-.energy-p-lg { padding: var(--energy-space-lg) !important; }
-.energy-p-xl { padding: var(--energy-space-xl) !important; }
+.energy-p-xs { padding: var(--energy-space-xs); }
+.energy-p-sm { padding: var(--energy-space-sm); }
+.energy-p-md { padding: var(--energy-space-md); }
+.energy-p-lg { padding: var(--energy-space-lg); }
+.energy-p-xl { padding: var(--energy-space-xl); }
+.energy-p-2xl { padding: var(--energy-space-2xl); }
 
-.energy-m-xs { margin: var(--energy-space-xs) !important; }
-.energy-m-sm { margin: var(--energy-space-sm) !important; }
-.energy-m-md { margin: var(--energy-space-md) !important; }
-.energy-m-lg { margin: var(--energy-space-lg) !important; }
-.energy-m-xl { margin: var(--energy-space-xl) !important; }
+.energy-m-xs { margin: var(--energy-space-xs); }
+.energy-m-sm { margin: var(--energy-space-sm); }
+.energy-m-md { margin: var(--energy-space-md); }
+.energy-m-lg { margin: var(--energy-space-lg); }
+.energy-m-xl { margin: var(--energy-space-xl); }
+.energy-m-2xl { margin: var(--energy-space-2xl); }
 
 // Border radius utilities
-.energy-rounded-sm { border-radius: var(--energy-radius-sm) !important; }
-.energy-rounded-md { border-radius: var(--energy-radius-md) !important; }
-.energy-rounded-lg { border-radius: var(--energy-radius-lg) !important; }
-.energy-rounded-xl { border-radius: var(--energy-radius-xl) !important; }
-.energy-rounded-2xl { border-radius: var(--energy-radius-2xl) !important; }
+.energy-rounded-xs { border-radius: var(--energy-radius-xs); }
+.energy-rounded-sm { border-radius: var(--energy-radius-sm); }
+.energy-rounded-md { border-radius: var(--energy-radius-md); }
+.energy-rounded-lg { border-radius: var(--energy-radius-lg); }
+.energy-rounded-xl { border-radius: var(--energy-radius-xl); }
+.energy-rounded-2xl { border-radius: var(--energy-radius-2xl); }
+.energy-rounded-3xl { border-radius: var(--energy-radius-3xl); }
+.energy-rounded-full { border-radius: var(--energy-radius-full); }
 
 // Shadow utilities
-.energy-shadow-sm { box-shadow: var(--energy-shadow-sm) !important; }
-.energy-shadow-md { box-shadow: var(--energy-shadow-md) !important; }
-.energy-shadow-lg { box-shadow: var(--energy-shadow-lg) !important; }
-.energy-shadow-xl { box-shadow: var(--energy-shadow-xl) !important; }
+.energy-shadow-xs { box-shadow: var(--energy-shadow-xs); }
+.energy-shadow-sm { box-shadow: var(--energy-shadow-sm); }
+.energy-shadow-md { box-shadow: var(--energy-shadow-md); }
+.energy-shadow-lg { box-shadow: var(--energy-shadow-lg); }
+.energy-shadow-xl { box-shadow: var(--energy-shadow-xl); }
+.energy-shadow-glass { box-shadow: var(--energy-shadow-glass); }
+.energy-shadow-elevated { box-shadow: var(--energy-shadow-elevated); }
+
+// Glass utility
+.energy-glass {
+  background: var(--energy-glass-bg);
+  backdrop-filter: var(--energy-blur-lg);
+  -webkit-backdrop-filter: var(--energy-blur-lg);
+  border: 1px solid var(--energy-glass-border);
+}
+
+.energy-glass-light {
+  background: var(--energy-glass-bg-light);
+  backdrop-filter: var(--energy-blur-lg);
+  -webkit-backdrop-filter: var(--energy-blur-lg);
+  border: 1px solid var(--energy-glass-border);
+}
+
+// Container utility
+.energy-container {
+  width: 100%;
+  max-width: var(--container-2xl);
+  margin: 0 auto;
+  padding: 0 var(--energy-space-md);
+
+  @media (min-width: 1024px) {
+    padding: 0 var(--energy-space-lg);
+  }
+
+  @media (min-width: 1400px) {
+    padding: 0 var(--energy-space-xl);
+  }
+}
 
 // Status indicators
 .energy-status-online {
-  color: var(--energy-success) !important;
+  color: var(--energy-success);
   &::before {
-    content: '●';
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--energy-success);
     margin-right: var(--energy-space-xs);
   }
 }
 
 .energy-status-offline {
-  color: var(--energy-error) !important;
+  color: var(--energy-error);
   &::before {
-    content: '●';
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--energy-error);
     margin-right: var(--energy-space-xs);
   }
 }
 
 .energy-status-charging {
-  color: var(--energy-cyan) !important;
+  color: var(--energy-primary);
   &::before {
-    content: '⚡';
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--energy-primary);
     margin-right: var(--energy-space-xs);
+    animation: pulse 2s ease-in-out infinite;
   }
 }
 
-/* You can add global styles to this file, and also import other style files */
+// Pulse animation for status indicators
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Inter, Roboto, "Helvetica Neue", sans-serif; }
+// =============================================================================
+// LOGIN STYLES
+// =============================================================================
 
-/* Energy Theme Login Styles */
 .login-container {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  height: 100% !important;
-  padding: var(--energy-space-xl) !important;
-  background: linear-gradient(135deg, var(--energy-gray-50) 0%, var(--energy-cyan-light) 100%) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: var(--energy-space-xl);
+  background: var(--energy-gradient-hero-soft);
 }
 
 .login-card {
-  width: 100% !important;
-  max-width: 450px !important;
-  margin: 0 auto !important;
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(10px) !important;
-  border: 1px solid var(--energy-gray-200) !important;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  background: var(--energy-glass-bg-heavy);
+  backdrop-filter: var(--energy-blur-lg);
+  -webkit-backdrop-filter: var(--energy-blur-lg);
+  border: 1px solid var(--energy-border);
+  border-radius: var(--energy-radius-2xl);
 }
 
 .login-card mat-card-header {
-  text-align: center !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: var(--energy-space-xl) var(--energy-space-lg) var(--energy-space-md) var(--energy-space-lg) !important;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--energy-space-xl) var(--energy-space-lg) var(--energy-space-md) var(--energy-space-lg);
 }
 
 .login-title {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: var(--energy-space-lg) !important;
-  font-size: 2.2rem !important;
-  font-weight: 600 !important;
-  color: var(--energy-gray-800) !important;
-  margin-bottom: var(--energy-space-sm) !important;
-  padding: 0 !important;
-  text-align: center !important;
+  font-family: var(--font-family-display);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--energy-space-lg);
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--energy-text-primary);
+  margin-bottom: var(--energy-space-sm);
+  padding: 0;
+  text-align: center;
 }
 
 .login-icon {
-  color: var(--energy-cyan) !important;
-  font-size: 1.8rem !important;
-  flex-shrink: 0 !important;
+  color: var(--energy-primary);
+  font-size: 1.8rem;
+  flex-shrink: 0;
 }
 
 mat-card-subtitle {
-  text-align: center !important;
-  margin: 0 !important;
-  color: var(--energy-gray-600) !important;
-  font-size: 1rem !important;
+  text-align: center;
+  margin: 0;
+  color: var(--energy-text-secondary);
+  font-size: var(--font-size-base);
 }
 
 .login-explanation {
-  margin-bottom: var(--energy-space-xl) !important;
-  text-align: center !important;
-  display: flex !important;
-  justify-content: center !important;
-  width: 100% !important;
+  margin-bottom: var(--energy-space-xl);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .explanation-text {
-  color: var(--energy-gray-600) !important;
-  font-size: 0.95rem !important;
-  line-height: 1.5 !important;
-  margin: 0 !important;
-  padding: 0 var(--energy-space-lg) !important;
-  text-align: center !important;
-  max-width: 400px !important;
+  color: var(--energy-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0 var(--energy-space-lg);
+  text-align: center;
+  max-width: 400px;
 }
 
 .primary-login {
-  display: flex !important;
-  justify-content: center !important;
-  width: 100% !important;
-  margin-bottom: var(--energy-space-2xl) !important;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: var(--energy-space-2xl);
 }
 
 .secondary-login {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }

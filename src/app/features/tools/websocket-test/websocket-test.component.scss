@@ -3,6 +3,14 @@
   max-width: 1920px;
   margin: 0 auto;
 
+  // Card title styling
+  ::ng-deep mat-card-title,
+  ::ng-deep .mat-mdc-card-title {
+    font-family: var(--font-family-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
   // Header Section
   .header {
     margin-bottom: 24px;
@@ -19,9 +27,12 @@
         gap: 16px;
 
         h1 {
+          font-family: var(--font-family-display);
           margin: 0;
           font-size: 28px;
-          font-weight: 500;
+          font-weight: 600;
+          letter-spacing: -0.02em;
+          color: var(--energy-text-primary);
         }
       }
 
@@ -32,10 +43,11 @@
     }
 
     .connection-info {
+      font-family: var(--font-family-body);
       display: flex;
       gap: 24px;
       flex-wrap: wrap;
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--energy-text-secondary);
       font-size: 14px;
 
       span {
@@ -62,7 +74,7 @@
 
     @media (max-width: 1200px) {
       grid-template-columns: 30% 70%;
-      
+
       .inspector-panel {
         grid-column: 1 / -1;
       }
@@ -70,7 +82,7 @@
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
-      
+
       .panel {
         grid-column: 1;
       }
@@ -116,12 +128,16 @@
 
     .quick-actions {
       h3 {
+        font-family: var(--font-family-display);
         margin: 0 0 16px;
         font-size: 16px;
-        font-weight: 500;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--energy-text-primary);
       }
 
       .quick-action-btn {
+        font-family: var(--font-family-body);
         margin-bottom: 8px;
 
         mat-icon {
@@ -160,18 +176,19 @@
       flex: 1;
       overflow-y: auto;
       max-height: 500px;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: 4px;
+      border: 1px solid var(--energy-border);
+      border-radius: var(--energy-radius-md);
       padding: 8px;
-      background-color: #fafafa;
+      background-color: var(--energy-surface-variant);
 
       .no-messages {
+        font-family: var(--font-family-body);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 100%;
-        color: rgba(0, 0, 0, 0.38);
+        color: var(--energy-text-disabled);
         padding: 48px;
 
         mat-icon {
@@ -183,9 +200,9 @@
       }
 
       .message-card {
-        background: white;
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        border-radius: 4px;
+        background: var(--energy-surface);
+        border: 1px solid var(--energy-border);
+        border-radius: var(--energy-radius-md);
         padding: 12px;
         margin-bottom: 8px;
         cursor: pointer;
@@ -193,13 +210,13 @@
         animation: slideIn 0.3s ease-out;
 
         &:hover {
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          box-shadow: var(--energy-shadow-sm);
           transform: translateY(-2px);
         }
 
         &.selected {
-          border-color: #1976d2;
-          background-color: #e3f2fd;
+          border-color: var(--energy-primary);
+          background-color: var(--energy-primary-50);
         }
 
         .message-header {
@@ -212,7 +229,7 @@
           .timestamp {
             font-family: 'Courier New', Courier, monospace;
             font-size: 12px;
-            color: rgba(0, 0, 0, 0.6);
+            color: var(--energy-text-secondary);
           }
 
           .status-chip,
@@ -231,22 +248,24 @@
         }
 
         .message-info {
+          font-family: var(--font-family-body);
           font-size: 13px;
-          color: rgba(0, 0, 0, 0.87);
+          color: var(--energy-text-primary);
           margin-bottom: 8px;
         }
 
         .message-fields {
+          font-family: var(--font-family-body);
           display: flex;
           flex-wrap: wrap;
           gap: 12px;
           font-size: 12px;
 
           .field {
-            color: rgba(0, 0, 0, 0.6);
+            color: var(--energy-text-secondary);
 
             strong {
-              color: rgba(0, 0, 0, 0.87);
+              color: var(--energy-text-primary);
             }
           }
         }
@@ -260,8 +279,9 @@
       margin-top: 16px;
 
       .message-count {
+        font-family: var(--font-family-body);
         font-size: 14px;
-        color: rgba(0, 0, 0, 0.6);
+        color: var(--energy-text-secondary);
       }
 
       .footer-actions {
@@ -287,9 +307,12 @@
 
       .parsed-fields {
         h3 {
+          font-family: var(--font-family-display);
           margin: 0 0 12px;
           font-size: 16px;
-          font-weight: 500;
+          font-weight: 600;
+          letter-spacing: -0.02em;
+          color: var(--energy-text-primary);
         }
 
         .field-list {
@@ -301,16 +324,17 @@
             display: flex;
             justify-content: space-between;
             padding: 8px 12px;
-            background-color: #f5f5f5;
-            border-radius: 4px;
+            background-color: var(--energy-surface-variant);
+            border-radius: var(--energy-radius-md);
 
             .field-label {
+              font-family: var(--font-family-body);
               font-weight: 500;
-              color: rgba(0, 0, 0, 0.6);
+              color: var(--energy-text-secondary);
             }
 
             .field-value {
-              color: rgba(0, 0, 0, 0.87);
+              color: var(--energy-text-primary);
               font-family: 'Courier New', Courier, monospace;
             }
           }
@@ -325,17 +349,20 @@
           margin-bottom: 8px;
 
           h3 {
+            font-family: var(--font-family-display);
             margin: 0;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--energy-text-primary);
           }
         }
 
         .json-content {
-          background-color: #1e1e1e;
-          color: #d4d4d4;
+          background-color: var(--energy-gray-900);
+          color: var(--energy-gray-300);
           padding: 16px;
-          border-radius: 4px;
+          border-radius: var(--energy-radius-md);
           font-family: 'Courier New', Courier, monospace;
           font-size: 12px;
           overflow-x: auto;
@@ -346,12 +373,13 @@
     }
 
     .no-selection {
+      font-family: var(--font-family-body);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 300px;
-      color: rgba(0, 0, 0, 0.38);
+      color: var(--energy-text-disabled);
 
       mat-icon {
         font-size: 64px;
@@ -385,7 +413,7 @@
         gap: 12px;
 
         mat-icon {
-          color: rgba(0, 0, 0, 0.54);
+          color: var(--energy-text-muted);
           margin-top: 4px;
         }
 
@@ -395,16 +423,18 @@
           gap: 4px;
 
           .stat-label {
+            font-family: var(--font-family-body);
             font-size: 12px;
-            color: rgba(0, 0, 0, 0.6);
+            color: var(--energy-text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
           }
 
           .stat-value {
+            font-family: var(--font-family-body);
             font-size: 24px;
             font-weight: 500;
-            color: rgba(0, 0, 0, 0.87);
+            color: var(--energy-text-primary);
           }
 
           .breakdown {
@@ -435,32 +465,32 @@
   // Status Badge Colors
   .status-chip {
     &.status-success {
-      background-color: #4caf50 !important;
+      background-color: var(--energy-success) !important;
       color: white !important;
     }
 
     &.status-error {
-      background-color: #f44336 !important;
+      background-color: var(--energy-error) !important;
       color: white !important;
     }
 
     &.status-waiting {
-      background-color: #ff9800 !important;
+      background-color: var(--energy-warning) !important;
       color: white !important;
     }
 
     &.status-ping {
-      background-color: #2196f3 !important;
+      background-color: var(--energy-info) !important;
       color: white !important;
     }
 
     &.status-value {
-      background-color: #00bcd4 !important;
+      background-color: var(--energy-secondary) !important;
       color: white !important;
     }
 
     &.status-event {
-      background-color: #9c27b0 !important;
+      background-color: var(--energy-tertiary) !important;
       color: white !important;
     }
   }
@@ -477,4 +507,3 @@
     }
   }
 }
-

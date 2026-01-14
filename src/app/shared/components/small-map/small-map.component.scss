@@ -22,26 +22,28 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--energy-glass-bg);
+  backdrop-filter: var(--energy-blur-sm);
+  -webkit-backdrop-filter: var(--energy-blur-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 500;
 }
 
 .loading-spinner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: var(--energy-space-sm);
 }
 
 .spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #007bff;
-  border-radius: 50%;
+  border: 2px solid var(--energy-border);
+  border-top: 2px solid var(--energy-primary);
+  border-radius: var(--energy-radius-full);
   animation: spin 1s linear infinite;
 }
 
@@ -51,48 +53,57 @@
 }
 
 .loading-spinner span {
-  font-size: 12px;
-  color: #666;
+  font-size: var(--font-size-xs);
+  color: var(--energy-text-secondary);
 }
 
 /* Leaflet map styles */
 :host ::ng-deep .leaflet-container {
-  height: 100% !important;
-  width: 100% !important;
-  background-color: #f8f9fa !important;
+  height: 100%;
+  width: 100%;
+  background-color: var(--energy-surface-variant);
+}
+
+/* Keep Leaflet controls below the app header (z-index: 1000) */
+:host ::ng-deep .leaflet-top,
+:host ::ng-deep .leaflet-bottom {
+  z-index: 800;
+}
+
+:host ::ng-deep .leaflet-pane {
+  z-index: 400;
 }
 
 :host ::ng-deep .leaflet-tile {
-  filter: none !important;
+  filter: none;
 }
 
 :host ::ng-deep .leaflet-popup-content {
-  font-size: 12px;
-  margin: 8px 12px;
+  font-size: var(--font-size-xs);
+  margin: var(--energy-space-sm) var(--energy-space-md);
 }
 
 :host ::ng-deep .leaflet-popup-content-wrapper {
-  border-radius: 6px;
-  box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+  border-radius: var(--energy-radius-md);
+  box-shadow: var(--energy-shadow-lg);
 }
 
 :host ::ng-deep .leaflet-control-zoom {
-  border-radius: 4px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  border-radius: var(--energy-radius-sm);
+  box-shadow: var(--energy-shadow-md);
 }
 
 :host ::ng-deep .leaflet-control-zoom a {
-  border-radius: 4px;
+  border-radius: var(--energy-radius-sm);
   font-size: 18px;
   line-height: 26px;
 }
 
 :host ::ng-deep .leaflet-control-zoom a:hover {
-  background-color: #f4f4f4;
+  background-color: var(--energy-surface-variant);
 }
 
 :host ::ng-deep .custom-marker {
-  background: transparent !important;
-  border: none !important;
+  background: transparent;
+  border: none;
 }
-

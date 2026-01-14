@@ -3,40 +3,55 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: var(--energy-space-lg);
+  background: var(--energy-gradient-hero);
 }
 
 .register-card {
   width: 100%;
   max-width: 500px;
   padding: 0;
+  background: var(--energy-glass-bg);
+  backdrop-filter: var(--energy-blur-lg);
+  -webkit-backdrop-filter: var(--energy-blur-lg);
+  border-radius: var(--energy-radius-2xl);
+  border: 1px solid var(--energy-glass-border);
+  box-shadow: var(--energy-shadow-glass);
 }
 
 .register-title {
+  font-family: var(--font-family-display);
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #333;
+  gap: var(--energy-space-sm);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--energy-text-primary);
 }
 
 .register-icon {
-  color: #2196f3;
+  color: var(--energy-primary);
   font-size: 2rem;
 }
 
+::ng-deep .register-card {
+  mat-card-subtitle, .mat-mdc-card-subtitle {
+    font-family: var(--font-family-body);
+  }
+}
+
 .register-form {
+  font-family: var(--font-family-body);
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 20px;
+  gap: var(--energy-space-md);
+  margin-top: var(--energy-space-lg);
 }
 
 .name-fields {
   display: flex;
-  gap: 16px;
+  gap: var(--energy-space-md);
 }
 
 .half-width {
@@ -48,42 +63,58 @@
 }
 
 .terms-checkbox {
-  margin: 8px 0;
+  margin: var(--energy-space-sm) 0;
 }
 
 .terms-checkbox-input {
-  font-size: 0.9rem;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
 }
 
 .terms-link {
-  color: #2196f3;
+  font-family: var(--font-family-body);
+  color: var(--energy-primary);
   text-decoration: none;
+  transition: color var(--transition-base);
 }
 
 .terms-link:hover {
   text-decoration: underline;
+  color: var(--energy-primary-dark);
 }
 
 .terms-error {
-  font-size: 0.75rem;
-  color: #f44336;
-  margin-top: 4px;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-xs);
+  color: var(--energy-error);
+  margin-top: var(--energy-space-xs);
 }
 
 .register-button {
+  font-family: var(--font-family-body);
   width: 100%;
   height: 48px;
-  font-size: 1rem;
-  margin-top: 8px;
+  font-size: var(--font-size-base);
+  margin-top: var(--energy-space-sm);
+  background: var(--energy-primary);
+  color: white;
+  border-radius: var(--energy-radius-lg);
+  transition: all var(--transition-base);
+
+  &:hover:not(:disabled) {
+    background: var(--energy-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  }
 }
 
 .button-spinner {
-  margin-right: 8px;
+  margin-right: var(--energy-space-sm);
 }
 
 .divider {
   text-align: center;
-  margin: 20px 0;
+  margin: var(--energy-space-lg) 0;
   position: relative;
 }
 
@@ -94,43 +125,60 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: #e0e0e0;
+  background: var(--energy-border);
 }
 
 .divider span {
-  background: white;
-  padding: 0 16px;
-  color: #666;
-  font-size: 0.9rem;
+  font-family: var(--font-family-body);
+  background: var(--energy-surface);
+  padding: 0 var(--energy-space-md);
+  color: var(--energy-text-secondary);
+  font-size: var(--font-size-sm);
 }
 
 .google-button {
+  font-family: var(--font-family-body);
   width: 100%;
   height: 48px;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
+  background: #4285f4;
+  color: white;
+  border: none;
+  border-radius: var(--energy-radius-lg);
+  transition: all var(--transition-base);
+
+  &:hover:not(:disabled) {
+    background: #3367d6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+  }
 }
 
 .register-actions {
+  font-family: var(--font-family-body);
   text-align: center;
-  padding: 20px;
+  padding: var(--energy-space-lg);
   margin: 0;
 }
 
 .login-link {
-  color: #2196f3;
+  font-family: var(--font-family-body);
+  color: var(--energy-primary);
   text-decoration: none;
   font-weight: 500;
+  transition: color var(--transition-base);
 }
 
 .login-link:hover {
   text-decoration: underline;
+  color: var(--energy-primary-dark);
 }
 
 @media (max-width: 600px) {
   .register-container {
-    padding: 10px;
+    padding: var(--energy-space-md);
   }
-  
+
   .register-card {
     margin: 0;
   }
@@ -138,5 +186,11 @@
   .name-fields {
     flex-direction: column;
     gap: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: var(--energy-space-sm);
   }
 }
