@@ -221,7 +221,7 @@
           flex-wrap: wrap;
 
           .timestamp {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: var(--font-family-mono);
             font-size: 12px;
             color: var(--energy-text-secondary);
           }
@@ -329,7 +329,7 @@
 
             .field-value {
               color: var(--energy-text-primary);
-              font-family: 'Courier New', Courier, monospace;
+              font-family: var(--font-family-mono);
             }
           }
         }
@@ -357,7 +357,7 @@
           color: var(--energy-gray-300);
           padding: 16px;
           border-radius: var(--energy-radius-md);
-          font-family: 'Courier New', Courier, monospace;
+          font-family: var(--font-family-mono);
           font-size: 12px;
           overflow-x: auto;
           white-space: pre-wrap;

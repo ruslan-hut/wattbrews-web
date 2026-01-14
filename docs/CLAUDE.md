@@ -82,6 +82,7 @@ ng generate guard core/guards/my-guard
 - **AuthService**: Firebase authentication with signal-based state (user, isAuthenticated, userProfile). Uses both signals and BehaviorSubject for backwards compatibility
 - **WebSocketService**: Global WebSocket connection manager with automatic reconnection, exponential backoff, and token-aware messaging
 - **SimpleTranslationService**: Internationalization service supporting English/Spanish with reactive translation updates
+- **ThemeService**: Manages light/dark theme with system preference detection and localStorage persistence
 - **ChargePointService** & **TransactionService**: Domain-specific services using signals for state management
 - **StateService**: Application-level state management with signals
 - **StorageService**: LocalStorage wrapper for persisting user preferences and offline data
@@ -148,32 +149,139 @@ readonly isDataLoaded = computed(() => !!this._data());
 
 **Supported Languages**: English (en), Spanish (es)
 
-**Translation Files**: `public/assets/i18n/{lang}.json`
+**Translation Files**: `src/assets/i18n/{lang}.json`
 
-**Usage**: Services expose `t$()` observable for reactive translations and `t()` for synchronous translations.
+**Usage in Components**:
+```typescript
+// Inject the service
+protected readonly translationService = inject(SimpleTranslationService);
+
+// In template - use getReactive() for reactive updates
+{{ translationService.getReactive('key.path') }}
+```
 
 See `TRANSLATION_SERVICE_TECHNICAL_GUIDE.md` for implementation details.
 
-### Design System
+## Design System
 
-**Theme**: Energy/Electric theme with Material Design 3
+### Theme & Color Palette
 
-**Colors**:
-- Primary: Cyan (`mat.$cyan-palette`) - Electric blue
-- Secondary: Amber (`mat.$yellow-palette`) - Energy yellow
-- Tertiary: Blue (`mat.$blue-palette`) - Technology blue
+The app uses a modern **Purple/Teal** color scheme with full dark mode support.
 
-**Custom CSS Properties** available globally:
-- `--energy-cyan`, `--energy-cyan-light`, `--energy-cyan-dark`
-- `--energy-amber`, `--energy-amber-light`, `--energy-amber-dark`
-- `--energy-blue`, `--energy-blue-light`, `--energy-blue-dark`
-- Gray scale: `--energy-gray-50` through `--energy-gray-900`
+**Primary Colors** (Purple Tech):
+- `--energy-primary`: #8b5cf6 (main purple)
+- `--energy-primary-light`: #a78bfa
+- `--energy-primary-dark`: #7c3aed
 
-See `DESIGN_POLICY.md` and `DESIGN_EXAMPLES.md` for complete design guidelines.
+**Secondary Colors** (Teal Accent):
+- `--energy-secondary`: #14b8a6 (main teal)
+- `--energy-secondary-light`: #2dd4bf
+- `--energy-secondary-dark`: #0d9488
+
+**Tertiary Colors** (Indigo):
+- `--energy-tertiary`: #6366f1
+
+**Status Colors**:
+- Success: `--energy-success` (#10b981)
+- Warning: `--energy-warning` (#f59e0b)
+- Error: `--energy-error` (#ef4444)
+- Info: `--energy-info` (#3b82f6)
+
+**Gray Scale**: `--energy-gray-50` through `--energy-gray-950`
+
+### Typography
+
+**Font Families**:
+- **Display/Headings**: `Space Grotesk` - Used for page titles, card titles, section headers
+- **Body/UI**: `Inter` - Used for body text, buttons, labels, form fields
+
+**CSS Variables**:
+```scss
+--font-family-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+--font-family-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+```
+
+**Font Size Scale** (responsive with clamp):
+- `--font-size-xs`: 0.75rem
+- `--font-size-sm`: 0.875rem
+- `--font-size-base`: 1rem
+- `--font-size-lg`: 1.125rem
+- `--font-size-xl`: clamp(1.25rem, ...)
+- `--font-size-2xl`: clamp(1.5rem, ...)
+- `--font-size-3xl`: clamp(2rem, ...)
+
+### Dark Theme
+
+Dark theme is activated via `data-theme="dark"` attribute on the root element. The `ThemeService` manages theme state and persists preference to localStorage.
+
+**Dark Mode Variables** (auto-applied):
+- Surfaces become dark grays
+- Text becomes light
+- Primary/secondary colors slightly brighter for contrast
+- Shadows deeper with higher opacity
+
+### Spacing & Layout
+
+**Spacing Scale**:
+- `--energy-space-xs`: 0.25rem
+- `--energy-space-sm`: 0.5rem
+- `--energy-space-md`: 1rem
+- `--energy-space-lg`: 1.5rem
+- `--energy-space-xl`: 2rem
+- `--energy-space-2xl`: 3rem
+
+**Border Radius**:
+- `--energy-radius-sm`: 0.5rem
+- `--energy-radius-md`: 0.75rem
+- `--energy-radius-lg`: 1rem
+- `--energy-radius-xl`: 1.25rem
+- `--energy-radius-full`: 9999px
+
+**Container Widths**:
+- `--container-xl`: 1280px
+- `--container-2xl`: 1400px
+
+### Page Layout Patterns
+
+**Page Headers**:
+- Title centered horizontally
+- Back button positioned absolutely on left (for detail pages)
+- Use `.page-header`, `.page-title`, `.page-subtitle` global classes
+
+```scss
+// Global page header pattern
+.page-header {
+  text-align: center;
+  margin-bottom: var(--energy-space-2xl);
+}
+
+// With back button
+.page-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-button {
+  position: absolute;
+  left: 0;
+}
+```
+
+### Material Component Overrides
+
+All Material components are styled globally in `styles.scss` to use project fonts and colors:
+- **Buttons**: Use `--font-family-body`
+- **Cards**: Titles use `--font-family-display`, content uses `--font-family-body`
+- **Dialogs**: Rounded corners with `--energy-radius-2xl`
+- **Snackbars**: Dark background, light text, project fonts
+- **Tooltips**: Project fonts with proper sizing
+- **Form Fields**: Project fonts and colors
 
 ## Critical Development Rules
 
-These rules are enforced via `.cursor/rules/cursor.mdc` and MUST be followed:
+These rules MUST be followed:
 
 ### Angular & TypeScript
 
@@ -194,6 +302,14 @@ These rules are enforced via `.cursor/rules/cursor.mdc` and MUST be followed:
 - **Keep templates simple** - Complex logic belongs in component
 - **Use async pipe** for observables in templates
 - **Always separate** component into TypeScript, HTML, and SCSS files (no inline templates)
+
+### Styling Rules
+
+- **Always use CSS variables** from the design system (not hardcoded colors/sizes)
+- **Use `--font-family-display`** for headings/titles
+- **Use `--font-family-body`** for body text, buttons, labels
+- **Component styles** should use design tokens, not raw values
+- **Global overrides** for Material components go in `styles.scss`
 
 ### Forms & Images
 
@@ -237,6 +353,8 @@ See `SETUP_LOCAL_DEV.md` for detailed setup instructions.
 
 **Service Worker**: Enabled in production builds via `ngsw-config.json`
 
+**Update Dialog**: When updates are detected, a dialog (not snackbar) is shown with "Update Now" / "Later" options
+
 **Installation**: `InstallPromptService` and `PwaService` manage PWA install prompts
 
 **Offline Support**: `OfflineService` handles offline state and provides cached data
@@ -247,5 +365,5 @@ See `SETUP_LOCAL_DEV.md` for detailed setup instructions.
 - `WEBSOCKET_TECHNICAL_GUIDE.md` - WebSocket integration guide
 - `WEBSOCKET_DESCRIPTION.md` - Backend WebSocket API spec
 - `TRANSLATION_SERVICE_TECHNICAL_GUIDE.md` - i18n implementation
-- `DESIGN_POLICY.md` - Design system guidelines
+- `DESIGN_POLICY.md` - Design system guidelines (may need update)
 - `DESIGN_EXAMPLES.md` - Practical design examples

@@ -474,7 +474,7 @@ mat-card {
   gap: var(--energy-space-xs);
   box-shadow: var(--energy-shadow-sm);
   font-size: var(--font-size-xs);
-  font-family: monospace;
+  font-family: var(--font-family-mono);
   color: var(--energy-text-secondary);
   border: 1px solid var(--energy-glass-border);
 
