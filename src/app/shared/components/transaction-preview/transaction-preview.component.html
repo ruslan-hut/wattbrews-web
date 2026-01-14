@@ -6,14 +6,14 @@
         <mat-icon>receipt</mat-icon>
         <span class="transaction-id">{{ translationService.getReactive('transactionDetails.title') }} #{{ transactionDetail()?.transaction_id }}</span>
       </div>
-      @if (transactionDetail()) {
-        <mat-chip [class]="'status-chip ' + getStatusClass(transactionDetail()!.status)">
-          {{ transactionDetail()!.status }}
-          @if (transactionDetail()!.is_charging) {
-            <span class="live-dot active" aria-hidden="true"></span>
-          }
-        </mat-chip>
-      }
+<!--      @if (transactionDetail()) {-->
+<!--        <mat-chip [class]="'status-chip ' + getStatusClass(transactionDetail()!.status)">-->
+<!--          {{ transactionDetail()!.status }}-->
+<!--          @if (transactionDetail()!.is_charging) {-->
+<!--            <span class="live-dot active" aria-hidden="true"></span>-->
+<!--          }-->
+<!--        </mat-chip>-->
+<!--      }-->
     </div>
     <button mat-icon-button (click)="closeDialog($event)" class="close-button">
       <mat-icon>close</mat-icon>
