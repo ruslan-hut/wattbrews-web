@@ -7,13 +7,17 @@
 }
 
 .page-header {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: var(--energy-space-md);
+  justify-content: center;
   margin-bottom: var(--energy-space-2xl);
+  min-height: 48px;
 }
 
 .back-button {
+  position: absolute;
+  left: 0;
   color: var(--energy-text-secondary);
   transition: color var(--transition-base);
 
@@ -23,7 +27,7 @@
 }
 
 .header-content {
-  flex: 1;
+  text-align: center;
 }
 
 .page-title {
@@ -35,6 +39,7 @@
   color: var(--energy-text-primary);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--energy-space-md);
 }
 

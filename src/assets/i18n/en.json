@@ -508,5 +508,12 @@
     "sendingCommand": "Sending stop command...",
     "waitingForResponse": "Waiting for response from charging station...",
     "completed": "Transaction stop completed successfully!"
+  },
+  "updateDialog": {
+    "title": "Update Available",
+    "message": "A new version of the app is available with improvements and bug fixes.",
+    "subMessage": "Update now to get the latest features.",
+    "updateNow": "Update Now",
+    "later": "Later"
   }
 }

@@ -1,0 +1,109 @@
+.update-dialog {
+  min-width: 340px;
+  max-width: 400px;
+}
+
+.dialog-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--energy-space-xl) var(--energy-space-xl) var(--energy-space-md);
+  text-align: center;
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--energy-text-primary);
+  }
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--energy-space-md);
+  background: var(--energy-gradient-hero);
+  border-radius: var(--energy-radius-xl);
+  box-shadow: var(--energy-glow-primary);
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: white;
+  }
+}
+
+mat-dialog-content {
+  padding: 0 var(--energy-space-xl) var(--energy-space-lg);
+  text-align: center;
+}
+
+.message {
+  margin: 0 0 var(--energy-space-sm);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  color: var(--energy-text-primary);
+  line-height: 1.5;
+}
+
+.sub-message {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  color: var(--energy-text-secondary);
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-md) var(--energy-space-xl) var(--energy-space-xl);
+  border-top: 1px solid var(--energy-border);
+}
+
+.later-button {
+  color: var(--energy-text-secondary);
+
+  &:hover {
+    background-color: var(--energy-surface-variant);
+  }
+}
+
+.update-button {
+  background: var(--energy-gradient-primary);
+  color: white;
+  border-radius: var(--energy-radius-lg);
+  padding: 0 var(--energy-space-lg);
+
+  mat-icon {
+    margin-right: var(--energy-space-xs);
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    box-shadow: var(--energy-glow-primary);
+  }
+}
+
+@media (max-width: 480px) {
+  .update-dialog {
+    min-width: 280px;
+  }
+
+  mat-dialog-actions {
+    flex-direction: column-reverse;
+    gap: var(--energy-space-sm);
+
+    button {
+      width: 100%;
+    }
+  }
+}

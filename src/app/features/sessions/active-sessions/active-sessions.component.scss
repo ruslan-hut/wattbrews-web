@@ -13,9 +13,8 @@
 
 .header-content {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
   gap: var(--energy-space-md);
 }
 
@@ -425,18 +424,10 @@ mat-card-content {
     padding: var(--energy-space-md);
   }
 
-  .page-header {
-    text-align: left;
-  }
-
   .header-content {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--energy-space-sm);
-  }
-
-  .realtime-indicator {
-    align-self: flex-end;
   }
 
   .page-title {

@@ -50,6 +50,12 @@
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
+  "overrides": {
+    "karma": {
+      "glob": "^10.4.5",
+      "rimraf": "^5.0.10"
+    }
+  },
   "devDependencies": {
     "@angular-eslint/schematics": "^20.3.0",
     "@angular/build": "^20.3.1",

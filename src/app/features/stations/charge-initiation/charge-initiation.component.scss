@@ -7,18 +7,27 @@
 }
 
 .page-header {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: var(--energy-space-md);
+  justify-content: center;
   margin-bottom: var(--energy-space-2xl);
+  min-height: 48px;
 }
 
 .back-button {
-  color: var(--energy-text-muted);
+  position: absolute;
+  left: 0;
+  color: var(--energy-text-secondary);
+  transition: color var(--transition-base);
+
+  &:hover {
+    color: var(--energy-text-primary);
+  }
 }
 
 .header-content {
-  flex: 1;
+  text-align: center;
 }
 
 .page-title {

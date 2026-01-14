@@ -1,0 +1,27 @@
+<div class="update-dialog">
+  <div class="dialog-header">
+    <div class="icon-container">
+      <mat-icon>system_update</mat-icon>
+    </div>
+    <h2>{{ translationService.getReactive('updateDialog.title') }}</h2>
+  </div>
+
+  <mat-dialog-content>
+    <p class="message">
+      {{ translationService.getReactive('updateDialog.message') }}
+    </p>
+    <p class="sub-message">
+      {{ translationService.getReactive('updateDialog.subMessage') }}
+    </p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button class="later-button" (click)="later()">
+      {{ translationService.getReactive('updateDialog.later') }}
+    </button>
+    <button mat-flat-button class="update-button" (click)="update()">
+      <mat-icon>refresh</mat-icon>
+      {{ translationService.getReactive('updateDialog.updateNow') }}
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -8,3 +8,4 @@ export * from './connection-status/connection-status.component';
 export * from './transaction-start-dialog/transaction-start-dialog.component';
 export * from './offline-fallback/offline-fallback.component';
 export * from './install-button/install-button.component';
+export * from './update-dialog/update-dialog.component';

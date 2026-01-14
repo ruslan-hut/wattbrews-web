@@ -511,5 +511,12 @@
     "sendingCommand": "Enviando comando de detención...",
     "waitingForResponse": "Esperando respuesta de la estación de carga...",
     "completed": "¡Transacción detenida con éxito!"
+  },
+  "updateDialog": {
+    "title": "Actualización Disponible",
+    "message": "Una nueva versión de la aplicación está disponible con mejoras y correcciones.",
+    "subMessage": "Actualiza ahora para obtener las últimas funciones.",
+    "updateNow": "Actualizar Ahora",
+    "later": "Más Tarde"
   }
 }

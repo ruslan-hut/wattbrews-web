@@ -1,7 +1,9 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
+import { MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators';
 import { NotificationService } from './notification.service';
+import { UpdateDialogComponent } from '../../shared/components/update-dialog/update-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +11,7 @@ import { NotificationService } from './notification.service';
 export class PwaService {
   private readonly swUpdate = inject(SwUpdate);
   private readonly notificationService = inject(NotificationService);
+  private readonly dialog = inject(MatDialog);
 
   // Signal to track if an update is available
   readonly updateAvailable = signal<boolean>(false);
@@ -104,19 +107,16 @@ export class PwaService {
    * Notify user about available update
    */
   private notifyUpdateAvailable(): void {
-    this.notificationService.info(
-      'A new version of the app is available.',
-      'Update Available',
-      {
-        duration: 0, // Don't auto-dismiss
-        action: {
-          label: 'Update',
-          callback: () => {
-            this.activateUpdate();
-          }
-        }
+    const dialogRef = this.dialog.open(UpdateDialogComponent, {
+      disableClose: false,
+      autoFocus: false
+    });
+
+    dialogRef.afterClosed().subscribe((shouldUpdate: boolean) => {
+      if (shouldUpdate) {
+        this.activateUpdate();
       }
-    );
+    });
   }
 }
 

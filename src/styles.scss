@@ -393,7 +393,12 @@ h6, .heading-6 {
   line-height: 1.5;
 }
 
-// Page title utilities (for component page headers)
+// Page header utilities (for component page headers)
+.page-header {
+  text-align: center;
+  margin-bottom: var(--energy-space-2xl);
+}
+
 .page-title {
   font-family: var(--font-family-display);
   font-size: var(--font-size-3xl);
@@ -723,6 +728,56 @@ h6, .heading-6 {
   }
 }
 
+// Tooltip overrides
+.mat-mdc-tooltip {
+  --mdc-plain-tooltip-container-color: var(--energy-gray-900);
+  --mdc-plain-tooltip-supporting-text-color: var(--energy-gray-50);
+  --mdc-plain-tooltip-supporting-text-font: var(--font-family-body);
+  --mdc-plain-tooltip-supporting-text-size: var(--font-size-xs);
+  --mdc-plain-tooltip-supporting-text-weight: 500;
+  --mdc-plain-tooltip-container-shape: var(--energy-radius-sm);
+}
+
+// Snackbar overrides
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--energy-gray-900);
+  --mdc-snackbar-supporting-text-color: var(--energy-gray-50);
+  --mdc-snackbar-supporting-text-font: var(--font-family-body);
+  --mdc-snackbar-supporting-text-size: var(--font-size-sm);
+  --mdc-snackbar-supporting-text-weight: 500;
+  --mat-snack-bar-button-color: var(--energy-primary-light);
+
+  .mdc-snackbar__surface {
+    border-radius: var(--energy-radius-lg) !important;
+    box-shadow: var(--energy-shadow-lg);
+  }
+
+  .mdc-snackbar__label {
+    font-family: var(--font-family-body);
+  }
+
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    font-family: var(--font-family-body);
+    font-weight: 600;
+  }
+
+  &.notification-success .mdc-snackbar__surface {
+    border-left: 4px solid var(--energy-success);
+  }
+
+  &.notification-error .mdc-snackbar__surface {
+    border-left: 4px solid var(--energy-error);
+  }
+
+  &.notification-warning .mdc-snackbar__surface {
+    border-left: 4px solid var(--energy-warning);
+  }
+
+  &.notification-info .mdc-snackbar__surface {
+    border-left: 4px solid var(--energy-info);
+  }
+}
+
 // =============================================================================
 // UTILITY CLASSES
 // =============================================================================
@@ -878,7 +933,6 @@ h6, .heading-6 {
   align-items: center;
   height: 100%;
   padding: var(--energy-space-xl);
-  background: var(--energy-gradient-hero-soft);
 }
 
 .login-card {
@@ -901,7 +955,8 @@ h6, .heading-6 {
   padding: var(--energy-space-xl) var(--energy-space-lg) var(--energy-space-md) var(--energy-space-lg);
 }
 
-.login-title {
+.login-title,
+.mat-mdc-card-title.login-title {
   font-family: var(--font-family-display);
   display: flex;
   align-items: center;
@@ -922,7 +977,9 @@ h6, .heading-6 {
   flex-shrink: 0;
 }
 
-mat-card-subtitle {
+mat-card-subtitle,
+.mat-mdc-card-subtitle {
+  font-family: var(--font-family-body);
   text-align: center;
   margin: 0;
   color: var(--energy-text-secondary);
