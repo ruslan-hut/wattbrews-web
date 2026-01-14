@@ -11,7 +11,7 @@ import {
   ResponseStatus,
   ResponseStage,
   ConnectionState
-} from '../models/websocket.model';
+} from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +31,7 @@ export class WebsocketService {
   private readonly _connectionStartTime = signal<Date | null>(null);
   private readonly _reconnectCount = signal<number>(0);
   private readonly _lastPingTime = signal<Date | null>(null);
-  
+
   // Charge point update signal
   private readonly _chargePointUpdate = signal<{ chargePointId: string; connectorId?: number; timestamp: Date } | null>(null);
 
@@ -52,11 +52,14 @@ export class WebsocketService {
   // Message broadcasting
   private messageSubject = new Subject<WsResponse>();
 
+  // Public observable for direct subscription with takeUntilDestroyed
+  readonly messages$ = this.messageSubject.asObservable();
+
   // Reconnection state
   private reconnectTimeout: any = null;
   private currentReconnectDelay: number = APP_CONSTANTS.WEBSOCKET.RECONNECT_INITIAL_DELAY;
   private pingInterval: any = null;
-  
+
   // Visibility state
   private isTabVisible: boolean = true;
 
@@ -66,13 +69,13 @@ export class WebsocketService {
   constructor() {
     // Set up visibility change handler
     this.setupVisibilityHandler();
-    
+
     // Clean up on destroy
     this.destroyRef.onDestroy(() => {
       this.disconnect();
     });
   }
-  
+
   /**
    * Set up browser visibility change handler
    */
@@ -180,12 +183,12 @@ export class WebsocketService {
       };
 
       const message = JSON.stringify(fullRequest);
-      
+
       // Log all commands except pings to reduce console clutter
       if (this.debug && request.command !== WsCommand.PingConnection) {
         console.log('[WebSocket] >>', request.command);
       }
-      
+
       this.ws.send(message);
     } catch (error: any) {
       if (this.debug) console.error('[WebSocket] Send error:', error);
@@ -257,7 +260,7 @@ export class WebsocketService {
     try {
       // Check if token is available
       const token = await this.authService.getToken();
-      
+
       if (!token) {
         if (this.debug) {
           console.log('[WebSocket] No authentication token available yet, skipping initial messages');
@@ -289,7 +292,7 @@ export class WebsocketService {
   private handleMessage(event: MessageEvent): void {
     try {
       const message: WsResponse = JSON.parse(event.data);
-      
+
       // Log all messages except pings to reduce console clutter
       if (this.debug && message.status !== ResponseStatus.Ping) {
         console.log('[WebSocket] << ', message);

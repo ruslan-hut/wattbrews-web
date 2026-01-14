@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject, effect, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,19 +11,19 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
-import { ChargePointService } from '../../../core/services/chargepoint.service';
-import { AuthService } from '../../../core/services/auth.service';
+import { ChargePointService } from '../../../core/services';
+import { AuthService } from '../../../core/services';
 import { WebsocketService } from '../../../core/services/websocket.service';
-import { StationDetail } from '../../../core/models/station-detail.model';
-import { WsCommand, WsResponse, ResponseStage } from '../../../core/models/websocket.model';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
-import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
-import { SmallMapComponent } from '../../../shared/components/small-map/small-map.component';
-import { TransactionPreviewComponent } from '../../../shared/components/transaction-preview/transaction-preview.component';
-import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
-import { DateUtils } from '../../../shared/utils/date.utils';
-import { ConnectorUtils } from '../../../shared/utils/connector.utils';
-import { SortByConnectorIdPipe } from '../../../shared/pipes';
+import { StationDetail } from '../../../core/models';
+import { WsCommand } from '../../../core/models';
+import { LoadingSpinnerComponent } from '../../../shared';
+import { ErrorMessageComponent } from '../../../shared';
+import { SmallMapComponent } from '../../../shared';
+import { TransactionPreviewComponent } from '../../../shared';
+import { SimpleTranslationService } from '../../../core/services';
+import { DateUtils } from '../../../shared';
+import { ConnectorUtils } from '../../../shared';
+import { SortByConnectorIdPipe } from '../../../shared';
 
 @Component({
   selector: 'app-station-detail',
@@ -44,7 +44,8 @@ import { SortByConnectorIdPipe } from '../../../shared/pipes';
     SortByConnectorIdPipe
   ],
   templateUrl: './station-detail.component.html',
-  styleUrls: ['./station-detail.component.scss']
+  styleUrls: ['./station-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StationDetailComponent implements OnInit, OnDestroy {
   private readonly chargePointService = inject(ChargePointService);
@@ -55,25 +56,24 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   private readonly location = inject(Location);
   private readonly dialog = inject(MatDialog);
   protected readonly translationService = inject(SimpleTranslationService);
+  private readonly destroyRef = inject(DestroyRef);
 
   // Signals
   readonly loading = this.chargePointService.loading;
   readonly error = this.chargePointService.error;
   private readonly _stationDetail = signal<StationDetail | null>(null);
   readonly stationDetail = this._stationDetail.asReadonly();
-  
+
   // Real-time updates
   protected readonly realtimeActive = signal(false);
   protected readonly updatedConnectorIds = signal<Set<number>>(new Set());
-  
+
   // Loading states
   protected readonly translationsLoading = signal(true);
   protected readonly initializing = signal(true);
-  
-  // Subscription management
-  private authSubscription?: Subscription;
-  private websocketSubscription?: Subscription;
-  private authCheckTimeout?: any;
+
+  // Timeout management
+  private authCheckTimeout?: ReturnType<typeof setTimeout>;
   private isProcessingUpdate = false;
 
   constructor() {
@@ -81,24 +81,24 @@ export class StationDetailComponent implements OnInit, OnDestroy {
     effect(() => {
       const update = this.websocketService.chargePointUpdate();
       const currentStation = this.stationDetail();
-      
+
       // Only process if we have an update, a current station, and we're not already processing
       if (update && currentStation && update.chargePointId === currentStation.charge_point_id && !this.isProcessingUpdate) {
         this.isProcessingUpdate = true;
-        
+
         // Clear the update signal immediately to prevent re-triggering
         this.websocketService.clearChargePointUpdate();
-        
+
         // Only reload if not already loading to prevent infinite loops
         if (!this.loading()) {
           this.loadStationDetail();
         }
-        
+
         // Highlight updated connector if connector_id is present
         if (update.connectorId) {
           this.highlightConnector(update.connectorId);
         }
-        
+
         // Set real-time indicator and allow processing again after timeout
         this.realtimeActive.set(true);
         setTimeout(() => {
@@ -122,7 +122,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       this.translationsLoading.set(true);
       await this.translationService.initializeTranslationsAsync();
       this.translationsLoading.set(false);
-      
+
       // After translations are loaded, set up auth subscription
       this.setupAuthSubscription();
     } catch (error) {
@@ -135,38 +135,35 @@ export class StationDetailComponent implements OnInit, OnDestroy {
 
   private setupAuthSubscription(): void {
     // Wait for authentication before loading station details
-    this.authSubscription = this.authService.user$.subscribe(user => {
-      if (user) {
-        if (this.authCheckTimeout) {
-          clearTimeout(this.authCheckTimeout);
-        }
-        this.route.params.subscribe(params => {
-          const pointId = params['id'];
-          if (pointId) {
-            this.loadStationDetail(pointId);
-            // Set initializing to false once we start loading data
-            this.initializing.set(false);
+    this.authService.user$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(user => {
+        if (user) {
+          if (this.authCheckTimeout) {
+            clearTimeout(this.authCheckTimeout);
           }
-        });
-      } else {
-        // Give Firebase auth time to restore session on page reload
-        // Only redirect after a short delay to avoid premature redirects
-        this.authCheckTimeout = setTimeout(() => {
-          this.initializing.set(false);
-          this.router.navigate(['/auth/login']);
-        }, 1000); // 1 second delay
-      }
-    });
+          this.route.params
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(params => {
+              const pointId = params['id'];
+              if (pointId) {
+                this.loadStationDetail(pointId);
+                // Set initializing to false once we start loading data
+                this.initializing.set(false);
+              }
+            });
+        } else {
+          // Give Firebase auth time to restore session on page reload
+          // Only redirect after a short delay to avoid premature redirects
+          this.authCheckTimeout = setTimeout(() => {
+            this.initializing.set(false);
+            this.router.navigate(['/auth/login']);
+          }, 1000); // 1 second delay
+        }
+      });
   }
 
   ngOnDestroy() {
-    // Clean up subscriptions to prevent memory leaks
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
-    if (this.websocketSubscription) {
-      this.websocketSubscription.unsubscribe();
-    }
     if (this.authCheckTimeout) {
       clearTimeout(this.authCheckTimeout);
     }
@@ -174,7 +171,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
 
   loadStationDetail(pointId?: string) {
     const id = pointId || this.route.snapshot.params['id'];
-    
+
     if (id) {
       this.chargePointService.getStationDetail(id).subscribe({
         next: (station) => {
@@ -186,7 +183,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
+
   /**
    * Initialize WebSocket listening for charge-point events.
    * We rely on the reactive chargePointUpdate signal (effect in constructor)
@@ -198,7 +195,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       console.error('[StationDetail] Failed to subscribe to charge points:', error);
     });
   }
-  
+
   /**
    * Highlight a connector temporarily
    */
@@ -208,7 +205,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       newSet.add(connectorId);
       return newSet;
     });
-    
+
     // Remove highlight after 3 seconds
     setTimeout(() => {
       this.updatedConnectorIds.update(set => {
@@ -218,7 +215,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
       });
     }, 3000);
   }
-  
+
   /**
    * Check if a connector should be highlighted
    */
@@ -300,7 +297,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
   startCharge(): void {
     const station = this.stationDetail();
     if (!station) return;
-    
+
     this.router.navigate(['/stations', station.charge_point_id, 'charge']);
   }
 

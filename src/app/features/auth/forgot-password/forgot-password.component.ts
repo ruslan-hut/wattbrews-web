@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -9,12 +9,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { AuthService } from '../../../core/services/auth.service';
-import { NotificationService } from '../../../core/services/notification.service';
+import { AuthService } from '../../../core/services';
+import { NotificationService } from '../../../core/services';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -36,7 +37,7 @@ import { NotificationService } from '../../../core/services/notification.service
           </mat-card-title>
           <mat-card-subtitle>Enter your email to receive reset instructions</mat-card-subtitle>
         </mat-card-header>
-        
+
         <mat-card-content>
           <form [formGroup]="forgotPasswordForm" (ngSubmit)="onSubmit()" class="forgot-password-form">
             <mat-form-field appearance="outline" class="full-width">
@@ -61,7 +62,7 @@ import { NotificationService } from '../../../core/services/notification.service
             <mat-icon class="success-icon">check_circle</mat-icon>
             <p>Password reset email sent! Check your inbox and follow the instructions.</p>
             <p class="resend-text">
-              Didn't receive the email? 
+              Didn't receive the email?
               <a href="#" (click)="resendEmail()" class="resend-link">Resend</a>
             </p>
           </div>

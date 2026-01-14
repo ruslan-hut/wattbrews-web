@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { TransactionDetail } from '../../../core/models/transaction-detail.model';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
@@ -35,7 +35,8 @@ import { TransactionStopDialogComponent } from '../../../shared/components/trans
     EnergyChartComponent
   ],
   templateUrl: './active-sessions.component.html',
-  styleUrl: './active-sessions.component.scss'
+  styleUrl: './active-sessions.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActiveSessionsComponent implements OnInit, OnDestroy {
   protected readonly transactionService = inject(TransactionService);
@@ -44,6 +45,7 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
   protected readonly websocketService = inject(WebsocketService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
   
   // Translation loading state
   protected readonly translationsLoading = signal(true);
@@ -60,41 +62,40 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
   // Real-time updates
   protected readonly realtimeActive = signal(false);
   protected readonly currentTime = signal(Date.now()); // For real-time duration updates
-  
-  // Subscription management
-  private authSubscription?: Subscription;
-  private apiSubscription?: Subscription;
-  private wsSubscription?: Subscription;
-  private authCheckTimeout?: any;
-  private durationUpdateInterval?: any;
+
+  // Timeout and interval management
+  private authCheckTimeout?: ReturnType<typeof setTimeout>;
+  private durationUpdateInterval?: ReturnType<typeof setInterval>;
 
   ngOnInit(): void {
     // Initialize translations first, regardless of auth state
     this.initializeTranslations();
-    
+
     // Subscribe to auth state changes with timeout to handle page reload
-    this.authSubscription = this.authService.user$.subscribe(async user => {
-      if (user) {
-        this.authLoading.set(false);
-        if (this.authCheckTimeout) {
-          clearTimeout(this.authCheckTimeout);
-        }
-        
-        // Load active transactions after authentication
-        this.loadActiveTransactions();
-        
-        // Initialize WebSocket subscriptions for real-time updates
-        this.initializeWebSocketSubscriptions();
-        
-        // Start duration update timer for real-time duration display
-        this.startDurationUpdateTimer();
-      } else {
-        // Give Firebase auth time to restore session on page reload
-        this.authCheckTimeout = setTimeout(() => {
+    this.authService.user$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(async user => {
+        if (user) {
           this.authLoading.set(false);
-        }, 1000); // 1 second delay
-      }
-    });
+          if (this.authCheckTimeout) {
+            clearTimeout(this.authCheckTimeout);
+          }
+
+          // Load active transactions after authentication
+          this.loadActiveTransactions();
+
+          // Initialize WebSocket subscriptions for real-time updates
+          this.initializeWebSocketSubscriptions();
+
+          // Start duration update timer for real-time duration display
+          this.startDurationUpdateTimer();
+        } else {
+          // Give Firebase auth time to restore session on page reload
+          this.authCheckTimeout = setTimeout(() => {
+            this.authLoading.set(false);
+          }, 1000); // 1 second delay
+        }
+      });
   }
 
   private async initializeTranslations(): Promise<void> {
@@ -120,12 +121,13 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
    */
   private initializeWebSocketSubscriptions(): void {
     // Subscribe to transaction value updates for real-time metrics
-    this.wsSubscription = this.websocketService.subscribeToStatus(
-      ResponseStatus.Value,
-      (message) => {
-        this.handleTransactionValueUpdate(message);
-      }
-    );
+    this.websocketService.messages$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((message: WsResponse) => {
+        if (message.status === ResponseStatus.Value) {
+          this.handleTransactionValueUpdate(message);
+        }
+      });
   }
 
   /**
@@ -233,20 +235,22 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
   private loadActiveTransactions(): void {
     this.loading.set(true);
     this.error.set(null);
-    
-    this.apiSubscription = this.transactionService.loadActiveTransactions().subscribe({
-      next: (transactions) => {
-        this.activeTransactions.set(transactions);
-        this.loading.set(false);
-        
-        // Start listening to each active transaction for real-time updates
-        this.startListeningToTransactions(transactions);
-      },
-      error: (error) => {
-        this.error.set(error.message || 'Failed to load active transactions');
-        this.loading.set(false);
-      }
-    });
+
+    this.transactionService.loadActiveTransactions()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (transactions) => {
+          this.activeTransactions.set(transactions);
+          this.loading.set(false);
+
+          // Start listening to each active transaction for real-time updates
+          this.startListeningToTransactions(transactions);
+        },
+        error: (error) => {
+          this.error.set(error.message || 'Failed to load active transactions');
+          this.loading.set(false);
+        }
+      });
   }
 
   /**
@@ -278,23 +282,13 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Clean up subscriptions and timeout
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
-    if (this.apiSubscription) {
-      this.apiSubscription.unsubscribe();
-    }
-    if (this.wsSubscription) {
-      this.wsSubscription.unsubscribe();
-    }
     if (this.authCheckTimeout) {
       clearTimeout(this.authCheckTimeout);
     }
     if (this.durationUpdateInterval) {
       clearInterval(this.durationUpdateInterval);
     }
-    
+
     // Stop listening to all transactions
     const transactions = this.activeTransactions();
     transactions.forEach(transaction => {

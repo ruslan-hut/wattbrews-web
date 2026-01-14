@@ -1,7 +1,7 @@
-import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,6 +48,7 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
     FormsModule
   ],
   templateUrl: './sessions-history.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [`
     .sessions-history-container {
       padding: var(--energy-space-xl);
@@ -597,11 +598,10 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   private readonly dialog = inject(MatDialog);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  
-  // Subscription management
-  private authSubscription?: Subscription;
-  private languageSubscription?: Subscription;
-  private authCheckTimeout?: any;
+  private readonly destroyRef = inject(DestroyRef);
+
+  // Auth check timeout
+  private authCheckTimeout?: ReturnType<typeof setTimeout>;
   
   // Table configuration
   protected readonly displayedColumns = [
@@ -647,35 +647,39 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Initialize available years
     this.initializeYears();
-    
+
     // Initialize translations first, regardless of auth state
     this.initializeTranslations();
-    
+
     // Subscribe to language changes to update month names
-    this.languageSubscription = this.translationService.language$.subscribe(() => {
-      this.initializeMonths();
-    });
-    
+    this.translationService.language$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.initializeMonths();
+      });
+
     // Subscribe to auth state changes with timeout to handle page reload
-    this.authSubscription = this.authService.user$.subscribe(async user => {
-      if (user) {
-        this.authLoading.set(false);
-        if (this.authCheckTimeout) {
-          clearTimeout(this.authCheckTimeout);
-        }
-        
-        // Set current year and month as default filter
-        const currentDate = new Date();
-        this.selectedYear.set(currentDate.getFullYear());
-        this.selectedMonth.set(currentDate.getMonth() + 1); // Month is 1-based for display
-        this.loadTransactions();
-      } else {
-        // Give Firebase auth time to restore session on page reload
-        this.authCheckTimeout = setTimeout(() => {
+    this.authService.user$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(async user => {
+        if (user) {
           this.authLoading.set(false);
-        }, 1000); // 1 second delay
-      }
-    });
+          if (this.authCheckTimeout) {
+            clearTimeout(this.authCheckTimeout);
+          }
+
+          // Set current year and month as default filter
+          const currentDate = new Date();
+          this.selectedYear.set(currentDate.getFullYear());
+          this.selectedMonth.set(currentDate.getMonth() + 1); // Month is 1-based for display
+          this.loadTransactions();
+        } else {
+          // Give Firebase auth time to restore session on page reload
+          this.authCheckTimeout = setTimeout(() => {
+            this.authLoading.set(false);
+          }, 1000); // 1 second delay
+        }
+      });
   }
 
   private async initializeTranslations(): Promise<void> {
@@ -692,13 +696,7 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    // Clean up subscriptions and timeout
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
+    // Clean up timeout
     if (this.authCheckTimeout) {
       clearTimeout(this.authCheckTimeout);
     }

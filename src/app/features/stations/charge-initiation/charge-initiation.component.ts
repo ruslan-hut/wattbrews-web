@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -61,27 +61,27 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
   private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
 
   // Signals
   readonly loading = this.chargePointService.loading;
   readonly error = this.chargePointService.error;
   private readonly _stationDetail = signal<StationDetail | null>(null);
   readonly stationDetail = this._stationDetail.asReadonly();
-  
+
   private readonly _selectedConnector = signal<StationDetail['connectors'][0] | null>(null);
   readonly selectedConnector = this._selectedConnector.asReadonly();
-  
+
   private readonly _selectedPaymentMethod = signal<UserPaymentMethod | null>(null);
   readonly selectedPaymentMethod = this._selectedPaymentMethod.asReadonly();
-  
+
   // Payment methods and plans are accessed directly from UserInfoService
-  
+
   // Translation loading state
   protected readonly translationsLoading = signal(true);
-  
-  // Subscription management
-  private authSubscription?: Subscription;
-  private authCheckTimeout?: any;
+
+  // Timeout for auth check
+  private authCheckTimeout?: ReturnType<typeof setTimeout>;
 
   // Computed values
   readonly allConnectors = computed(() => 
@@ -122,35 +122,36 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
 
   private setupAuthSubscription(): void {
     // Wait for authentication before loading any data
-    this.authSubscription = this.authService.user$.subscribe(user => {
-      if (user) {
-        if (this.authCheckTimeout) {
-          clearTimeout(this.authCheckTimeout);
-        }
-        
-        // Load user info first to get payment methods and tariff data
-        this.loadUserInfo();
-        
-        // Load station details
-        this.route.params.subscribe(params => {
-          const pointId = params['id'];
-          if (pointId) {
-            this.loadStationDetail(pointId);
+    this.authService.user$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(user => {
+        if (user) {
+          if (this.authCheckTimeout) {
+            clearTimeout(this.authCheckTimeout);
           }
-        });
-      } else {
-        // Give Firebase auth time to restore session on page reload
-        this.authCheckTimeout = setTimeout(() => {
-          this.router.navigate(['/auth/login']);
-        }, 1000);
-      }
-    });
+
+          // Load user info first to get payment methods and tariff data
+          this.loadUserInfo();
+
+          // Load station details
+          this.route.params
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(params => {
+              const pointId = params['id'];
+              if (pointId) {
+                this.loadStationDetail(pointId);
+              }
+            });
+        } else {
+          // Give Firebase auth time to restore session on page reload
+          this.authCheckTimeout = setTimeout(() => {
+            this.router.navigate(['/auth/login']);
+          }, 1000);
+        }
+      });
   }
 
   ngOnDestroy() {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
     if (this.authCheckTimeout) {
       clearTimeout(this.authCheckTimeout);
     }

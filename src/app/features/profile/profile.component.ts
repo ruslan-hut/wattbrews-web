@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -8,10 +8,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDividerModule } from '@angular/material/divider';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserInfoService } from '../../core/services/user-info.service';
 import { AuthService } from '../../core/services/auth.service';
 import { UserInfo, PaymentPlan, UserTag, UserPaymentMethod } from '../../core/models/user-info.model';
-import { Subscription } from 'rxjs';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 
 @Component({
@@ -30,33 +30,34 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileComponent implements OnInit, OnDestroy {
+export class ProfileComponent implements OnInit {
   protected readonly userInfoService = inject(UserInfoService);
   protected readonly authService = inject(AuthService);
   protected readonly translationService = inject(SimpleTranslationService);
   private readonly router = inject(Router);
-  
+
   // Authentication state
   protected readonly isAuthenticated = this.authService.isAuthenticated;
   protected readonly isAuthLoading = this.authService.isLoading;
   protected readonly translationsLoading = signal(true);
-  
-  // Subscription management
-  private authSubscription?: Subscription;
+
+  constructor() {
+    // Subscribe to auth state changes to handle race conditions
+    this.authService.user$
+      .pipe(takeUntilDestroyed())
+      .subscribe(user => {
+        if (user && this.isAuthenticated()) {
+          this.loadUserInfo();
+        } else if (!user) {
+          this.userInfoService.clearData();
+        }
+      });
+  }
 
   ngOnInit(): void {
     // Initialize translations first
     this.initializeTranslations();
-    
-    // Subscribe to auth state changes to handle race conditions
-    this.authSubscription = this.authService.user$.subscribe(user => {
-      if (user && this.isAuthenticated()) {
-        this.loadUserInfo();
-      } else if (!user) {
-        this.userInfoService.clearData();
-      }
-    });
-    
+
     // Also check immediately in case auth is already resolved
     if (this.isAuthenticated()) {
       this.loadUserInfo();
@@ -71,12 +72,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Failed to initialize translations:', error);
       this.translationsLoading.set(false);
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
     }
   }
 

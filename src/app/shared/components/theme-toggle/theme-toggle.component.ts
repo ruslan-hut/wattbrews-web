@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,8 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
     MatMenuModule
   ],
   templateUrl: './theme-toggle.component.html',
-  styleUrls: ['./theme-toggle.component.scss']
+  styleUrls: ['./theme-toggle.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ThemeToggleComponent {
   readonly themeService = inject(ThemeService);

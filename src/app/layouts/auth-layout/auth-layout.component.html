@@ -1,37 +1,39 @@
 <!-- Translation Loading State -->
-<div class="loading-container" *ngIf="translationsLoading()">
-  <mat-spinner diameter="40" class="spinner-white"></mat-spinner>
-  <p>Loading translations...</p>
-</div>
-
-<!-- Auth Layout (only show when translations are loaded) -->
-<div class="auth-container" *ngIf="!translationsLoading()">
-  <mat-toolbar color="primary" class="auth-toolbar">
-    <div class="toolbar-content">
-      <div class="logo-section">
-        <mat-icon class="logo-icon">ev_station</mat-icon>
-        <span class="logo-text">{{ translationService.getReactive('app.title') }}</span>
-      </div>
-      <div class="toolbar-actions">
-        <app-language-switcher></app-language-switcher>
-        <button mat-button routerLink="/" class="home-button">
-          <mat-icon>home</mat-icon>
-          {{ translationService.getReactive('nav.home') }}
-        </button>
-      </div>
-    </div>
-  </mat-toolbar>
-  
-  <div class="auth-content">
-    <router-outlet></router-outlet>
+@if (translationsLoading()) {
+  <div class="loading-container">
+    <mat-spinner diameter="40" class="spinner-white"></mat-spinner>
+    <p>Loading translations...</p>
   </div>
-  
-  <footer class="auth-footer">
-    <p>&copy; 2024 {{ translationService.getReactive('app.title') }}. All rights reserved.</p>
-    <div class="footer-links">
-      <a href="#" class="footer-link">{{ translationService.getReactive('footer.privacy') }}</a>
-      <a href="#" class="footer-link">{{ translationService.getReactive('footer.terms') }}</a>
-      <a href="#" class="footer-link">{{ translationService.getReactive('footer.support') }}</a>
+} @else {
+  <!-- Auth Layout (only show when translations are loaded) -->
+  <div class="auth-container">
+    <mat-toolbar color="primary" class="auth-toolbar">
+      <div class="toolbar-content">
+        <div class="logo-section">
+          <mat-icon class="logo-icon">ev_station</mat-icon>
+          <span class="logo-text">{{ translationService.getReactive('app.title') }}</span>
+        </div>
+        <div class="toolbar-actions">
+          <app-language-switcher></app-language-switcher>
+          <button mat-button routerLink="/" class="home-button">
+            <mat-icon>home</mat-icon>
+            {{ translationService.getReactive('nav.home') }}
+          </button>
+        </div>
+      </div>
+    </mat-toolbar>
+
+    <div class="auth-content">
+      <router-outlet></router-outlet>
     </div>
-  </footer>
-</div>
+
+    <footer class="auth-footer">
+      <p>&copy; 2024 {{ translationService.getReactive('app.title') }}. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#" class="footer-link">{{ translationService.getReactive('footer.privacy') }}</a>
+        <a href="#" class="footer-link">{{ translationService.getReactive('footer.terms') }}</a>
+        <a href="#" class="footer-link">{{ translationService.getReactive('footer.support') }}</a>
+      </div>
+    </footer>
+  </div>
+}

@@ -1,82 +1,96 @@
 <div class="login-container">
   <!-- Translation Loading State -->
-  <div class="loading-container" *ngIf="translationsLoading()">
-    <mat-spinner diameter="40"></mat-spinner>
-  </div>
+  @if (translationsLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else {
+    <!-- Content (only show when translations are loaded) -->
+    <mat-card class="login-card">
+      <mat-card-header>
+        <mat-card-title class="login-title">
+          <mat-icon class="login-icon">ev_station</mat-icon>
+          <span>{{ translationService.getReactive('auth.login.title') }}</span>
+        </mat-card-title>
+        <mat-card-subtitle>{{ translationService.getReactive('auth.login.subtitle') }}</mat-card-subtitle>
+      </mat-card-header>
 
-  <!-- Content (only show when translations are loaded) -->
-  <mat-card class="login-card" *ngIf="!translationsLoading()">
-    <mat-card-header>
-      <mat-card-title class="login-title">
-        <mat-icon class="login-icon">ev_station</mat-icon>
-        <span>{{ translationService.getReactive('auth.login.title') }}</span>
-      </mat-card-title>
-      <mat-card-subtitle>{{ translationService.getReactive('auth.login.subtitle') }}</mat-card-subtitle>
-    </mat-card-header>
-    
-    <mat-card-content>
-      <!-- Explanation Text -->
-      <div class="login-explanation">
-        <p class="explanation-text">
-          {{ translationService.getReactive('auth.login.explanation') }}
-        </p>
-      </div>
+      <mat-card-content>
+        <!-- Explanation Text -->
+        <div class="login-explanation">
+          <p class="explanation-text">
+            {{ translationService.getReactive('auth.login.explanation') }}
+          </p>
+        </div>
 
-      <!-- Sign-in Options -->
-      <div class="sign-in-options">
-        <button mat-raised-button type="button" class="sign-in-button google-button" (click)="signInWithGoogle()" [disabled]="isLoading()">
-          <mat-icon class="button-icon">login</mat-icon>
-          <span *ngIf="!isLoading()">{{ translationService.getReactive('auth.login.continueWithGoogle') }}</span>
-          <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
-        </button>
-
-        <button mat-raised-button type="button" class="sign-in-button email-link-button" (click)="toggleEmailLinkForm()" [disabled]="isLoading()">
-          <mat-icon class="button-icon">link</mat-icon>
-          <span *ngIf="!isLoading()">{{ translationService.getReactive('auth.login.signInWithEmailLink') }}</span>
-          <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
-        </button>
-      </div>
-
-      <!-- Email Link Form -->
-      <div class="email-link-form-container" [class.expanded]="showEmailLinkForm()">
-
-        <!-- Email Link Form -->
-        <form [formGroup]="emailLinkForm" (ngSubmit)="onEmailLinkSubmit()" class="login-form" *ngIf="showEmailLinkForm()">
-          <div class="email-link-explanation">
-            <p class="explanation-text">
-              {{ translationService.getReactive('auth.login.emailLinkExplanation') }}
-            </p>
-          </div>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ translationService.getReactive('auth.login.emailLabel') }}</mat-label>
-            <input matInput type="email" formControlName="email" [placeholder]="translationService.getReactive('auth.login.emailPlaceholder')">
-            <mat-icon matSuffix>email</mat-icon>
-            <mat-error *ngIf="emailLinkForm.get('email')?.hasError('required')">
-              {{ translationService.getReactive('auth.login.emailRequired') }}
-            </mat-error>
-            <mat-error *ngIf="emailLinkForm.get('email')?.hasError('email')">
-              {{ translationService.getReactive('auth.login.emailInvalid') }}
-            </mat-error>
-          </mat-form-field>
-
-          <button mat-raised-button type="submit" class="energy-button-secondary" [disabled]="emailLinkForm.invalid || isLoading()">
-            <mat-spinner *ngIf="isLoading()" diameter="20" class="energy-m-sm"></mat-spinner>
-            <span *ngIf="!isLoading()">{{ translationService.getReactive('auth.login.sendSignInLink') }}</span>
+        <!-- Sign-in Options -->
+        <div class="sign-in-options">
+          <button mat-raised-button type="button" class="sign-in-button google-button" (click)="signInWithGoogle()" [disabled]="isLoading()">
+            <mat-icon class="button-icon">login</mat-icon>
+            @if (isLoading()) {
+              <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+            } @else {
+              <span>{{ translationService.getReactive('auth.login.continueWithGoogle') }}</span>
+            }
           </button>
 
-          <!-- Success Message -->
-          <div class="email-link-success" *ngIf="emailLinkSent()">
-            <mat-icon class="success-icon">check_circle</mat-icon>
-            <p class="success-message">
-              {{ translationService.getReactive('auth.login.signInLinkSent') }}
-            </p>
-            <p class="success-submessage">
-              {{ translationService.getReactive('auth.login.checkSpamFolder') }}
-            </p>
-          </div>
-        </form>
-      </div>
-    </mat-card-content>
-  </mat-card>
+          <button mat-raised-button type="button" class="sign-in-button email-link-button" (click)="toggleEmailLinkForm()" [disabled]="isLoading()">
+            <mat-icon class="button-icon">link</mat-icon>
+            @if (isLoading()) {
+              <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+            } @else {
+              <span>{{ translationService.getReactive('auth.login.signInWithEmailLink') }}</span>
+            }
+          </button>
+        </div>
+
+        <!-- Email Link Form -->
+        <div class="email-link-form-container" [class.expanded]="showEmailLinkForm()">
+          @if (showEmailLinkForm()) {
+            <!-- Email Link Form -->
+            <form [formGroup]="emailLinkForm" (ngSubmit)="onEmailLinkSubmit()" class="login-form">
+              <div class="email-link-explanation">
+                <p class="explanation-text">
+                  {{ translationService.getReactive('auth.login.emailLinkExplanation') }}
+                </p>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ translationService.getReactive('auth.login.emailLabel') }}</mat-label>
+                <input matInput type="email" formControlName="email" [placeholder]="translationService.getReactive('auth.login.emailPlaceholder')">
+                <mat-icon matSuffix>email</mat-icon>
+                @if (emailLinkForm.get('email')?.hasError('required')) {
+                  <mat-error>{{ translationService.getReactive('auth.login.emailRequired') }}</mat-error>
+                }
+                @if (emailLinkForm.get('email')?.hasError('email')) {
+                  <mat-error>{{ translationService.getReactive('auth.login.emailInvalid') }}</mat-error>
+                }
+              </mat-form-field>
+
+              <button mat-raised-button type="submit" class="energy-button-secondary" [disabled]="emailLinkForm.invalid || isLoading()">
+                @if (isLoading()) {
+                  <mat-spinner diameter="20" class="energy-m-sm"></mat-spinner>
+                } @else {
+                  <span>{{ translationService.getReactive('auth.login.sendSignInLink') }}</span>
+                }
+              </button>
+
+              <!-- Success Message -->
+              @if (emailLinkSent()) {
+                <div class="email-link-success">
+                  <mat-icon class="success-icon">check_circle</mat-icon>
+                  <p class="success-message">
+                    {{ translationService.getReactive('auth.login.signInLinkSent') }}
+                  </p>
+                  <p class="success-submessage">
+                    {{ translationService.getReactive('auth.login.checkSpamFolder') }}
+                  </p>
+                </div>
+              }
+            </form>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
 </div>

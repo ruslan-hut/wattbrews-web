@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, effect, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -42,7 +42,8 @@ import { SortByConnectorIdPipe } from '../../../shared/pipes';
     SortByConnectorIdPipe
   ],
   templateUrl: './stations-list.component.html',
-  styleUrls: ['./stations-list.component.scss']
+  styleUrls: ['./stations-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StationsListComponent implements OnInit, OnDestroy {
   private readonly chargePointService = inject(ChargePointService);

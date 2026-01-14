@@ -1,14 +1,14 @@
-import { Component, inject, signal, computed, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { WebsocketService } from '../../../core/services/websocket.service';
-import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
-import { WsCommand, WsResponse, ResponseStatus, ResponseStage } from '../../../core/models/websocket.model';
+import { SimpleTranslationService } from '../../../core/services';
+import { WsCommand, WsResponse, ResponseStatus, ResponseStage } from '../../../core/models';
 
 export interface TransactionStartDialogData {
   chargePointId: string;
@@ -43,6 +43,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
   protected readonly translationService = inject(SimpleTranslationService);
   private readonly dialogRef = inject(MatDialogRef<TransactionStartDialogComponent>);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly data = signal<TransactionStartDialogData>(inject(MAT_DIALOG_DATA));
   protected readonly translationsLoading = signal(true);
@@ -53,8 +54,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
     info: ''
   });
 
-  private wsSubscription?: Subscription;
-  private autoCloseTimeout?: any;
+  private autoCloseTimeout?: ReturnType<typeof setTimeout>;
 
   ngOnInit(): void {
     this.initializeTranslations();
@@ -64,12 +64,12 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
     try {
       this.translationsLoading.set(true);
       await this.translationService.initializeTranslationsAsync();
-      
+
       // Verify translations are actually loaded
       if (!this.translationService.areTranslationsLoaded()) {
         throw new Error('Translations not available after initialization');
       }
-      
+
       this.translationsLoading.set(false);
       // Start transaction only after translations are loaded
       this.startTransaction();
@@ -82,9 +82,6 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.wsSubscription) {
-      this.wsSubscription.unsubscribe();
-    }
     if (this.autoCloseTimeout) {
       clearTimeout(this.autoCloseTimeout);
     }
@@ -121,26 +118,28 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
 
   private subscribeToMessages(): void {
     // Subscribe to all websocket messages and filter for start stage
-    this.wsSubscription = this.wsService.subscribe((message: WsResponse) => {
-      // Only process messages related to the start stage
-      if (message.stage !== ResponseStage.Start) {
-        return;
-      }
+    this.wsService.messages$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((message: WsResponse) => {
+        // Only process messages related to the start stage
+        if (message.stage !== ResponseStage.Start) {
+          return;
+        }
 
-      console.log('Transaction start message received:', message);
+        console.log('Transaction start message received:', message);
 
-      switch (message.status) {
-        case ResponseStatus.Waiting:
-          this.handleWaitingMessage(message);
-          break;
-        case ResponseStatus.Success:
-          this.handleSuccessMessage(message);
-          break;
-        case ResponseStatus.Error:
-          this.handleErrorMessage(message);
-          break;
-      }
-    });
+        switch (message.status) {
+          case ResponseStatus.Waiting:
+            this.handleWaitingMessage(message);
+            break;
+          case ResponseStatus.Success:
+            this.handleSuccessMessage(message);
+            break;
+          case ResponseStatus.Error:
+            this.handleErrorMessage(message);
+            break;
+        }
+      });
   }
 
   private handleWaitingMessage(message: WsResponse): void {
@@ -230,9 +229,9 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
   protected getStatusMessage(): string {
     const status = this.state().status;
     const info = this.state().info;
-    
+
     if (info) return info;
-    
+
     switch (status) {
       case 'initializing':
         return this.translationService.getReactive('transactionStart.sendingCommand');

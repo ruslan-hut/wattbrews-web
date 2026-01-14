@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, inject, OnInit, OnDestroy, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,7 +8,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterModule, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChargePointService } from '../../core/services/chargepoint.service';
 import { AuthService } from '../../core/services/auth.service';
 import { TransactionService } from '../../core/services/transaction.service';
@@ -38,7 +38,8 @@ import { SortByConnectorIdPipe } from '../../shared/pipes';
     SortByConnectorIdPipe
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrl: './dashboard.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   protected readonly chargePointService = inject(ChargePointService);
@@ -49,16 +50,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readonly userInfoService = inject(UserInfoService);
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
   
   // Translation loading state
   protected readonly translationsLoading = signal(true);
   
   // Real-time updates
   protected readonly realtimeActive = signal(false);
-  
-  // Subscription management
-  private authSubscription?: Subscription;
-  private readonly websocketSubscriptions = new Subscription();
+
+  // Transaction tracking for WebSocket
   private readonly listeningTransactionIds = new Set<number>();
   private websocketInitialized = false;
   
@@ -70,18 +70,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Initialize translations first
     this.initializeTranslations();
-    
+
     // Wait for authentication before loading data
-    this.authSubscription = this.authService.user$.subscribe(user => {
-      if (user) {
-        this.loadChargePoints();
-        this.loadRecentChargePoints();
-        this.loadTransactions();
-        this.loadActiveTransactions();
-        this.loadUserInfo();
-        this.initializeWebSocketSubscriptions();
-      }
-    });
+    this.authService.user$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(user => {
+        if (user) {
+          this.loadChargePoints();
+          this.loadRecentChargePoints();
+          this.loadTransactions();
+          this.loadActiveTransactions();
+          this.loadUserInfo();
+          this.initializeWebSocketSubscriptions();
+        }
+      });
   }
   
   /**
@@ -92,31 +94,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.websocketInitialized) {
       return;
     }
-    
+
     this.websocketInitialized = true;
-    
+
     // Subscribe to charge-point events
     this.websocketService.sendCommand(WsCommand.ListenChargePoints).catch(error => {
       console.error('[Dashboard] Failed to subscribe to charge points:', error);
     });
-    
-    // Listen for charge-point events
-    const chargePointSubscription = this.websocketService.subscribeToStage(
-      ResponseStage.ChargePointEvent,
-      (message) => {
-        this.handleChargePointEvent(message);
-      }
-    );
-    
-    const transactionValueSubscription = this.websocketService.subscribeToStatus(
-      ResponseStatus.Value,
-      (message) => {
-        this.handleTransactionValueUpdate(message);
-      }
-    );
-    
-    this.websocketSubscriptions.add(chargePointSubscription);
-    this.websocketSubscriptions.add(transactionValueSubscription);
+
+    // Listen for all WebSocket messages and filter by stage/status
+    this.websocketService.messages$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((message: WsResponse) => {
+        // Handle charge-point events
+        if (message.stage === ResponseStage.ChargePointEvent) {
+          this.handleChargePointEvent(message);
+        }
+
+        // Handle transaction value updates
+        if (message.status === ResponseStatus.Value) {
+          this.handleTransactionValueUpdate(message);
+        }
+      });
   }
   
   /**
@@ -160,12 +159,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
-    
     this.stopListeningToAllTransactions();
-    this.websocketSubscriptions.unsubscribe();
   }
   
   protected recentChargePoints(): ChargePoint[] {

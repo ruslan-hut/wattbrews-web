@@ -1,414 +1,425 @@
 <div class="sessions-history-container">
   <!-- Page Header -->
-  <div class="page-header" *ngIf="!translationsLoading()">
-    <h1 class="page-title">{{ translationService.getReactive('sessions.history.title') }}</h1>
-    <p class="page-subtitle">{{ translationService.getReactive('sessions.history.subtitle') }}</p>
-  </div>
+  @if (!translationsLoading()) {
+    <div class="page-header">
+      <h1 class="page-title">{{ translationService.getReactive('sessions.history.title') }}</h1>
+      <p class="page-subtitle">{{ translationService.getReactive('sessions.history.subtitle') }}</p>
+    </div>
+  }
 
   <!-- Translation Loading State -->
-  <div class="auth-required-message" *ngIf="translationsLoading()">
-    <mat-spinner diameter="40"></mat-spinner>
-    <h3>Loading translations...</h3>
-    <p>Please wait while we load the interface...</p>
-  </div>
-
-  <!-- Authentication Loading State -->
-  <div class="auth-required-message" *ngIf="!translationsLoading() && authLoading()">
-    <mat-spinner diameter="40"></mat-spinner>
-    <h3>{{ translationService.getReactive('sessions.history.auth.checking') }}</h3>
-    <p>{{ translationService.getReactive('sessions.history.auth.checkingMessage') }}</p>
-  </div>
-
-  <!-- Authentication Required Message -->
-  <div class="auth-required-message" *ngIf="!translationsLoading() && !authLoading() && !isAuthenticated()">
-    <mat-icon class="auth-icon">lock</mat-icon>
-    <h3>{{ translationService.getReactive('sessions.history.auth.required') }}</h3>
-    <p>{{ translationService.getReactive('sessions.history.auth.requiredMessage') }}</p>
-    <button mat-raised-button color="primary" (click)="navigateToLogin()">
-      <mat-icon>login</mat-icon>
-      {{ translationService.getReactive('sessions.history.auth.signIn') }}
-    </button>
-  </div>
-
-  <!-- Statistics Row - Desktop -->
-  <div class="stats-row desktop-stats" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
-    <mat-card class="stat-card">
-      <mat-card-content>
-        <div class="stat-content">
-          <mat-icon class="stat-icon">battery_charging_full</mat-icon>
-          <div>
-            <p class="stat-value">{{ totalEnergy().toFixed(1) }}</p>
-            <p class="stat-label">{{ translationService.getReactive('sessions.history.stats.totalEnergy') }}</p>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="stat-card">
-      <mat-card-content>
-        <div class="stat-content">
-          <mat-icon class="stat-icon">euro_symbol</mat-icon>
-          <div>
-            <p class="stat-value">{{ totalCost().toFixed(2) }}</p>
-            <p class="stat-label">{{ translationService.getReactive('sessions.history.stats.totalCost') }}</p>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="stat-card">
-      <mat-card-content>
-        <div class="stat-content">
-          <mat-icon class="stat-icon">check_circle</mat-icon>
-          <div>
-            <p class="stat-value">{{ completedSessions() }}</p>
-            <p class="stat-label">{{ translationService.getReactive('sessions.history.stats.completedSessions') }}</p>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <!-- Statistics - Mobile (Combined Card) -->
-  <mat-card class="stats-card-mobile" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
-    <mat-card-content>
-      <div class="stats-grid-mobile">
-        <div class="stat-item-mobile">
-          <mat-icon class="stat-icon-mobile">battery_charging_full</mat-icon>
-          <span class="stat-value-mobile">{{ totalEnergy().toFixed(1) }}</span>
-          <span class="stat-label-mobile">{{ translationService.getReactive('sessions.history.stats.totalEnergy') }}</span>
-        </div>
-        <div class="stat-item-mobile">
-          <mat-icon class="stat-icon-mobile">euro_symbol</mat-icon>
-          <span class="stat-value-mobile">{{ totalCost().toFixed(2) }}</span>
-          <span class="stat-label-mobile">{{ translationService.getReactive('sessions.history.stats.totalCost') }}</span>
-        </div>
-        <div class="stat-item-mobile">
-          <mat-icon class="stat-icon-mobile">check_circle</mat-icon>
-          <span class="stat-value-mobile">{{ completedSessions() }}</span>
-          <span class="stat-label-mobile">{{ translationService.getReactive('sessions.history.stats.completedSessions') }}</span>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-
-  <!-- Filters Section - Desktop -->
-  <div class="filters-section filters-desktop" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
-    <div class="filters-row">
-      <mat-form-field class="search-field">
-        <mat-label>{{ translationService.getReactive('sessions.history.filters.searchLabel') }}</mat-label>
-        <input
-          matInput
-          [placeholder]="translationService.getReactive('sessions.history.filters.searchPlaceholder')"
-          [value]="searchTerm()"
-          (input)="onSearchChange($event.target.value)"
-        >
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-
-      <mat-form-field class="year-filter-field">
-        <mat-label>{{ translationService.getReactive('sessions.history.filters.yearLabel') }}</mat-label>
-        <mat-select
-          [value]="selectedYear()"
-          (selectionChange)="onYearChange($event.value)"
-        >
-          <mat-option *ngFor="let year of availableYears()" [value]="year">
-            {{ year }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="month-filter-field">
-        <mat-label>{{ translationService.getReactive('sessions.history.filters.monthLabel') }}</mat-label>
-        <mat-select
-          [value]="selectedMonth()"
-          (selectionChange)="onMonthChange($event.value)"
-        >
-          <mat-option *ngFor="let month of availableMonths()" [value]="month.value">
-            {{ month.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+  @if (translationsLoading()) {
+    <div class="auth-required-message">
+      <mat-spinner diameter="40"></mat-spinner>
+      <h3>Loading translations...</h3>
+      <p>Please wait while we load the interface...</p>
     </div>
-  </div>
+  } @else if (authLoading()) {
+    <!-- Authentication Loading State -->
+    <div class="auth-required-message">
+      <mat-spinner diameter="40"></mat-spinner>
+      <h3>{{ translationService.getReactive('sessions.history.auth.checking') }}</h3>
+      <p>{{ translationService.getReactive('sessions.history.auth.checkingMessage') }}</p>
+    </div>
+  } @else if (!isAuthenticated()) {
+    <!-- Authentication Required Message -->
+    <div class="auth-required-message">
+      <mat-icon class="auth-icon">lock</mat-icon>
+      <h3>{{ translationService.getReactive('sessions.history.auth.required') }}</h3>
+      <p>{{ translationService.getReactive('sessions.history.auth.requiredMessage') }}</p>
+      <button mat-raised-button color="primary" (click)="navigateToLogin()">
+        <mat-icon>login</mat-icon>
+        {{ translationService.getReactive('sessions.history.auth.signIn') }}
+      </button>
+    </div>
+  } @else {
+    <!-- Statistics Row - Desktop -->
+    <div class="stats-row desktop-stats">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">battery_charging_full</mat-icon>
+            <div>
+              <p class="stat-value">{{ totalEnergy().toFixed(1) }}</p>
+              <p class="stat-label">{{ translationService.getReactive('sessions.history.stats.totalEnergy') }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-  <!-- Filters Section - Mobile (Expandable) -->
-  <mat-expansion-panel class="filters-panel-mobile" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <mat-icon>filter_list</mat-icon>
-        {{ translationService.getReactive('sessions.history.filters.searchLabel') }}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">euro_symbol</mat-icon>
+            <div>
+              <p class="stat-value">{{ totalCost().toFixed(2) }}</p>
+              <p class="stat-label">{{ translationService.getReactive('sessions.history.stats.totalCost') }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <div class="filters-row-mobile">
-      <mat-form-field class="filter-field-mobile">
-        <mat-label>{{ translationService.getReactive('sessions.history.filters.searchLabel') }}</mat-label>
-        <input
-          matInput
-          [placeholder]="translationService.getReactive('sessions.history.filters.searchPlaceholder')"
-          [value]="searchTerm()"
-          (input)="onSearchChange($event.target.value)"
-        >
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">check_circle</mat-icon>
+            <div>
+              <p class="stat-value">{{ completedSessions() }}</p>
+              <p class="stat-label">{{ translationService.getReactive('sessions.history.stats.completedSessions') }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-      <div class="filter-selects-row">
-        <mat-form-field class="filter-field-mobile">
+    <!-- Statistics - Mobile (Combined Card) -->
+    <mat-card class="stats-card-mobile">
+      <mat-card-content>
+        <div class="stats-grid-mobile">
+          <div class="stat-item-mobile">
+            <mat-icon class="stat-icon-mobile">battery_charging_full</mat-icon>
+            <span class="stat-value-mobile">{{ totalEnergy().toFixed(1) }}</span>
+            <span class="stat-label-mobile">{{ translationService.getReactive('sessions.history.stats.totalEnergy') }}</span>
+          </div>
+          <div class="stat-item-mobile">
+            <mat-icon class="stat-icon-mobile">euro_symbol</mat-icon>
+            <span class="stat-value-mobile">{{ totalCost().toFixed(2) }}</span>
+            <span class="stat-label-mobile">{{ translationService.getReactive('sessions.history.stats.totalCost') }}</span>
+          </div>
+          <div class="stat-item-mobile">
+            <mat-icon class="stat-icon-mobile">check_circle</mat-icon>
+            <span class="stat-value-mobile">{{ completedSessions() }}</span>
+            <span class="stat-label-mobile">{{ translationService.getReactive('sessions.history.stats.completedSessions') }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Filters Section - Desktop -->
+    <div class="filters-section filters-desktop">
+      <div class="filters-row">
+        <mat-form-field class="search-field">
+          <mat-label>{{ translationService.getReactive('sessions.history.filters.searchLabel') }}</mat-label>
+          <input
+            matInput
+            [placeholder]="translationService.getReactive('sessions.history.filters.searchPlaceholder')"
+            [value]="searchTerm()"
+            (input)="onSearchChange($event.target.value)"
+          >
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="year-filter-field">
           <mat-label>{{ translationService.getReactive('sessions.history.filters.yearLabel') }}</mat-label>
           <mat-select
             [value]="selectedYear()"
             (selectionChange)="onYearChange($event.value)"
           >
-            <mat-option *ngFor="let year of availableYears()" [value]="year">
-              {{ year }}
-            </mat-option>
+            @for (year of availableYears(); track year) {
+              <mat-option [value]="year">{{ year }}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="filter-field-mobile">
+        <mat-form-field class="month-filter-field">
           <mat-label>{{ translationService.getReactive('sessions.history.filters.monthLabel') }}</mat-label>
           <mat-select
             [value]="selectedMonth()"
             (selectionChange)="onMonthChange($event.value)"
           >
-            <mat-option *ngFor="let month of availableMonths()" [value]="month.value">
-              {{ month.label }}
-            </mat-option>
+            @for (month of availableMonths(); track month.value) {
+              <mat-option [value]="month.value">{{ month.label }}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
       </div>
     </div>
-  </mat-expansion-panel>
 
-  <!-- Transactions Section -->
-  <div class="transactions-section" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
-    <mat-card class="transactions-card">
-      <div class="card-header">
-        <h2 class="card-title">{{ translationService.getReactive('sessions.history.table.title') }}</h2>
-        <button 
-          mat-icon-button 
-          class="refresh-button"
-          (click)="refreshTransactions()"
-          [disabled]="transactionService.loading()"
-        >
-          <mat-icon>refresh</mat-icon>
-        </button>
+    <!-- Filters Section - Mobile (Expandable) -->
+    <mat-expansion-panel class="filters-panel-mobile">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>filter_list</mat-icon>
+          {{ translationService.getReactive('sessions.history.filters.searchLabel') }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="filters-row-mobile">
+        <mat-form-field class="filter-field-mobile">
+          <mat-label>{{ translationService.getReactive('sessions.history.filters.searchLabel') }}</mat-label>
+          <input
+            matInput
+            [placeholder]="translationService.getReactive('sessions.history.filters.searchPlaceholder')"
+            [value]="searchTerm()"
+            (input)="onSearchChange($event.target.value)"
+          >
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <div class="filter-selects-row">
+          <mat-form-field class="filter-field-mobile">
+            <mat-label>{{ translationService.getReactive('sessions.history.filters.yearLabel') }}</mat-label>
+            <mat-select
+              [value]="selectedYear()"
+              (selectionChange)="onYearChange($event.value)"
+            >
+              @for (year of availableYears(); track year) {
+                <mat-option [value]="year">{{ year }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="filter-field-mobile">
+            <mat-label>{{ translationService.getReactive('sessions.history.filters.monthLabel') }}</mat-label>
+            <mat-select
+              [value]="selectedMonth()"
+              (selectionChange)="onMonthChange($event.value)"
+            >
+              @for (month of availableMonths(); track month.value) {
+                <mat-option [value]="month.value">{{ month.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
+    </mat-expansion-panel>
 
-      <!-- Loading State -->
-      <div class="loading-container" *ngIf="transactionService.loading()">
-        <mat-spinner diameter="40"></mat-spinner>
-        <p>{{ translationService.getReactive('sessions.history.loadingTransactions') }}</p>
-      </div>
+    <!-- Transactions Section -->
+    <div class="transactions-section">
+      <mat-card class="transactions-card">
+        <div class="card-header">
+          <h2 class="card-title">{{ translationService.getReactive('sessions.history.table.title') }}</h2>
+          <button
+            mat-icon-button
+            class="refresh-button"
+            (click)="refreshTransactions()"
+            [disabled]="transactionService.loading()"
+          >
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
 
-      <!-- Error State -->
-      <div class="error-container" *ngIf="transactionService.error()">
-        <mat-icon class="error-icon">error</mat-icon>
-        <p>{{ transactionService.error() }}</p>
-        <button mat-raised-button color="primary" (click)="refreshTransactions()">
-          {{ translationService.getReactive('sessions.history.buttons.retry') }}
-        </button>
-      </div>
+        <!-- Loading State -->
+        @if (transactionService.loading()) {
+          <div class="loading-container">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>{{ translationService.getReactive('sessions.history.loadingTransactions') }}</p>
+          </div>
+        } @else if (transactionService.error()) {
+          <!-- Error State -->
+          <div class="error-container">
+            <mat-icon class="error-icon">error</mat-icon>
+            <p>{{ transactionService.error() }}</p>
+            <button mat-raised-button color="primary" (click)="refreshTransactions()">
+              {{ translationService.getReactive('sessions.history.buttons.retry') }}
+            </button>
+          </div>
+        } @else {
+          <!-- Mobile Transactions (Card Layout) -->
+          <div class="mobile-transactions">
+            @for (transaction of paginatedTransactions(); track transaction.transaction_id) {
+              <div class="mobile-transaction-card" (click)="onTransactionClick(transaction)">
+                <div class="mobile-transaction-header">
+                  <div class="mobile-transaction-id">#{{ transaction.transaction_id }}</div>
+                  <div class="mobile-transaction-status">
+                    <mat-chip
+                      class="status-chip"
+                      [class.completed]="transaction.is_finished"
+                      [class.in-progress]="!transaction.is_finished"
+                    >
+                      {{ transaction.is_finished ? translationService.getReactive('sessions.history.table.status.completed') : translationService.getReactive('sessions.history.table.status.inProgress') }}
+                    </mat-chip>
+                  </div>
+                </div>
 
-        <!-- Mobile Transactions (Card Layout) -->
-        <div class="mobile-transactions" *ngIf="!transactionService.loading() && !transactionService.error()">
-          <div class="mobile-transaction-card" *ngFor="let transaction of paginatedTransactions()" (click)="onTransactionClick(transaction)">
-            <div class="mobile-transaction-header">
-              <div class="mobile-transaction-id">#{{ transaction.transaction_id }}</div>
-              <div class="mobile-transaction-status">
-                <mat-chip 
+                <div class="mobile-transaction-details">
+                  <div class="mobile-detail-row">
+                    <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.station') }}</span>
+                    <span class="mobile-detail-value">{{ transaction.charge_point_id }}</span>
+                  </div>
+
+                  <div class="mobile-detail-row">
+                    <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.connector') }}</span>
+                    <span class="mobile-detail-value">{{ transaction.connector_id }}</span>
+                  </div>
+
+                  <div class="mobile-detail-row">
+                    <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.energy') }}</span>
+                    <span class="mobile-detail-value energy">{{ formatEnergy(transaction.meter_start, transaction.meter_stop) }} kWh</span>
+                  </div>
+
+                  @if (transaction.is_finished) {
+                    <div class="mobile-detail-row">
+                      <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.duration') }}</span>
+                      <span class="mobile-detail-value">{{ formatDuration(transaction.time_start, transaction.time_stop) }}</span>
+                    </div>
+                  }
+
+                  @if (transaction.payment_amount > 0) {
+                    <div class="mobile-detail-row">
+                      <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.cost') }}</span>
+                      <span class="mobile-detail-value payment">€{{ (transaction.payment_amount / 100).toFixed(2) }}</span>
+                    </div>
+                  }
+                </div>
+
+                <div class="mobile-transaction-time">
+                  {{ formatDateTime(transaction.time_start) }}
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Transactions Table (Desktop) -->
+          <table mat-table [dataSource]="paginatedTransactions()" class="transactions-table" matSort (matSortChange)="onSortChange($event)">
+            <!-- Transaction ID Column -->
+            <ng-container matColumnDef="transaction_id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ translationService.getReactive('sessions.history.table.columns.id') }}</th>
+              <td mat-cell *matCellDef="let transaction">
+                <span class="energy-value">#{{ transaction.transaction_id }}</span>
+              </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>{{ translationService.getReactive('sessions.history.table.columns.status') }}</th>
+              <td mat-cell *matCellDef="let transaction">
+                <mat-chip
                   class="status-chip"
                   [class.completed]="transaction.is_finished"
                   [class.in-progress]="!transaction.is_finished"
                 >
                   {{ transaction.is_finished ? translationService.getReactive('sessions.history.table.status.completed') : translationService.getReactive('sessions.history.table.status.inProgress') }}
                 </mat-chip>
-              </div>
-            </div>
-            
-            <div class="mobile-transaction-details">
-              <div class="mobile-detail-row">
-                <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.station') }}</span>
-                <span class="mobile-detail-value">{{ transaction.charge_point_id }}</span>
-              </div>
-              
-              <div class="mobile-detail-row">
-                <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.connector') }}</span>
-                <span class="mobile-detail-value">{{ transaction.connector_id }}</span>
-              </div>
-              
-              <div class="mobile-detail-row">
-                <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.energy') }}</span>
-                <span class="mobile-detail-value energy">{{ formatEnergy(transaction.meter_start, transaction.meter_stop) }} kWh</span>
-              </div>
-              
-              <div class="mobile-detail-row" *ngIf="transaction.is_finished">
-                <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.duration') }}</span>
-                <span class="mobile-detail-value">{{ formatDuration(transaction.time_start, transaction.time_stop) }}</span>
-              </div>
-              
-              <div class="mobile-detail-row" *ngIf="transaction.payment_amount > 0">
-                <span class="mobile-detail-label">{{ translationService.getReactive('sessions.history.mobile.cost') }}</span>
-                <span class="mobile-detail-value payment">€{{ (transaction.payment_amount / 100).toFixed(2) }}</span>
-              </div>
-            </div>
-            
-            <div class="mobile-transaction-time">
-              {{ formatDateTime(transaction.time_start) }}
-            </div>
-          </div>
-        </div>
+              </td>
+            </ng-container>
 
-        <!-- Transactions Table (Desktop) -->
-        <div *ngIf="!transactionService.loading() && !transactionService.error()">
-          <table mat-table [dataSource]="paginatedTransactions()" class="transactions-table" matSort (matSortChange)="onSortChange($event)">
-          <!-- Transaction ID Column -->
-          <ng-container matColumnDef="transaction_id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ translationService.getReactive('sessions.history.table.columns.id') }}</th>
-            <td mat-cell *matCellDef="let transaction">
-              <span class="energy-value">#{{ transaction.transaction_id }}</span>
-            </td>
-          </ng-container>
-
-          <!-- Status Column -->
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>{{ translationService.getReactive('sessions.history.table.columns.status') }}</th>
-            <td mat-cell *matCellDef="let transaction">
-              <mat-chip 
-                class="status-chip"
-                [class.completed]="transaction.is_finished"
-                [class.in-progress]="!transaction.is_finished"
-              >
-                {{ transaction.is_finished ? translationService.getReactive('sessions.history.table.status.completed') : translationService.getReactive('sessions.history.table.status.inProgress') }}
-              </mat-chip>
-            </td>
-          </ng-container>
-
-          <!-- Station Column -->
-          <ng-container matColumnDef="station">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header="charge_point_id">{{ translationService.getReactive('sessions.history.table.columns.station') }}</th>
-            <td mat-cell *matCellDef="let transaction">
-              <div>
-                <div class="energy-value">{{ transaction.charge_point_id }}</div>
-                <div style="font-size: 0.8rem; color: #666;">
-                  {{ translationService.getReactive('sessions.history.table.connector') }} {{ transaction.connector_id }}
+            <!-- Station Column -->
+            <ng-container matColumnDef="station">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header="charge_point_id">{{ translationService.getReactive('sessions.history.table.columns.station') }}</th>
+              <td mat-cell *matCellDef="let transaction">
+                <div>
+                  <div class="energy-value">{{ transaction.charge_point_id }}</div>
+                  <div style="font-size: 0.8rem; color: #666;">
+                    {{ translationService.getReactive('sessions.history.table.connector') }} {{ transaction.connector_id }}
+                  </div>
                 </div>
-              </div>
-            </td>
-          </ng-container>
+              </td>
+            </ng-container>
 
-          <!-- Energy Column -->
-          <ng-container matColumnDef="energy">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header="energy">{{ translationService.getReactive('sessions.history.table.columns.energy') }}</th>
-            <td mat-cell *matCellDef="let transaction">
-              <span class="energy-value">
-                {{ formatEnergy(transaction.meter_start, transaction.meter_stop) }} kWh
-              </span>
-            </td>
-          </ng-container>
+            <!-- Energy Column -->
+            <ng-container matColumnDef="energy">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header="energy">{{ translationService.getReactive('sessions.history.table.columns.energy') }}</th>
+              <td mat-cell *matCellDef="let transaction">
+                <span class="energy-value">
+                  {{ formatEnergy(transaction.meter_start, transaction.meter_stop) }} kWh
+                </span>
+              </td>
+            </ng-container>
 
-          <!-- Duration Column -->
-          <ng-container matColumnDef="duration">
-            <th mat-header-cell *matHeaderCellDef>{{ translationService.getReactive('sessions.history.table.columns.duration') }}</th>
-            <td mat-cell *matCellDef="let transaction">
-              <span *ngIf="transaction.is_finished; else inProgressDuration">
-                {{ formatDuration(transaction.time_start, transaction.time_stop) }}
-              </span>
-              <ng-template #inProgressDuration>
-                <span style="color: #ff9800;">{{ translationService.getReactive('sessions.history.table.status.inProgress') }}</span>
-              </ng-template>
-            </td>
-          </ng-container>
+            <!-- Duration Column -->
+            <ng-container matColumnDef="duration">
+              <th mat-header-cell *matHeaderCellDef>{{ translationService.getReactive('sessions.history.table.columns.duration') }}</th>
+              <td mat-cell *matCellDef="let transaction">
+                @if (transaction.is_finished) {
+                  <span>{{ formatDuration(transaction.time_start, transaction.time_stop) }}</span>
+                } @else {
+                  <span style="color: #ff9800;">{{ translationService.getReactive('sessions.history.table.status.inProgress') }}</span>
+                }
+              </td>
+            </ng-container>
 
-          <!-- Payment Column -->
-          <ng-container matColumnDef="payment">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header="payment_amount">{{ translationService.getReactive('sessions.history.table.columns.payment') }}</th>
-            <td mat-cell *matCellDef="let transaction">
-              <span *ngIf="transaction.payment_amount > 0; else noPayment" class="payment-amount">
-                €{{ (transaction.payment_amount / 100).toFixed(2) }}
-              </span>
-              <ng-template #noPayment>
-                <span style="color: #999;">{{ translationService.getReactive('sessions.history.table.free') }}</span>
-              </ng-template>
-            </td>
-          </ng-container>
+            <!-- Payment Column -->
+            <ng-container matColumnDef="payment">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header="payment_amount">{{ translationService.getReactive('sessions.history.table.columns.payment') }}</th>
+              <td mat-cell *matCellDef="let transaction">
+                @if (transaction.payment_amount > 0) {
+                  <span class="payment-amount">€{{ (transaction.payment_amount / 100).toFixed(2) }}</span>
+                } @else {
+                  <span style="color: #999;">{{ translationService.getReactive('sessions.history.table.free') }}</span>
+                }
+              </td>
+            </ng-container>
 
-          <!-- Start Time Column -->
-          <ng-container matColumnDef="start_time">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header="time_start">{{ translationService.getReactive('sessions.history.table.columns.startTime') }}</th>
-            <td mat-cell *matCellDef="let transaction">
-              <div>
-                <div>{{ formatDateTime(transaction.time_start) }}</div>
-                <div style="font-size: 0.8rem; color: #666;">
-                  {{ formatRelativeTime(transaction.time_start) }}
+            <!-- Start Time Column -->
+            <ng-container matColumnDef="start_time">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header="time_start">{{ translationService.getReactive('sessions.history.table.columns.startTime') }}</th>
+              <td mat-cell *matCellDef="let transaction">
+                <div>
+                  <div>{{ formatDateTime(transaction.time_start) }}</div>
+                  <div style="font-size: 0.8rem; color: #666;">
+                    {{ formatRelativeTime(transaction.time_start) }}
+                  </div>
                 </div>
-              </div>
-            </td>
-          </ng-container>
+              </td>
+            </ng-container>
 
-          <!-- End Time Column -->
-          <ng-container matColumnDef="end_time">
-            <th mat-header-cell *matHeaderCellDef>{{ translationService.getReactive('sessions.history.table.columns.endTime') }}</th>
-            <td mat-cell *matCellDef="let transaction">
-              <div *ngIf="transaction.is_finished; else inProgressEnd">
-                <div>{{ formatDateTime(transaction.time_stop) }}</div>
-                <div style="font-size: 0.8rem; color: #666;">
-                  {{ formatRelativeTime(transaction.time_stop) }}
-                </div>
-              </div>
-              <ng-template #inProgressEnd>
-                <span style="color: #ff9800;">{{ translationService.getReactive('sessions.history.table.status.inProgress') }}</span>
-              </ng-template>
-            </td>
-          </ng-container>
+            <!-- End Time Column -->
+            <ng-container matColumnDef="end_time">
+              <th mat-header-cell *matHeaderCellDef>{{ translationService.getReactive('sessions.history.table.columns.endTime') }}</th>
+              <td mat-cell *matCellDef="let transaction">
+                @if (transaction.is_finished) {
+                  <div>
+                    <div>{{ formatDateTime(transaction.time_stop) }}</div>
+                    <div style="font-size: 0.8rem; color: #666;">
+                      {{ formatRelativeTime(transaction.time_stop) }}
+                    </div>
+                  </div>
+                } @else {
+                  <span style="color: #ff9800;">{{ translationService.getReactive('sessions.history.table.status.inProgress') }}</span>
+                }
+              </td>
+            </ng-container>
 
-          <!-- Actions Column -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>{{ translationService.getReactive('sessions.history.table.columns.actions') }}</th>
-            <td mat-cell *matCellDef="let transaction">
-              <button 
-                mat-icon-button 
-                (click)="onTransactionClick(transaction)"
-                [matTooltip]="translationService.getReactive('sessions.history.table.viewDetailsTooltip')"
-              >
-                <mat-icon>visibility</mat-icon>
-              </button>
-            </td>
-          </ng-container>
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>{{ translationService.getReactive('sessions.history.table.columns.actions') }}</th>
+              <td mat-cell *matCellDef="let transaction">
+                <button
+                  mat-icon-button
+                  (click)="onTransactionClick(transaction)"
+                  [matTooltip]="translationService.getReactive('sessions.history.table.viewDetailsTooltip')"
+                >
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr 
-            mat-row 
-            *matRowDef="let transaction; columns: displayedColumns;"
-            class="transaction-row"
-            (click)="onTransactionClick(transaction)"
-          ></tr>
-        </table>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let transaction; columns: displayedColumns;"
+              class="transaction-row"
+              (click)="onTransactionClick(transaction)"
+            ></tr>
+          </table>
 
-        <!-- No Transactions State -->
-        <div class="no-transactions" *ngIf="paginatedTransactions().length === 0">
-          <mat-icon class="no-data-icon">receipt_long</mat-icon>
-          <h3>{{ translationService.getReactive('sessions.history.noTransactions') }}</h3>
-          <p *ngIf="searchTerm()">
-            {{ translationService.getReactive('sessions.history.noData.searchCriteria') }}
-          </p>
-          <p *ngIf="!searchTerm()">
-            {{ translationService.getReactive('sessions.history.noData.noSessions') }}
-          </p>
-        </div>
+          <!-- No Transactions State -->
+          @if (paginatedTransactions().length === 0) {
+            <div class="no-transactions">
+              <mat-icon class="no-data-icon">receipt_long</mat-icon>
+              <h3>{{ translationService.getReactive('sessions.history.noTransactions') }}</h3>
+              @if (searchTerm()) {
+                <p>{{ translationService.getReactive('sessions.history.noData.searchCriteria') }}</p>
+              } @else {
+                <p>{{ translationService.getReactive('sessions.history.noData.noSessions') }}</p>
+              }
+            </div>
+          }
 
-        <!-- Pagination -->
-        <mat-paginator
-          *ngIf="totalTransactions() > 0"
-          [length]="totalTransactions()"
-          [pageSize]="pageSize()"
-          [pageIndex]="currentPage()"
-          [pageSizeOptions]="[5, 10, 25, 50]"
-          (page)="onPageChange($event)"
-          showFirstLastButtons
-        ></mat-paginator>
-      </div>
-    </mat-card>
-  </div>
+          <!-- Pagination -->
+          @if (totalTransactions() > 0) {
+            <mat-paginator
+              [length]="totalTransactions()"
+              [pageSize]="pageSize()"
+              [pageIndex]="currentPage()"
+              [pageSizeOptions]="[5, 10, 25, 50]"
+              (page)="onPageChange($event)"
+              showFirstLastButtons
+            ></mat-paginator>
+          }
+        }
+      </mat-card>
+    </div>
+  }
 </div>

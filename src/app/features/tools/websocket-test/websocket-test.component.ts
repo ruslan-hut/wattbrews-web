@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject, DestroyRef, OnInit, effect } from '@angular/core';
+import { Component, signal, computed, inject, DestroyRef, OnInit, effect, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -27,6 +27,7 @@ interface MessageWithTimestamp {
 
 @Component({
   selector: 'app-websocket-test',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,
