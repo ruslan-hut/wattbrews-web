@@ -1,5 +1,5 @@
 .charge-initiation-container {
-  padding: 20px;
+  padding: var(--energy-space-lg);
   max-width: 800px;
   margin: 0 auto;
   background-color: var(--energy-background);
@@ -9,8 +9,8 @@
 .page-header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 2rem;
+  gap: var(--energy-space-md);
+  margin-bottom: var(--energy-space-2xl);
 }
 
 .back-button {
@@ -31,36 +31,93 @@
 }
 
 .page-subtitle {
-  font-size: 1.1rem;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-lg);
   color: var(--energy-text-secondary);
-  margin: 4px 0 0 0;
+  margin: var(--energy-space-xs) 0 0 0;
 }
 
 .loading-container, .error-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 3rem;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-2xl);
   text-align: center;
+
+  p {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-base);
+    color: var(--energy-text-secondary);
+    margin: 0;
+  }
 }
 
 .charge-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--energy-space-lg);
+}
+
+.station-name-header {
+  display: flex;
+  align-items: center;
+  gap: var(--energy-space-md);
+
+  mat-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.station-name {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--energy-text-primary);
+}
+
+@media (max-width: 768px) {
+  .station-name-header {
+    gap: var(--energy-space-sm);
+
+    mat-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  .station-name {
+    font-size: var(--font-size-xl);
+  }
 }
 
 mat-card {
   background-color: var(--energy-surface) !important;
-  border-radius: var(--energy-radius-lg);
+  border-radius: var(--energy-radius-xl);
+  border: 1px solid var(--energy-border);
   overflow: hidden;
 }
 
 .station-info-card, .connector-selection-card, .payment-method-card, .tariff-card {
-  border-radius: var(--energy-radius-lg);
+  border-radius: var(--energy-radius-xl);
   overflow: hidden;
   background-color: var(--energy-surface) !important;
+
+  .mat-mdc-card-title {
+    font-family: var(--font-family-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--energy-text-primary);
+  }
+
+  .mat-mdc-card-subtitle {
+    font-family: var(--font-family-body);
+    color: var(--energy-text-secondary);
+  }
 }
 
 .station-status-icon {
@@ -71,15 +128,15 @@ mat-card {
 .connectors-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
+  gap: var(--energy-space-md);
 }
 
 .connector-option {
-  border: 1px solid var(--energy-border);
-  border-radius: var(--energy-radius-lg);
-  padding: 1rem;
+  border: 2px solid var(--energy-border);
+  border-radius: var(--energy-radius-xl);
+  padding: var(--energy-space-md);
   background-color: var(--energy-surface);
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
   position: relative;
 }
 
@@ -105,96 +162,108 @@ mat-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-}
+  margin-bottom: var(--energy-space-md);
 
-.connector-header h4 {
-  margin: 0;
-  color: var(--energy-text-primary);
+  h4 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    margin: 0;
+    color: var(--energy-text-primary);
+  }
 }
 
 .connector-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: var(--energy-space-sm);
 }
 
 .connector-info {
   display: flex;
   flex-direction: column;
+  gap: var(--energy-space-xs);
 }
 
 .connector-label {
-  font-size: 0.8rem;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-xs);
   color: var(--energy-text-muted);
   font-weight: 500;
 }
 
 .connector-value {
-  font-size: 0.9rem;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
   color: var(--energy-text-primary);
-  font-weight: 400;
+  font-weight: 500;
 }
-
-
 
 .payment-methods-loading {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 2rem;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-xl);
   justify-content: center;
   color: var(--energy-text-muted);
-}
 
-.payment-methods-loading span {
-  font-size: 0.9rem;
+  span {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-sm);
+  }
 }
 
 .payment-methods-error {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 2rem;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-xl);
   text-align: center;
   color: var(--energy-error);
-}
 
-.payment-methods-error mat-icon {
-  font-size: 2rem;
-  color: var(--energy-error);
-}
+  mat-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    color: var(--energy-error);
+  }
 
-.payment-methods-error span {
-  font-size: 0.9rem;
+  span {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-sm);
+  }
 }
 
 .payment-methods {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--energy-space-md);
 }
 
 .payment-method-option {
-  border: 1px solid var(--energy-border);
-  border-radius: var(--energy-radius-lg);
-  padding: 1rem;
+  border: 2px solid var(--energy-border);
+  border-radius: var(--energy-radius-xl);
+  padding: var(--energy-space-md);
   background-color: var(--energy-surface);
   cursor: pointer;
-  transition: all 0.3s ease;
-}
+  transition: all var(--transition-base);
 
-.payment-method-option:hover {
-  box-shadow: var(--energy-shadow-md);
+  &:hover {
+    box-shadow: var(--energy-shadow-md);
+  }
+
+  &.selected {
+    background-color: var(--energy-success-light);
+    border-color: var(--energy-success);
+  }
 }
 
 .payment-method-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
+  gap: var(--energy-space-md);
+  margin-bottom: var(--energy-space-sm);
 }
 
 .payment-icon {
@@ -204,17 +273,21 @@ mat-card {
 
 .payment-method-info {
   flex: 1;
-}
 
-.payment-method-info h4 {
-  margin: 0;
-  color: var(--energy-text-primary);
-}
+  h4 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    margin: 0;
+    color: var(--energy-text-primary);
+  }
 
-.payment-method-info p {
-  margin: 0;
-  color: var(--energy-text-muted);
-  font-size: 0.9rem;
+  p {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-sm);
+    margin: var(--energy-space-xs) 0 0 0;
+    color: var(--energy-text-muted);
+  }
 }
 
 .check-icon {
@@ -224,89 +297,105 @@ mat-card {
 
 .payment-method-details {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--energy-space-sm);
 }
 
 .payment-method-label {
-  font-size: 0.8rem;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-xs);
   color: var(--energy-text-muted);
   font-weight: 500;
 }
 
 .payment-method-value {
-  font-size: 0.9rem;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
   color: var(--energy-text-primary);
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .no-payment-methods {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 2rem;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-xl);
   text-align: center;
-}
 
-.no-payment-methods mat-icon {
-  font-size: 3rem;
-  color: var(--energy-text-muted);
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    color: var(--energy-text-muted);
+  }
+
+  p {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-base);
+    color: var(--energy-text-secondary);
+    margin: 0;
+  }
 }
 
 .tariff-loading {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 2rem;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-xl);
   justify-content: center;
   color: var(--energy-text-muted);
-}
 
-.tariff-loading span {
-  font-size: 0.9rem;
+  span {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-sm);
+  }
 }
 
 .tariff-error {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 2rem;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-xl);
   text-align: center;
   color: var(--energy-error);
-}
 
-.tariff-error mat-icon {
-  font-size: 2rem;
-  color: var(--energy-error);
-}
+  mat-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    color: var(--energy-error);
+  }
 
-.tariff-error span {
-  font-size: 0.9rem;
+  span {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-sm);
+  }
 }
-
 
 .tariff-info {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--energy-space-md);
 }
 
 .tariff-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: var(--energy-space-sm) 0;
 }
 
 .tariff-label {
-  font-size: 1rem;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
   color: var(--energy-text-muted);
   font-weight: 500;
 }
 
 .tariff-value {
-  font-size: 1.1rem;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
   color: var(--energy-text-primary);
   font-weight: 600;
 }
@@ -315,56 +404,64 @@ mat-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 2rem;
-  background-color: var(--energy-surface);
-  border-radius: var(--energy-radius-lg);
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-lg);
+  background-color: var(--energy-surface-variant);
+  border-radius: var(--energy-radius-xl);
 }
 
 .selected-connector-info {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  gap: var(--energy-space-sm);
+  padding: var(--energy-space-sm) var(--energy-space-md);
   background-color: transparent;
   border: none;
   border-radius: var(--energy-radius-md);
   color: var(--energy-text-primary);
+  font-family: var(--font-family-body);
   font-weight: 500;
-  font-size: 0.9rem;
-}
+  font-size: var(--font-size-sm);
 
-.selected-connector-info mat-icon {
-  color: var(--energy-text-primary);
-  font-size: 1.2rem;
+  mat-icon {
+    color: var(--energy-primary);
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
 }
 
 .start-charge-button {
-  font-size: 1.2rem;
-  padding: 1rem 2rem;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  padding: var(--energy-space-md) var(--energy-space-xl);
   min-width: 200px;
   border: 2px solid var(--energy-primary) !important;
   background-color: transparent !important;
   color: var(--energy-primary) !important;
-}
+  border-radius: var(--energy-radius-xl);
 
-.start-charge-button:hover:not(:disabled) {
-  background-color: var(--energy-primary) !important;
-  color: var(--energy-surface) !important;
-}
+  &:hover:not(:disabled) {
+    background-color: var(--energy-primary) !important;
+    color: white !important;
+  }
 
-.start-charge-button:disabled {
-  border-color: var(--energy-text-disabled) !important;
-  color: var(--energy-text-disabled) !important;
+  &:disabled {
+    border-color: var(--energy-text-disabled) !important;
+    color: var(--energy-text-disabled) !important;
+  }
 }
 
 .start-charge-info {
   text-align: center;
-  color: var(--energy-text-muted);
-}
 
-.start-charge-info p {
-  margin: 0;
+  p {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-sm);
+    color: var(--energy-text-muted);
+    margin: 0;
+  }
 }
 
 .available {
@@ -393,6 +490,18 @@ mat-card {
 }
 
 @media (max-width: 768px) {
+  .charge-initiation-container {
+    padding: var(--energy-space-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .page-subtitle {
+    font-size: var(--font-size-base);
+  }
+
   .connectors-grid {
     grid-template-columns: 1fr;
   }

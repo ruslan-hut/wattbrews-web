@@ -616,34 +616,7 @@
   }
 }
 
-.connector-chip ::ng-deep .mat-mdc-chip-action {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  height: 100%;
-  padding: 0 var(--energy-space-sm);
-  gap: var(--energy-space-xs);
-  white-space: nowrap;
-  line-height: 1;
-  border-radius: var(--energy-radius-lg) !important;
-}
-
-.connector-chip ::ng-deep .mat-mdc-chip-action .mat-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  width: 14px;
-  height: 14px;
-  margin-right: var(--energy-space-xs);
-  vertical-align: middle;
-}
-
-.connector-chip ::ng-deep .mat-mdc-chip-action .mat-mdc-chip-action-label {
-  display: inline;
-  line-height: 1;
-  vertical-align: middle;
-}
+// Note: .mat-mdc-chip-action styles are in global styles.scss
 
 .connector-chip.available {
   background-color: var(--energy-success-light);

@@ -157,4 +157,18 @@ export class TransactionPreviewComponent implements OnInit {
   protected getLongitude(): number {
     return this.transactionDetail()?.charge_point_location?.longitude || 0;
   }
+
+  protected getStatusClass(status: string): string {
+    switch (status?.toLowerCase()) {
+      case 'charging':
+        return 'charging';
+      case 'finished':
+      case 'completed':
+        return 'completed';
+      case 'stopped':
+        return 'stopped';
+      default:
+        return 'unknown';
+    }
+  }
 }

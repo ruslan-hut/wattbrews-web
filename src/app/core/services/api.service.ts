@@ -4,6 +4,7 @@ import { Observable, throwError, timer } from 'rxjs';
 import { catchError, map, retryWhen, mergeMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiResponse, ApiError, PaginationInfo, FilterOptions } from '../models/api.model';
+import { AppError, AppErrorFactory } from '../models/error.model';
 
 @Injectable({
   providedIn: 'root'
@@ -176,64 +177,18 @@ export class ApiService {
   }
 
   /**
-   * Handle HTTP errors with improved error messages
+   * Handle HTTP errors and convert to AppError format
    */
   private handleError(error: HttpErrorResponse | Error): Observable<never> {
-    let errorMessage = 'An error occurred';
-    
-    if (error instanceof HttpErrorResponse) {
-      if (error.error instanceof ErrorEvent) {
-        // Client-side error
-        errorMessage = `Network error: ${error.error.message}`;
-      } else {
-        // Server-side error
-        if (error.error && typeof error.error === 'object') {
-          if (error.error.message) {
-            errorMessage = error.error.message;
-          } else if (error.error.error) {
-            errorMessage = error.error.error;
-          } else {
-            errorMessage = this.getErrorMessageForStatus(error.status);
-          }
-        } else {
-          errorMessage = this.getErrorMessageForStatus(error.status);
-        }
-      }
-    } else if (error instanceof Error) {
-      errorMessage = error.message;
-    }
-    
-    return throwError(() => new Error(errorMessage));
-  }
+    let appError: AppError;
 
-  /**
-   * Get user-friendly error message based on HTTP status code
-   */
-  private getErrorMessageForStatus(status: number): string {
-    switch (status) {
-      case 400:
-        return 'Invalid request. Please check your input and try again.';
-      case 401:
-        return 'Authentication required. Please log in and try again.';
-      case 403:
-        return 'You do not have permission to perform this action.';
-      case 404:
-        return 'The requested resource was not found.';
-      case 408:
-        return 'Request timeout. Please try again.';
-      case 429:
-        return 'Too many requests. Please wait a moment and try again.';
-      case 500:
-        return 'Server error. Please try again later.';
-      case 502:
-        return 'Bad gateway. The server is temporarily unavailable.';
-      case 503:
-        return 'Service unavailable. Please try again later.';
-      case 504:
-        return 'Gateway timeout. Please try again.';
-      default:
-        return `Error ${status}: An unexpected error occurred.`;
+    if (error instanceof HttpErrorResponse) {
+      appError = AppErrorFactory.fromHttpError(error);
+    } else {
+      appError = AppErrorFactory.fromUnknown(error);
     }
+
+    return throwError(() => appError);
   }
 
   /**
@@ -279,6 +234,7 @@ export class ApiService {
 
   /**
    * Get direct array response (for endpoints that return arrays directly)
+   * @deprecated Consider using get<T[]>() with proper API response wrapper
    */
   getArray<T>(endpoint: string, params?: Record<string, any>): Observable<T[]> {
     const httpParams = this.buildHttpParams(params);
@@ -290,6 +246,7 @@ export class ApiService {
 
   /**
    * Get direct object response (for endpoints that return objects directly)
+   * @deprecated Consider using get<T>() with proper API response wrapper
    */
   getDirect<T>(endpoint: string, params?: Record<string, any>): Observable<T> {
     const httpParams = this.buildHttpParams(params);

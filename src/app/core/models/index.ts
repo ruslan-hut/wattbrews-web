@@ -15,6 +15,9 @@ export * from './chargepoint.model';
 // API models
 export * from './api.model';
 
+// Error models
+export * from './error.model';
+
 // Transaction models
 export * from './transaction.model';
 export * from './transaction-detail.model';

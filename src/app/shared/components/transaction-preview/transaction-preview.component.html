@@ -1,147 +1,155 @@
 <div class="transaction-preview-container">
-  <!-- Translation Loading State -->
-  <div class="loading-container" *ngIf="translationsLoading()">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>Loading translations...</p>
-  </div>
-
-  <!-- Content (only show when translations are loaded) -->
-  <div *ngIf="!translationsLoading()">
-    <!-- Header -->
-    <div class="preview-header">
-      <h2 mat-dialog-title>{{ translationService.getReactive('transactionDetails.title') }}</h2>
-      <button mat-icon-button (click)="closeDialog($event)" class="close-button">
-        <mat-icon>close</mat-icon>
-      </button>
+  <!-- Header -->
+  <div class="preview-header">
+    <div class="header-left">
+      <div class="transaction-title">
+        <mat-icon>receipt</mat-icon>
+        <span class="transaction-id">{{ translationService.getReactive('transactionDetails.title') }} #{{ transactionDetail()?.transaction_id }}</span>
+      </div>
+      @if (transactionDetail()) {
+        <mat-chip [class]="'status-chip ' + getStatusClass(transactionDetail()!.status)">
+          {{ transactionDetail()!.status }}
+          @if (transactionDetail()!.is_charging) {
+            <span class="live-dot active" aria-hidden="true"></span>
+          }
+        </mat-chip>
+      }
     </div>
-
-  <!-- Loading State -->
-  <div class="loading-container" *ngIf="loading()">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>{{ translationService.getReactive('transactionDetails.loading') }}</p>
-  </div>
-
-  <!-- Error State -->
-  <div class="error-container" *ngIf="error()">
-    <mat-icon class="error-icon">error</mat-icon>
-    <p>{{ error() }}</p>
-    <button mat-raised-button color="primary" (click)="loadTransactionDetail()">
-      {{ translationService.getReactive('transactionDetails.retry') }}
+    <button mat-icon-button (click)="closeDialog($event)" class="close-button">
+      <mat-icon>close</mat-icon>
     </button>
   </div>
 
+  <!-- Loading State -->
+  @if (loading() || translationsLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>{{ translationsLoading() ? 'Loading...' : translationService.getReactive('transactionDetails.loading') }}</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error() && !loading() && !translationsLoading()) {
+    <div class="error-container">
+      <mat-icon class="error-icon">error</mat-icon>
+      <p>{{ error() }}</p>
+      <button mat-raised-button color="primary" (click)="loadTransactionDetail()">
+        {{ translationService.getReactive('transactionDetails.retry') }}
+      </button>
+    </div>
+  }
+
   <!-- Transaction Details -->
-  <div class="transaction-content" *ngIf="!loading() && !error() && transactionDetail()">
+  @if (!loading() && !error() && !translationsLoading() && transactionDetail()) {
     <mat-dialog-content>
-      <!-- Transaction Overview -->
-      <mat-card class="overview-card">
-        <mat-card-header>
-          <mat-card-title>
-            <mat-icon>receipt</mat-icon>
-            Transaction #{{ transactionDetail()?.transaction_id }}
-          </mat-card-title>
-          <mat-card-subtitle>
-            {{ transactionDetail()?.charge_point_title }}
-          </mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="overview-grid">
-            <div class="overview-item">
-              <mat-icon>ev_station</mat-icon>
-              <div class="item-content">
-                <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.station') }}</span>
-                <span class="item-value">{{ transactionDetail()?.charge_point_id }}</span>
-              </div>
-            </div>
-            <div class="overview-item">
-              <mat-icon>power</mat-icon>
-              <div class="item-content">
-                <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.connector') }}</span>
-                <span class="item-value">{{ transactionDetail()?.connector?.connector_id_name }} ({{ transactionDetail()?.connector?.type }})</span>
-              </div>
-            </div>
-            <div class="overview-item">
-              <mat-icon>schedule</mat-icon>
-              <div class="item-content">
-                <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.duration') }}</span>
-                <span class="item-value">{{ formatDuration(transactionDetail()?.duration || 0) }}</span>
-              </div>
-            </div>
-            <div class="overview-item">
-              <mat-icon>battery_charging_full</mat-icon>
-              <div class="item-content">
-                <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.energyConsumed') }}</span>
-                <span class="item-value">{{ formatEnergy(transactionDetail()?.consumed || 0) }} kWh</span>
-              </div>
-            </div>
-            <div class="overview-item">
-              <mat-icon>euro_symbol</mat-icon>
-              <div class="item-content">
-                <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.cost') }}</span>
-                <span class="item-value">€{{ ((transactionDetail()?.price || 0) / 100).toFixed(2) }}</span>
-              </div>
-            </div>
-            <div class="overview-item">
-              <mat-icon>flash_on</mat-icon>
-              <div class="item-content">
-                <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.averagePower') }}</span>
-                <span class="item-value">{{ calculateAveragePower() }}</span>
-              </div>
+      <!-- Station Info -->
+      <div class="station-info">
+        <mat-icon>ev_station</mat-icon>
+        <span>{{ transactionDetail()!.charge_point_title }}</span>
+      </div>
+
+      <!-- Overview Grid -->
+      <div class="overview-section">
+        <div class="overview-grid">
+          <div class="overview-item">
+            <mat-icon>ev_station</mat-icon>
+            <div class="item-content">
+              <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.station') }}</span>
+              <span class="item-value">{{ transactionDetail()!.charge_point_id }}</span>
             </div>
           </div>
-        </mat-card-content>
-      </mat-card>
-
-      <!-- Timing & Location -->
-      <mat-card class="status-card">
-        <mat-card-header>
-          <mat-card-title>{{ translationService.getReactive('transactionDetails.timing.title') }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="status-map-container">
-            <div class="status-grid">
-              <div class="status-item">
-                <span class="status-label">{{ translationService.getReactive('transactionDetails.timing.started') }}</span>
-                <span class="status-value">{{ formatDateTime(transactionDetail()?.time_started || '') }}</span>
-              </div>
-              <div class="status-item" *ngIf="!transactionDetail()?.is_charging">
-                <span class="status-label">{{ translationService.getReactive('transactionDetails.timing.ended') }}</span>
-                <span class="status-value">{{ formatEndTime(transactionDetail()?.time_started || '', transactionDetail()?.duration || 0) }}</span>
-              </div>
-              <div class="status-item">
-                <span class="status-label">{{ translationService.getReactive('transactionDetails.timing.location') }}</span>
-                <span class="status-value">{{ transactionDetail()?.charge_point_address }}</span>
-              </div>
-            </div>
-            <div class="map-container" *ngIf="hasLocation()">
-              <app-small-map 
-                [latitude]="getLatitude()" 
-                [longitude]="getLongitude()"
-                [title]="transactionDetail()?.charge_point_title || ''"
-                [zoom]="15"
-                height="200px">
-              </app-small-map>
+          <div class="overview-item">
+            <mat-icon>power</mat-icon>
+            <div class="item-content">
+              <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.connector') }}</span>
+              <span class="item-value">{{ transactionDetail()!.connector.connector_id_name }} ({{ transactionDetail()!.connector.type }})</span>
             </div>
           </div>
-        </mat-card-content>
-      </mat-card>
+          <div class="overview-item">
+            <mat-icon>schedule</mat-icon>
+            <div class="item-content">
+              <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.duration') }}</span>
+              <span class="item-value">{{ formatDuration(transactionDetail()!.duration || 0) }}</span>
+            </div>
+          </div>
+          <div class="overview-item">
+            <mat-icon>battery_charging_full</mat-icon>
+            <div class="item-content">
+              <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.energyConsumed') }}</span>
+              <span class="item-value">{{ formatEnergy(transactionDetail()!.consumed || 0) }} kWh</span>
+            </div>
+          </div>
+          <div class="overview-item">
+            <mat-icon>euro_symbol</mat-icon>
+            <div class="item-content">
+              <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.cost') }}</span>
+              <span class="item-value">€{{ ((transactionDetail()!.price || 0) / 100).toFixed(2) }}</span>
+            </div>
+          </div>
+          <div class="overview-item">
+            <mat-icon>flash_on</mat-icon>
+            <div class="item-content">
+              <span class="item-label">{{ translationService.getReactive('transactionDetails.overview.averagePower') }}</span>
+              <span class="item-value">{{ calculateAveragePower() }}</span>
+            </div>
+          </div>
+          <div class="overview-item">
+            <mat-icon>access_time</mat-icon>
+            <div class="item-content">
+              <span class="item-label">{{ translationService.getReactive('transactionDetails.timing.started') }}</span>
+              <span class="item-value">{{ formatDateTime(transactionDetail()!.time_started || '') }}</span>
+            </div>
+          </div>
+          @if (!transactionDetail()!.is_charging) {
+            <div class="overview-item">
+              <mat-icon>access_time_filled</mat-icon>
+              <div class="item-content">
+                <span class="item-label">{{ translationService.getReactive('transactionDetails.timing.ended') }}</span>
+                <span class="item-value">{{ formatEndTime(transactionDetail()!.time_started || '', transactionDetail()!.duration || 0) }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
 
-      <!-- Energy Consumption Chart -->
-      <mat-card class="chart-card" *ngIf="hasMeterValues()">
-        <mat-card-header>
-          <mat-card-title>{{ translationService.getReactive('transactionDetails.chart.title') }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <app-energy-chart [meterValues]="transactionDetail()?.meter_values || []"></app-energy-chart>
-        </mat-card-content>
-      </mat-card>
+      <!-- Location Section -->
+      @if (transactionDetail()!.charge_point_address) {
+        <div class="location-section">
+          <div class="location-content">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ transactionDetail()!.charge_point_address }}</span>
+          </div>
+        </div>
+      }
 
+      <!-- Map Section -->
+      @if (hasLocation()) {
+        <div class="map-section">
+          <div class="map-container">
+            <app-small-map
+              [latitude]="getLatitude()"
+              [longitude]="getLongitude()"
+              [title]="transactionDetail()!.charge_point_title || ''"
+              [zoom]="15"
+              height="200px">
+            </app-small-map>
+          </div>
+        </div>
+      }
+
+      <!-- Energy Chart Section -->
+      @if (hasMeterValues()) {
+        <div class="chart-section">
+          <div class="chart-container">
+            <app-energy-chart [meterValues]="transactionDetail()!.meter_values || []"></app-energy-chart>
+          </div>
+        </div>
+      }
     </mat-dialog-content>
 
     <!-- Actions -->
     <mat-dialog-actions>
       <button mat-button (click)="closeDialog($event)">{{ translationService.getReactive('transactionDetails.close') }}</button>
     </mat-dialog-actions>
-  </div>
-  </div>
+  }
 </div>

@@ -6,9 +6,6 @@
     </button>
     <div class="header-content">
       <h1 class="page-title">{{ translationService.getReactive('chargeInitiation.title') }}</h1>
-      @if (stationDetail()) {
-        <p class="page-subtitle">{{ stationDetail()!.title }}</p>
-      }
     </div>
   </div>
 
@@ -34,16 +31,11 @@
   <!-- Charge Initiation Form -->
   @if (stationDetail() && !loading() && !error()) {
     <div class="charge-form">
-      <!-- Station Info -->
-      <mat-card class="station-info-card">
-        <mat-card-header>
-          <div mat-card-avatar class="station-status-icon">
-            <mat-icon [class]="getStatusIconClass()">{{ getStatusIcon() }}</mat-icon>
-          </div>
-          <mat-card-title>{{ stationDetail()!.title }}</mat-card-title>
-          <mat-card-subtitle>{{ stationDetail()!.address }}</mat-card-subtitle>
-        </mat-card-header>
-      </mat-card>
+      <!-- Station Name -->
+      <div class="station-name-header">
+        <mat-icon [class]="getStatusIconClass()">{{ getStatusIcon() }}</mat-icon>
+        <span class="station-name">{{ stationDetail()!.title || stationDetail()!.charge_point_id }}</span>
+      </div>
 
       <!-- Connector Selection -->
       <mat-card class="connector-selection-card">

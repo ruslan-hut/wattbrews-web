@@ -1,10 +1,10 @@
 @if (showBanner()) {
   <div class="connection-warning">
     <mat-icon>cloud_off</mat-icon>
-    
+
     @if (connectionState() === ConnectionState.Reconnecting) {
       <span>{{ translationService.getReactive('connection.reconnecting') }}</span>
-      <mat-spinner diameter="20"></mat-spinner>
+      <mat-spinner diameter="20" class="spinner-white"></mat-spinner>
     } @else {
       <span>{{ translationService.getReactive('connection.warning') }}</span>
     }

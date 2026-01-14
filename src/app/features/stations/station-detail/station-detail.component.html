@@ -14,9 +14,6 @@
             aria-hidden="true"
           ></span>
         </h1>
-        @if (stationDetail()) {
-          <p class="page-subtitle">{{ stationDetail()!.title }}</p>
-        }
       </div>
     </div>
   }
@@ -47,121 +44,80 @@
   <!-- Station Details -->
   @if (stationDetail() && !loading() && !error() && !translationsLoading() && !initializing()) {
     <div class="station-details">
-    <!-- Basic Information -->
-    <mat-card class="info-card">
-      <mat-card-header>
-        <div mat-card-avatar class="station-status-icon">
-          <mat-icon [class]="getStatusIconClass()">{{ getStatusIcon() }}</mat-icon>
-        </div>
-        <mat-card-title>{{ stationDetail()!.title }}</mat-card-title>
-        <mat-card-subtitle>{{ stationDetail()!.charge_point_id }}</mat-card-subtitle>
-      </mat-card-header>
-      
-      <mat-card-content>
-        <div class="info-grid">
-          <div class="info-item">
-            <mat-icon class="info-icon">location_on</mat-icon>
-            <div class="info-content">
-              <span class="info-label">{{ translationService.getReactive('stationDetail.labels.address') }}</span>
-              <span class="info-value">{{ stationDetail()!.address }}</span>
-            </div>
-          </div>
-          
-          <div class="info-item">
-            <mat-icon class="info-icon">business</mat-icon>
-            <div class="info-content">
-              <span class="info-label">{{ translationService.getReactive('stationDetail.labels.vendor') }}</span>
-              <span class="info-value">{{ stationDetail()!.vendor }}</span>
-            </div>
-          </div>
-          
-          <div class="info-item">
-            <mat-icon class="info-icon">memory</mat-icon>
-            <div class="info-content">
-              <span class="info-label">{{ translationService.getReactive('stationDetail.labels.model') }}</span>
-              <span class="info-value">{{ stationDetail()!.model }}</span>
-            </div>
-          </div>
-          
-          <div class="info-item">
-            <mat-icon class="info-icon">tag</mat-icon>
-            <div class="info-content">
-              <span class="info-label">{{ translationService.getReactive('stationDetail.labels.serialNumber') }}</span>
-              <span class="info-value">{{ stationDetail()!.serial_number }}</span>
-            </div>
-          </div>
-          
-          <div class="info-item">
-            <mat-icon class="info-icon">update</mat-icon>
-            <div class="info-content">
-              <span class="info-label">{{ translationService.getReactive('stationDetail.labels.firmwareVersion') }}</span>
-              <span class="info-value">{{ stationDetail()!.firmware_version }}</span>
-            </div>
-          </div>
-          
-          <div class="info-item">
-            <mat-icon class="info-icon">schedule</mat-icon>
-            <div class="info-content">
-              <span class="info-label">{{ translationService.getReactive('stationDetail.labels.lastSeen') }}</span>
-              <span class="info-value">{{ formatDateTime(stationDetail()!.event_time) }}</span>
-            </div>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <!-- Station Name -->
+    <div class="station-name-header">
+      <mat-icon [class]="getStatusIconClass()">{{ getStatusIcon() }}</mat-icon>
+      <span class="station-name">{{ stationDetail()!.title || stationDetail()!.charge_point_id }}</span>
+    </div>
 
     <!-- Status Information with Map -->
-    <mat-card class="status-card">
-      <mat-card-header>
-        <mat-card-title>{{ translationService.getReactive('stationDetail.statusInformation') }}</mat-card-title>
-      </mat-card-header>
-      
-      <mat-card-content>
-        <div class="status-map-container">
-          <!-- Status Grid -->
-          <div class="status-content">
-            <div class="status-grid">
-              <div class="status-item">
-                <mat-chip [class]="getStatusChipClass(stationDetail()!.status)">
-                  {{ stationDetail()!.status }}
-                </mat-chip>
-                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.currentStatus') }}</span>
-              </div>
-              
-              <div class="status-item">
-                <mat-chip [class]="getErrorChipClass(stationDetail()!.error_code)">
-                  {{ stationDetail()!.error_code }}
-                </mat-chip>
-                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.errorCode') }}</span>
-              </div>
-              
-              <div class="status-item">
-                <mat-chip [class]="stationDetail()!.is_online ? 'online' : 'offline'">
-                  {{ stationDetail()!.is_online ? translationService.getReactive('stationDetail.status.online') : translationService.getReactive('stationDetail.status.offline') }}
-                </mat-chip>
-                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.connection') }}</span>
-              </div>
-              
-              <div class="status-item">
-                <mat-chip [class]="stationDetail()!.is_enabled ? 'enabled' : 'disabled'">
-                  {{ stationDetail()!.is_enabled ? translationService.getReactive('stationDetail.status.enabled') : translationService.getReactive('stationDetail.status.disabled') }}
-                </mat-chip>
-                <span class="status-label">{{ translationService.getReactive('stationDetail.labels.availability') }}</span>
-              </div>
+    <mat-expansion-panel class="status-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ translationService.getReactive('stationDetail.statusInformation') }}
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-chip [class]="getStatusChipClass(stationDetail()!.status)" class="header-chip">
+            {{ stationDetail()!.status }}
+          </mat-chip>
+          <mat-chip [class]="stationDetail()!.is_online ? 'online' : 'offline'" class="header-chip">
+            {{ stationDetail()!.is_online ? translationService.getReactive('stationDetail.status.online') : translationService.getReactive('stationDetail.status.offline') }}
+          </mat-chip>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="status-map-container">
+        <!-- Status Grid -->
+        <div class="status-content">
+          <div class="status-grid">
+            <div class="status-item">
+              <mat-chip [class]="getStatusChipClass(stationDetail()!.status)">
+                {{ stationDetail()!.status }}
+              </mat-chip>
+              <span class="status-label">{{ translationService.getReactive('stationDetail.labels.currentStatus') }}</span>
             </div>
-            
-            @if (stationDetail()!.info) {
-              <div class="status-info">
-                <p><strong>{{ translationService.getReactive('stationDetail.labels.info') }}</strong> {{ stationDetail()!.info }}</p>
-              </div>
-            }
-            
-            <div class="status-updated">
-              <p><strong>{{ translationService.getReactive('stationDetail.labels.statusUpdated') }}</strong> {{ getTimeAgo(stationDetail()!.event_time) }}</p>
+
+            <div class="status-item">
+              <mat-chip [class]="getErrorChipClass(stationDetail()!.error_code)">
+                {{ stationDetail()!.error_code }}
+              </mat-chip>
+              <span class="status-label">{{ translationService.getReactive('stationDetail.labels.errorCode') }}</span>
+            </div>
+
+            <div class="status-item">
+              <mat-chip [class]="stationDetail()!.is_online ? 'online' : 'offline'">
+                {{ stationDetail()!.is_online ? translationService.getReactive('stationDetail.status.online') : translationService.getReactive('stationDetail.status.offline') }}
+              </mat-chip>
+              <span class="status-label">{{ translationService.getReactive('stationDetail.labels.connection') }}</span>
+            </div>
+
+            <div class="status-item">
+              <mat-chip [class]="stationDetail()!.is_enabled ? 'enabled' : 'disabled'">
+                {{ stationDetail()!.is_enabled ? translationService.getReactive('stationDetail.status.enabled') : translationService.getReactive('stationDetail.status.disabled') }}
+              </mat-chip>
+              <span class="status-label">{{ translationService.getReactive('stationDetail.labels.availability') }}</span>
             </div>
           </div>
-          
-          <!-- Map Section -->
+
+          @if (stationDetail()!.info) {
+            <div class="status-info">
+              <p><strong>{{ translationService.getReactive('stationDetail.labels.info') }}</strong> {{ stationDetail()!.info }}</p>
+            </div>
+          }
+
+          <div class="status-updated">
+            <p><strong>{{ translationService.getReactive('stationDetail.labels.statusUpdated') }}</strong> {{ getTimeAgo(stationDetail()!.event_time) }}</p>
+          </div>
+        </div>
+
+        <!-- Map and Address Section -->
+        <div class="map-address-section">
+          @if (stationDetail()!.address) {
+            <div class="address-info">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ stationDetail()!.address }}</span>
+            </div>
+          }
           @if (stationDetail()!.location && stationDetail()!.location.latitude && stationDetail()!.location.longitude) {
             <div class="map-container">
               <app-small-map
@@ -174,16 +130,12 @@
             </div>
           }
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
+    </mat-expansion-panel>
 
     <!-- Connectors -->
-    <mat-card class="connectors-card">
-      <mat-card-header>
-        <mat-card-title>{{ translationService.getReactive('stationDetail.connectors') }} ({{ stationDetail()!.connectors.length }})</mat-card-title>
-      </mat-card-header>
-      
-      <mat-card-content>
+    <div class="connectors-section">
+      <div class="connectors-content">
         <div class="connectors-grid">
           @for (connector of stationDetail()!.connectors | sortByConnectorId; track connector.connector_id) {
             <div 
@@ -218,32 +170,18 @@
                 <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.type') }}</span>
                 <span class="connector-value">{{ connector.type }}</span>
               </div>
-              
+
               <div class="connector-info">
                 <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.power') }}</span>
                 <span class="connector-value">{{ connector.power }} kW</span>
               </div>
-              
-              <div class="connector-info">
-                <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.vendorWithColon') }}</span>
-                <span class="connector-value">{{ connector.vendor_id }}</span>
-              </div>
-              
-              <div class="connector-info">
-                <span class="connector-label">{{ translationService.getReactive('stationDetail.labels.errorCodeWithColon') }}</span>
-                <span class="connector-value">{{ connector.error_code }}</span>
-              </div>
             </div>
-              
+
               @if (connector.info) {
                 <div class="connector-status-info">
                   <p><strong>{{ translationService.getReactive('stationDetail.labels.info') }}</strong> {{ connector.info }}</p>
                 </div>
               }
-              
-              <div class="connector-time">
-                <p><strong>{{ translationService.getReactive('stationDetail.labels.statusTimeWithColon') }}</strong> {{ formatDateTime(connector.status_time) }}</p>
-              </div>
             </div>
           }
         </div>
@@ -262,8 +200,8 @@
             <p class="start-charge-info">{{ translationService.getReactive('stationDetail.actions.startChargeInfo') }}</p>
           </div>
         }
-      </mat-card-content>
-    </mat-card>
+      </div>
+    </div>
     </div>
   }
 </div>

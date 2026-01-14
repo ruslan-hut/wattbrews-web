@@ -93,11 +93,110 @@
   gap: var(--energy-space-xl);
 }
 
+.station-name-header {
+  display: flex;
+  align-items: center;
+  gap: var(--energy-space-md);
+
+  mat-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .station-name {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--energy-text-primary);
+  }
+}
+
+@media (max-width: 768px) {
+  .station-name-header {
+    gap: var(--energy-space-sm);
+
+    mat-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .station-name {
+      font-size: var(--font-size-xl);
+    }
+  }
+}
+
 mat-card {
   background-color: var(--energy-surface);
 }
 
-.info-card, .status-card, .location-card, .connectors-card {
+.status-panel {
+  border-radius: var(--energy-radius-xl);
+  overflow: hidden;
+  background-color: var(--energy-surface);
+  border: 1px solid var(--energy-border);
+  box-shadow: var(--energy-shadow-sm);
+  transition: box-shadow var(--transition-base);
+
+  &:hover {
+    box-shadow: var(--energy-shadow-md);
+  }
+
+  .mat-expansion-panel-header {
+    font-family: var(--font-family-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    padding: var(--energy-space-md) var(--energy-space-lg);
+  }
+
+  .mat-expansion-panel-header-title {
+    color: var(--energy-text-primary);
+    font-weight: 600;
+  }
+
+  .mat-expansion-panel-header-description {
+    display: flex;
+    align-items: center;
+    gap: var(--energy-space-sm);
+    justify-content: flex-end;
+  }
+
+  .header-chip {
+    font-size: var(--font-size-xs);
+    height: 24px;
+  }
+
+  .mat-expansion-panel-body {
+    padding: var(--energy-space-md) var(--energy-space-lg) var(--energy-space-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .status-panel {
+    .mat-expansion-panel-header {
+      padding: var(--energy-space-sm) var(--energy-space-md);
+    }
+
+    .mat-expansion-panel-header-description {
+      gap: var(--energy-space-xs);
+    }
+
+    .header-chip {
+      font-size: var(--font-size-xs);
+      height: 22px;
+      padding: 0 var(--energy-space-xs);
+    }
+
+    .mat-expansion-panel-body {
+      padding: var(--energy-space-sm) var(--energy-space-md) var(--energy-space-md);
+    }
+  }
+}
+
+.info-card, .location-card, .connectors-card {
   border-radius: var(--energy-radius-xl);
   overflow: hidden;
   background-color: var(--energy-surface);
@@ -160,6 +259,35 @@ mat-card {
   font-size: var(--font-size-base);
   color: var(--energy-text-primary);
   font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .info-item {
+    padding: var(--energy-space-xs) 0;
+  }
+
+  .info-icon {
+    display: none;
+  }
+
+  .info-content {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    flex: 1;
+    width: 100%;
+  }
+
+  .info-label {
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+  }
+
+  .info-value {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-align: right;
+  }
 }
 
 .status-map-container {
@@ -273,6 +401,29 @@ mat-card {
   line-height: 1.5;
 }
 
+.map-address-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--energy-space-md);
+}
+
+.address-info {
+  display: flex;
+  align-items: center;
+  gap: var(--energy-space-sm);
+  padding: var(--energy-space-md);
+  background-color: var(--energy-surface-variant);
+  border-radius: var(--energy-radius-lg);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  color: var(--energy-text-primary);
+
+  mat-icon {
+    color: var(--energy-primary);
+    flex-shrink: 0;
+  }
+}
+
 .map-container {
   position: relative;
   width: 100%;
@@ -293,6 +444,13 @@ mat-card {
 @media (min-width: 1024px) {
   .map-container {
     height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .address-info {
+    padding: var(--energy-space-sm);
+    font-size: var(--font-size-xs);
   }
 }
 
@@ -339,6 +497,17 @@ mat-card {
       height: 14px;
     }
   }
+}
+
+.connectors-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.connectors-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--energy-space-lg);
 }
 
 .connectors-grid {
@@ -444,10 +613,10 @@ mat-card {
   min-width: auto;
   height: 32px;
   font-size: var(--font-size-sm);
-  font-weight: 500;
-  border: none;
-  color: white;
-  background-color: var(--energy-primary);
+  font-weight: 600;
+  border: 2px solid var(--energy-primary);
+  color: var(--energy-primary);
+  background-color: transparent;
   border-radius: var(--energy-radius-xl);
   transition: all var(--transition-base);
   display: inline-flex;
@@ -458,12 +627,17 @@ mat-card {
     font-size: 16px;
     width: 16px;
     height: 16px;
+    color: var(--energy-primary);
   }
 
   &:hover {
-    background-color: var(--energy-primary-dark);
+    background-color: var(--energy-primary);
     color: white;
     box-shadow: var(--energy-shadow-sm);
+
+    mat-icon {
+      color: white;
+    }
   }
 
   &:active {
@@ -519,8 +693,8 @@ mat-card {
   flex-direction: column;
   align-items: center;
   gap: var(--energy-space-md);
-  margin-top: var(--energy-space-2xl);
-  padding: var(--energy-space-2xl);
+  margin-top: var(--energy-space-md);
+  padding: var(--energy-space-lg);
   background-color: var(--energy-surface-variant);
   border-radius: var(--energy-radius-xl);
 }

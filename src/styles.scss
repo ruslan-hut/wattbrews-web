@@ -210,6 +210,16 @@ html {
   --container-2xl: 1400px;
 
   // =========================================================================
+  // RESPONSIVE BREAKPOINTS
+  // =========================================================================
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1400px;
+
+  // =========================================================================
   // TRANSITIONS
   // =========================================================================
   --transition-fast: 0.15s ease;
@@ -949,4 +959,194 @@ mat-card-subtitle {
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+// =============================================================================
+// CONNECTOR CHIP STYLES (Dashboard & Stations)
+// =============================================================================
+
+.connector-chip {
+  .mat-mdc-chip-action {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 100%;
+    padding: 0 var(--energy-space-sm);
+    gap: var(--energy-space-xs);
+    white-space: nowrap;
+    line-height: 1;
+    border-radius: var(--energy-radius-lg) !important;
+
+    .mat-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      margin-right: var(--energy-space-xs);
+      vertical-align: middle;
+    }
+
+    .mat-mdc-chip-action-label {
+      display: inline;
+      line-height: 1;
+      vertical-align: middle;
+    }
+  }
+
+  // Dashboard uses slightly smaller icons
+  &.dashboard-chip .mat-mdc-chip-action .mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+}
+
+// =============================================================================
+// LEAFLET MAP STYLES
+// =============================================================================
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  background-color: var(--energy-surface-variant);
+}
+
+// Keep Leaflet controls below the app header (z-index: 1000)
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 800;
+}
+
+.leaflet-pane {
+  z-index: 400;
+}
+
+.leaflet-tile {
+  filter: none;
+}
+
+.leaflet-popup-content {
+  font-size: var(--font-size-xs);
+  margin: var(--energy-space-sm) var(--energy-space-md);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: var(--energy-radius-md);
+  box-shadow: var(--energy-shadow-lg);
+}
+
+.leaflet-control-zoom {
+  border-radius: var(--energy-radius-sm);
+  box-shadow: var(--energy-shadow-md);
+
+  a {
+    border-radius: var(--energy-radius-sm);
+    font-size: 18px;
+    line-height: 26px;
+
+    &:hover {
+      background-color: var(--energy-surface-variant);
+    }
+  }
+}
+
+.custom-marker {
+  background: transparent;
+  border: none;
+}
+
+// =============================================================================
+// MATERIAL PROGRESS SPINNER OVERRIDES
+// =============================================================================
+
+// White spinner for dark backgrounds (auth loading, connection status)
+.spinner-white {
+  --mdc-circular-progress-active-indicator-color: white;
+
+  circle {
+    stroke: white;
+  }
+}
+
+// =============================================================================
+// THEME TOGGLE MENU STYLES
+// =============================================================================
+
+.theme-menu {
+  .mat-mdc-menu-item {
+    &.active {
+      background-color: var(--energy-primary-50);
+      color: var(--energy-primary);
+
+      mat-icon {
+        color: var(--energy-primary);
+      }
+    }
+
+    mat-icon {
+      margin-right: var(--energy-space-sm);
+      color: var(--energy-text-secondary);
+    }
+
+    &:hover:not(.active) {
+      mat-icon {
+        color: var(--energy-primary);
+      }
+    }
+  }
+}
+
+// =============================================================================
+// DIALOG STYLES
+// =============================================================================
+
+.mat-mdc-dialog-content {
+  padding: var(--energy-space-xl);
+}
+
+// =============================================================================
+// TAB STYLES (Profile)
+// =============================================================================
+
+.profile-tabs {
+  .mat-mdc-tab-labels {
+    .mat-mdc-tab-label-container,
+    .mdc-tab__text-label {
+      font-family: var(--font-family-body);
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+  }
+}
+
+// =============================================================================
+// WEBSOCKET TEST CARD TITLE STYLES
+// =============================================================================
+
+.websocket-test-container {
+  mat-card-title,
+  .mat-mdc-card-title {
+    font-family: var(--font-family-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+}
+
+// =============================================================================
+// TRANSACTION PREVIEW MAP CONTAINER
+// =============================================================================
+
+.map-container {
+  app-small-map {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    .small-map-container {
+      height: 100%;
+      border-radius: 0;
+    }
+  }
 }

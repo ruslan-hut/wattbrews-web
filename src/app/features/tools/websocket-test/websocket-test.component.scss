@@ -3,13 +3,7 @@
   max-width: 1920px;
   margin: 0 auto;
 
-  // Card title styling
-  ::ng-deep mat-card-title,
-  ::ng-deep .mat-mdc-card-title {
-    font-family: var(--font-family-display);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
+  // Card title styling is in global styles.scss (.websocket-test-container mat-card-title)
 
   // Header Section
   .header {

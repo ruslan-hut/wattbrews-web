@@ -30,11 +30,11 @@
     </button>
   </div>
 
-  <!-- Statistics Row -->
-  <div class="stats-row" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
+  <!-- Statistics Row - Desktop -->
+  <div class="stats-row desktop-stats" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
     <mat-card class="stat-card">
       <mat-card-content>
-        <div style="display: flex; align-items: center; gap: 16px;">
+        <div class="stat-content">
           <mat-icon class="stat-icon">battery_charging_full</mat-icon>
           <div>
             <p class="stat-value">{{ totalEnergy().toFixed(1) }}</p>
@@ -46,7 +46,7 @@
 
     <mat-card class="stat-card">
       <mat-card-content>
-        <div style="display: flex; align-items: center; gap: 16px;">
+        <div class="stat-content">
           <mat-icon class="stat-icon">euro_symbol</mat-icon>
           <div>
             <p class="stat-value">{{ totalCost().toFixed(2) }}</p>
@@ -58,7 +58,7 @@
 
     <mat-card class="stat-card">
       <mat-card-content>
-        <div style="display: flex; align-items: center; gap: 16px;">
+        <div class="stat-content">
           <mat-icon class="stat-icon">check_circle</mat-icon>
           <div>
             <p class="stat-value">{{ completedSessions() }}</p>
@@ -69,50 +69,117 @@
     </mat-card>
   </div>
 
-  <!-- Filters Section -->
-  <div class="filters-section" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
-    <mat-card class="filters-card">
-      <mat-card-content>
-        <div class="filters-row">
-          <mat-form-field class="search-field">
-            <mat-label>{{ translationService.getReactive('sessions.history.filters.searchLabel') }}</mat-label>
-            <input 
-              matInput 
-              [placeholder]="translationService.getReactive('sessions.history.filters.searchPlaceholder')"
-              [value]="searchTerm()"
-              (input)="onSearchChange($event.target.value)"
-            >
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field class="year-filter-field">
-            <mat-label>{{ translationService.getReactive('sessions.history.filters.yearLabel') }}</mat-label>
-            <mat-select 
-              [value]="selectedYear()"
-              (selectionChange)="onYearChange($event.value)"
-            >
-              <mat-option *ngFor="let year of availableYears()" [value]="year">
-                {{ year }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field class="month-filter-field">
-            <mat-label>{{ translationService.getReactive('sessions.history.filters.monthLabel') }}</mat-label>
-            <mat-select 
-              [value]="selectedMonth()"
-              (selectionChange)="onMonthChange($event.value)"
-            >
-              <mat-option *ngFor="let month of availableMonths()" [value]="month.value">
-                {{ month.label }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
+  <!-- Statistics - Mobile (Combined Card) -->
+  <mat-card class="stats-card-mobile" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
+    <mat-card-content>
+      <div class="stats-grid-mobile">
+        <div class="stat-item-mobile">
+          <mat-icon class="stat-icon-mobile">battery_charging_full</mat-icon>
+          <span class="stat-value-mobile">{{ totalEnergy().toFixed(1) }}</span>
+          <span class="stat-label-mobile">{{ translationService.getReactive('sessions.history.stats.totalEnergy') }}</span>
         </div>
-      </mat-card-content>
-    </mat-card>
+        <div class="stat-item-mobile">
+          <mat-icon class="stat-icon-mobile">euro_symbol</mat-icon>
+          <span class="stat-value-mobile">{{ totalCost().toFixed(2) }}</span>
+          <span class="stat-label-mobile">{{ translationService.getReactive('sessions.history.stats.totalCost') }}</span>
+        </div>
+        <div class="stat-item-mobile">
+          <mat-icon class="stat-icon-mobile">check_circle</mat-icon>
+          <span class="stat-value-mobile">{{ completedSessions() }}</span>
+          <span class="stat-label-mobile">{{ translationService.getReactive('sessions.history.stats.completedSessions') }}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Filters Section - Desktop -->
+  <div class="filters-section filters-desktop" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
+    <div class="filters-row">
+      <mat-form-field class="search-field">
+        <mat-label>{{ translationService.getReactive('sessions.history.filters.searchLabel') }}</mat-label>
+        <input
+          matInput
+          [placeholder]="translationService.getReactive('sessions.history.filters.searchPlaceholder')"
+          [value]="searchTerm()"
+          (input)="onSearchChange($event.target.value)"
+        >
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field class="year-filter-field">
+        <mat-label>{{ translationService.getReactive('sessions.history.filters.yearLabel') }}</mat-label>
+        <mat-select
+          [value]="selectedYear()"
+          (selectionChange)="onYearChange($event.value)"
+        >
+          <mat-option *ngFor="let year of availableYears()" [value]="year">
+            {{ year }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="month-filter-field">
+        <mat-label>{{ translationService.getReactive('sessions.history.filters.monthLabel') }}</mat-label>
+        <mat-select
+          [value]="selectedMonth()"
+          (selectionChange)="onMonthChange($event.value)"
+        >
+          <mat-option *ngFor="let month of availableMonths()" [value]="month.value">
+            {{ month.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
+
+  <!-- Filters Section - Mobile (Expandable) -->
+  <mat-expansion-panel class="filters-panel-mobile" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon>filter_list</mat-icon>
+        {{ translationService.getReactive('sessions.history.filters.searchLabel') }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="filters-row-mobile">
+      <mat-form-field class="filter-field-mobile">
+        <mat-label>{{ translationService.getReactive('sessions.history.filters.searchLabel') }}</mat-label>
+        <input
+          matInput
+          [placeholder]="translationService.getReactive('sessions.history.filters.searchPlaceholder')"
+          [value]="searchTerm()"
+          (input)="onSearchChange($event.target.value)"
+        >
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <div class="filter-selects-row">
+        <mat-form-field class="filter-field-mobile">
+          <mat-label>{{ translationService.getReactive('sessions.history.filters.yearLabel') }}</mat-label>
+          <mat-select
+            [value]="selectedYear()"
+            (selectionChange)="onYearChange($event.value)"
+          >
+            <mat-option *ngFor="let year of availableYears()" [value]="year">
+              {{ year }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="filter-field-mobile">
+          <mat-label>{{ translationService.getReactive('sessions.history.filters.monthLabel') }}</mat-label>
+          <mat-select
+            [value]="selectedMonth()"
+            (selectionChange)="onMonthChange($event.value)"
+          >
+            <mat-option *ngFor="let month of availableMonths()" [value]="month.value">
+              {{ month.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
 
   <!-- Transactions Section -->
   <div class="transactions-section" *ngIf="!translationsLoading() && !authLoading() && isAuthenticated()">

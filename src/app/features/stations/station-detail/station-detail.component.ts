@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject, Pipe, PipeTransform, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, effect } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
 import { ChargePointService } from '../../../core/services/chargepoint.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -22,20 +23,7 @@ import { TransactionPreviewComponent } from '../../../shared/components/transact
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 import { DateUtils } from '../../../shared/utils/date.utils';
 import { ConnectorUtils } from '../../../shared/utils/connector.utils';
-
-@Pipe({
-  name: 'sortByConnectorId',
-  standalone: true
-})
-export class SortByConnectorIdPipe implements PipeTransform {
-  transform(connectors: any[]): any[] {
-    if (!connectors || connectors.length === 0) {
-      return connectors;
-    }
-    
-    return [...connectors].sort((a, b) => a.connector_id - b.connector_id);
-  }
-}
+import { SortByConnectorIdPipe } from '../../../shared/pipes';
 
 @Component({
   selector: 'app-station-detail',
@@ -49,6 +37,7 @@ export class SortByConnectorIdPipe implements PipeTransform {
     MatChipsModule,
     MatDividerModule,
     MatTooltipModule,
+    MatExpansionModule,
     LoadingSpinnerComponent,
     ErrorMessageComponent,
     SmallMapComponent,

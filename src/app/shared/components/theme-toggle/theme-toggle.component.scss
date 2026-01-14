@@ -21,27 +21,4 @@
   }
 }
 
-// Menu item styling
-::ng-deep .theme-menu {
-  .mat-mdc-menu-item {
-    &.active {
-      background-color: var(--energy-primary-50);
-      color: var(--energy-primary);
-
-      mat-icon {
-        color: var(--energy-primary);
-      }
-    }
-
-    mat-icon {
-      margin-right: var(--energy-space-sm);
-      color: var(--energy-text-secondary);
-    }
-
-    &:hover:not(.active) {
-      mat-icon {
-        color: var(--energy-primary);
-      }
-    }
-  }
-}
+// Menu item styling is in global styles.scss (.theme-menu)

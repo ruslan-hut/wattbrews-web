@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit, OnDestroy, Pipe, PipeTransform } from '@angular/core';
+import { Component, signal, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,20 +21,7 @@ import { WsCommand, WsResponse, ResponseStage, ResponseStatus } from '../../core
 import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 import { ConnectorUtils } from '../../shared/utils/connector.utils';
-
-@Pipe({
-  name: 'sortByConnectorId',
-  standalone: true
-})
-export class SortByConnectorIdPipe implements PipeTransform {
-  transform(connectors: ChargePointConnector[]): ChargePointConnector[] {
-    if (!connectors || connectors.length === 0) {
-      return connectors;
-    }
-    
-    return [...connectors].sort((a, b) => a.connector_id - b.connector_id);
-  }
-}
+import { SortByConnectorIdPipe } from '../../shared/pipes';
 
 @Component({
   selector: 'app-dashboard',

@@ -1,7 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
+import { AppError, isAppError } from '../models/error.model';
 import { Transaction } from '../models/transaction.model';
 import { TransactionDetail } from '../models/transaction-detail.model';
 import { ChargePoint } from '../models/chargepoint.model';
@@ -55,10 +56,11 @@ export class TransactionService {
         this._transactions.set(transactions);
         this._loading.set(false);
       }),
-      catchError(error => {
-        this._error.set(error.message || 'Failed to load transactions');
+      catchError((error: AppError | Error) => {
+        const message = isAppError(error) ? error.userMessage : (error.message || 'Failed to load transactions');
+        this._error.set(message);
         this._loading.set(false);
-        throw error;
+        return throwError(() => error);
       })
     );
   }
@@ -75,10 +77,11 @@ export class TransactionService {
         this._recentChargePoints.set(chargePoints);
         this._loading.set(false);
       }),
-      catchError(error => {
-        this._error.set(error.message || 'Failed to load recent charge points');
+      catchError((error: AppError | Error) => {
+        const message = isAppError(error) ? error.userMessage : (error.message || 'Failed to load recent charge points');
+        this._error.set(message);
         this._loading.set(false);
-        throw error;
+        return throwError(() => error);
       })
     );
   }
@@ -97,10 +100,11 @@ export class TransactionService {
         this._transactions.set(transactions);
         this._loading.set(false);
       }),
-      catchError(error => {
-        this._error.set(error.message || 'Failed to load transactions for selected period');
+      catchError((error: AppError | Error) => {
+        const message = isAppError(error) ? error.userMessage : (error.message || 'Failed to load transactions for selected period');
+        this._error.set(message);
         this._loading.set(false);
-        throw error;
+        return throwError(() => error);
       })
     );
   }
@@ -145,11 +149,8 @@ export class TransactionService {
    */
   loadTransactionDetail(transactionId: number): Observable<TransactionDetail> {
     return this.apiService.getDirect<TransactionDetail>(`/transactions/info/${transactionId}`).pipe(
-      tap(transactionDetail => {
-        // Transaction detail loaded successfully
-      }),
-      catchError(error => {
-        throw error;
+      catchError((error: AppError | Error) => {
+        return throwError(() => error);
       })
     );
   }
@@ -173,12 +174,13 @@ export class TransactionService {
         this._activeTransactions.set(activeTransactions);
         this._loading.set(false);
       }),
-      catchError(error => {
+      catchError((error: AppError | Error) => {
         if (!suppressError) {
-          this._error.set(error.message || 'Failed to load active transactions');
+          const message = isAppError(error) ? error.userMessage : (error.message || 'Failed to load active transactions');
+          this._error.set(message);
         }
         this._loading.set(false);
-        throw error;
+        return throwError(() => error);
       })
     );
   }

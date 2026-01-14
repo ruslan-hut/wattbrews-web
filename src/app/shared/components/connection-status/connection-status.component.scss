@@ -57,10 +57,6 @@
       font-size: 20px;
     }
 
-    mat-spinner {
-      ::ng-deep circle {
-        stroke: white;
-      }
-    }
+    // Spinner white color is handled by .spinner-white class in global styles.scss
   }
 }

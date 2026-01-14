@@ -35,11 +35,7 @@
   font-size: 2rem;
 }
 
-::ng-deep .register-card {
-  mat-card-subtitle, .mat-mdc-card-subtitle {
-    font-family: var(--font-family-body);
-  }
-}
+// Note: Card subtitle styles are in global styles.scss (.mat-mdc-card-subtitle)
 
 .register-form {
   font-family: var(--font-family-body);

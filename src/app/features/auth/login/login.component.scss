@@ -1,14 +1,4 @@
-::ng-deep .login-card {
-  mat-card-title, .mat-mdc-card-title {
-    font-family: var(--font-family-display);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
-
-  mat-card-subtitle, .mat-mdc-card-subtitle {
-    font-family: var(--font-family-body);
-  }
-}
+// Note: Card title/subtitle styles are in global styles.scss (.mat-mdc-card-title, .mat-mdc-card-subtitle)
 
 .login-explanation .explanation-text {
   font-family: var(--font-family-body);

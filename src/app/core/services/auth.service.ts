@@ -7,6 +7,7 @@ import { map, switchMap, catchError } from 'rxjs/operators';
 import { User as AppUser, UserProfile } from '../models/user.model';
 import { UserInfoService } from './user-info.service';
 import { environment } from '../../../environments/environment';
+import { AppError, AppErrorFactory, isAppError } from '../models/error.model';
 
 export interface LoginCredentials {
   email: string;
@@ -421,9 +422,17 @@ export class AuthService {
 
   /**
    * Get user-friendly error message
+   * Handles both Firebase errors and AppError types
    */
-  private getErrorMessage(error: any): string {
-    switch (error.code) {
+  private getErrorMessage(error: unknown): string {
+    // If it's already an AppError, use its userMessage
+    if (isAppError(error)) {
+      return error.userMessage;
+    }
+
+    // Handle Firebase auth errors
+    const firebaseError = error as { code?: string; message?: string };
+    switch (firebaseError.code) {
       case 'auth/user-not-found':
         return 'No user found with this email address.';
       case 'auth/wrong-password':
@@ -447,7 +456,7 @@ export class AuthService {
       case 'auth/email-already-exists':
         return 'An account with this email already exists.';
       default:
-        return error.message || 'An error occurred during authentication.';
+        return firebaseError.message || 'An error occurred during authentication.';
     }
   }
 

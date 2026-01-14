@@ -6,6 +6,7 @@ import { ChargePoint, ChargePointFilters, ChargePointListResponse } from '../mod
 import { StationDetail } from '../models/station-detail.model';
 import { API_ENDPOINTS } from '../constants/app.constants';
 import { ConnectorUtils } from '../../shared/utils/connector.utils';
+import { AppError, isAppError } from '../models/error.model';
 
 @Injectable({
   providedIn: 'root'
@@ -65,8 +66,9 @@ export class ChargePointService {
           this._lastUpdated.set(new Date());
           this._loading.set(false);
         }),
-        catchError(error => {
-          this._error.set(error.message || 'Failed to load charge points');
+        catchError((error: AppError | Error) => {
+          const message = isAppError(error) ? error.userMessage : (error.message || 'Failed to load charge points');
+          this._error.set(message);
           this._loading.set(false);
           return throwError(() => error);
         })
@@ -243,8 +245,9 @@ export class ChargePointService {
           this._loading.set(false);
           this._lastUpdated.set(new Date());
         }),
-        catchError(error => {
-          this._error.set(error.message || 'Failed to load station details');
+        catchError((error: AppError | Error) => {
+          const message = isAppError(error) ? error.userMessage : (error.message || 'Failed to load station details');
+          this._error.set(message);
           this._loading.set(false);
           return throwError(() => error);
         })

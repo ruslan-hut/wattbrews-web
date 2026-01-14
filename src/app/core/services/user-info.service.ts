@@ -4,6 +4,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { UserInfo, UserInfoFilters, PaymentPlan, UserTag, UserPaymentMethod } from '../models/user-info.model';
 import { API_ENDPOINTS } from '../constants/app.constants';
+import { AppError, isAppError } from '../models/error.model';
 
 @Injectable({
   providedIn: 'root'
@@ -61,8 +62,9 @@ export class UserInfoService {
           this._lastUpdated.set(new Date());
           this._loading.set(false);
         }),
-        catchError(error => {
-          this._error.set(error.message || 'Failed to load user info');
+        catchError((error: AppError | Error) => {
+          const message = isAppError(error) ? error.userMessage : (error.message || 'Failed to load user info');
+          this._error.set(message);
           this._loading.set(false);
           return throwError(() => error);
         })
@@ -86,8 +88,9 @@ export class UserInfoService {
           this._lastUpdated.set(new Date());
           this._loading.set(false);
         }),
-        catchError(error => {
-          this._error.set(error.message || 'Failed to load user info');
+        catchError((error: AppError | Error) => {
+          const message = isAppError(error) ? error.userMessage : (error.message || 'Failed to load user info');
+          this._error.set(message);
           this._loading.set(false);
           return throwError(() => error);
         })

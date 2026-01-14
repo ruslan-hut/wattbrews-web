@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject, Pipe, PipeTransform, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -21,20 +21,7 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
 import { ErrorMessageComponent } from '../../../shared/components/error-message/error-message.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 import { ConnectorUtils } from '../../../shared/utils/connector.utils';
-
-@Pipe({
-  name: 'sortByConnectorId',
-  standalone: true
-})
-export class SortByConnectorIdPipe implements PipeTransform {
-  transform(connectors: ChargePointConnector[]): ChargePointConnector[] {
-    if (!connectors || connectors.length === 0) {
-      return connectors;
-    }
-    
-    return [...connectors].sort((a, b) => a.connector_id - b.connector_id);
-  }
-}
+import { SortByConnectorIdPipe } from '../../../shared/pipes';
 
 @Component({
   selector: 'app-stations-list',

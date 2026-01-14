@@ -79,9 +79,7 @@
                 </div>
                 <div class="info-item">
                   <label>{{ translationService.getReactive('profile.labels.role') }}</label>
-                  <mat-chip [class.admin]="userInfoService.isAdmin()" [class.user]="!userInfoService.isAdmin()">
-                    {{ userInfoService.isAdmin() ? translationService.getReactive('profile.roles.admin') : translationService.getReactive('profile.roles.user') }}
-                  </mat-chip>
+                  <span>{{ userInfoService.isAdmin() ? translationService.getReactive('profile.roles.admin') : translationService.getReactive('profile.roles.user') }}</span>
                 </div>
                 <div class="info-item">
                   <label>{{ translationService.getReactive('profile.labels.accessLevel') }}</label>
