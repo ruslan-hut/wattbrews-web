@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit, OnDestroy, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,12 +27,11 @@ interface TransactionStopState {
   selector: 'app-transaction-stop-dialog',
   standalone: true,
   imports: [
-    CommonModule,
     MatDialogModule,
     MatProgressBarModule,
     MatIconModule,
     MatButtonModule
-  ],
+],
   templateUrl: './transaction-stop-dialog.component.html',
   styleUrl: './transaction-stop-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

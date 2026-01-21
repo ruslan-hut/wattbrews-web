@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit, OnDestroy, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,6 @@ import { TransactionStopDialogComponent } from '../../../shared/components/trans
   selector: 'app-active-sessions',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
@@ -33,7 +32,7 @@ import { TransactionStopDialogComponent } from '../../../shared/components/trans
     MatTooltipModule,
     MatDialogModule,
     EnergyChartComponent
-  ],
+],
   templateUrl: './active-sessions.component.html',
   styleUrl: './active-sessions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

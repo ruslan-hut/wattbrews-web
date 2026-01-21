@@ -1,5 +1,5 @@
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -17,7 +17,6 @@ import { NotificationService } from '../../../core/services';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     RouterLink,
     MatCardModule,
@@ -26,7 +25,7 @@ import { NotificationService } from '../../../core/services';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule
-  ],
+],
   template: `
     <div class="forgot-password-container">
       <mat-card class="forgot-password-card">
@@ -37,43 +36,53 @@ import { NotificationService } from '../../../core/services';
           </mat-card-title>
           <mat-card-subtitle>Enter your email to receive reset instructions</mat-card-subtitle>
         </mat-card-header>
-
+    
         <mat-card-content>
           <form [formGroup]="forgotPasswordForm" (ngSubmit)="onSubmit()" class="forgot-password-form">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Email</mat-label>
               <input matInput type="email" formControlName="email" placeholder="Enter your email address">
               <mat-icon matSuffix>email</mat-icon>
-              <mat-error *ngIf="forgotPasswordForm.get('email')?.hasError('required')">
-                Email is required
-              </mat-error>
-              <mat-error *ngIf="forgotPasswordForm.get('email')?.hasError('email')">
-                Please enter a valid email
-              </mat-error>
+              @if (forgotPasswordForm.get('email')?.hasError('required')) {
+                <mat-error>
+                  Email is required
+                </mat-error>
+              }
+              @if (forgotPasswordForm.get('email')?.hasError('email')) {
+                <mat-error>
+                  Please enter a valid email
+                </mat-error>
+              }
             </mat-form-field>
-
+    
             <button mat-raised-button color="primary" type="submit" class="reset-button" [disabled]="forgotPasswordForm.invalid || isLoading()">
-              <mat-spinner *ngIf="isLoading()" diameter="20" class="button-spinner"></mat-spinner>
-              <span *ngIf="!isLoading()">Send Reset Email</span>
+              @if (isLoading()) {
+                <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+              }
+              @if (!isLoading()) {
+                <span>Send Reset Email</span>
+              }
             </button>
           </form>
-
-          <div *ngIf="emailSent()" class="success-message">
-            <mat-icon class="success-icon">check_circle</mat-icon>
-            <p>Password reset email sent! Check your inbox and follow the instructions.</p>
-            <p class="resend-text">
-              Didn't receive the email?
-              <a href="#" (click)="resendEmail()" class="resend-link">Resend</a>
-            </p>
-          </div>
+    
+          @if (emailSent()) {
+            <div class="success-message">
+              <mat-icon class="success-icon">check_circle</mat-icon>
+              <p>Password reset email sent! Check your inbox and follow the instructions.</p>
+              <p class="resend-text">
+                Didn't receive the email?
+                <a href="#" (click)="resendEmail()" class="resend-link">Resend</a>
+              </p>
+            </div>
+          }
         </mat-card-content>
-
+    
         <mat-card-actions class="forgot-password-actions">
           <p>Remember your password? <a routerLink="/auth/login" class="login-link">Sign in</a></p>
         </mat-card-actions>
       </mat-card>
     </div>
-  `,
+    `,
   styles: [`
     .forgot-password-container {
       display: flex;

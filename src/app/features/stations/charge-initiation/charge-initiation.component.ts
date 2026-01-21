@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, signal, computed, inject, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
@@ -30,7 +30,6 @@ import { ConnectorUtils } from '../../../shared/utils/connector.utils';
 @Component({
   selector: 'app-charge-initiation',
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
@@ -46,7 +45,7 @@ import { ConnectorUtils } from '../../../shared/utils/connector.utils';
     MatDialogModule,
     LoadingSpinnerComponent,
     ErrorMessageComponent
-  ],
+],
   templateUrl: './charge-initiation.component.html',
   styleUrl: './charge-initiation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,5 +1,5 @@
 import { Component, signal, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,7 +12,6 @@ import { SimpleTranslationService } from '../../core/services';
   selector: 'app-auth-layout',
   standalone: true,
   imports: [
-    CommonModule,
     RouterOutlet,
     RouterModule,
     MatToolbarModule,
@@ -20,7 +19,7 @@ import { SimpleTranslationService } from '../../core/services';
     MatButtonModule,
     MatProgressSpinnerModule,
     LanguageSwitcherComponent
-  ],
+],
   templateUrl: './auth-layout.component.html',
   styleUrl: './auth-layout.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

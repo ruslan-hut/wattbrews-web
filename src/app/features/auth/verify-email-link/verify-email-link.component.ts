@@ -1,5 +1,5 @@
 import { Component, signal, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -17,7 +17,6 @@ import { NotificationService } from '../../../core/services/notification.service
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
@@ -25,7 +24,7 @@ import { NotificationService } from '../../../core/services/notification.service
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule
-  ],
+],
   template: `
     <div class="verify-container">
       <mat-card class="verify-card">
@@ -36,65 +35,81 @@ import { NotificationService } from '../../../core/services/notification.service
           </mat-card-title>
           <mat-card-subtitle>Verify your email to complete the sign-in process</mat-card-subtitle>
         </mat-card-header>
-        
+    
         <mat-card-content>
           <!-- Loading State -->
-          <div class="loading-state" *ngIf="isLoading()">
-            <mat-spinner diameter="40"></mat-spinner>
-            <p class="loading-text">Verifying your sign-in link...</p>
-          </div>
-
-          <!-- Email Input Form -->
-          <form [formGroup]="emailForm" (ngSubmit)="onSubmit()" class="verify-form" *ngIf="!isLoading() && !isVerifying()">
-            <div class="explanation">
-              <p class="explanation-text">
-                Please enter your email address to complete the sign-in process.
-              </p>
+          @if (isLoading()) {
+            <div class="loading-state">
+              <mat-spinner diameter="40"></mat-spinner>
+              <p class="loading-text">Verifying your sign-in link...</p>
             </div>
-
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Email</mat-label>
-              <input matInput type="email" formControlName="email" placeholder="Enter your email address">
-              <mat-icon matSuffix>email</mat-icon>
-              <mat-error *ngIf="emailForm.get('email')?.hasError('required')">
-                Email is required
-              </mat-error>
-              <mat-error *ngIf="emailForm.get('email')?.hasError('email')">
-                Please enter a valid email
-              </mat-error>
-            </mat-form-field>
-
-            <button mat-raised-button type="submit" class="energy-button-primary" [disabled]="emailForm.invalid || isVerifying()">
-              <mat-spinner *ngIf="isVerifying()" diameter="20" class="energy-m-sm"></mat-spinner>
-              <span *ngIf="!isVerifying()">Complete Sign-in</span>
-            </button>
-          </form>
-
+          }
+    
+          <!-- Email Input Form -->
+          @if (!isLoading() && !isVerifying()) {
+            <form [formGroup]="emailForm" (ngSubmit)="onSubmit()" class="verify-form">
+              <div class="explanation">
+                <p class="explanation-text">
+                  Please enter your email address to complete the sign-in process.
+                </p>
+              </div>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email" placeholder="Enter your email address">
+                <mat-icon matSuffix>email</mat-icon>
+                @if (emailForm.get('email')?.hasError('required')) {
+                  <mat-error>
+                    Email is required
+                  </mat-error>
+                }
+                @if (emailForm.get('email')?.hasError('email')) {
+                  <mat-error>
+                    Please enter a valid email
+                  </mat-error>
+                }
+              </mat-form-field>
+              <button mat-raised-button type="submit" class="energy-button-primary" [disabled]="emailForm.invalid || isVerifying()">
+                @if (isVerifying()) {
+                  <mat-spinner diameter="20" class="energy-m-sm"></mat-spinner>
+                }
+                @if (!isVerifying()) {
+                  <span>Complete Sign-in</span>
+                }
+              </button>
+            </form>
+          }
+    
           <!-- Verifying State -->
-          <div class="verifying-state" *ngIf="isVerifying()">
-            <mat-spinner diameter="40"></mat-spinner>
-            <p class="verifying-text">Completing sign-in...</p>
-          </div>
-
+          @if (isVerifying()) {
+            <div class="verifying-state">
+              <mat-spinner diameter="40"></mat-spinner>
+              <p class="verifying-text">Completing sign-in...</p>
+            </div>
+          }
+    
           <!-- Success State -->
-          <div class="success-state" *ngIf="isSuccess()">
-            <mat-icon class="success-icon">check_circle</mat-icon>
-            <p class="success-text">Sign-in successful!</p>
-            <p class="success-subtext">Redirecting to dashboard...</p>
-          </div>
-
+          @if (isSuccess()) {
+            <div class="success-state">
+              <mat-icon class="success-icon">check_circle</mat-icon>
+              <p class="success-text">Sign-in successful!</p>
+              <p class="success-subtext">Redirecting to dashboard...</p>
+            </div>
+          }
+    
           <!-- Error State -->
-          <div class="error-state" *ngIf="hasError()">
-            <mat-icon class="error-icon">error</mat-icon>
-            <p class="error-text">{{ errorMessage() }}</p>
-            <button mat-raised-button class="energy-button-secondary" (click)="goToLogin()">
-              Back to Login
-            </button>
-          </div>
+          @if (hasError()) {
+            <div class="error-state">
+              <mat-icon class="error-icon">error</mat-icon>
+              <p class="error-text">{{ errorMessage() }}</p>
+              <button mat-raised-button class="energy-button-secondary" (click)="goToLogin()">
+                Back to Login
+              </button>
+            </div>
+          }
         </mat-card-content>
       </mat-card>
     </div>
-  `,
+    `,
   styles: [`
     .verify-container {
       display: flex;

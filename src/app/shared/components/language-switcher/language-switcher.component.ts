@@ -1,5 +1,5 @@
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -10,11 +10,10 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     MatButtonModule,
     MatIconModule,
     MatMenuModule
-  ],
+],
   templateUrl: './language-switcher.component.html',
   styleUrl: './language-switcher.component.scss'
 })

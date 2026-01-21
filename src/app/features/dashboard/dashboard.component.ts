@@ -1,5 +1,5 @@
 import { Component, signal, inject, OnInit, OnDestroy, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +27,6 @@ import { SortByConnectorIdPipe } from '../../shared/pipes';
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
@@ -36,7 +35,7 @@ import { SortByConnectorIdPipe } from '../../shared/pipes';
     MatTooltipModule,
     RouterModule,
     SortByConnectorIdPipe
-  ],
+],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

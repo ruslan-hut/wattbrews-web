@@ -1,5 +1,5 @@
 import { Component, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -10,11 +10,10 @@ import { ConnectionState } from '../../../core/models/websocket.model';
 @Component({
   selector: 'app-connection-status',
   imports: [
-    CommonModule,
     MatIconModule,
     MatButtonModule,
     MatProgressSpinnerModule
-  ],
+],
   templateUrl: './connection-status.component.html',
   styleUrl: './connection-status.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, signal, computed, inject, effect, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -27,7 +27,6 @@ import { SortByConnectorIdPipe } from '../../../shared/pipes';
   selector: 'app-stations-list',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     MatIconModule,
     MatInputModule,
@@ -40,7 +39,7 @@ import { SortByConnectorIdPipe } from '../../../shared/pipes';
     LoadingSpinnerComponent,
     ErrorMessageComponent,
     SortByConnectorIdPipe
-  ],
+],
   templateUrl: './stations-list.component.html',
   styleUrls: ['./stations-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,5 +1,5 @@
 import { Component, signal, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,6 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
 @Component({
   selector: 'app-profile',
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
@@ -25,7 +24,7 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
     MatChipsModule,
     MatTabsModule,
     MatDividerModule
-  ],
+],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

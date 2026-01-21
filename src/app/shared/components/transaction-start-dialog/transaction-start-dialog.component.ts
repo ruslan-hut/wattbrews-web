@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit, OnDestroy, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,12 +28,11 @@ interface TransactionStartState {
   selector: 'app-transaction-start-dialog',
   standalone: true,
   imports: [
-    CommonModule,
     MatDialogModule,
     MatProgressBarModule,
     MatIconModule,
     MatButtonModule
-  ],
+],
   templateUrl: './transaction-start-dialog.component.html',
   styleUrl: './transaction-start-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,5 +1,5 @@
 import { Component, signal, computed, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterOutlet, Router, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -21,7 +21,6 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
   selector: 'app-main-layout',
   standalone: true,
   imports: [
-    CommonModule,
     RouterOutlet,
     RouterModule,
     MatToolbarModule,
@@ -35,7 +34,7 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
     LanguageSwitcherComponent,
     ConnectionStatusComponent,
     ThemeToggleComponent
-  ],
+],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,5 +1,5 @@
 import { Component, signal, computed, inject, DestroyRef, OnInit, effect, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,7 +29,6 @@ interface MessageWithTimestamp {
   selector: 'app-websocket-test',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatButtonModule,
@@ -44,7 +43,7 @@ interface MessageWithTimestamp {
     MatTabsModule,
     MatCheckboxModule,
     MatProgressSpinnerModule
-  ],
+],
   templateUrl: './websocket-test.component.html',
   styleUrl: './websocket-test.component.scss'
 })

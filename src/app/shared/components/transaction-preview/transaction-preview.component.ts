@@ -1,5 +1,5 @@
 import { Component, inject, signal, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +19,6 @@ import { SmallMapComponent } from '../small-map/small-map.component';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     MatDialogModule,
     MatCardModule,
     MatIconModule,
@@ -30,7 +29,7 @@ import { SmallMapComponent } from '../small-map/small-map.component';
     MatTabsModule,
     EnergyChartComponent,
     SmallMapComponent
-  ],
+],
   templateUrl: './transaction-preview.component.html',
   styleUrl: './transaction-preview.component.scss'
 })

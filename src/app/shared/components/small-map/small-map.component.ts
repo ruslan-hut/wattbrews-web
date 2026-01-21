@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import * as L from 'leaflet';
 import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-small-map',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './small-map.component.html',
   styleUrl: './small-map.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

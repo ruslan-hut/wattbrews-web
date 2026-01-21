@@ -11,7 +11,7 @@ import {
   inject,
   PLATFORM_ID
 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
@@ -39,7 +39,7 @@ echarts.use([
 @Component({
   selector: 'app-energy-chart',
   standalone: true,
-  imports: [CommonModule, MatIconModule, NgxEchartsDirective],
+  imports: [MatIconModule, NgxEchartsDirective],
   providers: [
     provideEchartsCore({ echarts })
   ],

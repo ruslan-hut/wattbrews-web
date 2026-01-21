@@ -1,5 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,11 +9,10 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
   selector: 'app-update-dialog',
   standalone: true,
   imports: [
-    CommonModule,
     MatDialogModule,
     MatButtonModule,
     MatIconModule
-  ],
+],
   templateUrl: './update-dialog.component.html',
   styleUrl: './update-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, signal, inject, effect, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
@@ -29,7 +29,6 @@ import { SortByConnectorIdPipe } from '../../../shared';
   selector: 'app-station-detail',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
@@ -42,7 +41,7 @@ import { SortByConnectorIdPipe } from '../../../shared';
     ErrorMessageComponent,
     SmallMapComponent,
     SortByConnectorIdPipe
-  ],
+],
   templateUrl: './station-detail.component.html',
   styleUrls: ['./station-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

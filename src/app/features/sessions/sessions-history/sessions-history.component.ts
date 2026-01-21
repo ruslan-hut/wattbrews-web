@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, OnDestroy, signal, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
@@ -29,7 +29,6 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
   selector: 'app-sessions-history',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
@@ -46,7 +45,7 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
     MatTooltipModule,
     MatExpansionModule,
     FormsModule
-  ],
+],
   templateUrl: './sessions-history.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [`
