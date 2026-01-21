@@ -3,6 +3,28 @@
   max-width: 500px;
 }
 
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--energy-space-3xl) var(--energy-space-xl);
+  gap: var(--energy-space-md);
+  color: var(--energy-text-secondary);
+
+  mat-icon {
+    font-size: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--energy-primary);
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+  }
+}
+
 h2[mat-dialog-title] {
   display: flex;
   align-items: center;
