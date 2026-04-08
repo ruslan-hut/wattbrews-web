@@ -15,7 +15,8 @@ This folder contains all technical documentation for the WattBrews web applicati
 
 | Document | Description |
 |----------|-------------|
-| [CLAUDE.md](./CLAUDE.md) | Development guidance and codebase instructions for Claude Code |
+| [Architecture](./ARCHITECTURE.md) | Layers, core services, HTTP, auth flow, state patterns |
+| [Coding Standards](./CODING_STANDARDS.md) | Angular/template/style rules enforced in review |
 | [Deployment](./DEPLOYMENT.md) | CI/CD configuration and production deployment guide |
 
 ### Design System

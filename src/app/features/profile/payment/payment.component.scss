@@ -1,0 +1,78 @@
+.payment-page {
+  padding: var(--spacing-lg, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 16px);
+}
+
+.payment-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md, 16px);
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.payment-page__loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-lg, 24px) 0;
+}
+
+.payment-page__empty {
+  text-align: center;
+}
+
+.payment-page__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 12px);
+}
+
+.payment-page__item-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 16px);
+  flex-wrap: wrap;
+}
+
+.payment-page__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs, 8px);
+  font-weight: 600;
+}
+
+.payment-page__meta {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.payment-page__label {
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payment-page__expiry {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary, rgba(0, 0, 0, 0.6));
+}
+
+.payment-page__chip {
+  margin-left: auto;
+
+  &--warn {
+    background-color: var(--color-error-bg, rgba(198, 40, 40, 0.12));
+    color: var(--color-error, #c62828);
+  }
+}

@@ -170,9 +170,25 @@ html {
                             0 2px 4px rgba(0, 0, 0, 0.04),
                             0 0 0 1px rgba(0, 0, 0, 0.02);
 
-  // Glow effects
-  --energy-glow-primary: 0 0 20px rgba(139, 92, 246, 0.3);
-  --energy-glow-secondary: 0 0 20px rgba(20, 184, 166, 0.3);
+  // Glow effects — layered (soft halo + tight rim) for a real "charged" feel
+  --energy-glow-primary: 0 0 0 1px rgba(139, 92, 246, 0.35),
+                         0 0 12px rgba(139, 92, 246, 0.25),
+                         0 0 32px rgba(139, 92, 246, 0.18);
+  --energy-glow-primary-strong: 0 0 0 1px rgba(139, 92, 246, 0.55),
+                                0 0 18px rgba(139, 92, 246, 0.45),
+                                0 0 48px rgba(139, 92, 246, 0.28);
+  --energy-glow-secondary: 0 0 0 1px rgba(20, 184, 166, 0.35),
+                           0 0 12px rgba(20, 184, 166, 0.25),
+                           0 0 32px rgba(20, 184, 166, 0.18);
+  --energy-glow-success: 0 0 0 1px rgba(16, 185, 129, 0.35),
+                         0 0 12px rgba(16, 185, 129, 0.25);
+  --energy-glow-warning: 0 0 0 1px rgba(245, 158, 11, 0.35),
+                         0 0 12px rgba(245, 158, 11, 0.25);
+  --energy-glow-error:   0 0 0 1px rgba(239, 68, 68, 0.35),
+                         0 0 12px rgba(239, 68, 68, 0.25);
+  --energy-glow-info:    0 0 0 1px rgba(59, 130, 246, 0.35),
+                         0 0 12px rgba(59, 130, 246, 0.25);
+  --energy-glow-focus-ring: 0 0 0 3px rgba(139, 92, 246, 0.25);
 
   // =========================================================================
   // GLASSMORPHISM UTILITIES
@@ -264,14 +280,35 @@ html {
   // Primary (slightly brighter for dark mode visibility)
   --energy-primary: #a78bfa;
   --energy-primary-light: #c4b5fd;
+  --energy-primary-lighter: #ddd6fe;
   --energy-primary-dark: #8b5cf6;
+  --energy-primary-darker: #7c3aed;
   --energy-primary-50: rgba(139, 92, 246, 0.1);
+  --energy-primary-100: rgba(139, 92, 246, 0.18);
+  --energy-primary-900: #c4b5fd;
 
   // Secondary (slightly brighter)
   --energy-secondary: #2dd4bf;
   --energy-secondary-light: #5eead4;
+  --energy-secondary-lighter: #99f6e4;
   --energy-secondary-dark: #14b8a6;
+  --energy-secondary-darker: #0d9488;
   --energy-secondary-50: rgba(20, 184, 166, 0.1);
+  --energy-secondary-100: rgba(20, 184, 166, 0.18);
+  --energy-secondary-900: #5eead4;
+
+  // Tertiary (indigo) — brighter for dark mode visibility
+  --energy-tertiary: #818cf8;
+  --energy-tertiary-light: #a5b4fc;
+  --energy-tertiary-dark: #6366f1;
+  --energy-tertiary-50: rgba(99, 102, 241, 0.12);
+
+  // Status base colors (brighter bases for dark mode — the -light and -dark
+  // variants are adjusted further down for background/text contrast)
+  --energy-success: #34d399;
+  --energy-warning: #fbbf24;
+  --energy-error: #f87171;
+  --energy-info: #60a5fa;
 
   // Glassmorphism dark mode
   --energy-glass-bg: rgba(24, 24, 27, 0.8);
@@ -305,9 +342,28 @@ html {
   --energy-error-dark: #f87171;
   --energy-info-dark: #60a5fa;
 
-  // Glow effects (more prominent in dark mode)
-  --energy-glow-primary: 0 0 30px rgba(167, 139, 250, 0.4);
-  --energy-glow-secondary: 0 0 30px rgba(45, 212, 191, 0.4);
+  // Glow effects — brighter + wider in dark mode so they actually read
+  --energy-glow-primary: 0 0 0 1px rgba(167, 139, 250, 0.55),
+                         0 0 18px rgba(167, 139, 250, 0.55),
+                         0 0 48px rgba(167, 139, 250, 0.35);
+  --energy-glow-primary-strong: 0 0 0 1px rgba(167, 139, 250, 0.75),
+                                0 0 24px rgba(167, 139, 250, 0.7),
+                                0 0 64px rgba(167, 139, 250, 0.45);
+  --energy-glow-secondary: 0 0 0 1px rgba(45, 212, 191, 0.55),
+                           0 0 18px rgba(45, 212, 191, 0.55),
+                           0 0 48px rgba(45, 212, 191, 0.32);
+  --energy-glow-success: 0 0 0 1px rgba(52, 211, 153, 0.6),
+                         0 0 16px rgba(52, 211, 153, 0.5);
+  --energy-glow-warning: 0 0 0 1px rgba(251, 191, 36, 0.6),
+                         0 0 16px rgba(251, 191, 36, 0.5);
+  --energy-glow-error:   0 0 0 1px rgba(248, 113, 113, 0.6),
+                         0 0 16px rgba(248, 113, 113, 0.5);
+  --energy-glow-info:    0 0 0 1px rgba(96, 165, 250, 0.6),
+                         0 0 16px rgba(96, 165, 250, 0.5);
+  --energy-glow-focus-ring: 0 0 0 3px rgba(167, 139, 250, 0.45);
+
+  // Hero gradient fallback for dark mode — brightened violet→teal ribbon
+  --energy-gradient-hero: linear-gradient(135deg, #a78bfa 0%, #2dd4bf 100%);
 }
 
 // =============================================================================
@@ -929,6 +985,183 @@ h6, .heading-6 {
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+// =============================================================================
+// INTERACTIVE STATES — GLOW, FOCUS, ACTIVE
+// =============================================================================
+// These rules wire the glow tokens into real active/focus/selected states so
+// the brand's "charged" feel shows up on the elements users actually touch.
+
+// Reusable utility classes ----------------------------------------------------
+
+// Static glow halo (use on cards, tiles, stat blocks, CTA surfaces)
+.energy-glow {
+  box-shadow: var(--energy-glow-primary);
+}
+
+.energy-glow-secondary { box-shadow: var(--energy-glow-secondary); }
+.energy-glow-success   { box-shadow: var(--energy-glow-success); }
+.energy-glow-warning   { box-shadow: var(--energy-glow-warning); }
+.energy-glow-error     { box-shadow: var(--energy-glow-error); }
+.energy-glow-info      { box-shadow: var(--energy-glow-info); }
+
+// Apply to anything in a "currently active / selected" state
+.is-active,
+[data-state='active'],
+[aria-current='page'],
+[aria-selected='true'] {
+  &:not(input):not(textarea):not(select) {
+    box-shadow: var(--energy-glow-primary);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+}
+
+// Soft breathing pulse for "live" indicators
+@keyframes energy-glow-pulse {
+  0%, 100% { box-shadow: var(--energy-glow-primary); }
+  50%      { box-shadow: var(--energy-glow-primary-strong); }
+}
+
+.energy-glow-pulse {
+  animation: energy-glow-pulse 2.4s ease-in-out infinite;
+}
+
+// Accessible keyboard focus ring — applies globally to everything focusable
+:focus-visible {
+  outline: none;
+  box-shadow: var(--energy-glow-focus-ring);
+  border-radius: var(--energy-radius-sm);
+  transition: box-shadow var(--transition-fast);
+}
+
+// Material button active / pressed / selected states ------------------------
+
+.mat-mdc-raised-button,
+.mat-mdc-flat-button,
+button[mat-raised-button],
+button[mat-flat-button] {
+  &:hover:not(:disabled) {
+    box-shadow: var(--energy-glow-primary);
+  }
+
+  &.energy-button-primary:hover:not(:disabled),
+  &.energy-button-primary:focus-visible {
+    box-shadow: var(--energy-glow-primary-strong);
+  }
+
+  &.energy-button-secondary:hover:not(:disabled),
+  &.energy-button-secondary:focus-visible {
+    box-shadow: var(--energy-glow-secondary);
+  }
+}
+
+.mat-mdc-icon-button {
+  transition: box-shadow var(--transition-base), background-color var(--transition-base);
+
+  &:hover:not(:disabled),
+  &.is-active {
+    box-shadow: var(--energy-glow-primary);
+  }
+}
+
+// Material list / menu / tab selected states --------------------------------
+
+.mat-mdc-menu-item.active,
+.mat-mdc-menu-item[aria-current='true'],
+.mat-mdc-list-item.active,
+.mat-mdc-list-item[aria-current='true'] {
+  background-color: var(--energy-primary-50);
+  color: var(--energy-primary);
+  box-shadow: inset 3px 0 0 var(--energy-primary),
+              var(--energy-glow-primary);
+
+  mat-icon, .mat-icon { color: var(--energy-primary); }
+}
+
+.mat-mdc-tab.mdc-tab--active .mdc-tab__text-label,
+.mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
+  color: var(--energy-primary);
+  text-shadow: 0 0 12px rgba(139, 92, 246, 0.35);
+}
+
+[data-theme='dark'] .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label,
+[data-theme='dark'] .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
+  text-shadow: 0 0 16px rgba(167, 139, 250, 0.6);
+}
+
+.mdc-tab-indicator__content--underline {
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
+}
+
+// Form field focus -----------------------------------------------------------
+
+.mat-mdc-form-field.mat-focused {
+  .mat-mdc-text-field-wrapper {
+    box-shadow: var(--energy-glow-primary);
+    transition: box-shadow var(--transition-base);
+  }
+}
+
+// Chips — selected & status glow on hover ------------------------------------
+
+.mat-mdc-chip.mdc-evolution-chip--selected,
+.mat-mdc-chip[aria-selected='true'] {
+  box-shadow: var(--energy-glow-primary);
+}
+
+.mat-mdc-chip.energy-chip-success:hover { box-shadow: var(--energy-glow-success); }
+.mat-mdc-chip.energy-chip-warning:hover { box-shadow: var(--energy-glow-warning); }
+.mat-mdc-chip.energy-chip-error:hover   { box-shadow: var(--energy-glow-error); }
+.mat-mdc-chip.energy-chip-info:hover    { box-shadow: var(--energy-glow-info); }
+
+// Slide toggle / checkbox / radio — glow when checked -----------------------
+
+.mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__handle,
+.mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__background,
+.mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__background {
+  box-shadow: var(--energy-glow-primary);
+  border-radius: var(--energy-radius-full);
+}
+
+// Status indicator dots — reuse the dashboard pattern as a global utility ---
+
+.energy-status-online::before,
+.energy-status-charging::before {
+  box-shadow: var(--energy-glow-success);
+}
+
+.energy-status-charging::before {
+  box-shadow: var(--energy-glow-primary);
+  animation: energy-glow-pulse 2s ease-in-out infinite;
+}
+
+.energy-status-offline::before {
+  box-shadow: var(--energy-glow-error);
+}
+
+// Card active / selected state ----------------------------------------------
+
+.mat-mdc-card {
+  &.is-active,
+  &.energy-card-active,
+  &[aria-current='true'] {
+    border-color: var(--energy-primary);
+    box-shadow: var(--energy-glow-primary);
+  }
+
+  &.energy-card-outlined {
+    box-shadow: var(--energy-glow-primary);
+  }
+}
+
+// Respect reduced-motion preferences -----------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .energy-glow-pulse,
+  .energy-status-charging::before {
+    animation: none;
+  }
 }
 
 // =============================================================================

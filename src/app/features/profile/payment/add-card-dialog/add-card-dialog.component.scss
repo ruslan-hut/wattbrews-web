@@ -1,0 +1,73 @@
+.add-card-dialog__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 16px);
+  min-width: 320px;
+  max-width: 480px;
+}
+
+.add-card-dialog__description {
+  margin: 0;
+  color: var(--color-text-secondary, rgba(0, 0, 0, 0.6));
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.add-card-dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 12px);
+}
+
+.add-card-dialog__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+
+  label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-secondary, rgba(0, 0, 0, 0.6));
+  }
+}
+
+.add-card-dialog__row {
+  display: flex;
+  gap: var(--spacing-sm, 12px);
+}
+
+// Redsys injects an iframe inside these containers; the outer div needs
+// enough height for the iframe's default 40px card input rendering and a
+// visible border so users understand it's an input.
+.add-card-dialog__iframe {
+  min-height: 42px;
+  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.23));
+  border-radius: var(--radius-sm, 4px);
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface, #fff);
+}
+
+.add-card-dialog__status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 12px);
+  padding: var(--spacing-md, 16px) 0;
+  color: var(--color-text-primary, rgba(0, 0, 0, 0.87));
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  &--success mat-icon {
+    color: var(--color-success, #2e7d32);
+  }
+
+  &--error mat-icon {
+    color: var(--color-error, #c62828);
+  }
+}

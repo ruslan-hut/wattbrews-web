@@ -1,0 +1,128 @@
+<h2 mat-dialog-title>
+  {{ translationService.getReactive('profile.paymentMethods.addCard.title') }}
+</h2>
+
+<mat-dialog-content class="add-card-dialog__content">
+  <p class="add-card-dialog__description">
+    {{ translationService.getReactive('profile.paymentMethods.addCard.description') }}
+  </p>
+
+  @switch (state().status) {
+    @case ('loading') {
+      <div class="add-card-dialog__status">
+        <mat-spinner diameter="40"></mat-spinner>
+        <span>{{ translationService.getReactive('profile.paymentMethods.addCard.loading') }}</span>
+      </div>
+    }
+
+    @case ('idle') {
+      <form [formGroup]="form" class="add-card-dialog__form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline">
+          <mat-label>
+            {{ translationService.getReactive('profile.paymentMethods.addCard.descriptionLabel') }}
+          </mat-label>
+          <input
+            matInput
+            formControlName="description"
+            maxlength="64"
+            [placeholder]="
+              translationService.getReactive('profile.paymentMethods.addCard.descriptionPlaceholder')
+            "
+          />
+        </mat-form-field>
+
+        <!-- Redsys inSite mounts iframe fields into these containers. The
+             card number / expiry / CVV themselves are hosted on sis.redsys.es,
+             so the data never enters this Angular component. -->
+        <div class="add-card-dialog__field">
+          <label for="redsys-card-number">
+            {{ translationService.getReactive('profile.paymentMethods.addCard.cardNumberLabel') }}
+          </label>
+          <div id="redsys-card-number" class="add-card-dialog__iframe"></div>
+        </div>
+
+        <div class="add-card-dialog__row">
+          <div class="add-card-dialog__field">
+            <label for="redsys-expiry">
+              {{ translationService.getReactive('profile.paymentMethods.addCard.expiryLabel') }}
+            </label>
+            <div id="redsys-expiry" class="add-card-dialog__iframe"></div>
+          </div>
+          <div class="add-card-dialog__field">
+            <label for="redsys-cvv">
+              {{ translationService.getReactive('profile.paymentMethods.addCard.cvvLabel') }}
+            </label>
+            <div id="redsys-cvv" class="add-card-dialog__iframe"></div>
+          </div>
+        </div>
+      </form>
+    }
+
+    @case ('tokenizing') {
+      <div class="add-card-dialog__status">
+        <mat-spinner diameter="40"></mat-spinner>
+        <span>
+          {{ translationService.getReactive('profile.paymentMethods.addCard.tokenizing') }}
+        </span>
+      </div>
+    }
+
+    @case ('saving') {
+      <div class="add-card-dialog__status">
+        <mat-spinner diameter="40"></mat-spinner>
+        <span>{{ translationService.getReactive('profile.paymentMethods.addCard.saving') }}</span>
+      </div>
+    }
+
+    @case ('success') {
+      <div class="add-card-dialog__status add-card-dialog__status--success">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ translationService.getReactive('profile.paymentMethods.addCard.success') }}</span>
+      </div>
+    }
+
+    @case ('error') {
+      <div class="add-card-dialog__status add-card-dialog__status--error">
+        <mat-icon>error</mat-icon>
+        <span>{{
+          state().errorMessage ||
+            translationService.getReactive('profile.paymentMethods.addCard.errorGeneric')
+        }}</span>
+      </div>
+    }
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @switch (state().status) {
+    @case ('idle') {
+      <button mat-button type="button" (click)="cancel()">
+        {{ translationService.getReactive('profile.paymentMethods.addCard.cancel') }}
+      </button>
+      <button mat-flat-button color="primary" type="button" (click)="submit()">
+        {{ translationService.getReactive('profile.paymentMethods.addCard.submit') }}
+      </button>
+    }
+
+    @case ('error') {
+      <button mat-button type="button" (click)="cancel()">
+        {{ translationService.getReactive('profile.paymentMethods.addCard.cancel') }}
+      </button>
+      <button mat-flat-button color="primary" type="button" (click)="retry()">
+        {{ translationService.getReactive('profile.paymentMethods.addCard.retry') }}
+      </button>
+    }
+
+    @case ('success') {
+      <button mat-button type="button" (click)="cancel()">
+        {{ translationService.getReactive('profile.paymentMethods.addCard.close') }}
+      </button>
+    }
+
+    @default {
+      <button mat-button type="button" disabled>
+        {{ translationService.getReactive('profile.paymentMethods.addCard.cancel') }}
+      </button>
+    }
+  }
+</mat-dialog-actions>

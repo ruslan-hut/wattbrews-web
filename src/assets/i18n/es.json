@@ -194,7 +194,28 @@
       "title": "Métodos de Pago",
       "default": "Predeterminado",
       "failures": "Fallos",
-      "noMethods": "No hay métodos de pago disponibles"
+      "noMethods": "No hay métodos de pago disponibles",
+      "addCard": {
+        "button": "Añadir tarjeta",
+        "title": "Añadir una nueva tarjeta",
+        "description": "Los datos de la tarjeta se introducen directamente en el formulario seguro de Redsys. El número de tu tarjeta nunca toca los servidores de WattBrews.",
+        "descriptionLabel": "Etiqueta de la tarjeta (opcional)",
+        "descriptionPlaceholder": "p. ej. Visa personal",
+        "cardNumberLabel": "Número de tarjeta",
+        "expiryLabel": "Caducidad",
+        "cvvLabel": "CVV",
+        "loading": "Preparando el formulario seguro…",
+        "tokenizing": "Verificando tu tarjeta con Redsys…",
+        "saving": "Guardando tu tarjeta…",
+        "success": "Tarjeta añadida correctamente",
+        "errorGeneric": "No hemos podido añadir tu tarjeta. Inténtalo de nuevo.",
+        "errorNetwork": "Error de red. Comprueba tu conexión e inténtalo de nuevo.",
+        "errorScript": "No se pudo cargar el formulario seguro. Inténtalo de nuevo.",
+        "cancel": "Cancelar",
+        "retry": "Reintentar",
+        "submit": "Guardar tarjeta",
+        "close": "Cerrar"
+      }
     },
     "settings": {
       "notifications": "profile.settings.notifications"

@@ -24,6 +24,8 @@ export interface UserTag {
 export interface UserPaymentMethod {
   description: string;
   identifier: string;
+  card_number?: string;
+  card_type?: string;
   card_brand: string;
   card_country: string;
   expiry_date: string;

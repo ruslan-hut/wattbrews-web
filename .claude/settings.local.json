@@ -13,7 +13,15 @@
       "mcp__plugin_context7_context7__query-docs",
       "WebFetch(domain:angular.dev)",
       "Bash(find:*)",
-      "Bash(npx ng update:*)"
+      "Bash(npx ng update:*)",
+      "Bash(wc:*)",
+      "Bash(xargs ls:*)",
+      "Bash(xargs grep:*)",
+      "WebFetch(domain:pagosonline.redsys.es)",
+      "Bash(go build:*)",
+      "Bash(go vet:*)",
+      "Bash(npx ng:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

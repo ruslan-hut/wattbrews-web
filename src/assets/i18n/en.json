@@ -191,7 +191,28 @@
       "title": "Payment Methods",
       "default": "Default",
       "failures": "Failures",
-      "noMethods": "No payment methods available"
+      "noMethods": "No payment methods available",
+      "addCard": {
+        "button": "Add card",
+        "title": "Add a new card",
+        "description": "Card details are entered directly on Redsys's secure form. Your card number never touches WattBrews servers.",
+        "descriptionLabel": "Card label (optional)",
+        "descriptionPlaceholder": "e.g. Personal Visa",
+        "cardNumberLabel": "Card number",
+        "expiryLabel": "Expiry",
+        "cvvLabel": "CVV",
+        "loading": "Preparing secure card form…",
+        "tokenizing": "Verifying your card with Redsys…",
+        "saving": "Saving your card…",
+        "success": "Card added successfully",
+        "errorGeneric": "We couldn't add your card. Please try again.",
+        "errorNetwork": "Network error. Check your connection and retry.",
+        "errorScript": "Could not load the secure card form. Please retry.",
+        "cancel": "Cancel",
+        "retry": "Try again",
+        "submit": "Save card",
+        "close": "Close"
+      }
     },
     "settings": {
       "notifications": "profile.settings.notifications"

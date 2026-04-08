@@ -125,10 +125,11 @@ export const API_ENDPOINTS = {
     ENABLE: '/chp/:id/enable',
     DISABLE: '/chp/:id/disable',
   },
-  PAYMENTS: {
-    METHODS: '/payments/methods',
-    ADD_METHOD: '/payments/methods',
-    DELETE_METHOD: '/payments/methods/:id',
-    SET_DEFAULT: '/payments/methods/:id/default',
+  PAYMENT: {
+    METHODS: '/payment/methods',
+    ORDER: '/payment/order',
+    SAVE: '/payment/save',
+    UPDATE: '/payment/update',
+    DELETE: '/payment/delete',
   },
 } as const;

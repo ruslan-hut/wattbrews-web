@@ -1,0 +1,51 @@
+<section class="payment-page">
+  <header class="payment-page__header">
+    <h2>{{ translationService.getReactive('profile.paymentMethods.title') }}</h2>
+    <button mat-flat-button color="primary" type="button" (click)="openAddCardDialog()">
+      <mat-icon>add</mat-icon>
+      {{ translationService.getReactive('profile.paymentMethods.addCard.button') }}
+    </button>
+  </header>
+
+  @if (loading()) {
+    <div class="payment-page__loading">
+      <mat-spinner diameter="32"></mat-spinner>
+    </div>
+  } @else if (!hasMethods()) {
+    <mat-card class="payment-page__empty">
+      <mat-card-content>
+        {{ translationService.getReactive('profile.paymentMethods.noMethods') }}
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <ul class="payment-page__list">
+      @for (method of methods(); track method.identifier) {
+        <li class="payment-page__item">
+          <mat-card>
+            <mat-card-content class="payment-page__item-content">
+              <div class="payment-page__brand">
+                <mat-icon>credit_card</mat-icon>
+                <span>{{ brandName(method.card_brand) }}</span>
+              </div>
+              <div class="payment-page__meta">
+                <span class="payment-page__label">{{ method.description || '—' }}</span>
+                <span class="payment-page__expiry">{{ expiry(method.expiry_date) }}</span>
+              </div>
+              @if (method.is_default) {
+                <mat-chip class="payment-page__chip">
+                  {{ translationService.getReactive('profile.paymentMethods.default') }}
+                </mat-chip>
+              }
+              @if (method.fail_count > 0) {
+                <mat-chip class="payment-page__chip payment-page__chip--warn">
+                  {{ translationService.getReactive('profile.paymentMethods.failures') }}:
+                  {{ method.fail_count }}
+                </mat-chip>
+              }
+            </mat-card-content>
+          </mat-card>
+        </li>
+      }
+    </ul>
+  }
+</section>
