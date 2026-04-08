@@ -25,7 +25,9 @@
       "Bash(npm --version)",
       "Bash(npm ci:*)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:sis-d.redsys.es)"
+      "WebFetch(domain:sis-d.redsys.es)",
+      "Bash(curl:*)",
+      "Bash(node scripts/set-env.js --prod)"
     ]
   }
 }

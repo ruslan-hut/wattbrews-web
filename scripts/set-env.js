@@ -36,14 +36,19 @@ const firebaseMeasurementId = process.env.FIREBASE_MEASUREMENT_ID || 'G-Z2M3DF6L
 const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY || '';
 const apiBaseUrl = process.env.API_BASE_URL || 'https://wattbrews.me/api/v1';
 const wsBaseUrl = process.env.WS_BASE_URL || 'wss://wattbrews.me/ws';
-// Redsys inSite JS SDK URL. Defaults to the Redsys sandbox endpoint; for
-// production set REDSYS_INSITE_SCRIPT_URL to the real entradaInsite.js URL.
-const redsysInsiteScriptUrl =
-  process.env.REDSYS_INSITE_SCRIPT_URL ||
-  'https://sis-t.redsys.es:25443/sis/NC/sandbox/redsysV3.js';
-
 // Determine if we're in production
 const isProduction = process.env.NODE_ENV === 'production' || process.argv.includes('--prod');
+
+// Redsys inSite JS SDK URL. The script host must match the REST endpoint
+// the backend is talking to: use the production URL when the backend is
+// wired to `sis.redsys.es`, and the sandbox URL when it is wired to
+// `sis-t.redsys.es`. Default picks based on NODE_ENV; override via
+// REDSYS_INSITE_SCRIPT_URL when the two environments are mixed.
+const redsysInsiteScriptUrl =
+  process.env.REDSYS_INSITE_SCRIPT_URL ||
+  (isProduction
+    ? 'https://sis.redsys.es/sis/NC/redsysV3.js'
+    : 'https://sis-t.redsys.es:25443/sis/NC/sandbox/redsysV3.js');
 
 // Validate required environment variables
 if (!firebaseApiKey) {
