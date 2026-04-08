@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -38,6 +38,7 @@ export class RedsysReturnComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly userInfoService = inject(UserInfoService);
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly translationService = inject(SimpleTranslationService);
 
   protected readonly status = signal<ReturnStatus>('loading');
@@ -50,7 +51,7 @@ export class RedsysReturnComponent implements OnInit {
       // the browser, so in practice the card is already stored by now.
       this.userInfoService
         .loadCurrentUserInfo({ include_payment_methods: true })
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => this.status.set('success'),
           // A refresh failure doesn't invalidate the tokenization; the

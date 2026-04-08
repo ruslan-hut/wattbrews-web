@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -42,6 +42,7 @@ export class PaymentComponent implements OnInit {
   protected readonly userInfoService = inject(UserInfoService);
   protected readonly translationService = inject(SimpleTranslationService);
   private readonly paymentService = inject(PaymentService);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly methods = this.userInfoService.activePaymentMethods;
   protected readonly loading = this.userInfoService.loading;
@@ -80,7 +81,7 @@ export class PaymentComponent implements OnInit {
         return_url_ko: `${returnBase}?result=ko`,
         language: this.translationService.currentLanguage().toUpperCase() === 'EN' ? '002' : '001',
       })
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (order) => this.paymentService.submitRedsysForm(order),
         error: (err) => {
