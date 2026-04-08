@@ -8,10 +8,10 @@ import { API_ENDPOINTS } from '../../../core/constants/app.constants';
 import { AppError, AppErrorFactory } from '../../../core/models/error.model';
 import {
   InSiteOrderResponse,
-  InSiteTokenResult,
   PaymentOrderRequest,
   SavePaymentMethodRequest,
   SavePaymentMethodResponse,
+  TokenizeCardRequest,
 } from '../../../core/models/payment.model';
 
 /**
@@ -55,7 +55,10 @@ export class PaymentService {
   /**
    * Persists a tokenized card and asks the backend to echo back the
    * updated methods list (`?include_list=1`) so the caller can refresh
-   * the UI in a single round-trip.
+   * the UI in a single round-trip. Used by flows that already hold a
+   * permanent card token (e.g. imports / migrations). The Redsys inSite
+   * "add card" flow should call `tokenizeCard` instead — the browser
+   * only ever holds a temporary idOper, never a permanent token.
    */
   saveMethod(
     method: SavePaymentMethodRequest,
@@ -70,8 +73,22 @@ export class PaymentService {
   }
 
   /**
+   * Exchanges a temporary Redsys inSite idOper for a permanent card
+   * token server-side (the backend calls Redsys REST with
+   * DS_MERCHANT_IDOPER) and returns the updated methods list.
+   */
+  tokenizeCard(req: TokenizeCardRequest): Observable<SavePaymentMethodResponse> {
+    return this.http
+      .post<SavePaymentMethodResponse>(
+        `${this.baseUrl}${API_ENDPOINTS.PAYMENT.TOKENIZE}`,
+        req,
+      )
+      .pipe(catchError((err) => this.toAppError(err)));
+  }
+
+  /**
    * Loads the Redsys inSite JS SDK once per page. Subsequent callers get
-   * the cached Promise. Resolves when `window.getInSiteFormData` is
+   * the cached Promise. Resolves when `window.getInSiteFormJSON` is
    * available; rejects if the script fails to load.
    */
   loadRedsysScript(): Promise<void> {
@@ -81,7 +98,7 @@ export class PaymentService {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
       return Promise.reject(new Error('Redsys inSite requires a browser environment'));
     }
-    if (window.getInSiteFormData) {
+    if (window.getInSiteFormJSON) {
       return Promise.resolve();
     }
     if (this.redsysScriptPromise) {
@@ -100,7 +117,7 @@ export class PaymentService {
       const onLoad = () => {
         script.removeEventListener('load', onLoad);
         script.removeEventListener('error', onError);
-        if (window.getInSiteFormData) {
+        if (window.getInSiteFormJSON) {
           resolve();
         } else {
           reject(new Error('Redsys inSite script loaded but API is unavailable'));
@@ -119,35 +136,13 @@ export class PaymentService {
 
       if (!existing) {
         document.head.appendChild(script);
-      } else if (window.getInSiteFormData) {
+      } else if (window.getInSiteFormJSON) {
         // Script already loaded between our check and this branch.
         onLoad();
       }
     });
 
     return this.redsysScriptPromise;
-  }
-
-  /**
-   * Maps a raw Redsys inSite SDK success payload into our normalized
-   * InSiteTokenResult shape. Extracted so the dialog component does not
-   * have to know the exact SDK field names.
-   */
-  mapTokenResult(raw: RedsysInSiteResult): InSiteTokenResult {
-    const masked = (raw.Ds_Card_Number as string | undefined) ?? '';
-    const last4 = masked ? masked.replace(/\D/g, '').slice(-4) : undefined;
-    return {
-      idOper: (raw.Ds_Merchant_Identifier as string | undefined) ?? '',
-      cofTxnid: raw.Ds_Merchant_Cof_Txnid as string | undefined,
-      cardNumberMasked: masked || undefined,
-      last4,
-      cardBrand: raw.Ds_Card_Brand as string | undefined,
-      cardCountry: raw.Ds_Card_Country as string | undefined,
-      cardType: raw.Ds_Card_Type as string | undefined,
-      expiryDate: raw.Ds_ExpiryDate as string | undefined,
-      responseCode: (raw.Ds_Response as string | undefined) ?? '',
-      authorisationCode: raw.Ds_AuthorisationCode as string | undefined,
-    };
   }
 
   private toAppError(error: HttpErrorResponse | Error): Observable<never> {

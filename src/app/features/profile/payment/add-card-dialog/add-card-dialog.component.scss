@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md, 16px);
-  min-width: 320px;
-  max-width: 480px;
+  min-width: 360px;
+  max-width: 520px;
 }
 
 .add-card-dialog__description {
@@ -13,41 +13,13 @@
   line-height: 1.4;
 }
 
-.add-card-dialog__form {
+.add-card-dialog__labelForm {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm, 12px);
-}
 
-.add-card-dialog__field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-
-  label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--color-text-secondary, rgba(0, 0, 0, 0.6));
+  mat-form-field {
+    width: 100%;
   }
-}
-
-.add-card-dialog__row {
-  display: flex;
-  gap: var(--spacing-sm, 12px);
-}
-
-// Redsys injects an iframe inside these containers; the outer div needs
-// enough height for the iframe's default 40px card input rendering and a
-// visible border so users understand it's an input.
-.add-card-dialog__iframe {
-  min-height: 42px;
-  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.23));
-  border-radius: var(--radius-sm, 4px);
-  padding: 0 12px;
-  display: flex;
-  align-items: center;
-  background-color: var(--color-surface, #fff);
 }
 
 .add-card-dialog__status {
@@ -69,5 +41,22 @@
 
   &--error mat-icon {
     color: var(--color-error, #c62828);
+  }
+}
+
+// Redsys inSite iframe container. Kept in the DOM across state
+// transitions (see template comment) but hidden when not in the idle
+// state so it doesn't visually compete with loading spinners or
+// success/error panels.
+.add-card-dialog__redsys {
+  min-height: 280px;
+  display: block;
+
+  &--hidden {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 }

@@ -40,7 +40,7 @@ const wsBaseUrl = process.env.WS_BASE_URL || 'wss://wattbrews.me/ws';
 // production set REDSYS_INSITE_SCRIPT_URL to the real entradaInsite.js URL.
 const redsysInsiteScriptUrl =
   process.env.REDSYS_INSITE_SCRIPT_URL ||
-  'https://sis-t.redsys.es:25443/sis/NC/sandbox/entradaInsite.js';
+  'https://sis-t.redsys.es:25443/sis/NC/sandbox/redsysV3.js';
 
 // Determine if we're in production
 const isProduction = process.env.NODE_ENV === 'production' || process.argv.includes('--prod');

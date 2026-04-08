@@ -23,7 +23,9 @@
       "Bash(npx ng:*)",
       "Bash(npx tsc:*)",
       "Bash(npm --version)",
-      "Bash(npm ci:*)"
+      "Bash(npm ci:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:sis-d.redsys.es)"
     ]
   }
 }
