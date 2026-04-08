@@ -129,7 +129,6 @@ export const API_ENDPOINTS = {
     METHODS: '/payment/methods',
     ORDER: '/payment/order',
     SAVE: '/payment/save',
-    TOKENIZE: '/payment/tokenize',
     UPDATE: '/payment/update',
     DELETE: '/payment/delete',
   },

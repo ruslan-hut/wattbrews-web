@@ -27,7 +27,10 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:sis-d.redsys.es)",
       "Bash(curl:*)",
-      "Bash(node scripts/set-env.js --prod)"
+      "Bash(node scripts/set-env.js --prod)",
+      "Bash(powershell:*)",
+      "Bash(go mod:*)",
+      "Bash(go run:*)"
     ]
   }
 }

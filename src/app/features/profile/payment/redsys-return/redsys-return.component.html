@@ -1,0 +1,41 @@
+<section class="redsys-return">
+  <mat-card class="redsys-return__card">
+    <mat-card-content class="redsys-return__content">
+      @switch (status()) {
+        @case ('loading') {
+          <mat-spinner diameter="48"></mat-spinner>
+          <h2>
+            {{ translationService.getReactive('profile.paymentMethods.addCard.saving') }}
+          </h2>
+        }
+
+        @case ('success') {
+          <mat-icon class="redsys-return__icon redsys-return__icon--success">
+            check_circle
+          </mat-icon>
+          <h2>
+            {{ translationService.getReactive('profile.paymentMethods.addCard.success') }}
+          </h2>
+        }
+
+        @case ('failure') {
+          <mat-icon class="redsys-return__icon redsys-return__icon--error">error</mat-icon>
+          <h2>
+            {{ translationService.getReactive('profile.paymentMethods.addCard.errorGeneric') }}
+          </h2>
+        }
+      }
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        [disabled]="status() === 'loading'"
+        (click)="backToMethods()"
+      >
+        {{ translationService.getReactive('profile.paymentMethods.addCard.close') }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

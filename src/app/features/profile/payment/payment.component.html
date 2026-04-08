@@ -1,11 +1,28 @@
 <section class="payment-page">
   <header class="payment-page__header">
     <h2>{{ translationService.getReactive('profile.paymentMethods.title') }}</h2>
-    <button mat-flat-button color="primary" type="button" (click)="openAddCardDialog()">
-      <mat-icon>add</mat-icon>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="redirecting()"
+      (click)="addCard()"
+    >
+      @if (redirecting()) {
+        <mat-spinner diameter="18"></mat-spinner>
+      } @else {
+        <mat-icon>add</mat-icon>
+      }
       {{ translationService.getReactive('profile.paymentMethods.addCard.button') }}
     </button>
   </header>
+
+  @if (errorMessage()) {
+    <div class="payment-page__error">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
 
   @if (loading()) {
     <div class="payment-page__loading">

@@ -39,17 +39,6 @@ const wsBaseUrl = process.env.WS_BASE_URL || 'wss://wattbrews.me/ws';
 // Determine if we're in production
 const isProduction = process.env.NODE_ENV === 'production' || process.argv.includes('--prod');
 
-// Redsys inSite JS SDK URL. The script host must match the REST endpoint
-// the backend is talking to: use the production URL when the backend is
-// wired to `sis.redsys.es`, and the sandbox URL when it is wired to
-// `sis-t.redsys.es`. Default picks based on NODE_ENV; override via
-// REDSYS_INSITE_SCRIPT_URL when the two environments are mixed.
-const redsysInsiteScriptUrl =
-  process.env.REDSYS_INSITE_SCRIPT_URL ||
-  (isProduction
-    ? 'https://sis.redsys.es/sis/NC/redsysV3.js'
-    : 'https://sis-t.redsys.es:25443/sis/NC/sandbox/redsysV3.js');
-
 // Validate required environment variables
 if (!firebaseApiKey) {
   console.error('ERROR: FIREBASE_API_KEY environment variable is required!');
@@ -80,9 +69,6 @@ const envContent = `export const environment = {
     recaptchaSiteKey: "${recaptchaSiteKey}",
     defaultLang: 'es',
     supportedLangs: ['es', 'en'],
-    redsys: {
-      insiteScriptUrl: '${redsysInsiteScriptUrl}',
-    },
   };
 `;
 

@@ -14,6 +14,13 @@ export const profileRoutes: Routes = [
     loadComponent: () => import('./payment/payment.component').then(m => m.PaymentComponent)
   },
   {
+    path: 'payment/redsys-return',
+    loadComponent: () =>
+      import('./payment/redsys-return/redsys-return.component').then(
+        (m) => m.RedsysReturnComponent,
+      ),
+  },
+  {
     path: 'notifications',
     loadComponent: () => import('./notifications/notifications.component').then(m => m.NotificationsComponent)
   }

@@ -3,51 +3,45 @@ import { UserPaymentMethod } from './user-info.model';
 /**
  * Request body for POST /payment/order.
  *
- * For the Redsys inSite web flow set `mode` to `"insite"`; the backend will
- * then return the additional `Ds_*` triplet needed to drive the Redsys JS
- * SDK. Android and other native callers omit `mode` and receive the legacy
- * PaymentOrder shape.
+ * For the web "add card" flow (Redsys TPV Virtual redirect) set
+ * `mode: "web"` and include `return_url_ok` / `return_url_ko`. The
+ * backend responds with a signed payload the browser auto-POSTs to
+ * Redsys' hosted card form. Android and other native callers omit
+ * `mode` and receive the legacy PaymentOrder shape.
  */
 export interface PaymentOrderRequest {
   transaction_id?: number;
   order?: number;
-  amount: number; // cents (Redsys expects an integer amount in the smallest currency unit)
+  amount: number; // cents, 0 for zero-auth tokenization
   currency: string; // ISO 4217 numeric code, e.g. "978" for EUR
   description?: string;
   identifier?: string;
-  mode?: 'insite';
+  mode?: 'web';
+  return_url_ok?: string;
+  return_url_ko?: string;
+  language?: string; // Redsys numeric language code, e.g. "001" ES, "002" EN
 }
 
 /**
- * Response from POST /payment/order when `mode === "insite"`. The backend
- * only needs to hand the browser the three identifiers required by
- * Redsys `getInSiteFormJSON({ fuc, terminal, order })` — no signing, no
- * pre-computed `Ds_*` payload, because inSite does not use them.
+ * Response from POST /payment/order when `mode === "web"`. The backend
+ * has signed the Redsys TPV Virtual hosted-form payload; the frontend
+ * must auto-submit an HTML form to `form_url` with the three Ds_*
+ * fields as hidden inputs. The browser navigates away to Redsys.
  *
- * `order` is the integer order id we use internally (e.g. to look up
- * the stored PaymentOrder from /payment/tokenize); `order_number` is the
- * 12-digit zero-padded string Redsys expects in the `order` option.
+ * After the user completes the flow, Redsys redirects the browser to
+ * `return_url_ok` (or `return_url_ko`) and in parallel POSTs the
+ * authoritative result to the backend's notify endpoint, which stores
+ * the new PaymentMethod.
  */
-export interface InSiteOrderResponse {
+export interface WebOrderResponse {
   order: number;
   amount: number;
   currency: string;
   description: string;
-  merchant_code: string;
-  terminal: string;
-  order_number: string;
-}
-
-/**
- * Request body for POST /payment/tokenize. Sent by the web client once
- * the Redsys inSite SDK has handed back a temporary idOper (valid for
- * 30 minutes). The backend then calls Redsys REST with
- * DS_MERCHANT_IDOPER to exchange it for a permanent card token.
- */
-export interface TokenizeCardRequest {
-  order: number;
-  id_oper: string;
-  description?: string;
+  form_url: string;
+  Ds_SignatureVersion: string;
+  Ds_MerchantParameters: string;
+  Ds_Signature: string;
 }
 
 /**
@@ -58,10 +52,9 @@ export type SavePaymentMethodRequest = Partial<UserPaymentMethod> &
   Pick<UserPaymentMethod, 'identifier'>;
 
 /**
- * Response from POST /payment/save?include_list=1 and POST /payment/tokenize.
- * Both endpoints return `{ saved, methods }` on the web path. Android
- * ignores `include_list` on /payment/save and keeps getting a single
- * method object; it never calls /payment/tokenize.
+ * Response from POST /payment/save?include_list=1 used by the web flow.
+ * The backend returns `{ saved, methods }`; Android ignores this query flag
+ * and keeps getting a single method object.
  */
 export interface SavePaymentMethodResponse {
   saved: UserPaymentMethod;
