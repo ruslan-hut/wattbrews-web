@@ -59,6 +59,28 @@
                   {{ method.fail_count }}
                 </mat-chip>
               }
+              <div class="payment-page__actions">
+                @if (busyIdentifier() === method.identifier) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="translationService.getReactive('common.buttons.edit')"
+                    (click)="editMethod(method)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="translationService.getReactive('common.buttons.delete')"
+                    (click)="deleteMethod(method)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </div>
             </mat-card-content>
           </mat-card>
         </li>

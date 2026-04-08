@@ -213,34 +213,37 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
     this._selectedPaymentMethod.set(method);
   }
 
-  getTariffPrice(): number {
-    // Use UserInfoService methods directly like Profile component does
+  /**
+   * Returns the per-kWh tariff price as a display string. The backend
+   * sends prices in minor units (cents), so we route through
+   * UserInfoService.formatPriceFromMinor which divides by 100 and
+   * formats with two decimals. Defaults to "0.25" (25 cents) when no
+   * plan is loaded yet.
+   */
+  getTariffPrice(): string {
     const paymentPlans = this.userInfoService.getPaymentPlans();
-    
     if (paymentPlans.length === 0) {
-      return 0.25; // Default price when no plans loaded
+      return this.userInfoService.formatPriceFromMinor(25);
     }
-    
     const defaultPlan = paymentPlans.find(plan => plan.is_default);
     const activePlan = paymentPlans.find(plan => plan.is_active);
     const selectedPlan = defaultPlan || activePlan || paymentPlans[0];
-    
-    return selectedPlan?.price_per_kwh !== undefined ? selectedPlan.price_per_kwh : 0.25;
+    return this.userInfoService.formatPriceFromMinor(selectedPlan?.price_per_kwh ?? 25);
   }
 
-  getTariffHourlyPrice(): number {
-    // Use UserInfoService methods directly like Profile component does
+  /**
+   * Per-hour tariff price, same conversion as getTariffPrice.
+   * Defaults to "2.50" (250 cents) when no plan is loaded yet.
+   */
+  getTariffHourlyPrice(): string {
     const paymentPlans = this.userInfoService.getPaymentPlans();
-    
     if (paymentPlans.length === 0) {
-      return 2.50; // Default price when no plans loaded
+      return this.userInfoService.formatPriceFromMinor(250);
     }
-    
     const defaultPlan = paymentPlans.find(plan => plan.is_default);
     const activePlan = paymentPlans.find(plan => plan.is_active);
     const selectedPlan = defaultPlan || activePlan || paymentPlans[0];
-    
-    return selectedPlan?.price_per_hour !== undefined ? selectedPlan.price_per_hour : 2.50;
+    return this.userInfoService.formatPriceFromMinor(selectedPlan?.price_per_hour ?? 250);
   }
 
 

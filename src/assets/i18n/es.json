@@ -93,6 +93,7 @@
       "startCharging": "Iniciar carga en esta estación",
       "noAvailableConnectors": "No hay conectores disponibles",
       "stationOffline": "Estación offline",
+      "stationDisabled": "Estación deshabilitada",
       "accessRequired": "Acceso requerido"
     }
   },
@@ -139,7 +140,10 @@
       "minutesAgo_plural": "hace {{count}} minutos"
     },
     "tooltips": {
-      "startCharging": "Iniciar carga en esta estación"
+      "startCharging": "Iniciar carga en esta estación",
+      "stationOffline": "Estación offline",
+      "stationDisabled": "Estación deshabilitada",
+      "noAvailableConnectors": "No hay conectores disponibles"
     }
   },
   "footer": {
@@ -215,7 +219,23 @@
         "retry": "Reintentar",
         "submit": "Guardar tarjeta",
         "close": "Cerrar"
-      }
+      },
+      "edit": {
+        "title": "Editar tarjeta",
+        "nameLabel": "Nombre de la tarjeta",
+        "namePlaceholder": "p. ej. Visa personal",
+        "nameRequired": "Introduce un nombre",
+        "setDefault": "Usar como tarjeta predeterminada",
+        "save": "Guardar cambios",
+        "cancel": "Cancelar"
+      },
+      "delete": {
+        "title": "Eliminar tarjeta",
+        "message": "¿Seguro que quieres eliminar esta tarjeta? Esta acción no se puede deshacer.",
+        "success": "Tarjeta eliminada"
+      },
+      "updateError": "No hemos podido actualizar la tarjeta. Inténtalo de nuevo.",
+      "deleteError": "No hemos podido eliminar la tarjeta. Inténtalo de nuevo."
     },
     "settings": {
       "notifications": "profile.settings.notifications"
@@ -412,6 +432,9 @@
     "retry": "Reintentar",
     "buttons": {
       "save": "Guardar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "edit": "Editar",
       "retry": "Reintentar",
       "refresh": "Actualizar",
       "signIn": "Iniciar Sesión",

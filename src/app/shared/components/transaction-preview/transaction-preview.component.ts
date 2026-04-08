@@ -13,6 +13,7 @@ import { TransactionDetail } from '../../../core/models/transaction-detail.model
 import { EnergyChartComponent } from '../energy-chart/energy-chart.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
 import { SmallMapComponent } from '../small-map/small-map.component';
+import { DateUtils } from '../../utils/date.utils';
 
 @Component({
   selector: 'app-transaction-preview',
@@ -107,14 +108,14 @@ export class TransactionPreviewComponent implements OnInit {
   }
   
   protected formatDateTime(dateString: string): string {
-    return new Date(dateString).toLocaleString();
+    return DateUtils.formatDateTime(dateString);
   }
-  
-  
+
+
   protected formatEndTime(startTime: string, durationSeconds: number): string {
     const start = new Date(startTime);
     const end = new Date(start.getTime() + durationSeconds * 1000);
-    return end.toLocaleString();
+    return DateUtils.formatDateTime(end);
   }
   
   protected hasMeterValues(): boolean {

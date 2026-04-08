@@ -1,0 +1,20 @@
+<h2 mat-dialog-title class="confirm-delete-dialog__title">
+  <mat-icon class="confirm-delete-dialog__icon">warning</mat-icon>
+  {{ translationService.getReactive(data.titleKey) }}
+</h2>
+
+<mat-dialog-content class="confirm-delete-dialog__content">
+  <p>{{ translationService.getReactive(data.messageKey) }}</p>
+  @if (data.subject) {
+    <p class="confirm-delete-dialog__subject">{{ data.subject }}</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">
+    {{ translationService.getReactive('common.buttons.cancel') }}
+  </button>
+  <button mat-flat-button color="warn" type="button" (click)="confirm()">
+    {{ translationService.getReactive('common.buttons.delete') }}
+  </button>
+</mat-dialog-actions>

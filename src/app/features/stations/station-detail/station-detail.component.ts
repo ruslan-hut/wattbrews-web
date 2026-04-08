@@ -270,12 +270,7 @@ export class StationDetailComponent implements OnInit, OnDestroy {
 
   formatDateTime(dateString: string): string {
     if (!dateString) return 'N/A';
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleString();
-    } catch {
-      return dateString;
-    }
+    return DateUtils.formatDateTime(dateString) || 'N/A';
   }
 
   getTimeAgo(dateString: string): string {

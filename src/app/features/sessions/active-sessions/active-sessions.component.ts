@@ -17,6 +17,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { WsCommand, WsResponse, ResponseStatus } from '../../../core/models/websocket.model';
 import { EnergyChartComponent } from '../../../shared/components/energy-chart/energy-chart.component';
+import { DateUtils } from '../../../shared/utils/date.utils';
 import { TransactionStopDialogComponent } from '../../../shared/components/transaction-stop-dialog/transaction-stop-dialog.component';
 
 @Component({
@@ -338,27 +339,15 @@ export class ActiveSessionsComponent implements OnInit, OnDestroy {
   }
 
   protected formatDateTime(dateString: string): string {
-    if (!dateString) {
-      return '';
-    }
-    
+    if (!dateString) return '';
     const date = new Date(dateString);
-    const now = new Date();
-    
-    // Check if the date is today
-    const isToday = date.getDate() === now.getDate() &&
-                   date.getMonth() === now.getMonth() &&
-                   date.getFullYear() === now.getFullYear();
-    
-    if (isToday) {
-      // Show only time in HH:mm format
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      return `${hours}:${minutes}`;
-    } else {
-      // Show full date and time
-      return date.toLocaleString();
-    }
+    if (Number.isNaN(date.getTime())) return '';
+    // For today's events we only show the time (HH:mm) to save space
+    // in the active-session cards; older events show the full
+    // dd.MM.yyyy HH:mm timestamp.
+    return DateUtils.isToday(date)
+      ? DateUtils.formatTime(date)
+      : DateUtils.formatDateTime(date);
   }
 
   protected calculateAveragePower(consumed: number, durationSeconds: number): string {

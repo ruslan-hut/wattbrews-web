@@ -578,8 +578,43 @@ h6, .heading-6 {
 .mat-mdc-form-field {
   font-family: var(--font-family-body);
 
+  // Drive the MDC container shape token so the inner notched outline
+  // (the actual visible border) uses our radius instead of Material's
+  // default ~4px. Without this the background wrapper is rounded but
+  // the leading/trailing corner pieces that draw the border stay
+  // nearly square — in the error+focus state you see a red "square"
+  // frame overlaid on the rounded gray background.
+  --mdc-outlined-text-field-container-shape: var(--energy-radius-lg);
+
   .mat-mdc-text-field-wrapper {
     border-radius: var(--energy-radius-lg);
+  }
+
+  // Belt-and-braces: explicitly round the leading/trailing outline
+  // pieces in case a future Material release renames the token.
+  .mdc-notched-outline__leading {
+    border-top-left-radius: var(--energy-radius-lg);
+    border-bottom-left-radius: var(--energy-radius-lg);
+    // The leading piece needs enough width to show the curve at our
+    // radius — default 12px won't contain a 12px corner.
+    width: var(--energy-radius-lg);
+  }
+
+  .mdc-notched-outline__trailing {
+    border-top-right-radius: var(--energy-radius-lg);
+    border-bottom-right-radius: var(--energy-radius-lg);
+  }
+
+  // Nuke the browser's native focus outline on the inner input so we
+  // never see a second rectangular ring stacked on top of the Material
+  // outlined border.
+  .mat-mdc-input-element:focus,
+  .mat-mdc-input-element:focus-visible,
+  input:focus,
+  input:focus-visible,
+  textarea:focus,
+  textarea:focus-visible {
+    outline: none;
   }
 
   .mat-mdc-floating-label,
@@ -596,10 +631,23 @@ h6, .heading-6 {
 .mat-mdc-chip {
   font-family: var(--font-family-body);
   font-weight: 500;
+  // Drive every shape-related MDC token directly so the outline,
+  // background, and state layer all share our radius. The "square
+  // frame over rounded background" bug happens when the outline
+  // pseudo keeps the default ~4px corners while the filled
+  // background uses our XL radius.
   --mdc-chip-container-shape-radius: var(--energy-radius-xl);
+  // Kill the outline entirely — our chips are filled, not outlined,
+  // and the outline pseudo was what was drawing the stray rectangle.
+  --mdc-chip-outline-width: 0;
+  --mdc-chip-outline-color: transparent;
+  --mdc-chip-focus-outline-color: transparent;
+  --mdc-chip-disabled-outline-color: transparent;
   border-radius: var(--energy-radius-xl) !important;
 
-  // Force all internal elements to use the same border-radius
+  // Force all internal elements (including the inner-action pseudo
+  // elements that actually draw the outline in Material 21) to use
+  // the same border-radius.
   &,
   &::before,
   &::after,
@@ -607,7 +655,10 @@ h6, .heading-6 {
   .mdc-evolution-chip__cell--primary,
   .mdc-evolution-chip__action,
   .mdc-evolution-chip__action--primary,
+  .mdc-evolution-chip__action--primary::before,
+  .mdc-evolution-chip__action--primary::after,
   .mdc-evolution-chip__action--presentational,
+  .mdc-evolution-chip__action--presentational::before,
   .mat-mdc-chip-action,
   .mat-mdc-chip-graphic,
   .mdc-evolution-chip__graphic,
@@ -618,8 +669,12 @@ h6, .heading-6 {
     border-radius: var(--energy-radius-xl) !important;
   }
 
-  // Remove any borders that might cause misalignment
-  &::before {
+  // Remove any borders that might cause misalignment — target both
+  // the chip root AND the inner action pseudos where Material 21
+  // actually draws the outline.
+  &::before,
+  .mdc-evolution-chip__action--primary::before,
+  .mdc-evolution-chip__action--presentational::before {
     border: none !important;
   }
 
@@ -730,6 +785,77 @@ h6, .heading-6 {
   font-family: var(--font-family-display);
   font-weight: 600;
   letter-spacing: -0.02em;
+}
+
+// Dialog body + action-row typography. Without these overrides Material
+// applies its own Roboto-ish default and the text inside every dialog
+// looks off-theme — the body content, the form labels, the mat-dialog
+// buttons. Scoping the rule to dialog descendants keeps the rest of the
+// app unaffected.
+.mat-mdc-dialog-content,
+.mat-mdc-dialog-actions {
+  font-family: var(--font-family-body);
+
+  p, span, label, input, textarea, li {
+    font-family: var(--font-family-body);
+  }
+}
+
+// Card body typography. `.mat-mdc-card-title` already has its own
+// override elsewhere in this file; the content/subtitle slots were
+// left on Material defaults and end up looking different from the
+// surrounding text. Set both here so every mat-card renders body copy
+// in the theme font.
+.mat-mdc-card-content,
+.mat-mdc-card-subtitle {
+  font-family: var(--font-family-body);
+
+  p, span, li, small {
+    font-family: var(--font-family-body);
+  }
+}
+
+// Material button labels. The Material 21 MDC button wraps its text
+// in a `.mdc-button__label` span that carries its own font-family;
+// raising it up to the component host doesn't reach the label, so we
+// target the inner node directly.
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-flat-button,
+.mat-mdc-stroked-button,
+.mat-mdc-outlined-button,
+.mat-mdc-icon-button {
+  .mdc-button__label {
+    font-family: var(--font-family-body);
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+}
+
+// Chip text. Same nested-label problem as buttons — the visible text
+// lives inside `.mdc-evolution-chip__text-label` and needs an explicit
+// font-family or it falls back to Material's default.
+.mat-mdc-chip {
+  .mdc-evolution-chip__text-label {
+    font-family: var(--font-family-body);
+    font-weight: 500;
+  }
+}
+
+// Form field (input, label, hint, error) and checkbox label — the
+// whole control tree gets the body font so text inputs, form labels,
+// and validation errors look consistent with surrounding copy.
+.mat-mdc-form-field,
+.mat-mdc-form-field .mat-mdc-input-element,
+.mat-mdc-form-field .mdc-floating-label,
+.mat-mdc-form-field .mat-mdc-form-field-hint,
+.mat-mdc-form-field .mat-mdc-form-field-error {
+  font-family: var(--font-family-body);
+}
+
+.mat-mdc-checkbox .mdc-form-field,
+.mat-mdc-checkbox .mdc-label {
+  font-family: var(--font-family-body);
 }
 
 // Table overrides
@@ -1194,6 +1320,15 @@ button[mat-flat-button] {
   align-items: center;
   justify-content: center;
   padding: var(--energy-space-xl) var(--energy-space-lg) var(--energy-space-md) var(--energy-space-lg);
+
+  // Material 21 auto-wraps title + subtitle in `.mat-mdc-card-header-text`.
+  // We want that wrapper to span the full header width so our flex
+  // centering on the inner title row actually anchors to the card's
+  // horizontal midline instead of defaulting to wrap-content width.
+  .mat-mdc-card-header-text {
+    width: 100%;
+    margin: 0;
+  }
 }
 
 .login-title,
@@ -1202,7 +1337,8 @@ button[mat-flat-button] {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--energy-space-lg);
+  gap: var(--energy-space-sm);
+  width: 100%;
   font-size: var(--font-size-2xl);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -1215,16 +1351,35 @@ button[mat-flat-button] {
 .login-icon {
   color: var(--energy-primary);
   font-size: 1.8rem;
+  width: 1.8rem;
+  height: 1.8rem;
   flex-shrink: 0;
 }
 
 mat-card-subtitle,
 .mat-mdc-card-subtitle {
+  // Drive the MDC-level typography tokens directly so Material stops
+  // falling back to its Roboto default. Without these overrides the
+  // plain `font-family` rule below is shadowed by the token the
+  // component reads from its own scope.
+  --mat-card-subtitle-text-font: var(--font-family-body);
+  --mat-card-subtitle-text-size: var(--font-size-base);
+  --mat-card-subtitle-text-weight: 400;
+  --mat-card-subtitle-text-line-height: 1.4;
   font-family: var(--font-family-body);
   text-align: center;
   margin: 0;
   color: var(--energy-text-secondary);
   font-size: var(--font-size-base);
+}
+
+// Same token override for the card title — most title surfaces in the
+// app already have explicit font rules, but setting the MDC tokens
+// here makes every untouched card title fall back to our display font
+// instead of Material's default.
+.mat-mdc-card-title {
+  --mat-card-title-text-font: var(--font-family-display);
+  --mat-card-title-text-weight: 600;
 }
 
 .login-explanation {
@@ -1243,6 +1398,11 @@ mat-card-subtitle,
   padding: 0 var(--energy-space-lg);
   text-align: center;
   max-width: 400px;
+  // Don't let the text push its own container wider than the parent
+  // on narrow screens — without this the fixed horizontal padding
+  // chops 48px off the usable width, causing aggressive wrapping.
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .primary-login {
@@ -1257,6 +1417,46 @@ mat-card-subtitle,
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+// Mobile refinements for the login card — tighten padding, reduce the
+// title font, drop the explanation text padding so it uses the card's
+// own padding instead.
+@media (max-width: 480px) {
+  .login-container {
+    padding: var(--energy-space-md);
+  }
+
+  .login-card {
+    max-width: 100%;
+  }
+
+  .login-card mat-card-header {
+    padding: var(--energy-space-lg) var(--energy-space-md) var(--energy-space-sm) var(--energy-space-md);
+  }
+
+  .login-title,
+  .mat-mdc-card-title.login-title {
+    font-size: var(--font-size-xl);
+    gap: var(--energy-space-xs);
+  }
+
+  .login-icon {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .login-explanation {
+    margin-bottom: var(--energy-space-lg);
+  }
+
+  .explanation-text {
+    // Drop the fixed side padding on mobile — the card already pads
+    // its content, and the extra 48px here is what causes the text
+    // to wrap into 4 narrow lines.
+    padding: 0;
+  }
 }
 
 // =============================================================================

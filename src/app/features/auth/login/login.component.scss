@@ -38,30 +38,68 @@
   justify-content: center;
   gap: var(--energy-space-sm);
   transition: all var(--transition-base);
-}
-
-.google-button {
-  background: var(--color-google);
-  color: white;
   border: none;
 }
 
-.google-button:hover:not(:disabled) {
-  background: var(--color-google-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--color-google-shadow);
+// Drive Angular Material 21 "raised" (MDC protected) button tokens so
+// every state — idle, hover, focus, pressed, disabled — renders in the
+// brand color instead of intermittently flashing Material defaults.
+// Setting just `background: var(--color-google)` works only for the
+// idle container; disabled and state-layer states are owned by their
+// own tokens and must be overridden explicitly.
+.google-button.mat-mdc-raised-button {
+  // Container + label
+  --mdc-protected-button-container-color: var(--color-google);
+  --mdc-protected-button-label-text-color: #fff;
+  // Disabled state — keep the brand tint but dim the label
+  --mdc-protected-button-disabled-container-color: var(--color-google);
+  --mdc-protected-button-disabled-label-text-color: rgba(255, 255, 255, 0.75);
+  // Hover / focus / pressed state layer — white overlay on brand color
+  --mat-protected-button-state-layer-color: #fff;
+  --mat-protected-button-hover-state-layer-opacity: 0.1;
+  --mat-protected-button-focus-state-layer-opacity: 0.14;
+  --mat-protected-button-pressed-state-layer-opacity: 0.18;
+
+  // Defensive plain-CSS fallbacks in case a future Material release
+  // renames the tokens — ensures the idle state is still correct.
+  background-color: var(--color-google);
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    --mdc-protected-button-container-color: var(--color-google-dark);
+    background-color: var(--color-google-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--color-google-shadow);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+  }
 }
 
-.email-link-button {
-  background: var(--energy-primary);
-  color: white;
-  border: none;
-}
+.email-link-button.mat-mdc-raised-button {
+  --mdc-protected-button-container-color: var(--energy-primary);
+  --mdc-protected-button-label-text-color: #fff;
+  --mdc-protected-button-disabled-container-color: var(--energy-primary);
+  --mdc-protected-button-disabled-label-text-color: rgba(255, 255, 255, 0.75);
+  --mat-protected-button-state-layer-color: #fff;
+  --mat-protected-button-hover-state-layer-opacity: 0.1;
+  --mat-protected-button-focus-state-layer-opacity: 0.14;
+  --mat-protected-button-pressed-state-layer-opacity: 0.18;
 
-.email-link-button:hover:not(:disabled) {
-  background: var(--energy-primary-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  background-color: var(--energy-primary);
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    --mdc-protected-button-container-color: var(--energy-primary-dark);
+    background-color: var(--energy-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+  }
 }
 
 .button-icon {
@@ -123,7 +161,7 @@
 
 @media (max-width: 480px) {
   .login-form {
-    padding: var(--energy-space-lg);
+    padding: 0;
     max-width: 100%;
   }
 
@@ -134,5 +172,22 @@
   .sign-in-button {
     height: 44px;
     font-size: var(--font-size-sm);
+  }
+
+  // Tighten the email-link notice box on mobile — the default padding
+  // combined with the 4px left border eats most of the card width,
+  // leaving very little room for the explanatory text to breathe.
+  .email-link-explanation {
+    padding: var(--energy-space-sm) var(--energy-space-md);
+    margin-bottom: var(--energy-space-md);
+  }
+
+  .email-link-explanation .explanation-text {
+    padding: 0;
+    line-height: 1.5;
+  }
+
+  .email-link-success {
+    padding: var(--energy-space-md);
   }
 }

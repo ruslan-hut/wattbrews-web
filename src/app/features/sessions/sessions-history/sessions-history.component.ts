@@ -24,6 +24,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Transaction } from '../../../core/models/transaction.model';
 import { TransactionPreviewComponent } from '../../../shared/components/transaction-preview/transaction-preview.component';
 import { SimpleTranslationService } from '../../../core/services/simple-translation.service';
+import { DateUtils } from '../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-sessions-history',
@@ -852,8 +853,7 @@ export class SessionsHistoryComponent implements OnInit, OnDestroy {
   }
   
   protected formatDateTime(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleString();
+    return DateUtils.formatDateTime(dateString);
   }
   
   protected formatRelativeTime(dateString: string): string {

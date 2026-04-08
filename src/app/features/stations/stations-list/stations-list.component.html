@@ -128,15 +128,16 @@
                   <mat-icon>play_arrow</mat-icon>
                   {{ translationService.getReactive('stations.startCharge') }}
                 </button>
-                <button
-                  mat-button
-                  color="primary"
-                  [disabled]="!hasViewDetailsAccess()"
-                  [matTooltip]="getViewDetailsTooltip(station)"
-                  (click)="viewStationDetails(station.charge_point_id)">
-                  <mat-icon>visibility</mat-icon>
-                  {{ translationService.getReactive('stations.viewDetails') }}
-                </button>
+                @if (hasViewDetailsAccess()) {
+                  <button
+                    mat-button
+                    color="primary"
+                    [matTooltip]="getViewDetailsTooltip(station)"
+                    (click)="viewStationDetails(station.charge_point_id)">
+                    <mat-icon>visibility</mat-icon>
+                    {{ translationService.getReactive('stations.viewDetails') }}
+                  </button>
+                }
               </mat-card-actions>
             </mat-card>
           }

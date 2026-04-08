@@ -19,6 +19,7 @@ import { Transaction } from '../../core/models/transaction.model';
 import { TransactionDetail } from '../../core/models/transaction-detail.model';
 import { WsCommand, WsResponse, ResponseStage, ResponseStatus } from '../../core/models/websocket.model';
 import { TransactionPreviewComponent } from '../../shared/components/transaction-preview/transaction-preview.component';
+import { DateUtils } from '../../shared/utils/date.utils';
 import { SimpleTranslationService } from '../../core/services/simple-translation.service';
 import { ConnectorUtils } from '../../shared/utils/connector.utils';
 import { SortByConnectorIdPipe } from '../../shared/pipes';
@@ -393,13 +394,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   protected formatTransactionDateTime(timeStart: string): string {
-    const date = new Date(timeStart);
-    return date.toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    return DateUtils.formatDateTime(timeStart);
   }
 
   protected hasViewDetailsAccess(): boolean {

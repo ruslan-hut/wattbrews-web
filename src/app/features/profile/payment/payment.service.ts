@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { API_ENDPOINTS } from '../../../core/constants/app.constants';
 import { AppError, AppErrorFactory } from '../../../core/models/error.model';
+import { UserPaymentMethod } from '../../../core/models/user-info.model';
 import {
   PaymentOrderRequest,
   SavePaymentMethodRequest,
@@ -92,6 +93,69 @@ export class PaymentService {
         { params: { include_list: '1' } },
       )
       .pipe(catchError((err) => this.toAppError(err)));
+  }
+
+  /**
+   * Updates the mutable fields of a saved card (description and
+   * is_default). The backend only writes those two fields — other
+   * fields in the payload are ignored, so callers can safely pass the
+   * full `UserPaymentMethod` object they already hold.
+   */
+  updateMethod(method: UserPaymentMethod): Observable<UserPaymentMethod> {
+    return this.http
+      .post<UserPaymentMethod>(
+        `${this.baseUrl}${API_ENDPOINTS.PAYMENT.UPDATE}`,
+        method,
+      )
+      .pipe(catchError((err) => this.toAppError(err)));
+  }
+
+  /**
+   * Deletes a saved card. Only `identifier` is strictly required —
+   * the backend enforces that the method belongs to the authenticated
+   * user and refuses cross-user deletes.
+   */
+  deleteMethod(method: UserPaymentMethod): Observable<UserPaymentMethod> {
+    return this.http
+      .post<UserPaymentMethod>(
+        `${this.baseUrl}${API_ENDPOINTS.PAYMENT.DELETE}`,
+        method,
+      )
+      .pipe(catchError((err) => this.toAppError(err)));
+  }
+
+  /**
+   * Shared "add card" kickoff used by both /profile/payment and the
+   * profile-page Payment Methods tab. Creates a signed Redsys order
+   * then triggers the full-page form redirect to Redsys. Resolves
+   * when the POST /payment/order call is in flight (not when Redsys
+   * responds — the browser has already navigated away by then).
+   *
+   * The caller is expected to flip a "redirecting" spinner before
+   * calling and an error message on rejection. On success this
+   * function never returns (browser navigates away).
+   */
+  startAddCardFlow(languageCode: '001' | '002'): Promise<void> {
+    const origin = window.location.origin;
+    const returnBase = `${origin}/profile/payment/redsys-return`;
+    return new Promise<void>((resolve, reject) => {
+      this.createWebOrder({
+        amount: 0,
+        currency: '978',
+        description: 'Card registration',
+        return_url_ok: `${returnBase}?result=ok`,
+        return_url_ko: `${returnBase}?result=ko`,
+        language: languageCode,
+      }).subscribe({
+        next: (order) => {
+          this.submitRedsysForm(order);
+          // Browser is navigating away; resolve so the caller can
+          // keep its spinner up until unload without erroring.
+          resolve();
+        },
+        error: (err) => reject(err),
+      });
+    });
   }
 
   private toAppError(error: HttpErrorResponse | Error): Observable<never> {

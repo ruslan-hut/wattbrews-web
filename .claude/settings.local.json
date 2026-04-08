@@ -30,7 +30,8 @@
       "Bash(node scripts/set-env.js --prod)",
       "Bash(powershell:*)",
       "Bash(go mod:*)",
-      "Bash(go run:*)"
+      "Bash(go run:*)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('src/assets/i18n/en.json','utf8'\\)\\); JSON.parse\\(require\\('fs'\\).readFileSync\\('src/assets/i18n/es.json','utf8'\\)\\); console.log\\('JSON OK'\\);\")"
     ]
   }
 }

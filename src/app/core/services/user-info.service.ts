@@ -212,6 +212,23 @@ export class UserInfoService {
   }
 
   /**
+   * Convert a backend minor-unit price (cents) to a display-ready
+   * major-unit string with two decimals. The backend sends tariff
+   * prices and payment amounts in the smallest currency unit — e.g.
+   * `25` means €0.25 — so every UI surface that shows a price must go
+   * through this helper instead of rendering the raw value.
+   *
+   * Returns "0.00" for null/undefined/NaN so the template never
+   * displays a bare dash or "NaN".
+   */
+  formatPriceFromMinor(value: number | null | undefined): string {
+    if (value === null || value === undefined || Number.isNaN(value)) {
+      return '0.00';
+    }
+    return (value / 100).toFixed(2);
+  }
+
+  /**
    * Clear error state
    */
   clearError(): void {
