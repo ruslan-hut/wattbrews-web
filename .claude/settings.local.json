@@ -21,7 +21,9 @@
       "Bash(go build:*)",
       "Bash(go vet:*)",
       "Bash(npx ng:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm --version)",
+      "Bash(npm ci:*)"
     ]
   }
 }
