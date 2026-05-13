@@ -103,6 +103,20 @@ html {
   --energy-info-dark: #2563eb;
 
   // =========================================================================
+  // RGB CHANNELS for rgba() composition
+  // Use as `rgba(var(--energy-primary-rgb), 0.3)` when an existing
+  // shadow / glow token doesn't fit and the design calls for a
+  // brand-tinted translucent fill. Keep in sync with the hex tokens
+  // above.
+  // =========================================================================
+  --energy-primary-rgb: 139, 92, 246;
+  --energy-secondary-rgb: 20, 184, 166;
+  --energy-success-rgb: 16, 185, 129;
+  --energy-warning-rgb: 245, 158, 11;
+  --energy-error-rgb: 239, 68, 68;
+  --energy-info-rgb: 59, 130, 246;
+
+  // =========================================================================
   // BRAND COLORS (Third-party authentication)
   // =========================================================================
   --color-google: #4285f4;
@@ -202,6 +216,14 @@ html {
   --energy-glass-bg-light: rgba(255, 255, 255, 0.85);
   --energy-glass-bg-heavy: rgba(255, 255, 255, 0.95);
   --energy-glass-border: rgba(255, 255, 255, 0.3);
+
+  // Translucent-white overlays used on top of the violet hero gradient
+  // (toolbars, footers, hover surfaces sitting on a colored base).
+  // Dark mode dials these down so the same overlay reads subtler
+  // against the darker chrome.
+  --energy-overlay-soft: rgba(255, 255, 255, 0.1);
+  --energy-overlay-medium: rgba(255, 255, 255, 0.15);
+  --energy-overlay-strong: rgba(255, 255, 255, 0.2);
 
   // =========================================================================
   // GRADIENTS
@@ -310,11 +332,26 @@ html {
   --energy-error: #f87171;
   --energy-info: #60a5fa;
 
+  // RGB channels — keep in sync with the dark-mode hex shifts above
+  // so rgba() compositions like glow shadows brighten too.
+  --energy-primary-rgb: 167, 139, 250;
+  --energy-secondary-rgb: 45, 212, 191;
+  --energy-success-rgb: 52, 211, 153;
+  --energy-warning-rgb: 251, 191, 36;
+  --energy-error-rgb: 248, 113, 113;
+  --energy-info-rgb: 96, 165, 250;
+
   // Glassmorphism dark mode
   --energy-glass-bg: rgba(24, 24, 27, 0.8);
   --energy-glass-bg-light: rgba(39, 39, 42, 0.85);
   --energy-glass-bg-heavy: rgba(39, 39, 42, 0.95);
   --energy-glass-border: rgba(255, 255, 255, 0.1);
+
+  // Overlay tokens — same hue (white), lower alpha against the darker
+  // surface so a button hover reads as "lifted" rather than "blown out".
+  --energy-overlay-soft: rgba(255, 255, 255, 0.05);
+  --energy-overlay-medium: rgba(255, 255, 255, 0.1);
+  --energy-overlay-strong: rgba(255, 255, 255, 0.15);
 
   // Shadows (darker, more subtle)
   --energy-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);

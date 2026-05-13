@@ -37,22 +37,14 @@
   gap: var(--energy-space-sm);
   padding: var(--energy-space-xs) var(--energy-space-sm);
   border-radius: var(--energy-radius-md);
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--energy-overlay-soft);
   backdrop-filter: var(--energy-blur-sm);
   -webkit-backdrop-filter: var(--energy-blur-sm);
   transition: background-color var(--transition-base);
   margin-left: var(--energy-space-sm);
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-
-  [data-theme="dark"] & {
-    background-color: rgba(255, 255, 255, 0.05);
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
+    background-color: var(--energy-overlay-strong);
   }
 }
 

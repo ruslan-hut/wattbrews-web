@@ -177,7 +177,7 @@
     --mdc-protected-button-container-color: var(--energy-primary-dark);
     background-color: var(--energy-primary-dark);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 12px rgba(var(--energy-primary-rgb), 0.3);
   }
 
   &:disabled {

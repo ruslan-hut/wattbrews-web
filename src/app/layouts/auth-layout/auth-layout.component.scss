@@ -10,10 +10,10 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--energy-overlay-soft);
   backdrop-filter: var(--energy-blur-lg);
   -webkit-backdrop-filter: var(--energy-blur-lg);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid var(--energy-overlay-strong);
   box-shadow: var(--energy-shadow-sm);
 }
 
@@ -56,7 +56,7 @@
   transition: background-color var(--transition-base);
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: var(--energy-overlay-medium);
   }
 }
 
@@ -71,14 +71,14 @@
 
 .auth-footer {
   font-family: var(--font-family-body), sans-serif;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--energy-overlay-soft);
   backdrop-filter: var(--energy-blur-sm);
   -webkit-backdrop-filter: var(--energy-blur-sm);
   color: white;
   text-align: center;
   padding: var(--energy-space-md);
   margin-top: auto;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--energy-overlay-soft);
 }
 
 .footer-links {
