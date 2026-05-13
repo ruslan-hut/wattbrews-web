@@ -530,12 +530,40 @@ h6, .heading-6 {
   --mat-card-subtitle-text-size: var(--font-size-base);
   --mat-card-subtitle-text-weight: 400;
   --mat-card-subtitle-text-line-height: 1.4;
-  font-family: var(--font-family-body);
 }
 
-// Button overrides
-.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button, .mat-mdc-flat-button, .mat-mdc-icon-button, .mat-button, button[mat-button], button[mat-raised-button], button[mat-flat-button] {
+// Card body typography. Material's content/subtitle slots fall back to
+// Roboto without these explicit rules. Hits inline tags so a bare
+// `<span>Foo</span>` inside the card body still picks up Inter.
+.mat-mdc-card-content,
+.mat-mdc-card-subtitle {
   font-family: var(--font-family-body);
+
+  p, span, li, small {
+    font-family: var(--font-family-body);
+  }
+}
+
+// Button typography — Material 21 wraps button text in `.mdc-button__label`
+// which carries its own font-family; setting the host alone doesn't
+// reach the label, so we hit both layers in one block.
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-stroked-button,
+.mat-mdc-flat-button,
+.mat-mdc-icon-button,
+.mat-button,
+button[mat-button],
+button[mat-raised-button],
+button[mat-flat-button] {
+  font-family: var(--font-family-body);
+
+  .mdc-button__label {
+    font-family: var(--font-family-body);
+    font-weight: 500;
+    letter-spacing: 0;
+  }
 }
 
 .mat-mdc-button {
@@ -717,6 +745,14 @@ h6, .heading-6 {
     background-color: var(--energy-info-light);
     color: var(--energy-info-dark);
   }
+
+  // Chip text — the visible label lives in `.mdc-evolution-chip__text-label`,
+  // which carries its own Material font-family; needs an explicit rule
+  // to inherit Inter.
+  .mdc-evolution-chip__text-label {
+    font-family: var(--font-family-body);
+    font-weight: 500;
+  }
 }
 
 // Toolbar override
@@ -811,58 +847,9 @@ h6, .heading-6 {
   }
 }
 
-// Card body typography. `.mat-mdc-card-title` already has its own
-// override elsewhere in this file; the content/subtitle slots were
-// left on Material defaults and end up looking different from the
-// surrounding text. Set both here so every mat-card renders body copy
-// in the theme font.
-.mat-mdc-card-content,
-.mat-mdc-card-subtitle {
-  font-family: var(--font-family-body);
-
-  p, span, li, small {
-    font-family: var(--font-family-body);
-  }
-}
-
-// Material button labels. The Material 21 MDC button wraps its text
-// in a `.mdc-button__label` span that carries its own font-family;
-// raising it up to the component host doesn't reach the label, so we
-// target the inner node directly.
-.mat-mdc-button,
-.mat-mdc-raised-button,
-.mat-mdc-flat-button,
-.mat-mdc-stroked-button,
-.mat-mdc-outlined-button,
-.mat-mdc-icon-button {
-  .mdc-button__label {
-    font-family: var(--font-family-body);
-    font-weight: 500;
-    letter-spacing: 0;
-  }
-}
-
-// Chip text. Same nested-label problem as buttons — the visible text
-// lives inside `.mdc-evolution-chip__text-label` and needs an explicit
-// font-family or it falls back to Material's default.
-.mat-mdc-chip {
-  .mdc-evolution-chip__text-label {
-    font-family: var(--font-family-body);
-    font-weight: 500;
-  }
-}
-
-// Form field (input, label, hint, error) and checkbox label — the
-// whole control tree gets the body font so text inputs, form labels,
-// and validation errors look consistent with surrounding copy.
-.mat-mdc-form-field,
-.mat-mdc-form-field .mat-mdc-input-element,
-.mat-mdc-form-field .mdc-floating-label,
-.mat-mdc-form-field .mat-mdc-form-field-hint,
-.mat-mdc-form-field .mat-mdc-form-field-error {
-  font-family: var(--font-family-body);
-}
-
+// Checkbox label font — `.mat-mdc-form-field` handles its own internals
+// in the form-field block above; the checkbox uses a separate label
+// container that needs an explicit rule.
 .mat-mdc-checkbox .mdc-form-field,
 .mat-mdc-checkbox .mdc-label {
   font-family: var(--font-family-body);
