@@ -1,9 +1,92 @@
-// Note: Card title/subtitle styles are in global styles.scss (.mat-mdc-card-title, .mat-mdc-card-subtitle)
+// Note: Global Material card title/subtitle token overrides live in
+// styles.scss. Everything below is local to <app-login>.
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: var(--energy-space-xl);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  background: var(--energy-glass-bg-heavy);
+  backdrop-filter: var(--energy-blur-lg);
+  -webkit-backdrop-filter: var(--energy-blur-lg);
+  border: 1px solid var(--energy-border);
+  border-radius: var(--energy-radius-2xl);
+
+  mat-card-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--energy-space-xl) var(--energy-space-lg) var(--energy-space-md) var(--energy-space-lg);
+
+    // Material 21 auto-wraps title + subtitle in
+    // `.mat-mdc-card-header-text` — a Material-generated wrapper that
+    // does not receive Angular's encapsulation attribute, so we have
+    // to pierce the view boundary to size it. Without this the inner
+    // flex-centered title row anchors to wrap-content width instead of
+    // the card's horizontal midline.
+    ::ng-deep .mat-mdc-card-header-text {
+      width: 100%;
+      margin: 0;
+    }
+  }
+}
+
+.login-title,
+.mat-mdc-card-title.login-title {
+  font-family: var(--font-family-display), sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--energy-space-sm);
+  width: 100%;
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--energy-text-primary);
+  margin-bottom: var(--energy-space-sm);
+  padding: 0;
+  text-align: center;
+}
+
+.login-icon {
+  color: var(--energy-primary);
+  font-size: 1.8rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+}
+
+.login-explanation {
+  margin-bottom: var(--energy-space-xl);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
 
 .login-explanation .explanation-text {
   font-family: var(--font-family-body), sans-serif;
+  color: var(--energy-text-secondary);
   font-size: var(--font-size-sm);
   line-height: 1.5;
+  margin: 0;
+  padding: 0 var(--energy-space-lg);
+  text-align: center;
+  max-width: 400px;
+  // Don't let the text push its own container wider than the parent
+  // on narrow screens — without this the fixed horizontal padding
+  // chops 48px off the usable width, causing aggressive wrapping.
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .login-form {
@@ -159,7 +242,45 @@
   font-size: var(--font-size-sm);
 }
 
+// Mobile refinements — tighten padding, reduce the title font, drop
+// the explanation text padding so it uses the card's own padding
+// instead.
 @media (max-width: 480px) {
+  .login-container {
+    padding: var(--energy-space-md);
+  }
+
+  .login-card {
+    max-width: 100%;
+
+    mat-card-header {
+      padding: var(--energy-space-lg) var(--energy-space-md) var(--energy-space-sm) var(--energy-space-md);
+    }
+  }
+
+  .login-title,
+  .mat-mdc-card-title.login-title {
+    font-size: var(--font-size-xl);
+    gap: var(--energy-space-xs);
+  }
+
+  .login-icon {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .login-explanation {
+    margin-bottom: var(--energy-space-lg);
+  }
+
+  .login-explanation .explanation-text {
+    // Drop the fixed side padding on mobile — the card already pads
+    // its content, and the extra 48px here is what causes the text
+    // to wrap into 4 narrow lines.
+    padding: 0;
+  }
+
   .login-form {
     padding: 0;
     max-width: 100%;

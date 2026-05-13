@@ -3,7 +3,15 @@
   max-width: 1920px;
   margin: 0 auto;
 
-  // Card title styling is in global styles.scss (.websocket-test-container mat-card-title)
+  // Card title font. `.mat-mdc-card-title` is added by Material at
+  // render time but lives on a direct template element (mat-card-title)
+  // so it picks up encapsulation without ::ng-deep.
+  mat-card-title,
+  .mat-mdc-card-title {
+    font-family: var(--font-family-display), sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
 
   // Header Section
   .header {

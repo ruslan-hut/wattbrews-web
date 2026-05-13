@@ -136,7 +136,18 @@
 
 .profile-tabs {
   margin-top: var(--energy-space-xl);
-  // Tab label styles are in global styles.scss (.profile-tabs .mat-mdc-tab-labels)
+
+  // Material's tab label container and text-label live below the
+  // template boundary, so we have to pierce encapsulation to set
+  // the font.
+  ::ng-deep .mat-mdc-tab-labels {
+    .mat-mdc-tab-label-container,
+    .mdc-tab__text-label {
+      font-family: var(--font-family-body), sans-serif;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+  }
 }
 
 .tab-content {
