@@ -1,5 +1,5 @@
 .websocket-test-container {
-  padding: 24px;
+  padding: var(--energy-space-lg);
   max-width: 1920px;
   margin: 0 auto;
 
@@ -15,18 +15,18 @@
 
   // Header Section
   .header {
-    margin-bottom: 24px;
+    margin-bottom: var(--energy-space-lg);
 
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: var(--energy-space-md);
 
       .title-section {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: var(--energy-space-md);
 
         h1 {
           font-family: var(--font-family-display), sans-serif;
@@ -47,7 +47,7 @@
     .connection-info {
       font-family: var(--font-family-body), sans-serif;
       display: flex;
-      gap: 24px;
+      gap: var(--energy-space-lg);
       flex-wrap: wrap;
       color: var(--energy-text-secondary);
       font-size: 14px;
@@ -55,7 +55,7 @@
       span {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--energy-space-sm);
 
         mat-icon {
           font-size: 18px;
@@ -70,8 +70,8 @@
   .main-content {
     display: grid;
     grid-template-columns: 25% 45% 30%;
-    gap: 16px;
-    margin: 24px 0;
+    gap: var(--energy-space-md);
+    margin: var(--energy-space-lg) 0;
     min-height: 600px;
 
     @media (max-width: 1200px) {
@@ -110,7 +110,7 @@
   // Command Panel
   .command-panel {
     mat-card-content {
-      padding-top: 8px;
+      padding-top: var(--energy-space-sm);
     }
 
     .full-width {
@@ -120,18 +120,18 @@
     form {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      margin-top: 8px;
+      gap: var(--energy-space-md);
+      margin-top: var(--energy-space-sm);
     }
 
     .section-divider {
-      margin: 24px 0 16px;
+      margin: var(--energy-space-lg) 0 var(--energy-space-md);
     }
 
     .quick-actions {
       h3 {
         font-family: var(--font-family-display), sans-serif;
-        margin: 0 0 16px;
+        margin: 0 0 var(--energy-space-md);
         font-size: 16px;
         font-weight: 600;
         letter-spacing: -0.02em;
@@ -140,10 +140,10 @@
 
       .quick-action-btn {
         font-family: var(--font-family-body), sans-serif;
-        margin-bottom: 8px;
+        margin-bottom: var(--energy-space-sm);
 
         mat-icon {
-          margin-right: 8px;
+          margin-right: var(--energy-space-sm);
         }
       }
     }
@@ -152,15 +152,15 @@
   // Message Log Panel
   .message-log-panel {
     mat-card-content {
-      padding-top: 8px;
+      padding-top: var(--energy-space-sm);
     }
 
     .filters {
       display: flex;
       gap: 12px;
       align-items: flex-start;
-      margin-bottom: 24px;
-      margin-top: 8px;
+      margin-bottom: var(--energy-space-lg);
+      margin-top: var(--energy-space-sm);
       flex-wrap: wrap;
 
       .filter-field {
@@ -180,7 +180,7 @@
       max-height: 500px;
       border: 1px solid var(--energy-border);
       border-radius: var(--energy-radius-md);
-      padding: 8px;
+      padding: var(--energy-space-sm);
       background-color: var(--energy-surface-variant);
 
       .no-messages {
@@ -191,13 +191,13 @@
         justify-content: center;
         height: 100%;
         color: var(--energy-text-disabled);
-        padding: 48px;
+        padding: var(--energy-space-2xl);
 
         mat-icon {
           font-size: 64px;
           width: 64px;
           height: 64px;
-          margin-bottom: 16px;
+          margin-bottom: var(--energy-space-md);
         }
       }
 
@@ -206,7 +206,7 @@
         border: 1px solid var(--energy-border);
         border-radius: var(--energy-radius-md);
         padding: 12px;
-        margin-bottom: 8px;
+        margin-bottom: var(--energy-space-sm);
         cursor: pointer;
         transition: all 0.2s ease;
         animation: slideIn 0.3s ease-out;
@@ -224,8 +224,8 @@
         .message-header {
           display: flex;
           align-items: center;
-          gap: 8px;
-          margin-bottom: 8px;
+          gap: var(--energy-space-sm);
+          margin-bottom: var(--energy-space-sm);
           flex-wrap: wrap;
 
           .timestamp {
@@ -253,7 +253,7 @@
           font-family: var(--font-family-body), sans-serif;
           font-size: 13px;
           color: var(--energy-text-primary);
-          margin-bottom: 8px;
+          margin-bottom: var(--energy-space-sm);
         }
 
         .message-fields {
@@ -278,7 +278,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 16px;
+      margin-top: var(--energy-space-md);
 
       .message-count {
         font-family: var(--font-family-body), sans-serif;
@@ -288,7 +288,7 @@
 
       .footer-actions {
         display: flex;
-        gap: 8px;
+        gap: var(--energy-space-sm);
       }
     }
   }
@@ -296,16 +296,16 @@
   // Inspector Panel
   .inspector-panel {
     mat-card-content {
-      padding-top: 8px;
+      padding-top: var(--energy-space-sm);
     }
 
     .inspector-content {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: var(--energy-space-md);
       overflow-y: auto;
       max-height: 500px;
-      margin-top: 8px;
+      margin-top: var(--energy-space-sm);
 
       .parsed-fields {
         h3 {
@@ -320,12 +320,12 @@
         .field-list {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: var(--energy-space-sm);
 
           .field-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 12px;
+            padding: var(--energy-space-sm) 12px;
             background-color: var(--energy-surface-variant);
             border-radius: var(--energy-radius-md);
 
@@ -348,7 +348,7 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 8px;
+          margin-bottom: var(--energy-space-sm);
 
           h3 {
             font-family: var(--font-family-display), sans-serif;
@@ -363,7 +363,7 @@
         .json-content {
           background-color: var(--energy-gray-900);
           color: var(--energy-gray-300);
-          padding: 16px;
+          padding: var(--energy-space-md);
           border-radius: var(--energy-radius-md);
           font-family: var(--font-family-mono), monospace;
           font-size: 12px;
@@ -387,27 +387,27 @@
         font-size: 64px;
         width: 64px;
         height: 64px;
-        margin-bottom: 16px;
+        margin-bottom: var(--energy-space-md);
       }
     }
   }
 
   // Statistics Card
   .statistics-card {
-    margin-top: 16px;
+    margin-top: var(--energy-space-md);
 
     mat-card-header {
       margin-bottom: 20px;
     }
 
     mat-card-content {
-      padding-top: 8px;
+      padding-top: var(--energy-space-sm);
     }
 
     .statistics-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
+      gap: var(--energy-space-lg);
 
       .stat-item {
         display: flex;
@@ -416,13 +416,13 @@
 
         mat-icon {
           color: var(--energy-text-muted);
-          margin-top: 4px;
+          margin-top: var(--energy-space-xs);
         }
 
         .stat-content {
           display: flex;
           flex-direction: column;
-          gap: 4px;
+          gap: var(--energy-space-xs);
 
           .stat-label {
             font-family: var(--font-family-body), sans-serif;
@@ -442,8 +442,8 @@
           .breakdown {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
+            gap: var(--energy-space-sm);
+            margin-top: var(--energy-space-sm);
 
             .breakdown-item {
               mat-chip {
