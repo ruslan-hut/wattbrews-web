@@ -19,8 +19,7 @@ interface ConnectorLike {
  * ```
  */
 @Pipe({
-  name: 'sortByConnectorId',
-  standalone: true
+  name: 'sortByConnectorId'
 })
 export class SortByConnectorIdPipe implements PipeTransform {
   transform<T extends ConnectorLike>(connectors: T[] | null | undefined): T[] {

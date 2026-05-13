@@ -559,5 +559,21 @@
     "subMessage": "Update now to get the latest features.",
     "updateNow": "Update Now",
     "later": "Later"
+  },
+  "welcome": {
+    "eyebrow": "Charge with WattBrews",
+    "headlinePart1": "Plug in.",
+    "headlinePart2": "Power up.",
+    "subhead": "Pick how you'd like to start your session at this station.",
+    "continueWeb": "Continue on the web",
+    "continueWebHint": "Sign in or create an account in your browser",
+    "getApp": "Get the Android app",
+    "getAppHint": "Faster sessions, push notifications, offline maps",
+    "footerHint": "No download required. Both options use the same account."
+  },
+  "legal": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "back": "Back"
   }
 }

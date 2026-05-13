@@ -25,7 +25,6 @@ import { SortByConnectorIdPipe } from '../../../shared/pipes';
 
 @Component({
   selector: 'app-stations-list',
-  standalone: true,
   imports: [
     FormsModule,
     MatIconModule,

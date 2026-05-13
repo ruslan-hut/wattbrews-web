@@ -562,5 +562,21 @@
     "subMessage": "Actualiza ahora para obtener las últimas funciones.",
     "updateNow": "Actualizar Ahora",
     "later": "Más Tarde"
+  },
+  "welcome": {
+    "eyebrow": "Carga con WattBrews",
+    "headlinePart1": "Conecta.",
+    "headlinePart2": "Carga.",
+    "subhead": "Elige cómo quieres iniciar tu sesión en esta estación.",
+    "continueWeb": "Continuar en la web",
+    "continueWebHint": "Inicia sesión o crea una cuenta desde el navegador",
+    "getApp": "Descargar la app para Android",
+    "getAppHint": "Sesiones más rápidas, notificaciones y mapas sin conexión",
+    "footerHint": "Sin descargas obligatorias. Ambas opciones usan la misma cuenta."
+  },
+  "legal": {
+    "privacy": "Política de Privacidad",
+    "terms": "Términos y Condiciones",
+    "back": "Atrás"
   }
 }

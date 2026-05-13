@@ -19,7 +19,6 @@ import { SimpleTranslationService } from '../../core/services/simple-translation
 
 @Component({
   selector: 'app-main-layout',
-  standalone: true,
   imports: [
     RouterOutlet,
     RouterModule,

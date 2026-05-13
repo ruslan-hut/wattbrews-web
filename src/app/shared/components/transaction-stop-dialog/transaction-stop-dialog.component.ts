@@ -25,7 +25,6 @@ interface TransactionStopState {
 
 @Component({
   selector: 'app-transaction-stop-dialog',
-  standalone: true,
   imports: [
     MatDialogModule,
     MatProgressBarModule,

@@ -87,6 +87,14 @@
             <mat-icon>person</mat-icon>
             <span>{{ translationService.getReactive('nav.profile') }}</span>
           </button>
+          <button mat-menu-item routerLink="/legal/privacy">
+            <mat-icon>privacy_tip</mat-icon>
+            <span>{{ translationService.getReactive('legal.privacy') }}</span>
+          </button>
+          <button mat-menu-item routerLink="/legal/terms">
+            <mat-icon>gavel</mat-icon>
+            <span>{{ translationService.getReactive('legal.terms') }}</span>
+          </button>
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>{{ translationService.getReactive('auth.signout') }}</span>

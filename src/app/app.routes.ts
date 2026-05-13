@@ -31,6 +31,14 @@ export const routes: Routes = [
     loadChildren: () => import('./features/tools/tools.routes').then(m => m.toolsRoutes)
   },
   {
+    path: 'welcome',
+    loadChildren: () => import('./features/welcome/welcome.routes').then(m => m.welcomeRoutes)
+  },
+  {
+    path: 'legal',
+    loadChildren: () => import('./features/legal/legal.routes').then(m => m.legalRoutes)
+  },
+  {
     path: '**',
     redirectTo: '/dashboard'
   }

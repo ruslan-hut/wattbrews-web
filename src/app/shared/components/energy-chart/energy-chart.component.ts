@@ -38,7 +38,6 @@ echarts.use([
 
 @Component({
   selector: 'app-energy-chart',
-  standalone: true,
   imports: [MatIconModule, NgxEchartsDirective],
   providers: [
     provideEchartsCore({ echarts })

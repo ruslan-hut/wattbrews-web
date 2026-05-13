@@ -312,3 +312,28 @@
     padding: var(--energy-space-md);
   }
 }
+
+.login-legal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--energy-space-sm);
+  padding: var(--energy-space-md) var(--energy-space-lg) var(--energy-space-lg);
+  font-size: var(--font-size-xs);
+  color: var(--energy-text-muted);
+}
+
+.login-legal__link {
+  color: var(--energy-text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 200ms ease;
+
+  &:hover {
+    color: var(--energy-primary);
+  }
+}
+
+.login-legal__sep {
+  color: var(--energy-text-muted);
+}

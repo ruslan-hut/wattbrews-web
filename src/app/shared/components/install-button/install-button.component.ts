@@ -7,7 +7,6 @@ import { InstallPromptService } from '../../../core/services/install-prompt.serv
 
 @Component({
   selector: 'app-install-button',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatButtonModule,

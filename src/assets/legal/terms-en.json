@@ -1,0 +1,38 @@
+{
+  "title": "Terms and conditions",
+  "introduction": "Please read the following terms and conditions carefully before using this website. By using our application, you agree to these terms and conditions. If you do not agree to these terms and conditions, please do not use this application.",
+  "thirdPartyNotice": "If you accessed this application through a third-party website, that entity might also collect data about you. In this case, you should review the terms of use and privacy policy of that software and website before installing and using the application to understand how the collected data will be used.",
+  "sections": [
+    {
+      "title": "1. General",
+      "content": [
+        "This application is provided by the company &#171;H2PLT&#187;, with an office in Lleida, Spain. The company &#171;H2PLT&#187; is not responsible for, and expressly disclaims all liability for, damages of any kind arising out of use, reference to, or reliance on any information contained within this application. While the information contained within this application is periodically updated, no guarantee is given that the information provided in this application is correct, complete, and up-to-date. This application may include links providing direct access to other Internet resources, including websites. The company is not responsible for the accuracy or content of information contained in these sites."
+        ]
+    },
+    {
+      "title": "2. Links",
+      "content": [
+        "Links from this application to third-party sites do not constitute an endorsement by the company of the parties or their products and services. The appearance on this application of advertisements and product or service information does not constitute an endorsement by the company, and the company has not investigated the claims made by any advertiser. Product information is based solely on material received from suppliers."
+        ]
+    },
+    {
+      "title": "3. Use of the application",
+      "content": [
+        "The company &#171;H2PLT&#187; authorizes you to view, copy, download, and print the documents, audio, and video contained in this application subject to the following conditions:\n\nThe documents, audio, and video may be used solely for personal, non-commercial, and informational purposes.\nThe documents, audio, and video may not be modified.\nNothing contained in this application should be construed as granting, by implication, estoppel, or otherwise, any license or right to use any trademark displayed in this application without the written permission of the company &#171;H2PLT&#187; or such third party that may own the trademarks displayed in this application.\n\nThe company &#171;H2PLT&#187; assumes no responsibility for material created or published by third parties that the company's application has a link to."
+        ]
+    },
+    {
+      "title": "4. Disclaimer of warranties",
+      "content": [
+        "Information provided in this application is provided 'as is' without warranty of any kind, either express or implied, including, without limitation, warranties of merchantability, fitness for a particular purpose, and non-infringement. The company &#171;H2PLT&#187; uses reasonable efforts to include accurate and up-to-date information in this application; it does not, however, make any warranties or representations as to its accuracy or completeness. The company &#171;H2PLT&#187; periodically adds, changes, improves, or updates the information and documents in this application without notice. The company &#171;H2PLT&#187; assumes no liability or responsibility for any errors or omissions in the content of this application. Your use of this application is at your own risk."
+        ]
+    }
+  ],
+  "contactInfo": {
+    "title": "5. Contact Information",
+    "content": [
+      "For general inquiries, contact our user support service, the details of which are published on the website <a href=\"https://wattbrews.me/\">https://wattbrews.me/</a>",
+      "You have the legal right to know what personal data about you is held by the organization and how these data are processed. If you want to know what data we have about you, send a letter mentioning the site where you registered or used our application to: <a href=\"mailto:support@h2plt.energy\">support@h2plt.energy</a>. Note that we may require you to confirm your identity and pay a small administrative fee."
+    ]
+  }
+}

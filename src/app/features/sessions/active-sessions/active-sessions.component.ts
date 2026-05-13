@@ -22,7 +22,6 @@ import { TransactionStopDialogComponent } from '../../../shared/components/trans
 
 @Component({
   selector: 'app-active-sessions',
-  standalone: true,
   imports: [
     MatCardModule,
     MatIconModule,

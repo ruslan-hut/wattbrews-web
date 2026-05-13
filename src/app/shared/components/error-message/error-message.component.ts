@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-error-message',
-  standalone: true,
   imports: [MatIconModule, MatButtonModule],
   templateUrl: './error-message.component.html',
   styleUrl: './error-message.component.scss',

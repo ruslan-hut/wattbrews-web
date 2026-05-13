@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the design system and guidelines for the WattBrews charging station management application. Our design follows a modern **Purple/Teal** theme that reflects innovation in electric vehicle charging infrastructure.
+This document defines the design system and guidelines for the WattBrews charging station management application. The visual language follows the **H2PLT / WattBrews brand**: a vibrant **green** primary paired with a **warm gold** accent (echoing the WATTBREWS band on the app icon), with a deep forest green for hero surfaces. The palette signals clean energy, hydrogen innovation, and EV charging in one cohesive system.
 
 ## Design Principles
 
@@ -20,36 +20,36 @@ This document defines the design system and guidelines for the WattBrews chargin
 
 ## Color Palette
 
-### Primary Colors (Purple Tech)
+### Primary Colors (Brand Green)
 ```scss
---energy-primary: #8b5cf6;         // Main purple
---energy-primary-light: #a78bfa;   // Light variant
---energy-primary-lighter: #c4b5fd; // Lighter variant
---energy-primary-dark: #7c3aed;    // Dark variant
---energy-primary-darker: #6d28d9;  // Darker variant
---energy-primary-50: #f5f3ff;      // Background tint
---energy-primary-100: #ede9fe;     // Light background
---energy-primary-900: #4c1d95;     // Darkest
+--energy-primary: #16a34a;         // Main brand green
+--energy-primary-light: #22c55e;   // Light variant
+--energy-primary-lighter: #4ade80; // Lighter variant
+--energy-primary-dark: #15803d;    // Dark variant
+--energy-primary-darker: #166534;  // Darker variant
+--energy-primary-50: #f0fdf4;      // Background tint
+--energy-primary-100: #dcfce7;     // Light background
+--energy-primary-900: #14532d;     // Darkest
 ```
 
-### Secondary Colors (Teal Accent)
+### Secondary Colors (Warm Gold Accent)
 ```scss
---energy-secondary: #14b8a6;         // Main teal
---energy-secondary-light: #2dd4bf;   // Light variant
---energy-secondary-lighter: #5eead4; // Lighter variant
---energy-secondary-dark: #0d9488;    // Dark variant
---energy-secondary-darker: #0f766e;  // Darker variant
---energy-secondary-50: #f0fdfa;      // Background tint
---energy-secondary-100: #ccfbf1;     // Light background
---energy-secondary-900: #134e4a;     // Darkest
+--energy-secondary: #eab308;         // Main gold (icon band)
+--energy-secondary-light: #facc15;   // Light variant
+--energy-secondary-lighter: #fde047; // Lighter variant
+--energy-secondary-dark: #ca8a04;    // Dark variant
+--energy-secondary-darker: #a16207;  // Darker variant
+--energy-secondary-50: #fefce8;      // Background tint
+--energy-secondary-100: #fef9c3;     // Light background
+--energy-secondary-900: #713f12;     // Darkest
 ```
 
-### Tertiary Colors (Indigo)
+### Tertiary Colors (Deep Forest Green)
 ```scss
---energy-tertiary: #6366f1;        // Main indigo
---energy-tertiary-light: #818cf8;  // Light variant
---energy-tertiary-dark: #4f46e5;   // Dark variant
---energy-tertiary-50: #eef2ff;     // Background tint
+--energy-tertiary: #047857;        // Forest green (hero gradients)
+--energy-tertiary-light: #10b981;  // Light variant
+--energy-tertiary-dark: #065f46;   // Dark variant
+--energy-tertiary-50: #ecfdf5;     // Background tint
 ```
 
 ### Neutral Colors (Gray Scale)

@@ -77,7 +77,7 @@ export class ThemeService {
     }
     metaThemeColor.setAttribute(
       'content',
-      theme === 'dark' ? '#18181b' : '#8b5cf6'
+      theme === 'dark' ? '#18181b' : '#16a34a'
     );
   }
 

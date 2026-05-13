@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -19,9 +19,8 @@ export interface TranslationResponse {
   providedIn: 'root'
 })
 export class TranslationProxyService {
-  private readonly apiUrl = '/api/translate'; // Your backend endpoint
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = '/api/translate';
 
   translateKeys(request: TranslationRequest): Observable<TranslationResponse> {
     return this.http.post<TranslationResponse>(this.apiUrl, request);

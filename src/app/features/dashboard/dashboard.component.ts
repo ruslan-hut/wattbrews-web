@@ -26,7 +26,6 @@ import { SortByConnectorIdPipe } from '../../shared/pipes';
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
   imports: [
     MatCardModule,
     MatIconModule,

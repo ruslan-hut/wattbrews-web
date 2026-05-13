@@ -1,37 +1,36 @@
-import { Component, signal, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
-
-import { RouterOutlet, RouterModule } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRippleModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { LanguageSwitcherComponent } from '../../shared';
 import { SimpleTranslationService } from '../../core/services';
 
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=energy.h2plt.evcharge';
+
 @Component({
-  selector: 'app-auth-layout',
+  selector: 'app-welcome',
   imports: [
-    RouterOutlet,
     RouterModule,
-    MatToolbarModule,
-    MatIconModule,
     MatButtonModule,
+    MatIconModule,
+    MatRippleModule,
     MatProgressSpinnerModule,
     LanguageSwitcherComponent
-],
-  templateUrl: './auth-layout.component.html',
-  styleUrl: './auth-layout.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  ],
+  templateUrl: './welcome.component.html',
+  styleUrl: './welcome.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'welcome-host' }
 })
-export class AuthLayoutComponent implements OnInit {
-  readonly translationService = inject(SimpleTranslationService);
-  protected readonly appTitle = signal('WattBrews');
-
-  // Translation loading state
+export class WelcomeComponent implements OnInit {
+  protected readonly translationService = inject(SimpleTranslationService);
   protected readonly translationsLoading = signal(true);
+  protected readonly playStoreUrl = PLAY_STORE_URL;
 
   ngOnInit(): void {
-    // Initialize translations first
     this.initializeTranslations();
   }
 
@@ -39,9 +38,9 @@ export class AuthLayoutComponent implements OnInit {
     try {
       this.translationsLoading.set(true);
       await this.translationService.initializeTranslationsAsync();
-      this.translationsLoading.set(false);
     } catch (error) {
       console.error('Failed to initialize translations:', error);
+    } finally {
       this.translationsLoading.set(false);
     }
   }

@@ -30,7 +30,6 @@ import {
  */
 @Component({
   selector: 'app-payment',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatCardModule,

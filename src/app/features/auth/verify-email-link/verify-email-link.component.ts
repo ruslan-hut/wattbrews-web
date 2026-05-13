@@ -14,7 +14,6 @@ import { NotificationService } from '../../../core/services/notification.service
 
 @Component({
   selector: 'app-verify-email-link',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,

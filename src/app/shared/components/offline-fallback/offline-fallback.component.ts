@@ -7,7 +7,6 @@ import { OfflineService } from '../../../core/services/offline.service';
 
 @Component({
   selector: 'app-offline-fallback',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatCardModule,

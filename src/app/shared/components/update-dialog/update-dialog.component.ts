@@ -7,7 +7,6 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
 
 @Component({
   selector: 'app-update-dialog',
-  standalone: true,
   imports: [
     MatDialogModule,
     MatButtonModule,

@@ -26,7 +26,6 @@ interface TransactionStartState {
 
 @Component({
   selector: 'app-transaction-start-dialog',
-  standalone: true,
   imports: [
     MatDialogModule,
     MatProgressBarModule,

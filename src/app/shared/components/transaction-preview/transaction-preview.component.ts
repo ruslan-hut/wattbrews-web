@@ -17,7 +17,6 @@ import { DateUtils } from '../../utils/date.utils';
 
 @Component({
   selector: 'app-transaction-preview',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatDialogModule,

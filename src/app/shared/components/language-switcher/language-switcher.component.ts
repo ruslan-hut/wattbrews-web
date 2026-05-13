@@ -7,7 +7,6 @@ import { SimpleTranslationService } from '../../../core/services/simple-translat
 
 @Component({
   selector: 'app-language-switcher',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatButtonModule,

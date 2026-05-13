@@ -27,7 +27,6 @@ import { SortByConnectorIdPipe } from '../../../shared';
 
 @Component({
   selector: 'app-station-detail',
-  standalone: true,
   imports: [
     MatCardModule,
     MatIconModule,

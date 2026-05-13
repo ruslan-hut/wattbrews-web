@@ -32,7 +32,6 @@ export interface EditCardDialogResult {
 
 @Component({
   selector: 'app-edit-card-dialog',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatButtonModule,

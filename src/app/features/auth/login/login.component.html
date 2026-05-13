@@ -91,6 +91,16 @@
           }
         </div>
       </mat-card-content>
+
+      <mat-card-actions class="login-legal">
+        <a routerLink="/legal/privacy" class="login-legal__link">
+          {{ translationService.getReactive('legal.privacy') }}
+        </a>
+        <span class="login-legal__sep" aria-hidden="true">·</span>
+        <a routerLink="/legal/terms" class="login-legal__link">
+          {{ translationService.getReactive('legal.terms') }}
+        </a>
+      </mat-card-actions>
     </mat-card>
   }
 </div>

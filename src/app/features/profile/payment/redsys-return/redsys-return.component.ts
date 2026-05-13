@@ -34,7 +34,6 @@ type ReturnStatus = 'loading' | 'success' | 'failure';
 
 @Component({
   selector: 'app-redsys-return',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatCardModule,

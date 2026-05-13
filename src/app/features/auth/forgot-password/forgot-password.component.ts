@@ -14,7 +14,6 @@ import { NotificationService } from '../../../core/services';
 
 @Component({
   selector: 'app-forgot-password',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,

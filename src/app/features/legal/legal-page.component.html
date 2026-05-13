@@ -1,0 +1,91 @@
+<div class="legal">
+  <header class="legal__bar">
+    <div class="legal__brand">
+      <img
+        class="legal__mark"
+        src="assets/brand/wattbrews-mark.png"
+        alt=""
+        width="40"
+        height="40"
+        aria-hidden="true"
+      />
+      <span class="legal__wordmark">{{ translationService.getReactive('app.title') }}</span>
+    </div>
+    <div class="legal__actions">
+      <button
+        mat-button
+        type="button"
+        class="legal__back"
+        (click)="goBack()"
+        [attr.aria-label]="translationService.getReactive('legal.back')"
+      >
+        <mat-icon>arrow_back</mat-icon>
+        <span>{{ translationService.getReactive('legal.back') }}</span>
+      </button>
+      <app-language-switcher></app-language-switcher>
+    </div>
+  </header>
+
+  <main class="legal__content">
+    @if (loading()) {
+      <div class="legal__loading">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    } @else if (content(); as page) {
+      <article class="legal__article">
+        <h1 class="legal__title" [innerHTML]="page.title"></h1>
+
+        @if (page.introduction) {
+          <p [innerHTML]="page.introduction"></p>
+        }
+        @if (page.thirdPartyNotice) {
+          <p class="legal__notice" [innerHTML]="page.thirdPartyNotice"></p>
+        }
+
+        @for (section of page.sections; track $index) {
+          <section class="legal__section">
+            <h2 [innerHTML]="section.title"></h2>
+            @for (paragraph of section.content; track $index) {
+              <p [innerHTML]="paragraph"></p>
+            }
+            @if (section.list) {
+              <ul>
+                @for (item of section.list; track $index) {
+                  <li [innerHTML]="item"></li>
+                }
+              </ul>
+            }
+          </section>
+        }
+
+        @if (page.unsubscribeSection; as us) {
+          <section class="legal__section">
+            <h2 [innerHTML]="us.title"></h2>
+            @for (paragraph of us.content; track $index) {
+              <p [innerHTML]="paragraph"></p>
+            }
+          </section>
+        }
+
+        @if (page.contactInfo; as info) {
+          <section class="legal__section legal__section--contact">
+            <h2 [innerHTML]="info.title"></h2>
+            @for (paragraph of info.content; track $index) {
+              <p [innerHTML]="paragraph"></p>
+            }
+          </section>
+        }
+      </article>
+    }
+  </main>
+
+  <footer class="legal__foot">
+    <a routerLink="/legal/privacy" class="legal__link">
+      {{ translationService.getReactive('legal.privacy') }}
+    </a>
+    <span class="legal__sep" aria-hidden="true">·</span>
+    <a routerLink="/legal/terms" class="legal__link">
+      {{ translationService.getReactive('legal.terms') }}
+    </a>
+  </footer>
+</div>

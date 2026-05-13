@@ -28,7 +28,6 @@ import { DateUtils } from '../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-sessions-history',
-  standalone: true,
   imports: [
     MatCardModule,
     MatIconModule,

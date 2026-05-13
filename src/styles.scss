@@ -16,9 +16,9 @@
 html {
   @include mat.theme((
     color: (
-      primary: mat.$violet-palette,
-      secondary: mat.$cyan-palette,
-      tertiary: mat.$azure-palette,
+      primary: mat.$green-palette,
+      secondary: mat.$yellow-palette,
+      tertiary: mat.$spring-green-palette,
     ),
     typography: (
       font-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
@@ -40,36 +40,36 @@ html {
   --font-family-mono: 'Courier New', Courier, monospace;
 
   // =========================================================================
-  // PRIMARY: Purple Tech
+  // PRIMARY: Brand Green (H2PLT / WattBrews)
   // =========================================================================
-  --energy-primary: #8b5cf6;
-  --energy-primary-light: #a78bfa;
-  --energy-primary-lighter: #c4b5fd;
-  --energy-primary-dark: #7c3aed;
-  --energy-primary-darker: #6d28d9;
-  --energy-primary-50: #f5f3ff;
-  --energy-primary-100: #ede9fe;
-  --energy-primary-900: #4c1d95;
+  --energy-primary: #16a34a;
+  --energy-primary-light: #22c55e;
+  --energy-primary-lighter: #4ade80;
+  --energy-primary-dark: #15803d;
+  --energy-primary-darker: #166534;
+  --energy-primary-50: #f0fdf4;
+  --energy-primary-100: #dcfce7;
+  --energy-primary-900: #14532d;
 
   // =========================================================================
-  // SECONDARY: Teal Accent
+  // SECONDARY: Warm Gold Accent (echoes the WATTBREWS band on the app icon)
   // =========================================================================
-  --energy-secondary: #14b8a6;
-  --energy-secondary-light: #2dd4bf;
-  --energy-secondary-lighter: #5eead4;
-  --energy-secondary-dark: #0d9488;
-  --energy-secondary-darker: #0f766e;
-  --energy-secondary-50: #f0fdfa;
-  --energy-secondary-100: #ccfbf1;
-  --energy-secondary-900: #134e4a;
+  --energy-secondary: #eab308;
+  --energy-secondary-light: #facc15;
+  --energy-secondary-lighter: #fde047;
+  --energy-secondary-dark: #ca8a04;
+  --energy-secondary-darker: #a16207;
+  --energy-secondary-50: #fefce8;
+  --energy-secondary-100: #fef9c3;
+  --energy-secondary-900: #713f12;
 
   // =========================================================================
-  // TERTIARY: Indigo
+  // TERTIARY: Deep Forest Green (hero gradients, secondary surfaces)
   // =========================================================================
-  --energy-tertiary: #6366f1;
-  --energy-tertiary-light: #818cf8;
-  --energy-tertiary-dark: #4f46e5;
-  --energy-tertiary-50: #eef2ff;
+  --energy-tertiary: #047857;
+  --energy-tertiary-light: #10b981;
+  --energy-tertiary-dark: #065f46;
+  --energy-tertiary-50: #ecfdf5;
 
   // =========================================================================
   // NEUTRAL GRAY SCALE
@@ -109,8 +109,8 @@ html {
   // brand-tinted translucent fill. Keep in sync with the hex tokens
   // above.
   // =========================================================================
-  --energy-primary-rgb: 139, 92, 246;
-  --energy-secondary-rgb: 20, 184, 166;
+  --energy-primary-rgb: 22, 163, 74;
+  --energy-secondary-rgb: 234, 179, 8;
   --energy-success-rgb: 16, 185, 129;
   --energy-warning-rgb: 245, 158, 11;
   --energy-error-rgb: 239, 68, 68;
@@ -175,9 +175,9 @@ html {
   --energy-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
   --energy-shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
 
-  // Glassmorphism shadows
-  --energy-shadow-glass: 0 8px 32px rgba(139, 92, 246, 0.1);
-  --energy-shadow-glass-lg: 0 16px 48px rgba(139, 92, 246, 0.15);
+  // Glassmorphism shadows (brand-tinted)
+  --energy-shadow-glass: 0 8px 32px rgba(22, 163, 74, 0.12);
+  --energy-shadow-glass-lg: 0 16px 48px rgba(22, 163, 74, 0.18);
 
   // Elevated shadow
   --energy-shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.08),
@@ -185,15 +185,15 @@ html {
                             0 0 0 1px rgba(0, 0, 0, 0.02);
 
   // Glow effects — layered (soft halo + tight rim) for a real "charged" feel
-  --energy-glow-primary: 0 0 0 1px rgba(139, 92, 246, 0.35),
-                         0 0 12px rgba(139, 92, 246, 0.25),
-                         0 0 32px rgba(139, 92, 246, 0.18);
-  --energy-glow-primary-strong: 0 0 0 1px rgba(139, 92, 246, 0.55),
-                                0 0 18px rgba(139, 92, 246, 0.45),
-                                0 0 48px rgba(139, 92, 246, 0.28);
-  --energy-glow-secondary: 0 0 0 1px rgba(20, 184, 166, 0.35),
-                           0 0 12px rgba(20, 184, 166, 0.25),
-                           0 0 32px rgba(20, 184, 166, 0.18);
+  --energy-glow-primary: 0 0 0 1px rgba(22, 163, 74, 0.35),
+                         0 0 12px rgba(22, 163, 74, 0.25),
+                         0 0 32px rgba(22, 163, 74, 0.18);
+  --energy-glow-primary-strong: 0 0 0 1px rgba(22, 163, 74, 0.55),
+                                0 0 18px rgba(22, 163, 74, 0.45),
+                                0 0 48px rgba(22, 163, 74, 0.28);
+  --energy-glow-secondary: 0 0 0 1px rgba(234, 179, 8, 0.35),
+                           0 0 12px rgba(234, 179, 8, 0.25),
+                           0 0 32px rgba(234, 179, 8, 0.18);
   --energy-glow-success: 0 0 0 1px rgba(16, 185, 129, 0.35),
                          0 0 12px rgba(16, 185, 129, 0.25);
   --energy-glow-warning: 0 0 0 1px rgba(245, 158, 11, 0.35),
@@ -202,7 +202,7 @@ html {
                          0 0 12px rgba(239, 68, 68, 0.25);
   --energy-glow-info:    0 0 0 1px rgba(59, 130, 246, 0.35),
                          0 0 12px rgba(59, 130, 246, 0.25);
-  --energy-glow-focus-ring: 0 0 0 3px rgba(139, 92, 246, 0.25);
+  --energy-glow-focus-ring: 0 0 0 3px rgba(22, 163, 74, 0.25);
 
   // =========================================================================
   // GLASSMORPHISM UTILITIES
@@ -217,7 +217,7 @@ html {
   --energy-glass-bg-heavy: rgba(255, 255, 255, 0.95);
   --energy-glass-border: rgba(255, 255, 255, 0.3);
 
-  // Translucent-white overlays used on top of the violet hero gradient
+  // Translucent-white overlays used on top of the brand-green hero gradient
   // (toolbars, footers, hover surfaces sitting on a colored base).
   // Dark mode dials these down so the same overlay reads subtler
   // against the darker chrome.
@@ -299,31 +299,31 @@ html {
   --energy-border-subtle: var(--energy-gray-800);
   --energy-border-strong: var(--energy-gray-600);
 
-  // Primary (slightly brighter for dark mode visibility)
-  --energy-primary: #a78bfa;
-  --energy-primary-light: #c4b5fd;
-  --energy-primary-lighter: #ddd6fe;
-  --energy-primary-dark: #8b5cf6;
-  --energy-primary-darker: #7c3aed;
-  --energy-primary-50: rgba(139, 92, 246, 0.1);
-  --energy-primary-100: rgba(139, 92, 246, 0.18);
-  --energy-primary-900: #c4b5fd;
+  // Primary (brand green, brightened for dark mode visibility)
+  --energy-primary: #22c55e;
+  --energy-primary-light: #4ade80;
+  --energy-primary-lighter: #86efac;
+  --energy-primary-dark: #16a34a;
+  --energy-primary-darker: #15803d;
+  --energy-primary-50: rgba(22, 163, 74, 0.12);
+  --energy-primary-100: rgba(22, 163, 74, 0.2);
+  --energy-primary-900: #86efac;
 
-  // Secondary (slightly brighter)
-  --energy-secondary: #2dd4bf;
-  --energy-secondary-light: #5eead4;
-  --energy-secondary-lighter: #99f6e4;
-  --energy-secondary-dark: #14b8a6;
-  --energy-secondary-darker: #0d9488;
-  --energy-secondary-50: rgba(20, 184, 166, 0.1);
-  --energy-secondary-100: rgba(20, 184, 166, 0.18);
-  --energy-secondary-900: #5eead4;
+  // Secondary (warm gold, brightened)
+  --energy-secondary: #facc15;
+  --energy-secondary-light: #fde047;
+  --energy-secondary-lighter: #fef08a;
+  --energy-secondary-dark: #eab308;
+  --energy-secondary-darker: #ca8a04;
+  --energy-secondary-50: rgba(234, 179, 8, 0.12);
+  --energy-secondary-100: rgba(234, 179, 8, 0.2);
+  --energy-secondary-900: #fde047;
 
-  // Tertiary (indigo) — brighter for dark mode visibility
-  --energy-tertiary: #818cf8;
-  --energy-tertiary-light: #a5b4fc;
-  --energy-tertiary-dark: #6366f1;
-  --energy-tertiary-50: rgba(99, 102, 241, 0.12);
+  // Tertiary (emerald) — brighter for dark mode visibility
+  --energy-tertiary: #10b981;
+  --energy-tertiary-light: #34d399;
+  --energy-tertiary-dark: #059669;
+  --energy-tertiary-50: rgba(16, 185, 129, 0.14);
 
   // Status base colors (brighter bases for dark mode — the -light and -dark
   // variants are adjusted further down for background/text contrast)
@@ -334,8 +334,8 @@ html {
 
   // RGB channels — keep in sync with the dark-mode hex shifts above
   // so rgba() compositions like glow shadows brighten too.
-  --energy-primary-rgb: 167, 139, 250;
-  --energy-secondary-rgb: 45, 212, 191;
+  --energy-primary-rgb: 34, 197, 94;
+  --energy-secondary-rgb: 250, 204, 21;
   --energy-success-rgb: 52, 211, 153;
   --energy-warning-rgb: 251, 191, 36;
   --energy-error-rgb: 248, 113, 113;
@@ -365,7 +365,7 @@ html {
   // Gradients
   --energy-gradient-surface: linear-gradient(135deg, var(--energy-gray-900) 0%, var(--energy-gray-800) 100%);
   --energy-gradient-glass: linear-gradient(135deg, rgba(39, 39, 42, 0.9) 0%, rgba(24, 24, 27, 0.7) 100%);
-  --energy-gradient-hero-soft: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+  --energy-gradient-hero-soft: linear-gradient(135deg, rgba(22, 163, 74, 0.18) 0%, rgba(16, 185, 129, 0.18) 100%);
 
   // Status colors with dark mode adjustments (backgrounds - higher opacity for visibility)
   --energy-success-light: rgba(16, 185, 129, 0.25);
@@ -380,15 +380,15 @@ html {
   --energy-info-dark: #60a5fa;
 
   // Glow effects — brighter + wider in dark mode so they actually read
-  --energy-glow-primary: 0 0 0 1px rgba(167, 139, 250, 0.55),
-                         0 0 18px rgba(167, 139, 250, 0.55),
-                         0 0 48px rgba(167, 139, 250, 0.35);
-  --energy-glow-primary-strong: 0 0 0 1px rgba(167, 139, 250, 0.75),
-                                0 0 24px rgba(167, 139, 250, 0.7),
-                                0 0 64px rgba(167, 139, 250, 0.45);
-  --energy-glow-secondary: 0 0 0 1px rgba(45, 212, 191, 0.55),
-                           0 0 18px rgba(45, 212, 191, 0.55),
-                           0 0 48px rgba(45, 212, 191, 0.32);
+  --energy-glow-primary: 0 0 0 1px rgba(34, 197, 94, 0.55),
+                         0 0 18px rgba(34, 197, 94, 0.55),
+                         0 0 48px rgba(34, 197, 94, 0.35);
+  --energy-glow-primary-strong: 0 0 0 1px rgba(34, 197, 94, 0.75),
+                                0 0 24px rgba(34, 197, 94, 0.7),
+                                0 0 64px rgba(34, 197, 94, 0.45);
+  --energy-glow-secondary: 0 0 0 1px rgba(250, 204, 21, 0.55),
+                           0 0 18px rgba(250, 204, 21, 0.55),
+                           0 0 48px rgba(250, 204, 21, 0.32);
   --energy-glow-success: 0 0 0 1px rgba(52, 211, 153, 0.6),
                          0 0 16px rgba(52, 211, 153, 0.5);
   --energy-glow-warning: 0 0 0 1px rgba(251, 191, 36, 0.6),
@@ -397,10 +397,10 @@ html {
                          0 0 16px rgba(248, 113, 113, 0.5);
   --energy-glow-info:    0 0 0 1px rgba(96, 165, 250, 0.6),
                          0 0 16px rgba(96, 165, 250, 0.5);
-  --energy-glow-focus-ring: 0 0 0 3px rgba(167, 139, 250, 0.45);
+  --energy-glow-focus-ring: 0 0 0 3px rgba(34, 197, 94, 0.45);
 
-  // Hero gradient fallback for dark mode — brightened violet→teal ribbon
-  --energy-gradient-hero: linear-gradient(135deg, #a78bfa 0%, #2dd4bf 100%);
+  // Hero gradient fallback for dark mode — brightened brand-green ribbon
+  --energy-gradient-hero: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
 }
 
 // =============================================================================
@@ -1242,16 +1242,16 @@ button[mat-flat-button] {
 .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label,
 .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
   color: var(--energy-primary);
-  text-shadow: 0 0 12px rgba(139, 92, 246, 0.35);
+  text-shadow: 0 0 12px rgba(var(--energy-primary-rgb), 0.35);
 }
 
 [data-theme='dark'] .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label,
 [data-theme='dark'] .mat-mdc-tab-link.mdc-tab--active .mdc-tab__text-label {
-  text-shadow: 0 0 16px rgba(167, 139, 250, 0.6);
+  text-shadow: 0 0 16px rgba(var(--energy-primary-rgb), 0.6);
 }
 
 .mdc-tab-indicator__content--underline {
-  box-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 8px rgba(var(--energy-primary-rgb), 0.6);
 }
 
 // Form field focus -----------------------------------------------------------

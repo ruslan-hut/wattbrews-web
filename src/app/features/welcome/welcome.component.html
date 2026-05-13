@@ -1,0 +1,95 @@
+@if (translationsLoading()) {
+  <div class="welcome-loading">
+    <mat-spinner diameter="40" class="spinner-white"></mat-spinner>
+  </div>
+} @else {
+  <section class="welcome">
+    <div class="welcome__grain" aria-hidden="true"></div>
+    <div class="welcome__glow" aria-hidden="true"></div>
+
+    <header class="welcome__bar">
+      <div class="welcome__brand">
+        <img
+          class="welcome__mark"
+          src="assets/brand/wattbrews-mark.png"
+          alt=""
+          width="44"
+          height="44"
+          aria-hidden="true"
+        />
+        <span class="welcome__wordmark">{{ translationService.getReactive('app.title') }}</span>
+      </div>
+      <app-language-switcher></app-language-switcher>
+    </header>
+
+    <main class="welcome__stage">
+      <div class="welcome__statement">
+        <span class="welcome__eyebrow">{{ translationService.getReactive('welcome.eyebrow') }}</span>
+        <h1 class="welcome__headline">
+          {{ translationService.getReactive('welcome.headlinePart1') }}
+          <em>{{ translationService.getReactive('welcome.headlinePart2') }}</em>
+        </h1>
+        <p class="welcome__subhead">{{ translationService.getReactive('welcome.subhead') }}</p>
+        <figure class="welcome__hero" aria-hidden="true">
+          <img
+            class="welcome__hero-icon"
+            src="assets/brand/wattbrews-app-icon.png"
+            alt=""
+            width="260"
+            height="260"
+          />
+        </figure>
+      </div>
+
+      <div class="welcome__actions">
+        <a
+          class="action action--primary"
+          routerLink="/auth/login"
+          matRipple
+          [matRippleColor]="'rgba(255,255,255,0.18)'"
+          [attr.aria-label]="translationService.getReactive('welcome.continueWeb')"
+        >
+          <span class="action__stripe" aria-hidden="true"></span>
+          <span class="action__body">
+            <span class="action__kicker">01</span>
+            <span class="action__title">{{ translationService.getReactive('welcome.continueWeb') }}</span>
+            <span class="action__hint">{{ translationService.getReactive('welcome.continueWebHint') }}</span>
+          </span>
+          <mat-icon class="action__icon">arrow_forward</mat-icon>
+        </a>
+
+        <a
+          class="action action--secondary"
+          [href]="playStoreUrl"
+          target="_blank"
+          rel="noopener"
+          matRipple
+          [matRippleColor]="'rgba(255,255,255,0.12)'"
+          [attr.aria-label]="translationService.getReactive('welcome.getApp')"
+        >
+          <span class="action__stripe" aria-hidden="true"></span>
+          <span class="action__body">
+            <span class="action__kicker">02</span>
+            <span class="action__title">{{ translationService.getReactive('welcome.getApp') }}</span>
+            <span class="action__hint">{{ translationService.getReactive('welcome.getAppHint') }}</span>
+          </span>
+          <mat-icon class="action__icon">android</mat-icon>
+        </a>
+      </div>
+    </main>
+
+    <footer class="welcome__foot">
+      <span class="welcome__rule" aria-hidden="true"></span>
+      <p class="welcome__footnote">{{ translationService.getReactive('welcome.footerHint') }}</p>
+      <nav class="welcome__legal" aria-label="Legal">
+        <a routerLink="/legal/privacy" class="welcome__legal-link">
+          {{ translationService.getReactive('legal.privacy') }}
+        </a>
+        <span aria-hidden="true">·</span>
+        <a routerLink="/legal/terms" class="welcome__legal-link">
+          {{ translationService.getReactive('legal.terms') }}
+        </a>
+      </nav>
+    </footer>
+  </section>
+}

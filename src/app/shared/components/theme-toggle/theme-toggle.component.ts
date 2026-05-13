@@ -8,7 +8,6 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-theme-toggle',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatIconModule,

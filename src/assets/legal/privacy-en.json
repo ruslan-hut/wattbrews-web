@@ -1,0 +1,75 @@
+{
+  "title": "Privacy Policy",
+  "introduction": "This application is serviced and provided by the company &#171;H2PLT&#187;, with an office in Lleida, Spain. By installing and using this application, you agree to the collection of your data. This Privacy Policy details how data collected by our applications and websites are used, and where you can turn in case of any questions or concerns.",
+  "thirdPartyNotice": "If you accessed this application through a third-party website, that entity might also collect data about you. In this case, you should review the terms of use and privacy policy of that software and website before installing and using the application to understand how the collected data will be used.",
+  "sections": [
+    {
+      "title": "1. What Types of Data Do We Collect?",
+      "content": [
+        "If you wish to register with us, we may ask you to provide information such as your name, username, email address, age, gender, phone number, and product information. In addition to these, we also collect your user ID, primary account details, and device or user IDs generated within the application. This data is essential for personalized services and enhancing your experience with our application.",
+        "An important aspect of our data collection is your location data. We may process this information to provide you with location-based services, content personalization, and enhanced functionality of our application. This data helps us understand how our application is used in different geographic locations and allows us to tailor our services accordingly.",
+        "Our websites and applications may conduct additional surveys where you may be invited to express your opinions about various products and services. If you download any materials from our websites or use our applications, we automatically receive information about your equipment. This includes but is not limited to the type of device you are using, its operating system, and unique device identifiers.",
+        "We also collect data about your usage of our application, which may include the time you spend on certain features and the way you interact with the app. If you use community tools within the app, we have the capability to store materials and messages you send and receive; we also reserve the right to monitor your messages. We may further save information about your actions, preferences, and behaviors when visiting our websites or using our applications. For example, we collect data on the features you use most frequently and any preferences you set within the app (see the &#171;Cookies&#187; section below).",
+        "It is important to note that before you submit personal data of any other individuals (for example, in &#171;refer a friend&#187; promotions), you must ensure their consent. Make sure that the data you provide are accurate and up-to-date, and promptly update them in case of changes."
+      ]
+    },
+    {
+      "title": "2. Collection and Use of Primary Account Data",
+      "content": [
+        "Purpose of Data Collection: In order to facilitate payment processing for transactions made through our app, we collect your primary account data. This includes information necessary to perform charging transactions effectively and securely.",
+        "Processing of Sensitive Data: We understand the importance of protecting your sensitive financial information. Therefore, we do not directly process or store details like your card number or cardholder name. Instead, these details are securely processed by a trusted banking service, ensuring the highest level of data security and compliance with financial regulations.",
+        "Storage of Processed Data: After your data is processed by our banking partner, a unique link representing your transaction is generated. This link does not contain direct financial information but allows us to reference the specific transaction. This link is securely stored on our server <b>wattbrews.me</b> and is used solely for the purpose of facilitating charging transactions in the app.",
+        "Data Security and Privacy: We are committed to protecting your data and privacy. All data collected and stored by us is treated with the utmost confidentiality and is protected using industry-standard security measures. We do not share your personal data with third parties except as necessary for processing transactions as described above."
+      ]
+    },
+    {
+      "title": "3. What Do We Do With Collected Data?",
+      "content": [
+        "We use the collected data for the following purposes:"
+      ],
+      "list": [
+        "To ensure the operation of our websites and applications, and to provide you with information and services, including, but not limited to, downloadable materials, chats, forums, promotions, and contests;",
+        "To provide you with technical support services;",
+        "For internal analysis and research to improve our websites and other products and services;",
+        "To send you news and marketing information about products and services, as well as offers, products, and services of selected third-party companies, but only within the limits permitted by current legislation or as specified by you (see the &#171;How to Unsubscribe&#187; section below);",
+        "To send you administrative messages (for example, if you forget your password);",
+        "To detect and prevent fraud and abuse of our websites, applications, or services."
+      ]
+    },
+    {
+      "title": "4. Who Else May Have Access to Your Data?",
+      "content": [
+        "Our affiliated companies, local distributors, and other organizations working with us may access your data for processing our needs and providing you with information and services upon your request.",
+        "Additionally, we collaborate with third-party companies in developing and improving our site and applications. These companies collect statistical information about site usage and are entitled to use your personal data only to the extent necessary to provide us with relevant services.",
+        "Some of these companies may process your data in the USA, Japan, and other countries outside the European Economic Area. The data protection laws in these countries may differ from those in the European Economic Area. If you do not wish your data to be transferred in this way, refrain from using our websites and applications.",
+        "In exceptional circumstances, we may disclose your personal data as required by law and to protect ourselves or third parties from harm and illegal activities. In the event of the sale or restructuring of our business, your data may be transferred along with it."
+      ]
+    },
+    {
+      "title": "5. Cookies",
+      "content": [
+        "Some of our websites and applications use cookies. These are small text files that the site sends to your computer to record your online actions. These files may be used by our websites and applications to store your preferences when using our sites and applications, to improve certain aspects of our sites and applications, to record your online actions, and to provide you with personalized advertising and other materials. You can disable the use of cookies in your browser settings, but in this case, some features of our websites or applications may be unavailable."
+      ]
+    },
+    {
+      "title": "6. How Do We Protect Your Data?",
+      "content": [
+        "We take commercially reasonable measures to protect your personal data. These measures include processes and procedures aimed at reducing the risks of unauthorized access to or disclosure of your data. However, we do not guarantee the complete exclusion of misuse of your personal data by intruders. Keep passwords for your accounts in a safe place and do not disclose them to third parties. If you become aware of unauthorized use of your password or other security breaches, contact us immediately.",
+        "Forums, chats, and other community player areas accessible through our websites and applications are public. Do not disclose information in these areas that can identify you or any other person. We are not responsible for the security and protection of data disclosed by you in such areas."
+      ]
+    }
+  ],
+  "unsubscribeSection": {
+    "title": "7. How to Unsubscribe",
+    "content": [
+      "If you no longer wish to receive marketing messages from us, follow the link provided in any of these messages or visit the registration section of our website and change your message settings. If you have not registered on any of our websites, send a message with the subject &#171;Unsubscribe&#187; (without quotes) to <a href=\"mailto:unsubscribe@h2plt.energy\">unsubscribe@h2plt.energy</a>."
+    ]
+  },
+  "contactInfo": {
+    "title": "8. Contact Information",
+    "content": [
+      "For general inquiries, contact our user support service, the details of which are published on the website <a href=\"https://wattbrews.me/\">https://wattbrews.me/</a>",
+      "You have the legal right to know what personal data about you is held by the organization and how these data are processed. If you want to know what data we have about you, send a letter mentioning the site where you registered or used our application to: <a href=\"mailto:support@h2plt.energy\">support@h2plt.energy</a>. Note that we may require you to confirm your identity and pay a small administrative fee."
+    ]
+  }
+}

@@ -17,7 +17,6 @@ import { ValidationUtils } from '../../../shared/utils/validation.utils';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     RouterLink,
