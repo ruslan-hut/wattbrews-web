@@ -333,7 +333,9 @@
     "selectedConnector": "Conector Seleccionado",
     "startCharge": "Iniciar Carga",
     "selectConnectorToStart": "Por favor selecciona un conector para iniciar la carga",
-    "selectPaymentMethodToStart": "Por favor selecciona un método de pago para iniciar la carga"
+    "selectPaymentMethodToStart": "Por favor selecciona un método de pago para iniciar la carga",
+    "paymentMethodFailed": "Este método de pago tuvo transacciones fallidas y no puede usarse. Selecciona otra tarjeta o añade una nueva.",
+    "noUsablePaymentMethod": "No hay métodos de pago utilizables. Añade una nueva tarjeta para continuar."
   },
   "sessions":{
     "active": {

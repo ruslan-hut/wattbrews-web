@@ -17,6 +17,7 @@ export interface UserRequest {
   connector_id?: number;
   transaction_id?: number;
   command: WsCommand;
+  payment_method_id?: string;
 }
 
 // Response status enum

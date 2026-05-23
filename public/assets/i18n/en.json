@@ -284,7 +284,9 @@
     "selectedConnector": "Selected Connector",
     "startCharge": "Start Charge",
     "selectConnectorToStart": "Please select a connector to start charging",
-    "selectPaymentMethodToStart": "Please select a payment method to start charging"
+    "selectPaymentMethodToStart": "Please select a payment method to start charging",
+    "paymentMethodFailed": "This payment method had failed transactions and can't be used. Please choose another card or add a new one.",
+    "noUsablePaymentMethod": "No usable payment method available. Please add a new card to continue."
   },
   "sessions":{
     "active": {

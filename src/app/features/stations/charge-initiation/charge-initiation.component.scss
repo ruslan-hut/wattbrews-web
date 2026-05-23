@@ -266,6 +266,55 @@ mat-card {
     background-color: var(--energy-success-light);
     border-color: var(--energy-success);
   }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-color: var(--energy-danger, var(--energy-border));
+    background-color: var(--energy-surface);
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
+}
+
+.failed-icon {
+  color: var(--energy-danger, #c62828);
+  font-size: 1.25rem;
+}
+
+.payment-method-warning {
+  margin-top: var(--energy-space-sm);
+  font-family: var(--font-family-body), sans-serif;
+  font-size: var(--font-size-xs);
+  color: var(--energy-danger, #c62828);
+}
+
+.no-usable-payment-method {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--energy-space-md);
+  padding: var(--energy-space-lg);
+  text-align: center;
+  margin-top: var(--energy-space-md);
+  border: 1px dashed var(--energy-danger, #c62828);
+  border-radius: var(--energy-radius-xl);
+
+  mat-icon {
+    color: var(--energy-danger, #c62828);
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  p {
+    margin: 0;
+    color: var(--energy-text-secondary);
+    font-family: var(--font-family-body), sans-serif;
+    font-size: var(--font-size-sm);
+  }
 }
 
 .payment-method-header {

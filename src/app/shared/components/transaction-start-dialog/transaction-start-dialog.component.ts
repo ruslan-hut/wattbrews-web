@@ -14,6 +14,7 @@ export interface TransactionStartDialogData {
   chargePointId: string;
   connectorId: number;
   stationTitle: string;
+  paymentMethodId: string;
 }
 
 interface TransactionStartState {
@@ -93,7 +94,8 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
       // Send StartTransaction command
       await this.wsService.sendCommand(WsCommand.StartTransaction, {
         charge_point_id: this.data().chargePointId,
-        connector_id: this.data().connectorId
+        connector_id: this.data().connectorId,
+        payment_method_id: this.data().paymentMethodId
       });
 
       // Update state to waiting

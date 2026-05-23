@@ -91,11 +91,23 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
     this._stationDetail()?.connectors.filter(c => ConnectorUtils.isAvailable(c.status)) || []
   );
   
-  readonly canStartCharge = computed(() => 
-    this.selectedConnector() !== null && 
-    this.selectedPaymentMethod() !== null &&
-    this.selectedConnector() !== null &&
-    ConnectorUtils.isAvailable(this.selectedConnector()!.status)
+  readonly canStartCharge = computed(() => {
+    const connector = this.selectedConnector();
+    const method = this.selectedPaymentMethod();
+    return (
+      connector !== null &&
+      method !== null &&
+      this.isPaymentMethodUsable(method) &&
+      ConnectorUtils.isAvailable(connector.status)
+    );
+  });
+
+  isPaymentMethodUsable(method: UserPaymentMethod): boolean {
+    return (method.fail_count ?? 0) <= 0;
+  }
+
+  readonly hasUsablePaymentMethod = computed(() =>
+    this.userInfoService.getPaymentMethods().some(m => this.isPaymentMethodUsable(m))
   );
 
   ngOnInit() {
@@ -189,17 +201,16 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
   }
 
   preselectDefaultPaymentMethod(paymentMethods: UserPaymentMethod[]) {
-    if (paymentMethods && paymentMethods.length > 0) {
-      // Find the default payment method
-      const defaultMethod = paymentMethods.find(method => method.is_default);
-      
-      if (defaultMethod) {
-        this._selectedPaymentMethod.set(defaultMethod);
-      } else {
-        // If no default method is marked, select the first one
-        this._selectedPaymentMethod.set(paymentMethods[0]);
-      }
+    if (!paymentMethods || paymentMethods.length === 0) {
+      return;
     }
+    const usable = paymentMethods.filter(m => this.isPaymentMethodUsable(m));
+    if (usable.length === 0) {
+      this._selectedPaymentMethod.set(null);
+      return;
+    }
+    const defaultMethod = usable.find(m => m.is_default);
+    this._selectedPaymentMethod.set(defaultMethod ?? usable[0]);
   }
 
   selectConnector(connector: StationDetail['connectors'][0]) {
@@ -210,6 +221,12 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
   }
 
   selectPaymentMethod(method: UserPaymentMethod) {
+    if (!this.isPaymentMethodUsable(method)) {
+      this.notificationService.warning(
+        this.translationService.get('chargeInitiation.paymentMethodFailed')
+      );
+      return;
+    }
     this._selectedPaymentMethod.set(method);
   }
 
@@ -315,10 +332,16 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
 
   startCharge() {
     if (!this.canStartCharge()) {
+      const method = this.selectedPaymentMethod();
       if (!this.selectedConnector()) {
         this.notificationService.warning(this.translationService.get('chargeInitiation.selectConnectorToStart'));
-      } else if (!this.selectedPaymentMethod()) {
-        this.notificationService.warning(this.translationService.get('chargeInitiation.selectPaymentMethodToStart'));
+      } else if (!method) {
+        const key = this.hasUsablePaymentMethod()
+          ? 'chargeInitiation.selectPaymentMethodToStart'
+          : 'chargeInitiation.noUsablePaymentMethod';
+        this.notificationService.warning(this.translationService.get(key));
+      } else if (!this.isPaymentMethodUsable(method)) {
+        this.notificationService.warning(this.translationService.get('chargeInitiation.paymentMethodFailed'));
       } else {
         this.notificationService.warning(this.translationService.get('chargeInitiation.selectConnectorToStart'));
       }
@@ -328,7 +351,7 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
     const connector = this.selectedConnector();
     const paymentMethod = this.selectedPaymentMethod();
     const station = this.stationDetail();
-    
+
     if (!connector || !paymentMethod || !station) {
       this.notificationService.error('Missing required information');
       return;
@@ -339,7 +362,8 @@ export class ChargeInitiationComponent implements OnInit, OnDestroy {
       data: {
         chargePointId: station.charge_point_id,
         connectorId: connector.connector_id,
-        stationTitle: station.title
+        stationTitle: station.title,
+        paymentMethodId: paymentMethod.identifier
       },
       disableClose: true, // Prevent closing by clicking outside
       width: '500px',
