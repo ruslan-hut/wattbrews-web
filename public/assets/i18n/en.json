@@ -427,6 +427,8 @@
     "success": "Transaction started successfully!",
     "redirecting": "Redirecting to active sessions...",
     "errorSendingCommand": "Failed to send command",
-    "errorOccurred": "An error occurred while starting the transaction"
+    "errorOccurred": "An error occurred while starting the transaction",
+    "connectionLost": "Connection lost. Trying to reconnect...",
+    "timeout": "The charging station is not responding. Please check your connection and try again."
   }
 }

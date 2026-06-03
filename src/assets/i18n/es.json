@@ -541,7 +541,9 @@
     "errorOccurred": "No se pudo iniciar la transacción. Por favor, inténtelo de nuevo o contacte al soporte si el problema persiste.",
     "sendingCommand": "Enviando comando de inicio...",
     "waitingForResponse": "Esperando respuesta de la estación de carga...",
-    "redirecting": "Redirigiendo a sesión activa..."
+    "redirecting": "Redirigiendo a sesión activa...",
+    "connectionLost": "Conexión perdida. Intentando reconectar...",
+    "timeout": "La estación de carga no responde. Por favor, comprueba tu conexión e inténtalo de nuevo."
   },
   "transactionStop": {
     "initializing": "Inicializando Detener Transacción",

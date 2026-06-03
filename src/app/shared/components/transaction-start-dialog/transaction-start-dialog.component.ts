@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, OnDestroy, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, effect, untracked, OnInit, OnDestroy, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { WebsocketService } from '../../../core/services/websocket.service';
 import { SimpleTranslationService } from '../../../core/services';
-import { WsCommand, WsResponse, ResponseStatus, ResponseStage } from '../../../core/models';
+import { WsCommand, WsResponse, ResponseStatus, ResponseStage, ConnectionState } from '../../../core/models';
+import { APP_CONSTANTS } from '../../../core/constants/app.constants';
 
 export interface TransactionStartDialogData {
   chargePointId: string;
@@ -55,6 +56,29 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
 
   private autoCloseTimeout?: ReturnType<typeof setTimeout>;
 
+  // Fails the dialog if no start-stage message arrives within the timeout
+  // window. Reset on every incoming message so an active flow keeps it alive.
+  private waitingTimeout?: ReturnType<typeof setTimeout>;
+
+  // Surface WebSocket connection loss while waiting so the user understands
+  // why progress stalled, instead of staring at a frozen modal.
+  private readonly connectionMonitor = effect(() => {
+    const connState = this.wsService.connectionState();
+
+    untracked(() => {
+      const status = this.state().status;
+      if (status !== 'initializing' && status !== 'waiting') {
+        return;
+      }
+
+      const infoKey =
+        connState === ConnectionState.Connected
+          ? 'transactionStart.preparing'
+          : 'transactionStart.connectionLost';
+      this.state.update(s => ({ ...s, info: this.translationService.getReactive(infoKey) }));
+    });
+  });
+
   ngOnInit(): void {
     this.initializeTranslations();
   }
@@ -84,6 +108,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
     if (this.autoCloseTimeout) {
       clearTimeout(this.autoCloseTimeout);
     }
+    this.clearWaitingTimeout();
   }
 
   private async startTransaction(): Promise<void> {
@@ -105,8 +130,12 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
         info: this.translationService.getReactive('transactionStart.waiting')
       }));
 
+      // Guard against the connection dropping before any response arrives
+      this.startWaitingTimeout();
+
     } catch (error: any) {
       console.error('Failed to start transaction:', error);
+      this.clearWaitingTimeout();
       this.state.set({
         status: 'error',
         progress: 0,
@@ -114,6 +143,34 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
         errorMessage: error.message || this.translationService.getReactive('transactionStart.errorSendingCommand')
       });
     }
+  }
+
+  private startWaitingTimeout(): void {
+    this.clearWaitingTimeout();
+    this.waitingTimeout = setTimeout(
+      () => this.handleTimeout(),
+      APP_CONSTANTS.WEBSOCKET.TRANSACTION_START_TIMEOUT
+    );
+  }
+
+  private clearWaitingTimeout(): void {
+    if (this.waitingTimeout) {
+      clearTimeout(this.waitingTimeout);
+      this.waitingTimeout = undefined;
+    }
+  }
+
+  private handleTimeout(): void {
+    const status = this.state().status;
+    if (status === 'success' || status === 'error') {
+      return;
+    }
+    this.state.set({
+      status: 'error',
+      progress: 0,
+      info: '',
+      errorMessage: this.translationService.getReactive('transactionStart.timeout')
+    });
   }
 
   private subscribeToMessages(): void {
@@ -127,6 +184,9 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
         }
 
         console.log('Transaction start message received:', message);
+
+        // Activity received - keep the dialog alive while the flow progresses
+        this.startWaitingTimeout();
 
         switch (message.status) {
           case ResponseStatus.Waiting:
@@ -152,6 +212,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
   }
 
   private handleSuccessMessage(message: WsResponse): void {
+    this.clearWaitingTimeout();
     this.state.set({
       status: 'success',
       progress: 100,
@@ -168,6 +229,7 @@ export class TransactionStartDialogComponent implements OnInit, OnDestroy {
   }
 
   private handleErrorMessage(message: WsResponse): void {
+    this.clearWaitingTimeout();
     this.state.set({
       status: 'error',
       progress: 0,

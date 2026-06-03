@@ -37,6 +37,8 @@ export const APP_CONSTANTS = {
     RECONNECT_INITIAL_DELAY: 1000, // 1 second
     RECONNECT_MAX_DELAY: 30000, // 30 seconds
     MESSAGE_HISTORY_LIMIT: 100, // For test page
+    // Abort waiting for a transaction-start response after this period of silence
+    TRANSACTION_START_TIMEOUT: 15000, // 15 seconds
   },
   VALIDATION: {
     PASSWORD_MIN_LENGTH: 8,

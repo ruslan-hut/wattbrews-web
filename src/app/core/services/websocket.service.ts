@@ -63,6 +63,11 @@ export class WebsocketService {
   // Visibility state
   private isTabVisible: boolean = true;
 
+  // Liveness tracking: set when a ping is sent, cleared when the server's
+  // pong (Ping response) arrives. If a new ping cycle starts while still
+  // awaiting a pong, the socket is considered dead even without a close event.
+  private awaitingPong: boolean = false;
+
   // Debug mode
   private debug = true;
 
@@ -245,6 +250,9 @@ export class WebsocketService {
     // Reset reconnection delay
     this.currentReconnectDelay = APP_CONSTANTS.WEBSOCKET.RECONNECT_INITIAL_DELAY;
 
+    // Reset liveness tracking for the fresh connection
+    this.awaitingPong = false;
+
     // Start periodic ping
     this.startPing();
 
@@ -305,6 +313,7 @@ export class WebsocketService {
       // Handle ping response
       if (message.status === ResponseStatus.Ping) {
         this._lastPingTime.set(new Date());
+        this.awaitingPong = false;
       }
 
       // Handle charge point events - update signal for reactive components
@@ -391,22 +400,60 @@ export class WebsocketService {
       clearInterval(this.pingInterval);
     }
 
+    this.awaitingPong = false;
+
     // Send ping every PING_INTERVAL
     this.pingInterval = setInterval(async () => {
-      if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-        try {
-          // Check if token is available before sending ping
-          const token = await this.authService.getToken();
-          if (token) {
-            await this.sendCommand(WsCommand.PingConnection);
-          }
-          // Silently skip ping if no token (user not authenticated)
-        } catch (error: any) {
-          // Silently fail - periodic ping errors are not critical
-          // Connection issues will be caught by onclose event
+      if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+        return;
+      }
+
+      // If the previous ping never got a pong, the socket is dead even though
+      // no close event fired (common on abrupt network loss / mobile sleep).
+      // Force a close so the standard reconnect flow takes over.
+      if (this.awaitingPong) {
+        if (this.debug) {
+          console.warn('[WebSocket] No pong since last ping - connection is stale, forcing reconnect');
         }
+        this.awaitingPong = false;
+        this.forceReconnect();
+        return;
+      }
+
+      try {
+        // Check if token is available before sending ping
+        const token = await this.authService.getToken();
+        if (token) {
+          await this.sendCommand(WsCommand.PingConnection);
+          this.awaitingPong = true;
+        }
+        // Silently skip ping if no token (user not authenticated)
+      } catch (error: any) {
+        // Silently fail - periodic ping errors are not critical
+        // Connection issues will be caught by onclose event
       }
     }, APP_CONSTANTS.WEBSOCKET.PING_INTERVAL);
+  }
+
+  /**
+   * Force-close a connection that looks alive but is no longer delivering
+   * messages. Closing triggers handleClose, which schedules a reconnect.
+   */
+  private forceReconnect(): void {
+    if (!this.ws) {
+      return;
+    }
+
+    // Mark as errored so handleClose treats this as an unexpected drop
+    this._connectionState.set(ConnectionState.Error);
+    this._lastError.set('Connection lost (no response from server)');
+
+    try {
+      this.ws.close();
+    } catch {
+      // Ignore close errors; handleClose / scheduleReconnect handle recovery
+      this.scheduleReconnect();
+    }
   }
 
   /**

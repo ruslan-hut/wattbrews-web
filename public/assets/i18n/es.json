@@ -430,6 +430,8 @@
     "success": "¡Transacción iniciada exitosamente!",
     "redirecting": "Redirigiendo a sesiones activas...",
     "errorSendingCommand": "Error al enviar comando",
-    "errorOccurred": "Ocurrió un error al iniciar la transacción"
+    "errorOccurred": "Ocurrió un error al iniciar la transacción",
+    "connectionLost": "Conexión perdida. Intentando reconectar...",
+    "timeout": "La estación de carga no responde. Por favor, comprueba tu conexión e inténtalo de nuevo."
   }
 }

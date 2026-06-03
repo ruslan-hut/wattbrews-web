@@ -538,7 +538,9 @@
     "errorOccurred": "Unable to start transaction. Please try again or contact support if the problem persists.",
     "sendingCommand": "Sending start command...",
     "waitingForResponse": "Waiting for response from charging station...",
-    "redirecting": "Redirecting to active session..."
+    "redirecting": "Redirecting to active session...",
+    "connectionLost": "Connection lost. Trying to reconnect...",
+    "timeout": "The charging station is not responding. Please check your connection and try again."
   },
   "transactionStop": {
     "initializing": "Initializing Stop Transaction",
