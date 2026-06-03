@@ -50,6 +50,7 @@ export class MainLayoutComponent implements OnInit {
 
   protected readonly appTitle = signal('WattBrews');
   protected readonly sidenavOpen = signal(false);
+  protected readonly legalExpanded = signal(false);
   protected readonly userName = this.authService.userName;
   protected readonly isAdmin = computed(() => 
     this.authService.hasAnyRole(['admin'])
@@ -92,6 +93,10 @@ export class MainLayoutComponent implements OnInit {
   
   closeSidenav(): void {
     this.sidenavOpen.set(false);
+  }
+
+  toggleLegal(): void {
+    this.legalExpanded.update(expanded => !expanded);
   }
   
   hasActiveSessions(): boolean {

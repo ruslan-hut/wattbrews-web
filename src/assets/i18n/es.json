@@ -11,7 +11,8 @@
     "home": "Inicio",
     "stations": "Estaciones",
     "auth": "Entrar",
-    "tools": "Herramientas"
+    "tools": "Herramientas",
+    "legal": "Legal"
   },
   "auth": {
     "title": "Acceder",
@@ -575,7 +576,7 @@
     "continueWeb": "Continuar en la web",
     "continueWebHint": "Inicia sesión o crea una cuenta desde el navegador",
     "getApp": "Descargar la app para Android",
-    "getAppHint": "Sesiones más rápidas, notificaciones y mapas sin conexión",
+    "getAppHint": "Sesiones más rápidas, notificaciones y acceso rápido desde la pantalla de inicio",
     "footerHint": "Sin descargas obligatorias. Ambas opciones usan la misma cuenta."
   },
   "legal": {

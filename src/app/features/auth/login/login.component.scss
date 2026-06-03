@@ -319,6 +319,7 @@
   align-items: center;
   gap: var(--energy-space-sm);
   padding: var(--energy-space-md) var(--energy-space-lg) var(--energy-space-lg);
+  font-family: var(--font-family-body), sans-serif;
   font-size: var(--font-size-xs);
   color: var(--energy-text-muted);
 }

@@ -43,6 +43,26 @@
             <span matListItemTitle>{{ translationService.getReactive('nav.tools') }}</span>
           </a>
         }
+        <a mat-list-item class="nav-group-toggle" (click)="toggleLegal()"
+           [attr.aria-expanded]="legalExpanded()">
+          <mat-icon matListItemIcon>gavel</mat-icon>
+          <span matListItemTitle>{{ translationService.getReactive('nav.legal') }}</span>
+          @if (legalExpanded()) {
+            <mat-icon matListItemMeta>expand_less</mat-icon>
+          } @else {
+            <mat-icon matListItemMeta>expand_more</mat-icon>
+          }
+        </a>
+        @if (legalExpanded()) {
+          <a mat-list-item class="nav-sub-item" routerLink="/legal/privacy" (click)="closeSidenav()">
+            <mat-icon matListItemIcon>privacy_tip</mat-icon>
+            <span matListItemTitle>{{ translationService.getReactive('legal.privacy') }}</span>
+          </a>
+          <a mat-list-item class="nav-sub-item" routerLink="/legal/terms" (click)="closeSidenav()">
+            <mat-icon matListItemIcon>description</mat-icon>
+            <span matListItemTitle>{{ translationService.getReactive('legal.terms') }}</span>
+          </a>
+        }
       </mat-nav-list>
     </mat-sidenav>
 

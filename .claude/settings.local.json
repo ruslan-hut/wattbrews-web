@@ -34,7 +34,15 @@
       "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('src/assets/i18n/en.json','utf8'\\)\\); JSON.parse\\(require\\('fs'\\).readFileSync\\('src/assets/i18n/es.json','utf8'\\)\\); console.log\\('JSON OK'\\);\")",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\rusla\\\\projects\\\\wattbrews-web\" -Depth 2 -Directory)",
       "Bash(Select-Object -First 20)",
-      "Bash(Format-List FullName)"
+      "Bash(Format-List FullName)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(grep -aoE \"_defaultFontSetClass[^,;]{0,60}\" node_modules/@angular/material/fesm2022/icon.mjs)",
+      "Bash(grep -aoE \"material-icons[^']{0,40}\" node_modules/@angular/material/fesm2022/icon.mjs)",
+      "Bash(grep -aoE \"getDefaultFontSetClass.{0,140}\" node_modules/@angular/material/fesm2022/icon.mjs)",
+      "Bash(grep -aoE \"_defaultFontSetClass.{0,80}\" node_modules/@angular/material/fesm2022/icon.mjs)",
+      "Bash(grep -aoE \"ligature.{0,60}\" node_modules/@angular/material/fesm2022/icon.mjs)",
+      "Bash(grep -aoE \"FontSetClass.{0,80}\" node_modules/@angular/material/fesm2022/icon.mjs)",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 4200 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { $c.OwningProcess | Select-Object -Unique | ForEach-Object { try { Stop-Process -Id $_ -Force -ErrorAction Stop; \"killed $_\" } catch {} } } else { \"no listener\" })"
     ]
   }
 }

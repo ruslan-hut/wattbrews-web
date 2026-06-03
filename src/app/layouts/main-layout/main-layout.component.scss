@@ -170,6 +170,22 @@ mat-nav-list {
     &:hover mat-icon {
       color: var(--energy-primary);
     }
+
+    &.nav-group-toggle {
+      cursor: pointer;
+
+      // The list meta slot adds `.mdc-list-item__end` directly on the icon,
+      // and that class sets a text font-family that overrides the icon font
+      // (same specificity, but loaded later). Reassert the Material Icons font
+      // so the expand/collapse chevron renders as a glyph, not literal text.
+      .mdc-list-item__end {
+        font-family: 'Material Icons';
+      }
+    }
+
+    &.nav-sub-item {
+      margin-left: var(--energy-space-lg);
+    }
   }
 }
 
