@@ -21,7 +21,12 @@ html {
       tertiary: mat.$spring-green-palette,
     ),
     typography: (
-      font-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+      // Material only reads `brand-family` (display) and `plain-family` (body) —
+      // a `font-family` key here is silently ignored, leaving the --mat-sys-*-font
+      // tokens empty so `font: var(--mat-sys-body-medium)` wipes font-family to a
+      // serif default. Keep these in sync with --font-family-display/-body below.
+      brand-family: 'Space Grotesk, -apple-system, BlinkMacSystemFont, sans-serif',
+      plain-family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     ),
     density: -1,
   ));
@@ -549,13 +554,8 @@ h6, .heading-6 {
   }
 }
 
-// Card title typography (Space Grotesk for headings)
-// Drive the MDC-level typography tokens directly so Material stops
-// falling back to its Roboto default. Without these tokens the bare
-// `font-family` rule is shadowed by the token the component reads
-// from its own scope.
+// Card title typography — display font (Space Grotesk) for headings.
 .mat-mdc-card-title {
-  --mat-card-title-text-font: var(--font-family-display);
   --mat-card-title-text-weight: 600;
   font-family: var(--font-family-display);
   font-weight: 600;
@@ -563,27 +563,13 @@ h6, .heading-6 {
 }
 
 .mat-mdc-card-subtitle {
-  --mat-card-subtitle-text-font: var(--font-family-body);
   --mat-card-subtitle-text-size: var(--font-size-base);
   --mat-card-subtitle-text-weight: 400;
   --mat-card-subtitle-text-line-height: 1.4;
 }
 
-// Card body typography. Material's content/subtitle slots fall back to
-// Roboto without these explicit rules. Hits inline tags so a bare
-// `<span>Foo</span>` inside the card body still picks up Inter.
-.mat-mdc-card-content,
-.mat-mdc-card-subtitle {
-  font-family: var(--font-family-body);
-
-  p, span, li, small {
-    font-family: var(--font-family-body);
-  }
-}
-
-// Button typography — Material 21 wraps button text in `.mdc-button__label`
-// which carries its own font-family; setting the host alone doesn't
-// reach the label, so we hit both layers in one block.
+// Button label typography tweaks — the font itself now inherits from the
+// theme's plain typeface; only the weight/tracking differ from defaults.
 .mat-mdc-button,
 .mat-mdc-raised-button,
 .mat-mdc-outlined-button,
@@ -594,10 +580,7 @@ h6, .heading-6 {
 button[mat-button],
 button[mat-raised-button],
 button[mat-flat-button] {
-  font-family: var(--font-family-body);
-
   .mdc-button__label {
-    font-family: var(--font-family-body);
     font-weight: 500;
     letter-spacing: 0;
   }
@@ -651,8 +634,6 @@ button[mat-flat-button] {
 
 // Form field override
 .mat-mdc-form-field {
-  font-family: var(--font-family-body);
-
   // Drive the MDC container shape token so the inner notched outline
   // (the actual visible border) uses our radius instead of Material's
   // default ~4px. Without this the background wrapper is rounded but
@@ -692,19 +673,10 @@ button[mat-flat-button] {
     outline: none;
   }
 
-  .mat-mdc-floating-label,
-  .mdc-floating-label,
-  .mat-mdc-form-field-hint,
-  .mat-mdc-form-field-error,
-  input,
-  textarea {
-    font-family: var(--font-family-body);
-  }
 }
 
 // Chip overrides - ensure consistent border-radius on all elements
 .mat-mdc-chip {
-  font-family: var(--font-family-body);
   font-weight: 500;
   // Drive every shape-related MDC token directly so the outline,
   // background, and state layer all share our radius. The "square
@@ -783,11 +755,7 @@ button[mat-flat-button] {
     color: var(--energy-info-dark);
   }
 
-  // Chip text — the visible label lives in `.mdc-evolution-chip__text-label`,
-  // which carries its own Material font-family; needs an explicit rule
-  // to inherit Inter.
   .mdc-evolution-chip__text-label {
-    font-family: var(--font-family-body);
     font-weight: 500;
   }
 }
@@ -870,84 +838,21 @@ button[mat-flat-button] {
   letter-spacing: -0.02em;
 }
 
-// Dialog body + action-row typography. Without these overrides Material
-// applies its own Roboto-ish default and the text inside every dialog
-// looks off-theme — the body content, the form labels, the mat-dialog
-// buttons. Scoping the rule to dialog descendants keeps the rest of the
-// app unaffected.
-.mat-mdc-dialog-content,
-.mat-mdc-dialog-actions {
-  font-family: var(--font-family-body);
-
-  p, span, label, input, textarea, li {
-    font-family: var(--font-family-body);
-  }
-}
-
-// Checkbox label font — `.mat-mdc-form-field` handles its own internals
-// in the form-field block above; the checkbox uses a separate label
-// container that needs an explicit rule.
-.mat-mdc-checkbox .mdc-form-field,
-.mat-mdc-checkbox .mdc-label {
-  font-family: var(--font-family-body);
-}
-
 // Table overrides
 .mat-mdc-table {
-  font-family: var(--font-family-body);
-
   .mat-mdc-header-cell {
-    font-family: var(--font-family-body);
     font-weight: 600;
   }
-
-  .mat-mdc-cell {
-    font-family: var(--font-family-body);
-  }
-}
-
-// Paginator overrides
-.mat-mdc-paginator {
-  font-family: var(--font-family-body);
-
-  .mat-mdc-paginator-container {
-    font-family: var(--font-family-body);
-  }
-
-  .mat-mdc-paginator-page-size-label,
-  .mat-mdc-paginator-range-label {
-    font-family: var(--font-family-body);
-  }
-
-  .mat-mdc-select-value {
-    font-family: var(--font-family-body);
-  }
-}
-
-// Select overrides
-.mat-mdc-select {
-  font-family: var(--font-family-body);
-
-  .mat-mdc-select-value,
-  .mat-mdc-select-placeholder {
-    font-family: var(--font-family-body);
-  }
-}
-
-.mat-mdc-option {
-  font-family: var(--font-family-body);
 }
 
 // Menu overrides
 .mat-mdc-menu-panel {
-  font-family: var(--font-family-body);
   background-color: var(--energy-surface);
   border-radius: var(--energy-radius-lg);
   border: 1px solid var(--energy-border-subtle);
   box-shadow: var(--energy-shadow-lg);
 
   .mat-mdc-menu-item {
-    font-family: var(--font-family-body);
     font-weight: 500;
   }
 }
@@ -956,19 +861,19 @@ button[mat-flat-button] {
 .mat-mdc-tooltip {
   --mdc-plain-tooltip-container-color: var(--energy-gray-900);
   --mdc-plain-tooltip-supporting-text-color: var(--energy-gray-50);
-  --mdc-plain-tooltip-supporting-text-font: var(--font-family-body);
   --mdc-plain-tooltip-supporting-text-size: var(--font-size-xs);
   --mdc-plain-tooltip-supporting-text-weight: 500;
   --mdc-plain-tooltip-container-shape: var(--energy-radius-sm);
 }
 
-// Snackbar overrides
+// Snackbar overrides. Material 21 reads the `--mat-snack-bar-*` tokens (the
+// legacy `--mdc-snackbar-*` names are ignored), so the surface picks these up
+// instead of falling back to the light `inverse-surface` default.
 .mat-mdc-snack-bar-container {
-  --mdc-snackbar-container-color: var(--energy-gray-900);
-  --mdc-snackbar-supporting-text-color: var(--energy-gray-50);
-  --mdc-snackbar-supporting-text-font: var(--font-family-body);
-  --mdc-snackbar-supporting-text-size: var(--font-size-sm);
-  --mdc-snackbar-supporting-text-weight: 500;
+  --mat-snack-bar-container-color: var(--energy-gray-900);
+  --mat-snack-bar-supporting-text-color: var(--energy-gray-50);
+  --mat-snack-bar-supporting-text-size: var(--font-size-sm);
+  --mat-snack-bar-supporting-text-weight: 500;
   --mat-snack-bar-button-color: var(--energy-primary-light);
 
   .mdc-snackbar__surface {
@@ -976,12 +881,7 @@ button[mat-flat-button] {
     box-shadow: var(--energy-shadow-lg);
   }
 
-  .mdc-snackbar__label {
-    font-family: var(--font-family-body);
-  }
-
   .mat-mdc-button.mat-mdc-snack-bar-action {
-    font-family: var(--font-family-body);
     font-weight: 600;
   }
 

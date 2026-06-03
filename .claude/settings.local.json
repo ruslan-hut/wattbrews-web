@@ -42,7 +42,10 @@
       "Bash(grep -aoE \"_defaultFontSetClass.{0,80}\" node_modules/@angular/material/fesm2022/icon.mjs)",
       "Bash(grep -aoE \"ligature.{0,60}\" node_modules/@angular/material/fesm2022/icon.mjs)",
       "Bash(grep -aoE \"FontSetClass.{0,80}\" node_modules/@angular/material/fesm2022/icon.mjs)",
-      "PowerShell($c = Get-NetTCPConnection -LocalPort 4200 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { $c.OwningProcess | Select-Object -Unique | ForEach-Object { try { Stop-Process -Id $_ -Force -ErrorAction Stop; \"killed $_\" } catch {} } } else { \"no listener\" })"
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 4200 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { $c.OwningProcess | Select-Object -Unique | ForEach-Object { try { Stop-Process -Id $_ -Force -ErrorAction Stop; \"killed $_\" } catch {} } } else { \"no listener\" })",
+      "Bash(grep -rln 'body-medium-font\\\\|#{$prefix}-body-medium' node_modules/@angular/material/core/)",
+      "Bash(grep -rn 'font-family\\\\|plain:\\\\|brand:\\\\|map.get\\($typography' node_modules/@angular/material/core/theming/_theme.scss)",
+      "Bash(grep -rn 'brand: \\\\|plain: \\\\|map.get\\($config, font-family\\)\\\\|font-family\\)' node_modules/@angular/material/core/theming/_config-validation.scss node_modules/@angular/material/core/theming/_validation.scss)"
     ]
   }
 }
