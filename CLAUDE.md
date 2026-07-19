@@ -16,6 +16,27 @@ Read the relevant topic file before making changes in that area.
 - **[docs/SETUP_LOCAL_DEV.md](docs/SETUP_LOCAL_DEV.md)** — local env setup.
 - **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** — deployment / CI.
 
+## Linked Projects
+
+| Repository | Local path | Role |
+|---|---|---|
+| evsys-back | `~/projects/evsys-back` | The API and WebSocket server this app calls (Go, Chi v5, MongoDB) |
+| evsys | `~/projects/evsys` | OCPP central system; writes the charge point and transaction data the API serves |
+| Wattbrews | `~/projects/Wattbrews` | Android app on the same API |
+| evsys-front | `~/projects/evsys-front` | Angular web app (operator/admin) on the same API |
+
+This app is one of three clients of evsys-back. Data flows
+evsys → MongoDB → evsys-back → here, and the models are hand-copied at each
+hop, so a value that renders empty may never have been carried through rather
+than being a bug here. Check that `~/projects/evsys-back/entity/` declares the
+field and that the endpoint returns it — the transaction detail endpoint
+returns the `ChargeState` DTO, not the full transaction.
+
+The Android client ships through the Play Store and old versions stay in use,
+so evsys-back changes response shapes only additively. A field this app needs
+must be **added** to the API, never reshaped — see
+`~/projects/evsys-back/CLAUDE.md`.
+
 ## Commands
 
 ```bash
